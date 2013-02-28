@@ -158,6 +158,8 @@
 (define-key isearch-mode-map (kbd "<S-return>")
   'isearch-repeat-backward)
 
+(setq isearch-lazy-highlight-initial-delay 0)
+
 (require 'advice)
 
 (defadvice mouse-drag-region (after my-sublime-like-mouse-select (start-event))
@@ -166,7 +168,7 @@
           (isearch-forward t)
           (beg (min (mark) (point)))
           (string (buffer-substring-no-properties (mark) (point))))
-      (unless (string-match "^\n?$" string)
+      (unless (string-match "^\n*$" string)
 	(deactivate-mark)
 	(save-excursion
 	  (call-interactively 'isearch-forward)
