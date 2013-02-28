@@ -4,6 +4,7 @@
 
 (set-register ?e '(file . "~/.emacs"))
 
+(setq-default indent-tabs-mode nil)
 (setq-default show-trailing-whitespace t)
 (setq make-backup-files nil)
 (setq inhibit-splash-screen t)
