@@ -64,7 +64,7 @@
 
 (global-set-key (kbd "C-b") 'backward-kill-word)
 (global-set-key (kbd "C-d") 'kill-word)
-(global-set-key (kbd "C-f") 'isearch-forward)
+(global-set-key (kbd "C-f") 'my-isearch-forward)
 (global-set-key (kbd "C-j") 'other-window)
 (global-set-key (kbd "C-k") 'my-kill-line-or-region)
 (global-set-key (kbd "C-o") 'ffap)
@@ -153,6 +153,24 @@
 
 ;; Some Sublime Text-isms:
 
+(defun my-sublime-like-mouse-dblclick-select-fn ()
+  (let ((isearch-word t)
+	(isearch-forward t)
+	(beg (min (mark) (point)))
+	(string (buffer-substring-no-properties (mark) (point))))
+    (unless (string-match "^\n*$" string)
+      (deactivate-mark)
+      (save-excursion
+	(call-interactively 'isearch-forward)
+	(goto-char beg)
+	(isearch-yank-string string)))))
+
+(defun my-isearch-forward ()
+  (interactive)
+  (if (and transient-mark-mode (region-active-p))
+      (my-sublime-like-mouse-dblclick-select-fn)
+    (call-interactively 'isearch-forward)))
+
 (define-key isearch-mode-map (kbd "<return>")
   'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "<S-return>")
@@ -164,16 +182,7 @@
 
 (defadvice mouse-drag-region (after my-sublime-like-mouse-select (start-event))
   (when (= (event-click-count start-event) 2)
-    (let ((isearch-word t)
-          (isearch-forward t)
-          (beg (min (mark) (point)))
-          (string (buffer-substring-no-properties (mark) (point))))
-      (unless (string-match "^\n*$" string)
-	(deactivate-mark)
-	(save-excursion
-	  (call-interactively 'isearch-forward)
-	  (goto-char beg)
-	  (isearch-yank-string string))))))
+    (my-sublime-like-mouse-dblclick-select-fn)))
 
 (ad-activate 'mouse-drag-region)
 
