@@ -150,9 +150,28 @@
   (package-initialize)
   (load-theme 'solarized-dark t))
 
-(define-key isearch-mode-map (kbd "C-m")
+;; Some Sublime Text-isms:
+
+(define-key isearch-mode-map (kbd "<return>")
   'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "<C-S-return>")
+(define-key isearch-mode-map (kbd "<S-return>")
   'isearch-repeat-backward)
+
+(require 'advice)
+
+(defadvice mouse-drag-region (after my-sublime-like-mouse-select (start-event))
+  (when (= (event-click-count start-event) 2)
+    (let ((isearch-word t)
+          (isearch-forward t)
+          (beg (min (mark) (point)))
+          (string (buffer-substring-no-properties (mark) (point))))
+      (unless (string-match "^\n?$" string)
+	(deactivate-mark)
+	(save-excursion
+	  (call-interactively 'isearch-forward)
+	  (goto-char beg)
+	  (isearch-yank-string string))))))
+
+(ad-activate 'mouse-drag-region)
 
 (message "")
