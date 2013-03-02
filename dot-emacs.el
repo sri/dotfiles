@@ -4,12 +4,13 @@
 
 (set-register ?e '(file . "~/.emacs"))
 
+(setq-default visual-line-mode t)
 (setq-default indent-tabs-mode nil)
 (setq-default show-trailing-whitespace t)
 (setq make-backup-files nil)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
-(setq inhibit-startup-echo-area-message "sri")
+(setq inhibit-startup-echo-area-message "sthaiyar")
 (setq initial-scratch-message nil)
 (setq visible-bell nil)
 (setq ring-bell-function (lambda ()))
@@ -170,6 +171,8 @@
   (if (and transient-mark-mode (region-active-p))
       (my-sublime-like-mouse-dblclick-select-fn)
     (call-interactively 'isearch-forward)))
+
+(setq isearch-allow-scroll t)
 
 (define-key isearch-mode-map (kbd "<return>")
   'isearch-repeat-forward)
