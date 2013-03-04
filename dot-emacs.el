@@ -10,7 +10,7 @@
 (setq make-backup-files nil)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
-(setq inhibit-startup-echo-area-message "sthaiyar")
+(setq inhibit-startup-echo-area-message "sri")
 (setq initial-scratch-message nil)
 (setq visible-bell nil)
 (setq ring-bell-function (lambda ()))
@@ -41,6 +41,7 @@
 (auto-compression-mode t)
 (transient-mark-mode 1)
 (show-paren-mode t)
+(ido-mode)
 
 (require 'dired-x)
 
@@ -48,10 +49,6 @@
           (lambda ()
             (define-key dired-mode-map [left] 'dired-up-directory)
             (define-key dired-mode-map [right] 'dired-find-file)))
-
-
-;(require 'helm-config)
-;(helm-mode 1)
 
 (defun my-kill-line-or-region (&optional arg)
   (interactive "P")
@@ -78,6 +75,11 @@
 (global-set-key (kbd "C-v") 'clipboard-yank)
 (global-set-key (kbd "C-w") 'other-window)
 (global-set-key (kbd "C-z") 'undo)
+
+
+(global-set-key (kbd "<M-down>") 'scroll-up)
+(global-set-key (kbd "<M-up>") 'scroll-down)
+
 
 ;; Selection
 
@@ -146,11 +148,27 @@
    '(show-paren-match ((((class color) (background light)) (:background "cyan"))))
    '(trailing-whitespace ((((class color) (background light)) (:background "yellow"))))))
 
+(defvar my-packages
+  '(color-theme color-theme-solarized magit))
+
 (when window-system
   (require 'package)
   (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (package-initialize)
+
+  (let ((missing '()))
+    (dolist (p my-packages)
+      (unless (package-installed-p p)
+        (push p missing)))
+    (when missing
+      (package-refresh-contents)
+      (dolist (p missing)
+        (package-install p))))
+
   (load-theme 'solarized-dark t))
+
+(require 'magit)
+(add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
 
 ;; Some Sublime Text-isms:
 
