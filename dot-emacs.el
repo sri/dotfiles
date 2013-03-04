@@ -41,7 +41,7 @@
 (auto-compression-mode t)
 (transient-mark-mode 1)
 (show-paren-mode t)
-(ido-mode)
+(ido-mode 1)
 
 (require 'dired-x)
 
@@ -80,6 +80,7 @@
 (global-set-key (kbd "<M-down>") 'scroll-up)
 (global-set-key (kbd "<M-up>") 'scroll-down)
 
+(global-set-key (kbd "C-x k") 'my-kill-current-buffer)
 
 ;; Selection
 
@@ -90,8 +91,6 @@
   "Kill the current buffer without prompting."
   (interactive)
   (kill-buffer (current-buffer)))
-
-(global-set-key (kbd "C-x k") 'my-kill-current-buffer)
 
 (defun my-shell-forward-char-or-previous-history (&optional arg)
   (interactive "p")
@@ -119,9 +118,12 @@
             (set (make-variable-buffer-local
                   'show-trailing-whitespace)
                  nil)
-            (define-key shell-mode-map (kbd "C-c e") 'my-shell-erase-buffer)
-            (define-key shell-mode-map (kbd "<right>") 'my-shell-forward-char-or-previous-history)
-            (define-key shell-mode-map (kbd "<down>") 'my-shell-next-line-or-next-history)))
+            (define-key shell-mode-map (kbd "C-c e")
+              'my-shell-erase-buffer)
+            (define-key shell-mode-map (kbd "<right>")
+              'my-shell-forward-char-or-previous-history)
+            (define-key shell-mode-map (kbd "<down>")
+              'my-shell-next-line-or-next-history)))
 
 (global-font-lock-mode -1)
 
