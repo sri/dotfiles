@@ -1,10 +1,13 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d"))
 
-; (require 'filladapt)
+;(require 'filladapt)
+
+(setq filladapt-mode-line-string nil)
+(setq-default filladapt-mode t)
 
 (set-register ?e '(file . "~/.emacs"))
 
-(setq-default visual-line-mode t)
+; (setq-default visual-line-mode t)
 (setq-default indent-tabs-mode nil)
 (setq-default show-trailing-whitespace t)
 (setq make-backup-files nil)
@@ -32,7 +35,7 @@
 (put 'erase-buffer 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(menu-bar-mode -1)
+(menu-bar-mode 1)
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (line-number-mode t)
@@ -42,6 +45,8 @@
 (transient-mark-mode 1)
 (show-paren-mode t)
 (ido-mode 1)
+(auto-revert-mode 1)
+(global-hl-line-mode 1)
 
 (require 'dired-x)
 
@@ -63,10 +68,12 @@
 (global-set-key (kbd "C-b") 'backward-kill-word)
 (global-set-key (kbd "C-d") 'kill-word)
 (global-set-key (kbd "C-f") 'my-isearch-forward)
+(global-set-key (kbd "C-i") 'my-hippie-tab)
 (global-set-key (kbd "C-j") 'other-window)
 (global-set-key (kbd "C-k") 'my-kill-line-or-region)
+(global-set-key "\C-m" 'newline-and-indent)
 (global-set-key (kbd "C-o") 'ffap)
-(global-set-key (kbd "C-n") 'dabbrev-expand)
+;;(global-set-key (kbd "C-n") ')
 (global-set-key (kbd "C-p") 'shell)
 (global-set-key (kbd "C-q") 'magit-status) ;; was quoted-insert
 (global-set-key (kbd "C-r") 'isearch-forward)
@@ -84,6 +91,20 @@
 
 ;; Selection
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'hippie-exp)
+
+(defun my-hippie-tab (arg)
+  (interactive "*P")
+  (cond ((and transient-mark-mode (region-active-p))
+         (indent-region (region-beginning) (region-end) nil))
+        ((and (eq (char-syntax (preceding-char)) ?w)
+              (not (zerop (current-column))))
+         (hippie-expand arg))
+        (t
+         (indent-for-tab-command))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
