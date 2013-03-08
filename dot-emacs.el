@@ -13,7 +13,7 @@
 (setq make-backup-files nil)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
-(setq inhibit-startup-echo-area-message "sri")
+(setq inhibit-startup-echo-area-message "sthaiyar")
 (setq initial-scratch-message nil)
 (setq visible-bell nil)
 (setq ring-bell-function (lambda ()))
@@ -71,17 +71,19 @@
 (global-set-key (kbd "C-i") 'my-hippie-tab)
 (global-set-key (kbd "C-j") 'other-window)
 (global-set-key (kbd "C-k") 'my-kill-line-or-region)
-(global-set-key "\C-m" 'newline-and-indent)
+(global-set-key (kbd "C-m") 'newline-and-indent)
 (global-set-key (kbd "C-o") 'ffap)
-;;(global-set-key (kbd "C-n") ')
+;;****(global-set-key (kbd "C-n") ')
 (global-set-key (kbd "C-p") 'shell)
-(global-set-key (kbd "C-q") 'magit-status) ;; was quoted-insert
+;;****(global-set-key (kbd "C-q") 'magit-status) ;; was quoted-insert
 (global-set-key (kbd "C-r") 'isearch-forward)
 (global-set-key (kbd "C-s") 'save-buffer)
-(global-set-key (kbd "C-t") 'dabbrev-expand)
+;;****(global-set-key (kbd "C-t") 'dabbrev-expand)
 (global-set-key (kbd "C-v") 'clipboard-yank)
-(global-set-key (kbd "C-w") 'other-window)
+;;****(global-set-key (kbd "C-w") 'other-window)
 (global-set-key (kbd "C-z") 'undo)
+
+(global-set-key (kbd "C-x C-q") 'quoted-insert) ; was toggle-read-only
 
 
 (global-set-key (kbd "<M-down>") 'scroll-up)
@@ -89,12 +91,30 @@
 
 (global-set-key (kbd "C-x k") 'my-kill-current-buffer)
 
+(global-set-key (kbd "<f5>") 'magit-status)
+
+(global-set-key (kbd "<f6>") 'find-tag)
+(global-set-key (kbd "<S-f6>") 'my-find-tag-next)
+(global-set-key (kbd "<f7>") 'pop-tag-mark)
+
+(global-set-key (kbd "s-J")
+                'my-sublime-expand-selection-to-indentation)
+(global-set-key (kbd "M-J")
+                'my-sublime-expand-selection-to-indentation)
+
 ;; Selection
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'hippie-exp)
+
+(setq hippie-expand-try-functions-list
+      '(try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-file-name
+        try-complete-lisp-symbol))
 
 (defun my-hippie-tab (arg)
   (interactive "*P")
@@ -107,6 +127,10 @@
          (indent-for-tab-command))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun my-find-tag-next ()
+  (interactive)
+  (find-tag nil t nil))
 
 (defun my-kill-current-buffer ()
   "Kill the current buffer without prompting."
@@ -131,7 +155,7 @@
 (defun my-shell-erase-buffer ()
   (interactive)
   (erase-buffer)
-  (comint-send-input))
+  (comint-next-input t))
 
 (add-hook 'shell-mode-hook
           (lambda ()
@@ -145,6 +169,13 @@
               'my-shell-forward-char-or-previous-history)
             (define-key shell-mode-map (kbd "<down>")
               'my-shell-next-line-or-next-history)))
+
+(add-hook 'view-mode-hook
+          (lambda ()
+            (define-key view-mode-map (kbd "<up>")
+              'scroll-up)
+            (define-key view-mode-map (kbd "<up>")
+              'scroll-up)))
 
 (global-font-lock-mode -1)
 
@@ -176,7 +207,8 @@
 
 (when window-system
   (require 'package)
-  (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+  (add-to-list 'package-archives
+               '("marmalade" . "http://marmalade-repo.org/packages/"))
   (package-initialize)
 
   (let ((missing '()))
@@ -229,5 +261,53 @@
     (my-sublime-like-mouse-dblclick-select-fn)))
 
 (ad-activate 'mouse-drag-region)
+
+(defun my-sublime-expand-selection-to-indentation ()
+  (interactive)
+  "Expand selection to the next indentation level.
+Inspired by Sublime Text."
+  (let ((n (current-indentation))
+        (beg (point-at-bol))
+        (end (point-at-eol)))
+    ;; when region is active & transient mark mode is
+    ;; turned on, we expand to make that region bigger
+    (when (and (region-active-p) transient-mark-mode)
+      (setq beg (region-beginning)
+            end (region-end))
+      (save-excursion
+        ;; get the min indentation within the region
+        (goto-char beg)
+        (forward-line 1)
+        (while (< (point) end)
+          (setq n (min n (current-indentation)))
+          (forward-line 1))
+        ;; get the min indentation of line before
+        ;; region start, line after region start or n
+        (setq n
+              (max (progn
+                     (goto-char beg)
+                     (forward-line -1)
+                     (if (bobp) 0 (current-indentation)))
+                   (progn
+                     (goto-char end)
+                     (forward-line 1)
+                     (if (eobp) 0 (current-indentation)))))))
+    ;; now expand the region
+    (save-excursion
+      (goto-char beg)
+      (forward-line -1)
+      (while (and (>= (current-indentation) n) (not (bobp)))
+        (forward-line -1))
+      (forward-line 1)
+      (setq beg (point-at-bol))
+      (goto-char end)
+      (forward-line 1)
+      (while (and (>= (current-indentation) n) (not (eobp)))
+        (forward-line 1))
+      (forward-line -1)
+      (setq end (point-at-eol)))
+    (goto-char beg)
+    (set-mark beg)
+    (goto-char end)))
 
 (message "")
