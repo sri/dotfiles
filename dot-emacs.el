@@ -173,8 +173,8 @@
 (add-hook 'view-mode-hook
           (lambda ()
             (define-key view-mode-map (kbd "<up>")
-              'scroll-up)
-            (define-key view-mode-map (kbd "<up>")
+              'scroll-down)
+            (define-key view-mode-map (kbd "<down>")
               'scroll-up)))
 
 (global-font-lock-mode -1)
