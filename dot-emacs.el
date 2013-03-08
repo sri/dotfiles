@@ -131,7 +131,7 @@
 (defun my-shell-erase-buffer ()
   (interactive)
   (erase-buffer)
-  (comint-next-input t))
+  (comint-send-input))
 
 (add-hook 'shell-mode-hook
           (lambda ()
