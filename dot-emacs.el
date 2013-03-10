@@ -13,12 +13,16 @@
 (setq make-backup-files nil)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
-(setq inhibit-startup-echo-area-message "sthaiyar")
+(setq inhibit-startup-echo-area-message "sri")
 (setq initial-scratch-message nil)
 (setq visible-bell nil)
 (setq ring-bell-function (lambda ()))
 (setq disabled-command-hook nil)
 (setq kill-whole-line t)
+;; Help char is `?' so C-x ? will list all the
+;; keys bound to C-x.
+(setq help-char ??)
+
 
 (setq eval-expression-print-length nil)
 (setq eval-expression-print-level nil)
@@ -73,7 +77,7 @@
 (global-set-key (kbd "C-k") 'my-kill-line-or-region)
 (global-set-key (kbd "C-m") 'newline-and-indent)
 (global-set-key (kbd "C-o") 'ffap)
-;;****(global-set-key (kbd "C-n") ')
+(global-set-key (kbd "C-n") 'execute-extended-command)
 (global-set-key (kbd "C-p") 'shell)
 ;;****(global-set-key (kbd "C-q") 'magit-status) ;; was quoted-insert
 (global-set-key (kbd "C-r") 'isearch-forward)
