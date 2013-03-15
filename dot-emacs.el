@@ -13,7 +13,7 @@
 (setq make-backup-files nil)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
-(setq inhibit-startup-echo-area-message "sri")
+(setq inhibit-startup-echo-area-message "sthaiyar")
 (setq initial-scratch-message nil)
 (setq visible-bell nil)
 (setq ring-bell-function (lambda ()))
@@ -51,6 +51,7 @@
 (ido-mode 1)
 (auto-revert-mode 1)
 (global-hl-line-mode 1)
+(desktop-save-mode 1)
 
 (require 'dired-x)
 
@@ -164,6 +165,8 @@
 (add-hook 'shell-mode-hook
           (lambda ()
             (setq line-number-mode nil)
+            (setq comint-input-sender
+                  'my-emacs-rspec-command)
             (set (make-variable-buffer-local
                   'show-trailing-whitespace)
                  nil)
@@ -313,5 +316,45 @@ Inspired by Sublime Text."
     (goto-char beg)
     (set-mark beg)
     (goto-char end)))
+
+;; Miscellaneous functions:
+
+;; If there is a visible "rspec" (*_spec.rb) buffer in the
+;; current frame, running a "rspec" command is a shell process,
+;; will run rspec against that buffer's file name (at the line
+;; where the cursor is in that buffer). Add this to your shell-mode-hook
+;; to enable this feature:
+;;     (add-hook 'shell-mode-hook
+;;               (lambda ()
+;;                 (setq comint-input-sender 'my-emacs-rspec-command)))
+;;
+(defun my-emacs-rspec-command (proc string)
+  (when (string-match "^rspec\n?$" string)
+    (let ((buffers (mapcar #'window-buffer (window-list)))
+          (spec-buffer nil))
+      (dolist (buf buffers)
+        (when (string-match "_spec[.]rb$" (or (buffer-file-name buf) ""))
+          (setq spec-buffer buf)))
+      (when spec-buffer
+        (let ((n (with-current-buffer spec-buffer
+                   (line-number-at-pos))))
+          (setq string (format "rspec %s:%d"
+                               (buffer-file-name spec-buffer)
+                               n))
+          (message "Running \"%s\"" string)))))
+  (comint-simple-send proc string))
+
+(defun my-transpose-buffers (&optional arg)
+  (interactive "p")
+  (let* ((windows (window-list nil 'never-minibuffer))
+         (selected (pop windows))
+         (selected-buffer (window-buffer selected)))
+    (when (< arg 0)
+      (setq windows (reverse windows)))
+    (dotimes (i (length windows))
+      (switch-to-buffer (window-buffer (pop windows)))
+      (other-window arg))
+    (switch-to-buffer selected-buffer)
+    (other-window arg)))
 
 (message "")
