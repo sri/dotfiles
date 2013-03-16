@@ -189,13 +189,18 @@
 (setq linum-format " %d ")
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
 
-(unless window-system
+(if window-system
+    (custom-set-faces
+     '(bm-fringe-face ((t (:foreground "#859900")))))
+  ;;
+  ;; non window-system
+  ;;
   (custom-set-faces
    ;; custom-set-faces was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
@@ -210,7 +215,7 @@
    '(trailing-whitespace ((((class color) (background light)) (:background "yellow"))))))
 
 (defvar my-packages
-  '(color-theme color-theme-solarized magit))
+  '(color-theme color-theme-solarized magit bm))
 
 (when window-system
   (require 'package)
@@ -229,6 +234,15 @@
 
   (load-theme 'solarized-dark t))
 
+(require 'bm)
+(setq bm-highlight-style 'bm-highlight-only-fringe)
+(global-set-key (kbd "<C-f2>") 'bm-toggle)
+(global-set-key (kbd "<f2>") 'bm-next)
+(global-set-key (kbd "<S-f2>") 'bm-previous)
+(global-set-key (kbd "<left-fringe> <mouse-5>") 'bm-next-mouse)
+(global-set-key (kbd "<left-fringe> <mouse-4>") 'bm-previous-mouse)
+(global-set-key (kbd "<left-fringe> <mouse-1>") 'bm-toggle-mouse)
+
 (require 'magit)
 (add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
 
@@ -236,15 +250,15 @@
 
 (defun my-sublime-like-mouse-dblclick-select-fn ()
   (let ((isearch-word t)
-	(isearch-forward t)
-	(beg (min (mark) (point)))
-	(string (buffer-substring-no-properties (mark) (point))))
+        (isearch-forward t)
+        (beg (min (mark) (point)))
+        (string (buffer-substring-no-properties (mark) (point))))
     (unless (string-match "^\n*$" string)
       (deactivate-mark)
       (save-excursion
-	(call-interactively 'isearch-forward)
-	(goto-char beg)
-	(isearch-yank-string string)))))
+        (call-interactively 'isearch-forward)
+        (goto-char beg)
+        (isearch-yank-string string)))))
 
 (defun my-isearch-forward ()
   (interactive)
@@ -358,3 +372,4 @@ Inspired by Sublime Text."
     (other-window arg)))
 
 (message "")
+
