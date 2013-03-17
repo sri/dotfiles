@@ -13,7 +13,7 @@
 (setq make-backup-files nil)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
-(setq inhibit-startup-echo-area-message "sthaiyar")
+(setq inhibit-startup-echo-area-message "sri")
 (setq initial-scratch-message nil)
 (setq visible-bell nil)
 (setq ring-bell-function (lambda ()))
@@ -23,6 +23,7 @@
 ;; keys bound to C-x.
 (setq help-char ??)
 
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (setq eval-expression-print-length nil)
 (setq eval-expression-print-level nil)
@@ -107,9 +108,6 @@
 (global-set-key (kbd "M-J")
                 'my-sublime-expand-selection-to-indentation)
 
-;; Selection
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'hippie-exp)
@@ -184,55 +182,33 @@
             (define-key view-mode-map (kbd "<down>")
               'scroll-up)))
 
-(global-font-lock-mode -1)
+(global-font-lock-mode t)
 
 (setq linum-format " %d ")
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
-(if window-system
-    (custom-set-faces
-     '(bm-fringe-face ((t (:foreground "#859900")))))
-  ;;
-  ;; non window-system
-  ;;
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(isearch ((((class color) (min-colors 8)) (:background "cyan" :foreground "black"))))
-   '(linum ((t (:inherit (shadow default) :foreground "gray" :width extra-expanded))))
-   '(magit-item-highlight ((t nil)))
-   '(minibuffer-prompt ((t (:foreground "black"))))
-   '(region ((t (:background "cyan" :foreground "black"))))
-   '(show-paren-match ((((class color) (background light)) (:background "cyan"))))
-   '(trailing-whitespace ((((class color) (background light)) (:background "yellow"))))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar my-packages
   '(color-theme color-theme-solarized magit bm))
 
-(when window-system
-  (require 'package)
-  (add-to-list 'package-archives
-               '("marmalade" . "http://marmalade-repo.org/packages/"))
-  (package-initialize)
+(require 'package)
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
 
-  (let ((missing '()))
-    (dolist (p my-packages)
-      (unless (package-installed-p p)
-        (push p missing)))
-    (when missing
-      (package-refresh-contents)
-      (dolist (p missing)
-        (package-install p))))
+(package-initialize)
 
-  (load-theme 'solarized-dark t))
+(let ((missing '()))
+  (dolist (p my-packages)
+    (unless (package-installed-p p)
+      (push p missing)))
+  (when missing
+    (package-refresh-contents)
+    (dolist (p missing)
+      (package-install p))))
+
+(load-theme 'solarized-dark t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'bm)
 (setq bm-highlight-style 'bm-highlight-only-fringe)
@@ -371,5 +347,12 @@ Inspired by Sublime Text."
     (switch-to-buffer selected-buffer)
     (other-window arg)))
 
-(message "")
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:height 130))))
+ '(bm-fringe-face ((t (:foreground "#859900")))))
 
+(message "")
