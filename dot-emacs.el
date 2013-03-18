@@ -52,9 +52,11 @@
 (ido-mode 1)
 (auto-revert-mode 1)
 (global-hl-line-mode 1)
-(desktop-save-mode 1)
 (electric-pair-mode 1)
 (outline-minor-mode 1)
+
+(desktop-save-mode 1)
+(add-to-list 'desktop-path "~/.emacs.d/desktop")
 
 (require 'dired-x)
 
@@ -224,7 +226,13 @@
 
 (load-theme 'solarized-light t)
 
-(add-hook 'emacs-lisp-mode-hook (lambda () (view-mode 1)))
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (let ((cur (current-buffer)))
+              (if (or (string-equal (buffer-name cur) ".emacs")
+                      (null (buffer-file-name cur)))
+                  nil
+                (view-mode 1)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
