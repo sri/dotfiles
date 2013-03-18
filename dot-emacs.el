@@ -53,6 +53,7 @@
 (auto-revert-mode 1)
 (global-hl-line-mode 1)
 (desktop-save-mode 1)
+(electric-pair-mode 1)
 
 (require 'dired-x)
 
