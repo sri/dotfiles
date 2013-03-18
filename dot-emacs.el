@@ -208,6 +208,8 @@
 (require 'package)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
 (package-initialize)
 
@@ -221,6 +223,8 @@
       (package-install p))))
 
 (load-theme 'solarized-light t)
+
+(add-hook 'emacs-lisp-mode-hook (lambda () (view-mode 1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
