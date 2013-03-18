@@ -132,6 +132,18 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun my-mouse-ctrl-click (event)
+  (interactive "e")
+  (mouse-minibuffer-check event)
+  (unless (one-window-p t)
+    (let ((window (posn-window (event-start event))))
+      (select-window (if (framep window)
+                         (frame-selected-window window)
+                       window))
+      (delete-other-windows))))
+
+(global-set-key [C-down-mouse-1] 'mouse-delete-other-windows)
+
 (defun my-find-tag-next ()
   (interactive)
   (find-tag nil t nil))
@@ -207,7 +219,7 @@
     (dolist (p missing)
       (package-install p))))
 
-(load-theme 'solarized-dark t)
+(load-theme 'solarized-light t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -249,6 +261,14 @@
   'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "<S-return>")
   'isearch-repeat-backward)
+(define-key isearch-mode-map (kbd "<backspace>")
+  'my-isearch-delete-region)
+
+(defun my-isearch-delete-region ()
+  (interactive)
+  (when isearch-other-end
+    (delete-region (point) isearch-other-end)
+    (isearch-done)))
 
 (setq isearch-lazy-highlight-initial-delay 0)
 
