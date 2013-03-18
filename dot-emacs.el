@@ -54,6 +54,7 @@
 (global-hl-line-mode 1)
 (desktop-save-mode 1)
 (electric-pair-mode 1)
+(outline-minor-mode 1)
 
 (require 'dired-x)
 
