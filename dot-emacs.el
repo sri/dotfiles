@@ -101,8 +101,8 @@
 
 (global-set-key (kbd "C-x k") 'my-kill-current-buffer)
 
+(global-set-key (kbd "<f1>") 'view-mode)
 (global-set-key (kbd "<f5>") 'magit-status)
-
 (global-set-key (kbd "<f6>") 'find-tag)
 (global-set-key (kbd "<S-f6>") 'my-find-tag-next)
 (global-set-key (kbd "<f7>") 'pop-tag-mark)
@@ -357,7 +357,7 @@ Inspired by Sublime Text."
     (let ((buffers (mapcar #'window-buffer (window-list)))
           (spec-buffer nil))
       (dolist (buf buffers)
-        (when (string-match "_spec[.]rb$" (or (buffer-file-name buf) ""))
+        (when (string-match "_(spec|test)[.]rb$" (or (buffer-file-name buf) ""))
           (setq spec-buffer buf)))
       (when spec-buffer
         (let ((n (with-current-buffer spec-buffer
