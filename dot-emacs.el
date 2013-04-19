@@ -78,6 +78,7 @@
 (global-set-key (kbd "C-b") 'backward-kill-word)
 (global-set-key (kbd "C-d") 'kill-word)
 (global-set-key (kbd "C-f") 'my-isearch-forward)
+;; (global-set-key (kbd "C-S-f") 'ag-regexp-project-at-point)
 (global-set-key (kbd "C-i") 'my-hippie-tab)
 (global-set-key (kbd "C-j") 'other-window)
 (global-set-key (kbd "C-k") 'my-kill-line-or-region)
@@ -85,12 +86,12 @@
 (global-set-key (kbd "C-o") 'ffap)
 (global-set-key (kbd "C-n") 'execute-extended-command)
 (global-set-key (kbd "C-p") 'shell)
-;;****(global-set-key (kbd "C-q") 'magit-status) ;; was quoted-insert
+;;(global-set-key (kbd "C-q") 'ido-switch-buffer)
 (global-set-key (kbd "C-r") 'isearch-forward)
 (global-set-key (kbd "C-s") 'save-buffer)
-;;****(global-set-key (kbd "C-t") 'dabbrev-expand)
+(global-set-key (kbd "C-t") 'ido-switch-buffer)
 (global-set-key (kbd "C-v") 'clipboard-yank)
-;;****(global-set-key (kbd "C-w") 'other-window)
+(global-set-key (kbd "C-w") 'my-kill-current-buffer)
 (global-set-key (kbd "C-z") 'undo)
 
 (global-set-key (kbd "C-x C-q") 'quoted-insert) ; was toggle-read-only
@@ -174,7 +175,7 @@
 (defun my-shell-erase-buffer ()
   (interactive)
   (erase-buffer)
-  (comint-next-input t))
+  (comint-send-input))
 
 (add-hook 'shell-mode-hook
           (lambda ()
@@ -184,6 +185,12 @@
             (set (make-variable-buffer-local
                   'show-trailing-whitespace)
                  nil)
+            (toggle-truncate-lines 1)
+            ;(buffer-disable-undo)
+            (define-key shell-mode-map (kbd "C-<up>")
+              'comint-previous-prompt)
+            (define-key shell-mode-map (kbd "C-<down>")
+              'comint-next-prompt)
             (define-key shell-mode-map (kbd "C-c e")
               'my-shell-erase-buffer)
             (define-key shell-mode-map (kbd "<right>")
@@ -224,15 +231,7 @@
     (dolist (p missing)
       (package-install p))))
 
-(load-theme 'solarized-light t)
-
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (let ((cur (current-buffer)))
-              (if (or (string-equal (buffer-name cur) ".emacs")
-                      (null (buffer-file-name cur)))
-                  nil
-                (view-mode 1)))))
+(load-theme 'solarized-dark t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -342,6 +341,13 @@ Inspired by Sublime Text."
     (goto-char end)))
 
 ;; Miscellaneous functions:
+
+(defun my-toggle-fullscreen ()
+  (interactive)
+  (cond ((eq window-system 'x)
+         (let ((fullp (frame-parameter nil 'fullscreen)))
+           (set-frame-parameter nil 'fullscreen
+                                (if fullp nil 'fullscreen))))))
 
 ;; If there is a visible "rspec" (*_spec.rb) buffer in the
 ;; current frame, running a "rspec" command is a shell process,
