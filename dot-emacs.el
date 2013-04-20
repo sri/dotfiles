@@ -395,4 +395,84 @@ Inspired by Sublime Text."
  '(default ((t (:height 130))))
  '(bm-fringe-face ((t (:foreground "#859900")))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Mode line hacking
+
+(defun my-mode-line-kill-file-full-path (event)
+  (interactive "e")
+  (with-selected-window (posn-window (event-start event))
+    (let ((full (buffer-file-name)))
+      (when full
+        (kill-new full)
+        (message "Copied: `%s'" full)))))
+
+(defvar my-mode-line-buffer-identification-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map [mode-line mouse-1] 'my-mode-line-kill-file-full-path)
+    (define-key map [header-line down-mouse-1] 'ignore)
+    (define-key map [header-line mouse-1] 'my-mode-line-kill-file-full-path)
+    (define-key map [mode-line mouse-3] 'ignore)
+    (define-key map [header-line down-mouse-3] 'ignore)
+    (define-key map [header-line mouse-3] 'ignore)
+    map))
+
+(defun my-mode-line-buffer-identification-help-echo (window object point)
+  (let ((buffer (window-buffer window)))
+    (with-current-buffer buffer
+      (format "%s\n%s\nmouse-1: Copy file path to kill ring"
+              (buffer-name buffer)
+              (buffer-file-name buffer)))))
+
+(setq-default mode-line-buffer-identification
+      (list (propertize "%12b"
+                        'face 'mode-line-buffer-id
+                        'help-echo 'my-mode-line-buffer-identification-help-echo
+                        'mouse-face 'mode-line-highlight
+                        'local-map my-mode-line-buffer-identification-keymap)))
+
+(defvar my-mode-line-buffer-modified-p-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map [mode-line mouse-1] 'save-buffer)
+    (define-key map [mode-line down-mouse-1] 'ignore)
+    map))
+
+(setq-default mode-line-modified
+              `(:propertize (:eval (if (buffer-modified-p) "*" " "))
+                            help-echo "mouse-1: Save buffer"
+                            mouse-face mode-line-highlight
+                            local-map ,my-mode-line-buffer-modified-p-keymap))
+
+(defun my-mode-line-beginning-or-end-of-buffer (event)
+  (interactive "e")
+  (let* ((window (posn-window (event-start event)))
+         (buffer (window-buffer window)))
+    (with-current-buffer buffer
+      (if (bobp)
+          (end-of-buffer)
+        (beginning-of-buffer)))))
+
+(setq my-mode-line-buffer-percentage-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [mode-line mouse-1] 'my-mode-line-beginning-or-end-of-buffer)
+    (define-key map [mode-line down-mouse-1] 'ignore)
+    map))
+
+(setq-default mode-line-position
+  `((-3 ,(propertize
+          "%p"
+          'local-map my-mode-line-buffer-percentage-mode-map
+          'mouse-face 'mode-line-highlight
+          'help-echo "mouse-1: toggle between Beginning & End of buffer"))))
+(make-variable-buffer-local 'mode-line-position)
+
+ (setq-default mode-line-format
+      '(" " mode-line-modified " "
+        mode-line-buffer-identification " | "
+        mode-line-position " | "
+        mode-line-modes
+        (vc-mode vc-mode)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (message "")
