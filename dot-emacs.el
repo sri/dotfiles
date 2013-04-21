@@ -424,9 +424,17 @@ Inspired by Sublime Text."
               (buffer-name buffer)
               (buffer-file-name buffer)))))
 
+(make-face 'my-mode-line-buffer-name-face)
+(set-face-attribute 'my-mode-line-buffer-name-face nil
+    :inherit 'mode-line-faced
+    ;:foreground "#4271ae"
+    ;;:height 90
+    ;:box '(:line-width 2 :color "#4271ae")
+    )
+
 (setq-default mode-line-buffer-identification
-      (list (propertize "%12b"
-                        'face 'mode-line-buffer-id
+      (list (propertize "%30b"
+                        'face 'my-mode-line-buffer-name-face
                         'help-echo 'my-mode-line-buffer-identification-help-echo
                         'mouse-face 'mode-line-highlight
                         'local-map my-mode-line-buffer-identification-keymap)))
@@ -445,33 +453,74 @@ Inspired by Sublime Text."
 
 (defun my-mode-line-beginning-or-end-of-buffer (event)
   (interactive "e")
-  (let* ((window (posn-window (event-start event)))
-         (buffer (window-buffer window)))
-    (with-current-buffer buffer
-      (if (bobp)
-          (end-of-buffer)
-        (beginning-of-buffer)))))
+  (with-selected-window (posn-window (event-start event))
+    (if (bobp)
+        (goto-char (point-max))
+      (goto-char (point-min)))))
+
+(defun my-mode-line-scroll-up (event)
+  (interactive "e")
+  (with-selected-window (posn-window (event-start event))
+    (scroll-up)))
+
+(defun my-mode-line-scroll-down (event)
+  (interactive "e")
+  (with-selected-window (posn-window (event-start event))
+    (scroll-down)))
 
 (setq my-mode-line-buffer-percentage-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map [mode-line mouse-1] 'my-mode-line-beginning-or-end-of-buffer)
+    (define-key map [mode-line mouse-1] 'my-mode-line-scroll-up)
+    (define-key map [mode-line C-mouse-1] 'my-mode-line-scroll-down)
+    (define-key map [mode-line S-mouse-1] 'my-mode-line-beginning-or-end-of-buffer)
     (define-key map [mode-line down-mouse-1] 'ignore)
     map))
+
+(defun my-mode-line-goto-line (event)
+  (interactive "e")
+  (with-selected-window (posn-window (event-start event))
+    (let ((n (read-number "Goto line: ")))
+      (goto-line n))))
+
+(setq my-mode-line-column-line-number-mode-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map [mode-line mouse-1] 'my-mode-line-goto-line)
+        (define-key map [mode-line down-mouse-1] 'ignore)
+        map))
 
 (setq-default mode-line-position
   `((-3 ,(propertize
           "%p"
           'local-map my-mode-line-buffer-percentage-mode-map
           'mouse-face 'mode-line-highlight
-          'help-echo "mouse-1: toggle between Beginning & End of buffer"))))
+          'help-echo "mouse-1: scroll up\nCtrl mouse-1: scroll down
+Shift mouse-1: toggle between Beginning & End of buffer"))
+    (line-number-mode
+     ((column-number-mode
+       (10 ,(propertize
+	     " (L%l,C%c)"
+	     'local-map my-mode-line-column-line-number-mode-map
+	     'mouse-face 'mode-line-highlight
+	     'help-echo "mouse-1: goto line"))
+       (6 ,(propertize
+	    " L%l"
+	    'local-map my-mode-line-column-line-number-mode-map
+	    'mouse-face 'mode-line-highlight
+	    'help-echo "mouse-1: goto line"))))
+     ((column-number-mode
+       (5 ,(propertize
+	    " C%c"
+	    'local-map my-mode-line-column-line-number-mode-map
+	    'mouse-face 'mode-line-highlight
+	    'help-echo "mouse-1: goto line")))))))
+
 (make-variable-buffer-local 'mode-line-position)
 
  (setq-default mode-line-format
-      '(" " mode-line-modified " "
-        mode-line-buffer-identification " | "
-        mode-line-position " | "
-        mode-line-modes
-        (vc-mode vc-mode)))
+       '(" " mode-line-modified " "
+         mode-line-buffer-identification " "
+         mode-line-modes " "
+         mode-line-position))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
