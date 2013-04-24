@@ -28,35 +28,27 @@
 (setq eval-expression-print-length nil)
 (setq eval-expression-print-level nil)
 
-;; (setq mode-line-format
-;;       '("" mode-line-modified
-;;      mode-line-frame-identification
-;;      mode-line-buffer-identification
-;;      mode-line-position
-;;      (vc-mode vc-mode)
-;;      mode-line-modes
-;;      ))
-
 (put 'erase-buffer 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (menu-bar-mode 1)
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 (line-number-mode t)
-(column-number-mode -1)
+(column-number-mode t)
 (blink-cursor-mode -1)
 (auto-compression-mode t)
 (transient-mark-mode 1)
 (show-paren-mode t)
 (ido-mode 1)
-(auto-revert-mode 1)
+;(auto-revert-mode 1)
 (global-hl-line-mode 1)
 (electric-pair-mode 1)
-(outline-minor-mode 1)
+;(outline-minor-mode 1)
 
 (desktop-save-mode 1)
 (add-to-list 'desktop-path "~/.emacs.d/desktop")
+
 
 (require 'dired-x)
 
@@ -179,7 +171,8 @@
 
 (add-hook 'shell-mode-hook
           (lambda ()
-            (setq line-number-mode nil)
+            (setq line-number-mode nil
+                  column-number-mode nil)
             (setq comint-input-sender
                   'my-emacs-rspec-command)
             (set (make-variable-buffer-local
@@ -231,7 +224,7 @@
     (dolist (p missing)
       (package-install p))))
 
-(load-theme 'solarized-dark t)
+(load-theme 'solarized-light t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -432,12 +425,20 @@ Inspired by Sublime Text."
     ;:box '(:line-width 2 :color "#4271ae")
     )
 
+(defun my-mode-line-buffer-name ()
+  (let* ((boxsize 30)
+         (bn (buffer-name))
+         (len (length bn)))
+    (if (> len boxsize)
+        (concat (substring bn 0 (- boxsize 3)) "...")
+      (concat bn (make-string (- boxsize len) ? )))))
+
 (setq-default mode-line-buffer-identification
-      (list (propertize "%30b"
-                        'face 'my-mode-line-buffer-name-face
-                        'help-echo 'my-mode-line-buffer-identification-help-echo
-                        'mouse-face 'mode-line-highlight
-                        'local-map my-mode-line-buffer-identification-keymap)))
+              `(:propertize (:eval (my-mode-line-buffer-name))
+                           face my-mode-line-buffer-name-face
+                           help-echo my-mode-line-buffer-identification-help-echo
+                           mouse-face mode-line-highlight
+                           local-map ,my-mode-line-buffer-identification-keymap))
 
 (defvar my-mode-line-buffer-modified-p-keymap
   (let ((map (make-sparse-keymap)))
@@ -446,7 +447,7 @@ Inspired by Sublime Text."
     map))
 
 (setq-default mode-line-modified
-              `(:propertize (:eval (if (buffer-modified-p) "*" " "))
+              `(:propertize (:eval (if (buffer-modified-p) "•" " "))
                             help-echo "mouse-1: Save buffer"
                             mouse-face mode-line-highlight
                             local-map ,my-mode-line-buffer-modified-p-keymap))
@@ -516,11 +517,70 @@ Shift mouse-1: toggle between Beginning & End of buffer"))
 
 (make-variable-buffer-local 'mode-line-position)
 
- (setq-default mode-line-format
-       '(" " mode-line-modified " "
-         mode-line-buffer-identification " "
-         mode-line-modes " "
-         mode-line-position))
+
+(defun my-mode-line-window-split-right (event)
+  (interactive "e")
+  (with-selected-window (posn-window (event-start event))
+    (split-window-right)))
+
+(defun my-mode-line-window-split-below (event)
+  (interactive "e")
+  (with-selected-window (posn-window (event-start event))
+    (split-window-below)))
+
+(defun my-mode-line-window-delete (event)
+  (interactive "e")
+  (with-selected-window (posn-window (event-start event))
+    (delete-window)))
+
+(defun my-mode-line-window-delete-other-windows (event)
+  (interactive "e")
+  (with-selected-window (posn-window (event-start event))
+    (delete-other-windows)))
+
+(defun my-make-mode-line-mouse-map (&rest args)
+  (let ((map (make-sparse-keymap)))
+    (while args
+      (define-key map (vector 'mode-line (pop args)) (pop args)))
+    map))
+
+
+(setq-default my-mode-line-window-manipulation
+  (list (propertize "⇨"
+                    'mouse-face 'mode-line-highlight
+                    'help-echo "split window right"
+                    'local-map (my-make-mode-line-mouse-map
+                                'down-mouse-1 #'ignore
+                                'mouse-1 #'my-mode-line-window-split-right))
+        (propertize "⇩"
+                    'mouse-face 'mode-line-highlight
+                    'help-echo "split window below"
+                    'local-map (my-make-mode-line-mouse-map
+                                'down-mouse-1 #'ignore
+                                'mouse-1 #'my-mode-line-window-split-below))
+        (propertize "₀"
+                    'mouse-face 'mode-line-highlight
+                    'help-echo "delete window"
+                   'local-map (my-make-mode-line-mouse-map
+                                'down-mouse-1 #'ignore
+                                'mouse-1 #'my-mode-line-window-delete))
+        (propertize "₁"
+                    'mouse-face 'mode-line-highlight
+                    'help-echo "delete other windows"
+                    'local-map (my-make-mode-line-mouse-map
+                                'down-mouse-1 #'ignore
+                                'mouse-1 #'my-mode-line-window-delete-other-windows))))
+
+(make-variable-buffer-local 'my-mode-line-window-manipulation)
+(put 'my-mode-line-window-manipulation 'risky-local-variable t)
+
+(setq-default mode-line-format
+              '(" "
+                mode-line-modified " "
+                my-mode-line-window-manipulation " "
+                mode-line-buffer-identification " "
+                mode-line-modes " "
+                mode-line-position))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
