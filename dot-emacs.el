@@ -79,12 +79,14 @@
 (global-set-key (kbd "C-n") 'execute-extended-command)
 (global-set-key (kbd "C-p") 'shell)
 ;;(global-set-key (kbd "C-q") 'ido-switch-buffer)
-(global-set-key (kbd "C-r") 'isearch-forward)
+(global-set-key (kbd "C-r") 'query-replace)
 (global-set-key (kbd "C-s") 'save-buffer)
 (global-set-key (kbd "C-t") 'ido-switch-buffer)
 (global-set-key (kbd "C-v") 'clipboard-yank)
 (global-set-key (kbd "C-w") 'my-kill-current-buffer)
 (global-set-key (kbd "C-z") 'undo)
+
+(global-set-key (kbd "S-C-j") 'join-line)
 
 (global-set-key (kbd "C-x C-q") 'quoted-insert) ; was toggle-read-only
 
@@ -100,10 +102,10 @@
 (global-set-key (kbd "<S-f6>") 'my-find-tag-next)
 (global-set-key (kbd "<f7>") 'pop-tag-mark)
 
-(global-set-key (kbd "s-J")
-                'my-sublime-expand-selection-to-indentation)
-(global-set-key (kbd "M-J")
-                'my-sublime-expand-selection-to-indentation)
+;(global-set-key (kbd "s-J")
+;                'my-sublime-expand-selection-to-indentation)
+;(global-set-key (kbd "M-J")
+;                'my-sublime-expand-selection-to-indentation)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -392,13 +394,17 @@ Inspired by Sublime Text."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode line hacking
 
-(defun my-mode-line-kill-file-full-path (event)
-  (interactive "e")
-  (with-selected-window (posn-window (event-start event))
-    (let ((full (buffer-file-name)))
-      (when full
-        (kill-new full)
-        (message "Copied: `%s'" full)))))
+(defmacro def-with-selected-window (name &rest body)
+  `(defun ,name (event)
+     (interactive "e")
+     (with-selected-window (posn-window (event-start event))
+       ,@body)))
+
+(def-with-selected-window my-mode-line-kill-file-full-path
+  (let ((full (buffer-file-name)))
+    (when full
+      (kill-new full)
+      (message "Copied: `%s'" full))))
 
 (defvar my-mode-line-buffer-identification-keymap
   (let ((map (make-sparse-keymap)))
@@ -452,36 +458,28 @@ Inspired by Sublime Text."
                             mouse-face mode-line-highlight
                             local-map ,my-mode-line-buffer-modified-p-keymap))
 
-(defun my-mode-line-beginning-or-end-of-buffer (event)
-  (interactive "e")
-  (with-selected-window (posn-window (event-start event))
-    (if (bobp)
-        (goto-char (point-max))
-      (goto-char (point-min)))))
+(def-with-selected-window my-mode-line-beginning-or-end-of-buffer
+  (if (bobp)
+      (goto-char (point-max))
+    (goto-char (point-min))))
 
-(defun my-mode-line-scroll-up (event)
-  (interactive "e")
-  (with-selected-window (posn-window (event-start event))
-    (scroll-up)))
+(def-with-selected-window my-mode-line-scroll-up
+  (scroll-up))
 
-(defun my-mode-line-scroll-down (event)
-  (interactive "e")
-  (with-selected-window (posn-window (event-start event))
-    (scroll-down)))
+(def-with-selected-window my-mode-line-scroll-down
+  (scroll-down))
 
 (setq my-mode-line-buffer-percentage-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map [mode-line mouse-1] 'my-mode-line-scroll-up)
-    (define-key map [mode-line C-mouse-1] 'my-mode-line-scroll-down)
-    (define-key map [mode-line S-mouse-1] 'my-mode-line-beginning-or-end-of-buffer)
+    (define-key map [mode-line S-mouse-1] 'my-mode-line-scroll-down)
+    (define-key map [mode-line C-mouse-1] 'my-mode-line-beginning-or-end-of-buffer)
     (define-key map [mode-line down-mouse-1] 'ignore)
     map))
 
-(defun my-mode-line-goto-line (event)
-  (interactive "e")
-  (with-selected-window (posn-window (event-start event))
-    (let ((n (read-number "Goto line: ")))
-      (goto-line n))))
+(def-with-selected-window my-mode-line-goto-line
+  (let ((n (read-number "Goto line: ")))
+    (goto-line n)))
 
 (setq my-mode-line-column-line-number-mode-map
       (let ((map (make-sparse-keymap)))
@@ -494,8 +492,8 @@ Inspired by Sublime Text."
           "%p"
           'local-map my-mode-line-buffer-percentage-mode-map
           'mouse-face 'mode-line-highlight
-          'help-echo "mouse-1: scroll up\nCtrl mouse-1: scroll down
-Shift mouse-1: toggle between Beginning & End of buffer"))
+          'help-echo "mouse-1: scroll up\nShift mouse-1: scroll down
+Ctrl mouse-1: toggle between Beginning & End of buffer"))
     (line-number-mode
      ((column-number-mode
        (10 ,(propertize
@@ -518,25 +516,18 @@ Shift mouse-1: toggle between Beginning & End of buffer"))
 (make-variable-buffer-local 'mode-line-position)
 
 
-(defun my-mode-line-window-split-right (event)
-  (interactive "e")
-  (with-selected-window (posn-window (event-start event))
-    (split-window-right)))
 
-(defun my-mode-line-window-split-below (event)
-  (interactive "e")
-  (with-selected-window (posn-window (event-start event))
-    (split-window-below)))
+(def-with-selected-window my-mode-line-window-split-right
+  (split-window-right))
 
-(defun my-mode-line-window-delete (event)
-  (interactive "e")
-  (with-selected-window (posn-window (event-start event))
-    (delete-window)))
+(def-with-selected-window my-mode-line-window-split-below
+  (split-window-below))
 
-(defun my-mode-line-window-delete-other-windows (event)
-  (interactive "e")
-  (with-selected-window (posn-window (event-start event))
-    (delete-other-windows)))
+(def-with-selected-window my-mode-line-window-delete
+  (delete-window))
+
+(def-with-selected-window my-mode-line-window-delete-other-windows
+  (delete-other-windows))
 
 (defun my-make-mode-line-mouse-map (&rest args)
   (let ((map (make-sparse-keymap)))
@@ -558,13 +549,13 @@ Shift mouse-1: toggle between Beginning & End of buffer"))
                     'local-map (my-make-mode-line-mouse-map
                                 'down-mouse-1 #'ignore
                                 'mouse-1 #'my-mode-line-window-split-below))
-        (propertize "₀"
+        (propertize "×" ; "₀"
                     'mouse-face 'mode-line-highlight
                     'help-echo "delete window"
                    'local-map (my-make-mode-line-mouse-map
                                 'down-mouse-1 #'ignore
                                 'mouse-1 #'my-mode-line-window-delete))
-        (propertize "₁"
+        (propertize "1" ; "₁"
                     'mouse-face 'mode-line-highlight
                     'help-echo "delete other windows"
                     'local-map (my-make-mode-line-mouse-map
