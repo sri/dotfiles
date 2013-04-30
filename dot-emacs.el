@@ -310,8 +310,11 @@
 (require 'advice)
 
 (defadvice mouse-drag-region (after my-sublime-like-mouse-select (start-event))
-  (when (= (event-click-count start-event) 2)
-    (my-sublime-like-mouse-dblclick-select-fn)))
+  (let ((click-count (event-click-count start-event)))
+    (cond ((= click-count 2)
+           (my-sublime-like-mouse-dblclick-select-fn))
+          ((= click-count 1)
+           (my-sublime-like-mouse-dblclick-unselect-fn)))))
 
 (ad-activate 'mouse-drag-region)
 
