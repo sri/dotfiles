@@ -243,8 +243,36 @@
 (add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
 
 ;; Some Sublime Text-isms:
+(defvar my-highlight-word-on-dblclick-word nil)
+(make-variable-buffer-local 'my-highlight-word-on-dblclick-word)
+
+(defun my-highlight-word-on-dblclick ()
+  (let ((string (buffer-substring-no-properties (mark) (point))))
+    (my-sublime-like-mouse-dblclick-unselect-fn)
+    (setq my-sublime-like-mouse-dblclick-select-word string)
+    (highlight-regexp string 'isearch)))
+
+(defun my-unhighlight-word-on-dblclick ()
+  (when my-highlight-word-on-dblclick-word
+    (unhighlight-regexp my-highlight-word-on-dblclick-word)
+    (setq my-sublime-like-mouse-dblclick-select-word nil)))
+
+(defvar my-sublime-like-mouse-dblclick-select-word nil)
+(make-variable-buffer-local 'my-sublime-like-mouse-dblclick-select-word)
 
 (defun my-sublime-like-mouse-dblclick-select-fn ()
+  (let ((string (buffer-substring-no-properties (mark) (point))))
+    (message "string is: %s" string)
+    (my-sublime-like-mouse-dblclick-unselect-fn)
+    (setq my-sublime-like-mouse-dblclick-select-word string)
+    (highlight-regexp string 'isearch)))
+
+(defun my-sublime-like-mouse-dblclick-unselect-fn ()
+  (when my-sublime-like-mouse-dblclick-select-word
+    (unhighlight-regexp my-sublime-like-mouse-dblclick-select-word)
+    (setq my-sublime-like-mouse-dblclick-select-word nil)))
+
+(defun my-sublime-like-mouse-dblclick-select-fn/isearch ()
   (let ((isearch-word t)
         (isearch-forward t)
         (beg (min (mark) (point)))
@@ -268,7 +296,7 @@
   'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "<S-return>")
   'isearch-repeat-backward)
-(define-key isearch-mode-map (kbd "<backspace>")
+(define-key isearch-mode-map (kbd "<deletechar>")
   'my-isearch-delete-region)
 
 (defun my-isearch-delete-region ()
