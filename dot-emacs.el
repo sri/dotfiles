@@ -102,6 +102,10 @@
 (global-set-key (kbd "<S-f6>") 'my-find-tag-next)
 (global-set-key (kbd "<f7>") 'pop-tag-mark)
 
+(when (eq system-type 'darwin)
+  (global-set-key (kbd "<s-up>") 'scroll-down)
+  (global-set-key (kbd "<s-down>") 'scroll-up))
+
 ;(global-set-key (kbd "s-J")
 ;                'my-sublime-expand-selection-to-indentation)
 ;(global-set-key (kbd "M-J")
@@ -243,36 +247,8 @@
 (add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
 
 ;; Some Sublime Text-isms:
-(defvar my-highlight-word-on-dblclick-word nil)
-(make-variable-buffer-local 'my-highlight-word-on-dblclick-word)
-
-(defun my-highlight-word-on-dblclick ()
-  (let ((string (buffer-substring-no-properties (mark) (point))))
-    (my-sublime-like-mouse-dblclick-unselect-fn)
-    (setq my-sublime-like-mouse-dblclick-select-word string)
-    (highlight-regexp string 'isearch)))
-
-(defun my-unhighlight-word-on-dblclick ()
-  (when my-highlight-word-on-dblclick-word
-    (unhighlight-regexp my-highlight-word-on-dblclick-word)
-    (setq my-sublime-like-mouse-dblclick-select-word nil)))
-
-(defvar my-sublime-like-mouse-dblclick-select-word nil)
-(make-variable-buffer-local 'my-sublime-like-mouse-dblclick-select-word)
 
 (defun my-sublime-like-mouse-dblclick-select-fn ()
-  (let ((string (buffer-substring-no-properties (mark) (point))))
-    (message "string is: %s" string)
-    (my-sublime-like-mouse-dblclick-unselect-fn)
-    (setq my-sublime-like-mouse-dblclick-select-word string)
-    (highlight-regexp string 'isearch)))
-
-(defun my-sublime-like-mouse-dblclick-unselect-fn ()
-  (when my-sublime-like-mouse-dblclick-select-word
-    (unhighlight-regexp my-sublime-like-mouse-dblclick-select-word)
-    (setq my-sublime-like-mouse-dblclick-select-word nil)))
-
-(defun my-sublime-like-mouse-dblclick-select-fn/isearch ()
   (let ((isearch-word t)
         (isearch-forward t)
         (beg (min (mark) (point)))
@@ -296,7 +272,7 @@
   'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "<S-return>")
   'isearch-repeat-backward)
-(define-key isearch-mode-map (kbd "<deletechar>")
+(define-key isearch-mode-map (kbd "<backspace>")
   'my-isearch-delete-region)
 
 (defun my-isearch-delete-region ()
@@ -310,11 +286,8 @@
 (require 'advice)
 
 (defadvice mouse-drag-region (after my-sublime-like-mouse-select (start-event))
-  (let ((click-count (event-click-count start-event)))
-    (cond ((= click-count 2)
-           (my-sublime-like-mouse-dblclick-select-fn))
-          ((= click-count 1)
-           (my-sublime-like-mouse-dblclick-unselect-fn)))))
+  (when (= (event-click-count start-event) 2)
+    (my-sublime-like-mouse-dblclick-select-fn)))
 
 (ad-activate 'mouse-drag-region)
 
@@ -568,25 +541,25 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
 
 
 (setq-default my-mode-line-window-manipulation
-  (list (propertize "⇨"
+  (list (propertize "[⇨]"
                     'mouse-face 'mode-line-highlight
                     'help-echo "split window right"
                     'local-map (my-make-mode-line-mouse-map
                                 'down-mouse-1 #'ignore
                                 'mouse-1 #'my-mode-line-window-split-right))
-        (propertize "⇩"
+        (propertize "[⇩]"
                     'mouse-face 'mode-line-highlight
                     'help-echo "split window below"
                     'local-map (my-make-mode-line-mouse-map
                                 'down-mouse-1 #'ignore
                                 'mouse-1 #'my-mode-line-window-split-below))
-        (propertize "×" ; "₀"
+        (propertize "[×]" ; "₀"
                     'mouse-face 'mode-line-highlight
                     'help-echo "delete window"
                    'local-map (my-make-mode-line-mouse-map
                                 'down-mouse-1 #'ignore
                                 'mouse-1 #'my-mode-line-window-delete))
-        (propertize "1" ; "₁"
+        (propertize "[1]" ; "₁"
                     'mouse-face 'mode-line-highlight
                     'help-echo "delete other windows"
                     'local-map (my-make-mode-line-mouse-map
@@ -601,7 +574,7 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
                 mode-line-modified " "
                 my-mode-line-window-manipulation " "
                 mode-line-buffer-identification " "
-                mode-line-modes " "
+;                mode-line-modes " "
                 mode-line-position))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
