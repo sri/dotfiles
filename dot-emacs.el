@@ -10,15 +10,15 @@
 (defun my-show-trailing-whitespace ()
   (setq show-trailing-whitespace t))
 
-(let ((trailing-whitespace-modes
+(let ((trailing-whitespace-mode-hooks
        '(ruby-mode-hook python-mode-hook
                         c-mode-hook
                         c++-mode-hook
                         js-mode-hook
                         java-mode-hook
                         emacs-lisp-mode-hook)))
-  (dolist (mode trailing-whitespace-modes)
-    (add-hook mode 'my-show-trailing-whitespace)))
+  (dolist (hook trailing-whitespace-mode-hooks)
+    (add-hook hook 'my-show-trailing-whitespace)))
 
 ; (setq-default visual-line-mode t)
 (setq-default indent-tabs-mode nil)
