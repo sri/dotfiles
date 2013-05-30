@@ -7,9 +7,21 @@
 
 (set-register ?e '(file . "~/.emacs"))
 
+(defun my-show-trailing-whitespace ()
+  (setq show-trailing-whitespace t))
+
+(let ((trailing-whitespace-modes
+       '(ruby-mode-hook python-mode-hook
+                        c-mode-hook
+                        c++-mode-hook
+                        js-mode-hook
+                        java-mode-hook
+                        emacs-lisp-mode-hook)))
+  (dolist (mode trailing-whitespace-modes)
+    (add-hook mode 'my-show-trailing-whitespace)))
+
 ; (setq-default visual-line-mode t)
 (setq-default indent-tabs-mode nil)
-(setq-default show-trailing-whitespace t)
 (setq make-backup-files nil)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
@@ -181,9 +193,6 @@
                   column-number-mode nil)
             (setq comint-input-sender
                   'my-emacs-rspec-command)
-            (set (make-variable-buffer-local
-                  'show-trailing-whitespace)
-                 nil)
             (toggle-truncate-lines 1)
             ;(buffer-disable-undo)
             (define-key shell-mode-map (kbd "C-<up>")
