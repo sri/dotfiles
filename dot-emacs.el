@@ -584,7 +584,8 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
                 my-mode-line-window-manipulation " "
                 mode-line-buffer-identification " "
 ;                mode-line-modes " "
-                mode-line-position))
+                mode-line-position
+                (defining-kbd-macro " Def")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
