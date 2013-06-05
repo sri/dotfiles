@@ -587,6 +587,10 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
                 mode-line-position
                 (defining-kbd-macro " Def")))
 
+(let ((private-emacs (expand-file-name "~/.emacs.private")))
+  (when (file-exists-p private-emacs)
+    (load-file private-emacs)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (message "")
