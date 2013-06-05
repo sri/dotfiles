@@ -43,6 +43,7 @@
 (put 'erase-buffer 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 
+(cua-selection-mode 1)
 (menu-bar-mode 1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -187,8 +188,23 @@
   (erase-buffer)
   (comint-send-input))
 
+(def-with-selected-window my-header-line-shell-erase-buffer-and-run-prev-cmd
+  (my-shell-erase-buffer)
+  (comint-previous-input 1)
+  (comint-send-input))
+
+(defun my-setup-shell-header-line ()
+  (setq header-line-format
+        (list (propertize " [↩]"
+                          'mouse-face 'mode-line-highlight
+                          'help-echo "erase buffer & run prev cmd"
+                          'local-map (my-make-header-line-mouse-map
+                                      'down-mouse-1 #'ignore
+                                      'mouse-1 #'my-header-line-shell-erase-buffer-and-run-prev-cmd)))))
+
 (add-hook 'shell-mode-hook
           (lambda ()
+            (my-setup-shell-header-line)
             (setq line-number-mode nil
                   column-number-mode nil)
             (setq comint-input-sender
@@ -548,6 +564,11 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
       (define-key map (vector 'mode-line (pop args)) (pop args)))
     map))
 
+(defun my-make-header-line-mouse-map (&rest args)
+  (let ((map (make-sparse-keymap)))
+    (while args
+      (define-key map (vector 'header-line (pop args)) (pop args)))
+    map))
 
 (setq-default my-mode-line-window-manipulation
   (list (propertize "[⇨]"
