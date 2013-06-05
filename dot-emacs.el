@@ -21,6 +21,7 @@
     (add-hook hook 'my-show-trailing-whitespace)))
 
 ; (setq-default visual-line-mode t)
+(setq mouse-drag-copy-region t)
 (setq-default indent-tabs-mode nil)
 (setq make-backup-files nil)
 (setq inhibit-splash-screen t)
@@ -188,14 +189,15 @@
   (erase-buffer)
   (comint-send-input))
 
-(def-with-selected-window my-header-line-shell-erase-buffer-and-run-prev-cmd
-  (my-shell-erase-buffer)
-  (comint-previous-input 1)
-  (comint-send-input))
-
 (defun my-setup-shell-header-line ()
   (setq header-line-format
         (list (propertize " [↩]"
+                          'mouse-face 'mode-line-highlight
+                          'help-echo "erase buffer"
+                          'local-map (my-make-header-line-mouse-map
+                                      'down-mouse-1 #'ignore
+                                      'mouse-1 #'my-header-line-shell-erase-buffer))
+              (propertize " [↩!]"
                           'mouse-face 'mode-line-highlight
                           'help-echo "erase buffer & run prev cmd"
                           'local-map (my-make-header-line-mouse-map
@@ -297,8 +299,7 @@
   'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "<S-return>")
   'isearch-repeat-backward)
-(define-key isearch-mode-map (kbd "<backspace>")
-  'my-isearch-delete-region)
+;(define-key isearch-mode-map (kbd "<backspace>") 'my-isearch-delete-region)
 
 (defun my-isearch-delete-region ()
   (interactive)
@@ -428,6 +429,15 @@ Inspired by Sublime Text."
      (interactive "e")
      (with-selected-window (posn-window (event-start event))
        ,@body)))
+
+(def-with-selected-window my-header-line-shell-erase-buffer-and-run-prev-cmd
+  (my-shell-erase-buffer)
+  (comint-previous-input 1)
+  (comint-send-input))
+
+(def-with-selected-window my-header-line-shell-erase-buffer
+  (my-shell-erase-buffer))
+
 
 (def-with-selected-window my-mode-line-kill-file-full-path
   (let ((full (buffer-file-name)))
