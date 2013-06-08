@@ -273,6 +273,25 @@
 (require 'magit)
 (add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
 
+(defun my-magit-click ()
+  (cond ((memq major-mode '(magit-log-mode
+                            magit-branch-manager-mode))
+         (magit-show-item-or-scroll-up))
+        ((eq major-mode 'magit-status-mode)
+         (let* ((current (magit-current-section))
+                (parent (magit-section-parent current)))
+           (if (eq (magit-section-title parent) 'stashes)
+               (magit-show-item-or-scroll-up)
+             (magit-toggle-section))))
+        ((memq major-mode '(magit-wazzup-mode
+                            magit-commit-mode
+                            magit-log-edit-mode
+                            magit-stash-mode
+                            magit-reflog-mode
+                            magit-diff-mode))
+         (magit-toggle-section))))
+
+
 ;; Some Sublime Text-isms:
 
 (defun my-sublime-like-mouse-dblclick-select-fn ()
@@ -312,8 +331,12 @@
 (require 'advice)
 
 (defadvice mouse-drag-region (after my-sublime-like-mouse-select (start-event))
-  (when (= (event-click-count start-event) 2)
-    (my-sublime-like-mouse-dblclick-select-fn)))
+  (let ((click-count (event-click-count start-event)))
+    (cond ((= click-count 1)
+           (when (string-match "^magit-" (format "%s" major-mode))
+             (my-magit-click)))
+          ((= click-count 2)
+           (my-sublime-like-mouse-dblclick-select-fn)))))
 
 (ad-activate 'mouse-drag-region)
 
