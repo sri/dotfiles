@@ -89,5 +89,5 @@ Inspired by Sublime Text."
       (forward-line -1)
       (setq end (point-at-eol)))
     (goto-char beg)
-    (set-mark beg)`
+    (set-mark beg)
     (goto-char end)))
