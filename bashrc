@@ -1,7 +1,7 @@
 . ~/my/dotfiles/bash/aliases
 . ~/my/dotfiles/bash/thirdparty/git-completions.bash
 
-export PATH=~/my/dotfiles/bin:$PATH
+export PATH=~/my/dotfiles/bin:~/my/dotfiles/bin/thirdparty:$PATH
 
 #export LESS='-i-P%f (%i/%m) Line %lt/%L'
 export EDITOR=emacs

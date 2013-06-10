@@ -6,4 +6,4 @@
  '(default ((t (:height 130))))
  '(bm-fringe-face ((t (:foreground "#859900")))))
 
-(load (expand-file-name "emacs.d/my-emacs.el"))
+(load (expand-file-name "~/.emacs.d/my-emacs.el"))
