@@ -1,0 +1,45 @@
+# Git
+alias g=git
+alias ga='git add'
+alias gb='git branch'
+alias gc='git checkout'
+alias gd='git diff'
+alias gf='git fetch'
+alias gl='git log --date-order --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset" --graph'
+alias gs='git status'
+
+# Misc
+alias rm_rf='command rm -rf'
+alias ..='c ..'
+alias ...='c ../..'
+alias r=irb
+alias x='chmod +x'
+alias rr='. ~/.bashrc'
+alias brc='vim ~/.bashrc; . ~/.bashrc'
+alias topcmds='cat ~/.bash_history | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
+
+# Function commands
+alias l='my_ls'
+function my_ls() {
+  if [ $# = 1 ]; then
+    if [ -f $1 ]; then
+      less $1;
+      return
+    fi
+  fi
+  ls -G $*;
+}
+
+alias c="cd_ls"
+function cd_ls () {
+   if [ $# = 0 ]; then
+      cd && ls -G
+   else
+      cd "$*" && ls -G
+   fi
+}
+
+alias d='my_dir'
+function my_dir() {
+  mkdir -p $1
+}

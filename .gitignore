@@ -1,0 +1,8 @@
+.DS_Store
+**/.DS_Store
+emacs.d/.emacs.desktop
+emacs.d/.emacs.desktop.lock
+emacs.d/auto-save-list/
+emacs.d/elpa/
+emacs.d/url/
+*.elc
