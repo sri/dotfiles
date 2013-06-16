@@ -1,0 +1,13 @@
+#!/bin/bash
+# Move the most recent downloaded item from ~/Downloads
+# to the current directory.
+downloads _dir=~/Downloads
+most_recent_download=`ls '$downloads_dir' -t | head -1`
+if [ "$most_recent_download" = "" ]; then
+    echo "nothing in downloads directory ($downloads_dir)"
+elif [ -e "$most_recent_download" ]; then
+    echo "'./$most_recent_download' already exists"
+else
+    mv "$downloads_dir/$most_recent_download" .
+    echo "moved '$most_recent_download' to ."
+fi

@@ -1,0 +1,11 @@
+#!/bin/bash
+os=`uname`
+url=
+case "$os" in
+    Darwin* ) url=`pbpaste` ;;
+esac
+if [ "$url" = "" ]; then
+    echo "(nothing in url)"
+fi
+echo $url
+curl --silent --head "$url"
