@@ -154,6 +154,17 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
       (define-key map (vector 'header-line (pop args)) (pop args)))
     map))
 
+(def-with-selected-window my-mode-line-switch-buffer-fn
+  (my-switch-to-buffer))
+
+(setq-default my-mode-line-switch-buffer
+  (list (propertize "(β)"
+                    'mouse-face 'mode-line-highlight
+                    'help-each "switch buffers"
+                    'local-map (my-make-mode-line-mouse-map
+                                'down-mouse-1 #'ignore
+                                'mouse-1 #'my-mode-line-switch-buffer-fn))))
+
 (setq-default my-mode-line-window-manipulation
   (list (propertize "[⇨]"
                     'mouse-face 'mode-line-highlight
@@ -183,10 +194,14 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
 (make-variable-buffer-local 'my-mode-line-window-manipulation)
 (put 'my-mode-line-window-manipulation 'risky-local-variable t)
 
+(make-variable-buffer-local 'my-mode-line-switch-buffer)
+(put 'my-mode-line-switch-buffer 'risky-local-variable t)
+
 (setq-default mode-line-format
               '(" "
                 mode-line-modified " "
                 my-mode-line-window-manipulation " "
+                my-mode-line-switch-buffer " "
                 mode-line-buffer-identification " "
 ;                mode-line-modes " "
                 mode-line-position

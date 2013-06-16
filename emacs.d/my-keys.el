@@ -45,3 +45,5 @@
 
 (my-overwrite-key-bindings-in-mode "C-j" 'other-window
                                    '(lisp-interaction-mode))
+
+(global-set-key (kbd "<C-tab>") 'my-switch-to-buffer)

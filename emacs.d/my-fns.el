@@ -106,3 +106,7 @@
                               (message ,msg (cdr my-overwrite-key-bindings-in-mode-alist))
                               (setcar my-overwrite-key-bindings-in-mode-alist t))
                             (call-interactively ',new-fn))))))))
+
+(defun my-switch-to-buffer ()
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
