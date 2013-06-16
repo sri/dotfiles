@@ -80,3 +80,29 @@
       (other-window arg))
     (switch-to-buffer selected-buffer)
     (other-window arg)))
+
+;; Since I have non-standard key bindings (C-j for other-window),
+;; it clashes with some major modes that overrides that key.
+;; For example, lisp-interaction-mode binds C-j to eval-print-last-sexp.
+;; Now when I override that key, I would like to see what
+;; function was shadowed.
+
+(defvar my-overwrite-key-bindings-in-mode-alist nil)
+(make-variable-buffer-local 'my-overwrite-key-bindings-in-mode-alist)
+
+(defun my-overwrite-key-bindings-in-mode (key new-fn modes)
+  (dolist (mode modes)
+    (let ((hook (intern (format "%s-hook" mode)))
+          (map (intern (format "%s-map" mode)))
+          (msg (format "%s was bound to `%%s' but is now bound to `%s'" key new-fn)))
+      (add-hook hook `(lambda ()
+                        (when (null my-overwrite-key-bindings-in-mode-alist)
+                          (setq my-overwrite-key-bindings-in-mode-alist
+                                (cons nil (key-binding (kbd ,key) t))))
+                        (define-key ,map (kbd ,key)
+                          (lambda ()
+                            (interactive)
+                            (when (null (car my-overwrite-key-bindings-in-mode-alist))
+                              (message ,msg (cdr my-overwrite-key-bindings-in-mode-alist))
+                              (setcar my-overwrite-key-bindings-in-mode-alist t))
+                            (call-interactively ',new-fn))))))))

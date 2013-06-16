@@ -42,3 +42,6 @@
 ;                'my-sublime-expand-selection-to-indentation)
 
 (global-set-key [C-down-mouse-1] 'mouse-delete-other-windows)
+
+(my-overwrite-key-bindings-in-mode "C-j" 'other-window
+                                   '(lisp-interaction-mode))
