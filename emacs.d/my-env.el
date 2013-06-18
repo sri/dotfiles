@@ -2,7 +2,9 @@
 ;(setq filladapt-mode-line-string nil)
 ;(setq-default filladapt-mode t)
 
-(set-register ?e '(file . "~/.emacs"))
+(set-register ?d '(file . "~/Desktop"))
+(set-register ?e '(file . "~/my/dotfiles/emacs.d"))
+(set-register ?~ '(file . "~"))
 
 (defun my-show-trailing-whitespace ()
   (setq show-trailing-whitespace t))

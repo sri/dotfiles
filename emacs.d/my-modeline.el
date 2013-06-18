@@ -160,7 +160,7 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
 (setq-default my-mode-line-switch-buffer
   (list (propertize "(β)"
                     'mouse-face 'mode-line-highlight
-                    'help-each "switch buffers"
+                    'help-echo "switch buffers"
                     'local-map (my-make-mode-line-mouse-map
                                 'down-mouse-1 #'ignore
                                 'mouse-1 #'my-mode-line-switch-buffer-fn))))
