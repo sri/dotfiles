@@ -14,7 +14,7 @@
     (my-load f)))
 
 (let ((private (expand-file-name "~/.emacs.private")))
-  (when (file-exists-p private)
+  (when (file-exists-p (concat private ".el"))
     (my-load private)))
 
 (message "")

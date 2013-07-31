@@ -4,8 +4,8 @@
 export PATH=~/my/dotfiles/bin:~/my/dotfiles/bin/thirdparty:$PATH
 
 #export LESS='-i-P%f (%i/%m) Line %lt/%L'
-export EDITOR=emacs
-export VISUAL=emacs
+export EDITOR=emacsclient
+export VISUAL=emacsclient
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
@@ -29,3 +29,5 @@ if [ -e ~/.bashrc_private ];
 then
   . ~/.bashrc_private
 fi
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

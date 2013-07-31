@@ -18,4 +18,4 @@
     (dolist (p missing)
       (package-install p))))
 
-(load-theme 'solarized-light t)
+(load-theme 'solarized-dark t)

@@ -60,7 +60,7 @@
 ;(outline-minor-mode 1)
 
 (desktop-save-mode 1)
-(add-to-list 'desktop-path "~/.emacs.d/desktop")
+(add-to-list 'desktop-path "~/.emacs.d")
 
 (make-variable-buffer-local
  'line-number-mode)
