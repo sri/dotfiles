@@ -26,8 +26,8 @@
 
 (global-set-key (kbd "C-x k") 'my-kill-current-buffer)
 
-(global-set-key (kbd "<f1>") 'view-mode)
-(global-set-key (kbd "<f5>") 'magit-status)
+(global-set-key (kbd "<f1>") 'magit-status)
+(global-set-key (kbd "<f2>") 'ido-switch-buffer)
 (global-set-key (kbd "<f6>") 'find-tag)
 (global-set-key (kbd "<S-f6>") 'my-find-tag-next)
 (global-set-key (kbd "<f7>") 'pop-tag-mark)

@@ -1,3 +1,6 @@
+(require 'dirtrack)
+(setq-default dirtrack-list (list "^\\([^(]+\\)\\( .*?\\)?[$] $" 1))
+
 (defun my-setup-shell-header-line ()
   (setq header-line-format
         (list (propertize " [↩]"
@@ -39,6 +42,7 @@
                   'my-emacs-rspec-command)
             (toggle-truncate-lines 1)
             ;(buffer-disable-undo)
+            (dirtrack-mode)
             (define-key shell-mode-map (kbd "C-<up>")
               'comint-previous-prompt)
             (define-key shell-mode-map (kbd "C-<down>")
