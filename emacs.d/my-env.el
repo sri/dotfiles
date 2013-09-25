@@ -6,6 +6,8 @@
 (set-register ?e '(file . "~/my/dotfiles/emacs.d"))
 (set-register ?~ '(file . "~"))
 
+(menu-bar-mode -1)
+
 (defun my-show-trailing-whitespace ()
   (setq show-trailing-whitespace t))
 
