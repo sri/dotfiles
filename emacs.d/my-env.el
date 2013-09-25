@@ -6,8 +6,6 @@
 (set-register ?e '(file . "~/my/dotfiles/emacs.d"))
 (set-register ?~ '(file . "~"))
 
-(menu-bar-mode -1)
-
 (defun my-show-trailing-whitespace ()
   (setq show-trailing-whitespace t))
 
@@ -46,7 +44,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (cua-selection-mode 1)
-(menu-bar-mode 1)
+(menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (line-number-mode t)
