@@ -81,4 +81,5 @@
 
 (global-font-lock-mode t)
 
-(setq linum-format " %d ")
+(setq linum-format 'dynamic)
+(global-linum-mode 1)

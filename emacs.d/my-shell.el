@@ -1,5 +1,14 @@
 (require 'dirtrack)
 (setq-default dirtrack-list (list "^\\([^(]+\\)\\( .*?\\)?[$] $" 1))
+;;
+;; (let ((possibles '("/$ " "~$ " "~/my/test (master)$ "))
+;;       (results '()))
+;;   (dolist (p possibles)
+;;     (push (cons p
+;;                 (and (string-match (car dirtrack-list) p)
+;;                      (match-string (cadr dirtrack-list) p)))
+;;           results))
+;;   results)
 
 (defun my-setup-shell-header-line ()
   (setq header-line-format
@@ -36,6 +45,7 @@
 (add-hook 'shell-mode-hook
           (lambda ()
             (my-setup-shell-header-line)
+            (linum-mode -1)
             (setq line-number-mode nil
                   column-number-mode nil)
             (setq comint-input-sender
