@@ -26,13 +26,13 @@
                               'face '(:background "gray")))
                ;; Briefly highlight the copied region if its visible
                ;; to the user.
-               (when (and (pos-visible-in-window-p start (select-window))
-                          (pos-visible-in-window-p end (select-window)))
+               (when (and (pos-visible-in-window-p start (selected-window))
+                          (pos-visible-in-window-p end (selected-window)))
                  (move-overlay my-change-inside-pair-overlay
                                start
                                end
                                (current-buffer))
-                 (run-at-time 0.6 nil 'my-change-inside-pair-unhighlight))
+                 (run-at-time 0.3 nil 'my-change-inside-pair-unhighlight))
                (message "Copied `%s'"
                         (buffer-substring-no-properties start end)))
           (t (goto-char end)
