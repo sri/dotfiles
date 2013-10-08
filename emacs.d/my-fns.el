@@ -19,6 +19,12 @@
           (t (goto-char end)
              (delete-region start end)))))
 
+(defun my-kill-line-or-region (&optional arg)
+  (interactive "P")
+  (if (region-active-p)
+      (kill-region (point) (mark))
+    (kill-line arg)))
+
 (defun my-hippie-tab (arg)
   (interactive "*P")
   (cond ((and transient-mark-mode (region-active-p))
