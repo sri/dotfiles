@@ -15,8 +15,10 @@
          (start nil)
          (end nil))
     (save-excursion
-      (setq start (and (search-forward start-string nil t) (point)))
-      (setq end (and start (search-forward end-string nil t) (1- (point)))))
+      (when (search-forward start-string nil t)
+        (setq start (point))
+        (when (search-forward end-string nil t)
+          (setq end (1- (point))))))
     (cond ((null start) (message "Couldn't find starting `%s'" key))
           ((null end) (message "Couldn't find ending `%s'" key))
           (arg (kill-ring-save start end)
