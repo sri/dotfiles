@@ -50,3 +50,4 @@
 (global-set-key (kbd "<C-tab>") 'my-switch-to-buffer)
 
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
+(global-set-key (kbd "C-c i") 'my-change-inside-pair)

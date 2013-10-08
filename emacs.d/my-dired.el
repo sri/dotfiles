@@ -12,6 +12,8 @@
 
 (add-hook 'dired-mode-hook
           (lambda ()
+            (linum-mode -1)
+            (setq dired-omit-files-p t)
             (define-key dired-mode-map [mouse-2] 'dired-find-file)
             (define-key dired-mode-map "a" 'my-dired-first-file)
             (define-key dired-mode-map "z" 'my-dired-last-file)

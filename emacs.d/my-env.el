@@ -2,9 +2,23 @@
 ;(setq filladapt-mode-line-string nil)
 ;(setq-default filladapt-mode t)
 
+;(desktop-save-mode 1)
+;(add-to-list 'desktop-path "~/.emacs.d")
+
+;(setq desktop-globals-to-save
+;      (delq 'register-alist desktop-globals-to-save))
 (set-register ?d '(file . "~/Desktop"))
 (set-register ?e '(file . "~/my/dotfiles/emacs.d"))
 (set-register ?~ '(file . "~"))
+
+;; (require 'advice)
+;; (defadvice desktop-buffer-info (after my-desktop-buffer-info (buffer))
+;;   ;; Don't set the major modes or minor modes.
+;;   ;; Basically I want desktop-save only to save the
+;;   ;; filenames not other things that are session based.
+;;   (setcar (nthcdr 3 ad-return-value) nil)
+;;   (setcar (nthcdr 4 ad-return-value) nil))
+;; (ad-activate 'desktop-buffer-info)
 
 (defun my-show-trailing-whitespace ()
   (setq show-trailing-whitespace t))
@@ -59,9 +73,6 @@
 (electric-pair-mode 1)
 ;(outline-minor-mode 1)
 
-(desktop-save-mode 1)
-(add-to-list 'desktop-path "~/.emacs.d")
-
 (make-variable-buffer-local
  'line-number-mode)
 
@@ -82,4 +93,4 @@
 (global-font-lock-mode t)
 
 (setq linum-format 'dynamic)
-(global-linum-mode 1)
+;(global-linum-mode 1)

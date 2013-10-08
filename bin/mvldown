@@ -2,7 +2,7 @@
 # Move the most recent downloaded item from ~/Downloads
 # to the current directory.
 downloads_dir=~/Downloads
-most_recent_download=`ls $downloads_dir -t | head -1`
+most_recent_download=`ls -t $downloads_dir| head -1`
 if [ "$most_recent_download" = "" ]; then
     echo "nothing in downloads directory ($downloads_dir)"
 elif [ -e "$most_recent_download" ]; then
