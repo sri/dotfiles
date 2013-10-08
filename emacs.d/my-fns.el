@@ -1,3 +1,9 @@
+(defvar my-change-inside-pair-overlay nil)
+(make-variable-buffer-local 'my-change-inside-pair-overlay)
+
+(defun my-change-inside-pair-unhighlight ()
+  (delete-overlay my-change-inside-pair-overlay))
+
 (defun my-change-inside-pair (arg)
   (interactive "P")
   (let* ((start-string (format "%c" (read-event)))
@@ -14,6 +20,19 @@
     (cond ((null start) (message "Couldn't find starting `%s'" key))
           ((null end) (message "Couldn't find ending `%s'" key))
           (arg (kill-ring-save start end)
+               (when (null my-change-inside-pair-overlay)
+                 (setq my-change-inside-pair-overlay (make-overlay 0 0))
+                 (overlay-put my-change-inside-pair-overlay
+                              'face '(:background "gray")))
+               ;; Briefly highlight the copied region if its visible
+               ;; to the user.
+               (when (and (pos-visible-in-window-p start (select-window))
+                          (pos-visible-in-window-p end (select-window)))
+                 (move-overlay my-change-inside-pair-overlay
+                               start
+                               end
+                               (current-buffer))
+                 (run-at-time 0.6 nil 'my-change-inside-pair-unhighlight))
                (message "Copied `%s'"
                         (buffer-substring-no-properties start end)))
           (t (goto-char end)
