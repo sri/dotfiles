@@ -1,3 +1,7 @@
+;;; -*- lexical-binding: t -*-
+;;; This file uses lexical binding for the
+;;; function `my-overwrite-key-bindings-in-mode'.
+
 (defvar my-change-inside-pair-overlay nil)
 (make-variable-buffer-local 'my-change-inside-pair-overlay)
 
@@ -19,8 +23,8 @@
         (setq start (point))
         (when (search-forward end-string nil t)
           (setq end (1- (point))))))
-    (cond ((null start) (message "Couldn't find starting `%s'" key))
-          ((null end) (message "Couldn't find ending `%s'" key))
+    (cond ((null start) (message "Couldn't find starting `%s'" start-string))
+          ((null end) (message "Couldn't find ending `%s'" end-string))
           (arg (kill-ring-save start end)
                ;; Briefly highlight the copied region if its visible
                ;; to the user.
@@ -129,25 +133,22 @@
 ;; Now when I override that key, I would like to see what
 ;; function was shadowed.
 
-(defvar my-overwrite-key-bindings-in-mode-alist nil)
-(make-variable-buffer-local 'my-overwrite-key-bindings-in-mode-alist)
-
 (defun my-overwrite-key-bindings-in-mode (key new-fn modes)
   (dolist (mode modes)
     (let ((hook (intern (format "%s-hook" mode)))
           (map (intern (format "%s-map" mode)))
-          (msg (format "%s was bound to `%%s' but is now bound to `%s'" key new-fn)))
-      (add-hook hook `(lambda ()
-                        (when (null my-overwrite-key-bindings-in-mode-alist)
-                          (setq my-overwrite-key-bindings-in-mode-alist
-                                (cons nil (key-binding (kbd ,key) t))))
-                        (define-key ,map (kbd ,key)
-                          (lambda ()
-                            (interactive)
-                            (when (null (car my-overwrite-key-bindings-in-mode-alist))
-                              (message ,msg (cdr my-overwrite-key-bindings-in-mode-alist))
-                              (setcar my-overwrite-key-bindings-in-mode-alist t))
-                            (call-interactively ',new-fn))))))))
+          (msg (format "%s was bound to `%%s'; it now runs `%s'" key new-fn)))
+      (add-hook hook
+                (lambda ()
+                  (let ((current-binding (key-binding (kbd key) t)))
+                    (unless (eq new-fn current-binding)
+                      (define-key (symbol-value map) (kbd key)
+                        (lambda ()
+                          (interactive)
+                          (message msg current-binding)
+                          (call-interactively new-fn)
+                          (define-key (symbol-value map)
+                            (kbd key) new-fn))))))))))
 
 (defun my-switch-to-buffer ()
   (interactive)

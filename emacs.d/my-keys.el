@@ -47,6 +47,16 @@
 (my-overwrite-key-bindings-in-mode "C-j" 'other-window
                                    '(lisp-interaction-mode))
 
+(my-overwrite-key-bindings-in-mode "C-w" 'my-kill-current-buffer
+                                   '(magit-log-mode magit-branch-manager-mode
+                                                    magit-status-mode
+                                                    magit-wazzup-mode
+                                                    magit-commit-mode
+                                                    magit-log-edit-mode
+                                                    magit-stash-mode
+                                                    magit-reflog-mode
+                                                    magit-diff-mode))
+
 (global-set-key (kbd "<C-tab>") 'my-switch-to-buffer)
 
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
