@@ -132,7 +132,7 @@
 ;; For example, lisp-interaction-mode binds C-j to eval-print-last-sexp.
 ;; Now when I override that key, I would like to see what
 ;; function was shadowed.
-
+;; CAUTION: this needs Emacs 24's lexical scoping to work.
 (defun my-overwrite-key-bindings-in-mode (key new-fn modes)
   (dolist (mode modes)
     (let ((hook (intern (format "%s-hook" mode)))
