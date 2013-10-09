@@ -22,14 +22,14 @@
     (cond ((null start) (message "Couldn't find starting `%s'" key))
           ((null end) (message "Couldn't find ending `%s'" key))
           (arg (kill-ring-save start end)
-               (when (null my-change-inside-pair-overlay)
-                 (setq my-change-inside-pair-overlay (make-overlay 0 0))
-                 (overlay-put my-change-inside-pair-overlay
-                              'face '(:background "gray")))
                ;; Briefly highlight the copied region if its visible
                ;; to the user.
                (when (and (pos-visible-in-window-p start (selected-window))
                           (pos-visible-in-window-p end (selected-window)))
+                 (when (null my-change-inside-pair-overlay)
+                   (setq my-change-inside-pair-overlay (make-overlay 0 0))
+                   (overlay-put my-change-inside-pair-overlay
+                                'face 'isearch))
                  (move-overlay my-change-inside-pair-overlay
                                start
                                end
