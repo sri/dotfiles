@@ -8,6 +8,14 @@
 (defun my-change-inside-pair-unhighlight ()
   (delete-overlay my-change-inside-pair-overlay))
 
+;; This shows a way to briefly highlight a region.
+;; This done using the run-at-time function.
+;; But that function can't delay execution depending
+;; on what emacs is doing. See Emacs's compile.el
+;; and search for pre-command-hook. It adds a pre-command-hook
+;; that cancels the stored timer if execution of run-at-time
+;; takes too long. And function remove itself from the pre-command-hook
+;; after that.
 (defun my-change-inside-pair (arg)
   (interactive "P")
   (let* ((start-string (format "%c" (read-event)))
