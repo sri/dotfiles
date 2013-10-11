@@ -33,6 +33,8 @@
 (global-set-key (kbd "<S-f6>") 'my-find-tag-next)
 (global-set-key (kbd "<f7>") 'pop-tag-mark)
 
+(global-set-key (kbd "<S-return>") 'my-dired)
+
 (when (eq system-type 'darwin)
   (global-set-key (kbd "<s-up>") 'scroll-down)
   (global-set-key (kbd "<s-down>") 'scroll-up))
@@ -61,3 +63,10 @@
 
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
+
+(require 'help-mode)
+(define-key help-mode-map (kbd "b") 'help-go-back)
+(define-key help-mode-map (kbd "f") 'help-go-forward)
+(define-key help-mode-map (kbd "n") 'forward-button)
+(define-key help-mode-map (kbd "p") 'backward-button)
+(define-key help-mode-map (kbd "x") 'delete-window)

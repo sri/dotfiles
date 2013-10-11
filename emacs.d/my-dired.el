@@ -1,5 +1,9 @@
 (require 'dired-x)
 
+(defun my-dired ()
+  (interactive)
+  (dired default-directory))
+
 (defun my-dired-first-file ()
   (interactive)
   (goto-char (point-min))

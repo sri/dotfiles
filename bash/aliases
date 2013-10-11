@@ -19,6 +19,8 @@ alias rr='. ~/.bashrc'
 alias brc='vim ~/.bashrc; . ~/.bashrc'
 alias topcmds='cat ~/.bash_history | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
 
+alias dt='c ~/Desktop'
+
 # Function commands
 alias l='my_ls'
 function my_ls() {
