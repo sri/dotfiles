@@ -154,16 +154,16 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
       (define-key map (vector 'header-line (pop args)) (pop args)))
     map))
 
-(def-with-selected-window my-mode-line-switch-buffer-fn
-  (my-switch-to-buffer))
+(def-with-selected-window my-mode-line-goto-dired-fn
+  (my-dired))
 
-(setq-default my-mode-line-switch-buffer
-  (list (propertize "(β)"
+(setq-default my-mode-line-goto-dired
+  (list (propertize "(D)"
                     'mouse-face 'mode-line-highlight
-                    'help-echo "switch buffers"
+                    'help-echo "dired current directory"
                     'local-map (my-make-mode-line-mouse-map
                                 'down-mouse-1 #'ignore
-                                'mouse-1 #'my-mode-line-switch-buffer-fn))))
+                                'mouse-1 #'my-mode-line-goto-dired-fn))))
 
 (setq-default my-mode-line-window-manipulation
   (list (propertize "[⇨]"
@@ -194,15 +194,19 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
 (make-variable-buffer-local 'my-mode-line-window-manipulation)
 (put 'my-mode-line-window-manipulation 'risky-local-variable t)
 
-(make-variable-buffer-local 'my-mode-line-switch-buffer)
-(put 'my-mode-line-switch-buffer 'risky-local-variable t)
+(make-variable-buffer-local 'my-mode-line-goto-dired)
+(put 'my-mode-line-goto-dired 'risky-local-variable t)
+
+(defvar my-original-mode-line-format mode-line-format)
 
 (setq-default mode-line-format
               '(" "
                 mode-line-modified " "
                 my-mode-line-window-manipulation " "
-                my-mode-line-switch-buffer " "
+                my-mode-line-goto-dired " "
                 mode-line-buffer-identification " "
 ;                mode-line-modes " "
                 mode-line-position
-                (defining-kbd-macro " Def")))
+                (defining-kbd-macro " Def")
+                (vc-mode vc-mode)
+                ))

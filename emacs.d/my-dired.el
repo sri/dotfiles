@@ -7,7 +7,7 @@
 (defun my-dired-first-file ()
   (interactive)
   (goto-char (point-min))
-  (dired-next-line 4))
+  (dired-next-line 2))
 
 (defun my-dired-last-file ()
   (interactive)
