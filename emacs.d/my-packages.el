@@ -1,5 +1,5 @@
 (defvar my-packages
-  '(color-theme color-theme-solarized magit bm))
+  '(color-theme color-theme-solarized magit bm autopair go-mode org))
 
 (require 'package)
 (add-to-list 'package-archives
@@ -19,3 +19,6 @@
       (package-install p))))
 
 (load-theme 'solarized-dark t)
+
+(require 'autopair)
+(autopair-global-mode)

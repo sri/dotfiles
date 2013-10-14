@@ -71,7 +71,6 @@
 (ido-mode 1)
 ;(auto-revert-mode 1)
 (global-hl-line-mode 1)
-(electric-pair-mode 1)
 ;(outline-minor-mode 1)
 
 (make-variable-buffer-local
