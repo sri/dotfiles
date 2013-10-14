@@ -14,6 +14,9 @@
   (goto-char (point-max))
   (dired-previous-line 1))
 
+(my-overwrite-key-bindings-in-mode
+ "C-t" 'ido-switch-buffer '(dired-mode))
+
 (add-hook 'dired-mode-hook
           (lambda ()
             (linum-mode -1)

@@ -1,9 +1,11 @@
 . ~/my/dotfiles/bash/aliases
 . ~/my/dotfiles/bash/thirdparty/git-completions.bash
 
+export PS1='\w$(__git_ps1)\$ '
+
 export PATH=~/my/dotfiles/bin:~/my/dotfiles/bin/thirdparty:$PATH
 
-#export LESS='-i-P%f (%i/%m) Line %lt/%L'
+export LESS='-i-P%f (%i/%m) Line %lt/%L'
 export EDITOR=emacsclient
 export VISUAL=emacsclient
 
@@ -29,5 +31,3 @@ if [ -e ~/.bashrc_private ];
 then
   . ~/.bashrc_private
 fi
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

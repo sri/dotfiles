@@ -63,10 +63,3 @@
 
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
-
-(require 'help-mode)
-(define-key help-mode-map (kbd "b") 'help-go-back)
-(define-key help-mode-map (kbd "f") 'help-go-forward)
-(define-key help-mode-map (kbd "n") 'forward-button)
-(define-key help-mode-map (kbd "p") 'backward-button)
-(define-key help-mode-map (kbd "x") 'delete-window)

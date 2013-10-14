@@ -25,6 +25,7 @@
     (define-key map [header-line down-mouse-1] 'ignore)
     (define-key map [header-line mouse-1] 'my-mode-line-kill-file-full-path)
     (define-key map [mode-line mouse-3] 'ignore)
+    (define-key map [mode-line S-mouse-1] 'my-mode-line-toggle)
     (define-key map [header-line down-mouse-3] 'ignore)
     (define-key map [header-line mouse-3] 'ignore)
     map))
@@ -199,7 +200,14 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
 
 (defvar my-original-mode-line-format mode-line-format)
 
-(setq-default mode-line-format
+(defun my-mode-line-toggle ()
+  (interactive)
+  (setq-default mode-line-format
+                (if (eq mode-line-format my-original-mode-line-format)
+                    my-mode-line-format
+                  my-original-mode-line-format)))
+
+(defvar my-mode-line-format
               '(" "
                 mode-line-modified " "
                 my-mode-line-window-manipulation " "
@@ -210,3 +218,5 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
                 (defining-kbd-macro " Def")
                 (vc-mode vc-mode)
                 ))
+
+(setq-default mode-line-format my-mode-line-format)
