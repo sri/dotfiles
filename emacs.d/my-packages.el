@@ -19,6 +19,3 @@
       (package-install p))))
 
 (load-theme 'solarized-dark t)
-
-(require 'autopair)
-(autopair-global-mode)

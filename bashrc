@@ -5,7 +5,7 @@ export PS1='\w$(__git_ps1)\$ '
 
 export PATH=~/my/dotfiles/bin:~/my/dotfiles/bin/thirdparty:$PATH
 
-export LESS='-i-P%f (%i/%m) Line %lt/%L'
+#export LESS='-i-P%f (%i/%m) Line %lt/%L'
 export EDITOR=emacsclient
 export VISUAL=emacsclient
 
