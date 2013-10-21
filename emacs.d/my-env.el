@@ -34,6 +34,7 @@
     (add-hook hook 'my-show-trailing-whitespace)))
 
 ; (setq-default visual-line-mode t)
+(setq echo-keystrokes 0.1)
 (setq vc-follow-symlinks t)
 (setq mouse-drag-copy-region t)
 (setq-default indent-tabs-mode nil)
