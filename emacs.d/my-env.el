@@ -69,10 +69,13 @@
 (auto-compression-mode t)
 (transient-mark-mode 1)
 (show-paren-mode t)
-(ido-mode 1)
 ;(auto-revert-mode 1)
 (global-hl-line-mode 1)
 ;(outline-minor-mode 1)
+
+(ido-mode 1)
+(setq ido-default-file-method 'selected-window)
+(setq ido-default-buffer-method 'selected-window)
 
 (make-variable-buffer-local
  'line-number-mode)
@@ -95,3 +98,5 @@
 
 (setq linum-format 'dynamic)
 ;(global-linum-mode 1)
+
+(server-start)
