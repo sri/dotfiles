@@ -153,9 +153,8 @@
                       (define-key (symbol-value map) (kbd key)
                         (lambda ()
                           (interactive)
-                          (message msg (if (keymapp current-binding)
-                                           "prefix key"
-                                         current-binding))
+                          (when (symbolp current-binding)
+                            (message msg current-binding))
                           (call-interactively new-fn)
                           (define-key (symbol-value map)
                             (kbd key) new-fn))))))))))
