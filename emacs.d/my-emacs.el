@@ -16,6 +16,7 @@ the extension."
 
 (let ((my-files '("my-env" "my-fns" "my-keys" "my-dired" "my-help"
                   "my-shell" "my-sublime" "my-modeline" "my-win"
+                  "my-mouse-hacks"
                   ;; Packages
                   "my-packages"
                   "my-bm" "my-magit" "my-autopair"

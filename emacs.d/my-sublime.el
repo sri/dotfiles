@@ -32,18 +32,6 @@
 
 (setq isearch-lazy-highlight-initial-delay 0)
 
-(require 'advice)
-
-(defadvice mouse-drag-region (after my-sublime-like-mouse-select (start-event))
-  (let ((click-count (event-click-count start-event)))
-    (cond ((= click-count 1)
-           (when (string-match "^magit-" (format "%s" major-mode))
-             (my-magit-click)))
-          ((= click-count 2)
-           (my-sublime-like-mouse-dblclick-select-fn)))))
-
-(ad-activate 'mouse-drag-region)
-
 (defun my-sublime-expand-selection-to-indentation ()
   (interactive)
   "Expand selection to the next indentation level.
