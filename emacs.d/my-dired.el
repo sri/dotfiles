@@ -24,5 +24,6 @@
             (define-key dired-mode-map [mouse-2] 'dired-find-file)
             (define-key dired-mode-map "a" 'my-dired-first-file)
             (define-key dired-mode-map "z" 'my-dired-last-file)
+            (define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
             (define-key dired-mode-map [left] 'dired-up-directory)
             (define-key dired-mode-map [right] 'dired-find-file)))

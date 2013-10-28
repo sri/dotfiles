@@ -1,3 +1,5 @@
+(setenv "PAGER" "cat")
+
 (require 'dirtrack)
 (setq-default dirtrack-list (list "^\\([^(]+\\)\\( .*?\\)?[$] $" 1))
 ;;
