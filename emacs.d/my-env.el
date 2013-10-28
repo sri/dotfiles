@@ -83,7 +83,9 @@
 (require 'hippie-exp)
 
 (setq hippie-expand-try-functions-list
-      '(try-expand-dabbrev
+      '(
+        yas/hippie-try-expand
+        try-expand-dabbrev
         try-expand-dabbrev-all-buffers
         try-expand-dabbrev-from-kill
         try-complete-file-name

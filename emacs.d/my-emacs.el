@@ -15,8 +15,12 @@ the extension."
     (load compiled nil t t)))
 
 (let ((my-files '("my-env" "my-fns" "my-keys" "my-dired" "my-help"
-                  "my-shell" "my-packages" "my-bm" "my-magit" "my-autopair"
-                  "my-sublime" "my-modeline" "my-win"))
+                  "my-shell" "my-sublime" "my-modeline" "my-win"
+                  ;; Packages
+                  "my-packages"
+                  "my-bm" "my-magit" "my-autopair"
+                  "my-yasnippet"
+                  ))
       (load-directory (file-name-directory load-file-name)))
   (dolist (f my-files)
     (my-load (expand-file-name f load-directory))))
