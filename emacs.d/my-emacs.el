@@ -20,7 +20,7 @@ the extension."
                   ;; Packages
                   "my-packages"
                   "my-bm" "my-magit" "my-autopair"
-                  "my-yasnippet"
+                  "my-yasnippet" "my-ace-jump-mode"
                   ))
       (load-directory (file-name-directory load-file-name)))
   (dolist (f my-files)
