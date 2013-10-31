@@ -19,4 +19,5 @@
     (dolist (p missing)
       (package-install p))))
 
-(load-theme 'solarized-dark t)
+(when window-system
+  (load-theme 'solarized-dark t))

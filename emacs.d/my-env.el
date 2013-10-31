@@ -101,4 +101,7 @@
 (setq linum-format 'dynamic)
 ;(global-linum-mode 1)
 
-(server-start)
+(cond (window-system
+       (server-start))
+      (t
+       (xterm-mouse-mode)))
