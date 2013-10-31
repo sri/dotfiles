@@ -1,6 +1,6 @@
 (defvar my-packages
   '(color-theme color-theme-solarized magit bm autopair go-mode org
-                macrostep yasnippet ace-jump-mode))
+                macrostep yasnippet ace-jump-mode expand-region))
 
 (require 'package)
 (add-to-list 'package-archives
