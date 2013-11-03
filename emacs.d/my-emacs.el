@@ -21,7 +21,7 @@ the extension."
                   "my-packages"
                   "my-bm" "my-magit" "my-autopair"
                   "my-yasnippet" "my-ace-jump-mode"
-                  "my-expand-region"))
+                  "my-expand-region" "my-dired-details"))
       (load-directory (file-name-directory load-file-name)))
   (dolist (f my-files)
     (my-load (expand-file-name f load-directory))))
