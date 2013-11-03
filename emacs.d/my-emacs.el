@@ -26,6 +26,22 @@ the extension."
   (dolist (f my-files)
     (my-load (expand-file-name f load-directory))))
 
+;; Some third party stuff that isn't packaged via ELPA or MELPA.
+;; So I maintain a copy of them. Customizations to those files will
+;; be under ~/.emacs.d/my-<third-party-package-name>.el
+(let* ((third-party-dir (expand-file-name "third-party" "~/.emacs.d"))
+       (third-party-files (condition-case nil
+                              (directory-files third-party-dir 'full)
+                            (error '()))))
+  (dolist (f third-party-files)
+    (when (string-match "\\.el$" f)
+      (my-load (file-name-sans-extension f))
+      (let ((my-customization
+             (expand-file-name (concat "my-" (file-name-base f))
+                               (file-name-directory load-file-name))))
+        (when (file-exists-p (concat my-customization ".el"))
+          (my-load my-customization))))))
+
 (let ((private (expand-file-name "~/.emacs.private")))
   (when (file-exists-p (concat private ".el"))
     (my-load private)))
