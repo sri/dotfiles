@@ -162,3 +162,14 @@
 (defun my-switch-to-buffer ()
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
+
+(defvar my-yank-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "y") 'yank-pop)
+    map))
+
+(defun my-yank (arg)
+  (interactive "*P")
+  (yank arg)
+  (message "Press `y' to yank-pop")
+  (set-temporary-overlay-map my-yank-keymap t))

@@ -13,6 +13,7 @@
 (global-set-key (kbd "C-t") 'ido-switch-buffer)
 (global-set-key (kbd "C-v") 'clipboard-yank)
 (global-set-key (kbd "C-w") 'my-kill-current-buffer)
+(global-set-key (kbd "C-y") 'my-yank)
 (global-set-key (kbd "C-z") 'undo)
 
 (global-set-key (kbd "S-C-j") 'join-line)
