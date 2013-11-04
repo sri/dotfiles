@@ -59,7 +59,7 @@
 (put 'erase-buffer 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(cua-selection-mode 1)
+;(cua-selection-mode 1)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)

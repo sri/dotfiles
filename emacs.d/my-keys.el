@@ -1,26 +1,21 @@
 (global-set-key (kbd "C-b") 'backward-kill-word)
 (global-set-key (kbd "C-d") 'kill-word)
 (global-set-key (kbd "C-f") 'my-isearch-forward)
-;; (global-set-key (kbd "C-S-f") 'ag-regexp-project-at-point)
 (global-set-key (kbd "C-i") 'my-hippie-tab)
 (global-set-key (kbd "C-j") 'other-window)
 (global-set-key (kbd "C-k") 'my-kill-line-or-region)
 (global-set-key (kbd "C-m") 'newline-and-indent)
-(global-set-key (kbd "C-o") 'ffap)
 (global-set-key (kbd "C-n") 'execute-extended-command)
+(global-set-key (kbd "C-o") 'ffap)
 (global-set-key (kbd "C-p") 'shell)
-;;(global-set-key (kbd "C-q") 'ido-switch-buffer)
 (global-set-key (kbd "C-r") 'query-replace)
 (global-set-key (kbd "C-s") 'save-buffer)
 (global-set-key (kbd "C-t") 'ido-switch-buffer)
-;;(global-set-key (kbd "C-u") 'clipboard-yank)
 (global-set-key (kbd "C-v") 'clipboard-yank)
 (global-set-key (kbd "C-w") 'my-kill-current-buffer)
 (global-set-key (kbd "C-z") 'undo)
 
 (global-set-key (kbd "S-C-j") 'join-line)
-
-(global-set-key (kbd "C-x C-q") 'quoted-insert) ; was toggle-read-only
 
 (global-set-key (kbd "<M-down>") 'scroll-up)
 (global-set-key (kbd "<M-up>") 'scroll-down)
@@ -39,13 +34,6 @@
   (global-set-key (kbd "<s-up>") 'scroll-down)
   (global-set-key (kbd "<s-down>") 'scroll-up))
 
-;(global-set-key (kbd "s-J")
-;                'my-sublime-expand-selection-to-indentation)
-;(global-set-key (kbd "M-J")
-;                'my-sublime-expand-selection-to-indentation)
-
-(global-set-key [C-down-mouse-1] 'mouse-delete-other-windows)
-
 (my-overwrite-key-bindings-in-mode "C-j" 'other-window
                                    '(lisp-interaction-mode))
 
@@ -61,5 +49,9 @@
 
 (global-set-key (kbd "<C-tab>") 'my-switch-to-buffer)
 
-(global-set-key (kbd "C-c l") 'toggle-truncate-lines)
+(global-set-key (kbd "C-c c") 'calendar)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
+(global-set-key (kbd "C-c l") 'toggle-truncate-lines)
+
+;; Try out:
+;; [C-down-mouse-1]
