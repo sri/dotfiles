@@ -29,6 +29,7 @@
 (defvar my-files
   '("my-env" "my-fns" "my-keys" "my-dired" "my-help"
     "my-shell" "my-sublime" "my-modeline" "my-win"
+    "my-desktop"
     "my-mouse-hacks" "my-packages"))
 
 (defvar my-packages
@@ -55,7 +56,10 @@
 (when (file-exists-p my-private-dot-emacs)
   (my-load my-private-dot-emacs))
 
-(message "")
+(defun display-startup-echo-area-message ()
+  (let ((elapsed (float-time (time-subtract (current-time)
+                                            my-emacs-start-time))))
+    (message "Finished loading in %.3fs " elapsed)))
 
 ;; Local Variables:
 ;; eval: (add-hook 'after-save-hook (lambda () (byte-compile-file "my-emacs.el")) nil t)
