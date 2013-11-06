@@ -2,6 +2,12 @@
 ;;; This file uses lexical binding for the
 ;;; function `my-overwrite-key-bindings-in-mode'.
 
+(defun my-comment-line-or-region ()
+  (interactive "*")
+  (if (region-active-p)
+      (comment-or-uncomment-region (region-beginning) (region-end))
+    (comment-or-uncomment-region (point-at-bol) (point-at-eol))))
+
 (defvar my-change-inside-pair-overlay nil)
 (make-variable-buffer-local 'my-change-inside-pair-overlay)
 
