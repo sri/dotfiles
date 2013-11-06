@@ -5,13 +5,14 @@
 ;; If it inserts, doesn't highlight line; otherwise it does.
 (defun bug/my-duplicate-line-or-region (arg)
   (interactive "P")
-  (if (null arg) (insert "aaa"))
-  (doit (point-at-bol) (point-at-eol)))
+  (if (null arg) (insert "aaaaaa"))
+  (set-mark (point-at-bol))
+  (goto-char (point-at-eol)))
 
 (defun my-duplicate-line-or-region ()
   (interactive)
   ;; FIXME: Region doesn't get re-selected when something
-  ;; get inserted, but the regions get highlighted
+  ;; gets inserted, but the region gets highlighted
   ;; temporarily when called from M-x.
   (if (region-active-p)
       (let* ((old-end (region-end))
