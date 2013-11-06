@@ -2,6 +2,34 @@
 ;;; This file uses lexical binding for the
 ;;; function `my-overwrite-key-bindings-in-mode'.
 
+;; If it inserts, doesn't highlight line; otherwise it does.
+(defun bug/my-duplicate-line-or-region (arg)
+  (interactive "P")
+  (if (null arg) (insert "aaa"))
+  (doit (point-at-bol) (point-at-eol)))
+
+(defun my-duplicate-line-or-region ()
+  (interactive)
+  ;; FIXME: Region doesn't get re-selected when something
+  ;; get inserted, but the regions get highlighted
+  ;; temporarily when called from M-x.
+  (if (region-active-p)
+      (let* ((old-end (region-end))
+             (region (buffer-substring (region-beginning) old-end))
+             (new-end (save-excursion (insert region) (point))))
+        (set-mark old-end)
+        (goto-char new-end))
+    (let ((line (buffer-substring (point-at-bol) (point-at-eol)))
+          (column (current-column)))
+      (end-of-line)
+      (if (eobp)
+          (insert "\n")
+        (forward-char 1))
+      (save-excursion
+        (insert line)
+        (unless (eobp) (insert "\n")))
+      (move-to-column column))))
+
 (defun my-comment-line-or-region ()
   (interactive "*")
   (if (region-active-p)

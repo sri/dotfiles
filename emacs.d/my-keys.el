@@ -11,13 +11,21 @@
 (global-set-key (kbd "C-r") 'query-replace)
 (global-set-key (kbd "C-s") 'save-buffer)
 (global-set-key (kbd "C-t") 'ido-switch-buffer)
-(global-set-key (kbd "C-v") 'clipboard-yank)
+;(global-set-key (kbd "C-v") 'clipboard-yank)
 (global-set-key (kbd "C-w") 'my-kill-current-buffer)
 (global-set-key (kbd "C-y") 'my-yank)
 (global-set-key (kbd "C-z") 'undo)
 (global-set-key (kbd "C-/") 'my-comment-line-or-region)
 
+(global-set-key (kbd "C-<") 'beginning-of-buffer)
+(global-set-key (kbd "C->") 'end-of-buffer)
+(global-set-key (kbd "C-0") 'delete-window)
+(global-set-key (kbd "C-1") 'delete-other-windows)
+(global-set-key (kbd "C-2") 'split-window-vertically)
+(global-set-key (kbd "C-3") 'split-window-horizontally)
+
 (global-set-key (kbd "S-C-j") 'join-line)
+(global-set-key (kbd "S-C-d") 'my-duplicate-line-or-region)
 
 (global-set-key (kbd "<M-down>") 'scroll-up)
 (global-set-key (kbd "<M-up>") 'scroll-down)
@@ -57,3 +65,4 @@
 
 ;; Try out:
 ;; [C-down-mouse-1]
+;; Make join-line respect region
