@@ -21,6 +21,7 @@
           (lambda ()
             (linum-mode -1)
             (dired-omit-mode 1)
+            (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)
             (define-key dired-mode-map [mouse-2] 'dired-find-file)
             (define-key dired-mode-map "a" 'my-dired-first-file)
