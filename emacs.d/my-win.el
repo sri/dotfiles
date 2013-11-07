@@ -11,4 +11,4 @@
     (add-to-list 'default-frame-alist (cons 'top top))
     (add-to-list 'default-frame-alist (cons 'left left))))
 
-(set-frame-parameter nil 'alpha '(80 80))
+(set-frame-parameter nil 'alpha '(100 100))
