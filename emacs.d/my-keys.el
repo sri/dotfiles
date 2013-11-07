@@ -32,6 +32,7 @@
 (global-set-key (kbd "<M-up>") 'scroll-down)
 
 (global-set-key (kbd "C-x k") 'my-kill-current-buffer)
+(global-set-key (kbd "C-x s") 'my-start-line-or-region-swap)
 
 (global-set-key (kbd "<f1>") 'magit-status)
 (global-set-key (kbd "<f2>") 'ido-switch-buffer)
