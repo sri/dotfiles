@@ -24,6 +24,7 @@
 (global-set-key (kbd "C-2") 'split-window-vertically)
 (global-set-key (kbd "C-3") 'split-window-horizontally)
 
+(global-set-key (kbd "S-C-k") 'kill-whole-line)
 (global-set-key (kbd "S-C-j") 'join-line)
 (global-set-key (kbd "S-C-d") 'my-duplicate-line-or-region)
 
