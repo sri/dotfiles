@@ -22,6 +22,31 @@
       (goto-char (+ reg-end (length line)))
       (setq deactivate-mark nil))))
 
+(defun my-swap-line-or-region-up ()
+  "Move the current line or region up one line."
+  (interactive "*")
+  (let (beg end line reg-beg reg-end)
+    (when (use-region-p)
+      (setq reg-beg (region-beginning))
+      (setq reg-end (region-end)))
+    ;; Save & delete the previous line.
+    (save-excursion
+      (when reg-beg (goto-char reg-beg))
+      (forward-line -1)
+      (setq beg (point))
+      (forward-line 1)
+      (setq end (point)))
+    (setq line (buffer-substring beg end))
+    (delete-region beg end)
+    (save-excursion
+      (when reg-end (goto-char (- reg-end (length line))))
+      (forward-line 1)
+      (insert line))
+    (when reg-end
+      (set-mark (- reg-beg (length line)))
+      (goto-char (- reg-end (length line)))
+      (setq deactivate-mark nil))))
+
 (defun my-duplicate-line-or-region ()
   "Duplicate line or current region."
   (interactive "*")
