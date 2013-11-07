@@ -2,30 +2,6 @@
 ;;; This file uses lexical binding for the
 ;;; function `my-overwrite-key-bindings-in-mode'.
 
-(defun my-duplicate-line-or-region ()
-  (interactive)
-  (if (or (region-active-p)
-          (and (eq last-command 'my-duplicate-line-or-region) (mark)))
-      (let ((region (buffer-substring (region-beginning) (region-end))))
-        (set-mark (region-end))
-        (insert region))
-    (let ((line (buffer-substring (point-at-bol) (point-at-eol)))
-          (column (current-column)))
-      (end-of-line)
-      (if (eobp)
-          (insert "\n")
-        (forward-char 1))
-      (save-excursion
-        (insert line)
-        (unless (eobp) (insert "\n")))
-      (move-to-column column))))
-
-(defun my-comment-line-or-region ()
-  (interactive "*")
-  (if (region-active-p)
-      (comment-or-uncomment-region (region-beginning) (region-end))
-    (comment-or-uncomment-region (point-at-bol) (point-at-eol))))
-
 (defvar my-change-inside-pair-overlay nil)
 (make-variable-buffer-local 'my-change-inside-pair-overlay)
 

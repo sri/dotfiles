@@ -1,3 +1,37 @@
+(defun my-duplicate-line-or-region ()
+  "Duplicate line or current region."
+  (interactive "*")
+  (if (use-region-p)
+      (let* ((beg (region-beginning))
+             (end (region-end))
+             (point-at-region-beg (= (point) beg))
+             (region (buffer-substring beg end)))
+        (cond (point-at-region-beg
+               (goto-char end)
+               (insert region)
+               (goto-char beg)
+               (set-mark end))
+              (t (insert region)
+                 (set-mark end)))
+        (setq deactivate-mark nil))
+    (let ((line (buffer-substring (point-at-bol) (point-at-eol)))
+          (column (current-column)))
+      (end-of-line)
+      (if (eobp)
+          (insert "\n")
+        (forward-char 1))
+      (save-excursion
+        (insert line)
+        (unless (eobp) (insert "\n")))
+      (move-to-column column))))
+
+(defun my-comment-line-or-region ()
+  "Comment or uncomment the current line or region."
+  (interactive "*")
+  (if (region-active-p)
+      (comment-or-uncomment-region (region-beginning) (region-end))
+    (comment-or-uncomment-region (point-at-bol) (point-at-eol))))
+
 (defun my-sublime-like-mouse-dblclick-select-fn ()
   (let ((isearch-word t)
         (isearch-forward t)
