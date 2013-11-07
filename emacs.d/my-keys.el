@@ -17,12 +17,17 @@
 (global-set-key (kbd "C-z") 'undo)
 (global-set-key (kbd "C-/") 'my-comment-line-or-region)
 
+(global-set-key (kbd "C-c c") 'calendar)
+(global-set-key (kbd "C-c i") 'my-change-inside-pair)
+(global-set-key (kbd "C-c l") 'toggle-truncate-lines)
+
 (global-set-key (kbd "C-<") 'beginning-of-buffer)
 (global-set-key (kbd "C->") 'end-of-buffer)
 (global-set-key (kbd "C-0") 'delete-window)
 (global-set-key (kbd "C-1") 'delete-other-windows)
 (global-set-key (kbd "C-2") 'split-window-vertically)
 (global-set-key (kbd "C-3") 'split-window-horizontally)
+(global-set-key (kbd "C-4") 'universal-argument)
 
 (global-set-key (kbd "S-C-k") 'kill-whole-line)
 (global-set-key (kbd "S-C-j") 'join-line)
@@ -46,6 +51,8 @@
   (global-set-key (kbd "<s-up>") 'scroll-down)
   (global-set-key (kbd "<s-down>") 'scroll-up))
 
+(global-set-key (kbd "<C-tab>") 'my-switch-to-buffer)
+
 (my-overwrite-key-bindings-in-mode "C-j" 'other-window
                                    '(lisp-interaction-mode))
 
@@ -58,12 +65,6 @@
                                                     magit-stash-mode
                                                     magit-reflog-mode
                                                     magit-diff-mode))
-
-(global-set-key (kbd "<C-tab>") 'my-switch-to-buffer)
-
-(global-set-key (kbd "C-c c") 'calendar)
-(global-set-key (kbd "C-c i") 'my-change-inside-pair)
-(global-set-key (kbd "C-c l") 'toggle-truncate-lines)
 
 ;; Try out:
 ;; [C-down-mouse-1]

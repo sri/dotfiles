@@ -20,6 +20,9 @@
     (load compiled nil t t)))
 
 (defun my-load-customization (package-name)
+  (when (file-name-absolute-p package-name)
+    (setq package-name
+          (file-name-sans-extension (file-name-nondirectory package-name))))
   (let ((my-customization (format "my-%s.el" package-name)))
     (when (file-exists-p my-customization)
       (my-load my-customization))))
