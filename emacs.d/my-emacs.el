@@ -20,7 +20,8 @@
     (load compiled nil t t)))
 
 (defun my-load-customization (package-name)
-  (when (file-name-absolute-p package-name)
+  (when (and (stringp package-name)
+             (file-name-absolute-p package-name))
     (setq package-name
           (file-name-sans-extension (file-name-nondirectory package-name))))
   (let ((my-customization (format "my-%s.el" package-name)))
@@ -38,7 +39,7 @@
 (defvar my-packages
   '(color-theme color-theme-solarized magit bm autopair go-mode org
                 macrostep yasnippet ace-jump-mode expand-region
-                dired-details))
+                dired-details rainbow-mode browse-kill-ring))
 
 (defvar my-private-dot-emacs
   (expand-file-name "~/.emacs.private.el"))
