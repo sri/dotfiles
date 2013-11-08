@@ -33,7 +33,7 @@
 (defvar my-files
   '("my-env" "my-fns" "my-keys" "my-dired" "my-help"
     "my-shell" "my-sublime" "my-modeline" "my-win"
-    "my-desktop"
+    "my-desktop" "my-scratch"
     "my-mouse-hacks" "my-packages"))
 
 (defvar my-packages
