@@ -171,7 +171,8 @@
 (defun my-yank (arg)
   (interactive "*P")
   (yank arg)
-  (message "Press `y' to yank-pop")
+  (unless (window-minibuffer-p)
+    (message "Press `y' to yank-pop"))
   (set-temporary-overlay-map my-yank-keymap t))
 
 (defvar my-line-or-region-swap-keymap
@@ -184,3 +185,23 @@
   (interactive)
   (message "Hit [up] or [down] to move region or line in that direction")
   (set-temporary-overlay-map my-line-or-region-swap-keymap t))
+
+(defun my-quick-hotkey ()
+  "Temporarily bind a key to a hotkey.
+Key can be any key that invokes a command.  Hotkey is a single
+key. Any other key other than the hotkey exits this mode."
+  (interactive)
+  (let* ((cmd-key (read-key-sequence "Command key: " nil t))
+         (cmd (intern-soft (key-binding cmd-key))))
+    (if (null cmd)
+        (message "No command associated with key `%s'" cmd-key)
+      (let* ((prompt (format "Hot key to run `%s': " cmd))
+             (hotkey (format "%c" (read-event prompt)))
+             (map (make-sparse-keymap)))
+        (define-key map (kbd hotkey) cmd)
+        (call-interactively cmd)
+        (unless (window-minibuffer-p)
+          (with-temp-message (format "`%s' will run the command `%s'"
+                                     hotkey cmd)
+            (sit-for 1.0)))
+        (set-temporary-overlay-map map t)))))
