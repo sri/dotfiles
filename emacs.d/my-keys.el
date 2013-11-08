@@ -17,6 +17,7 @@
 (global-set-key (kbd "C-z") 'undo)
 (global-set-key (kbd "C-/") 'my-comment-line-or-region)
 
+
 (global-set-key (kbd "C-c c") 'calendar)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
@@ -28,6 +29,8 @@
 (global-set-key (kbd "C-2") 'split-window-vertically)
 (global-set-key (kbd "C-3") 'split-window-horizontally)
 (global-set-key (kbd "C-4") 'universal-argument)
+(global-set-key (kbd "C-9") 'kmacro-start-macro)
+(global-set-key (kbd "C-(") 'kmacro-end-macro)
 
 (global-set-key (kbd "S-C-k") 'kill-whole-line)
 (global-set-key (kbd "S-C-j") 'join-line)
