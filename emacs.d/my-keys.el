@@ -31,6 +31,7 @@
 (global-set-key (kbd "C-4") 'universal-argument)
 (global-set-key (kbd "C-9") 'kmacro-start-macro)
 (global-set-key (kbd "C-(") 'kmacro-end-macro)
+(global-set-key (kbd "<C-return>") 'my-quick-hotkey)
 
 (global-set-key (kbd "S-C-k") 'kill-whole-line)
 (global-set-key (kbd "S-C-j") 'join-line)
