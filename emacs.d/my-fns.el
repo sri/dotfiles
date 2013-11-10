@@ -206,3 +206,17 @@ key. Any other key other than the hotkey exits this mode."
           (with-temp-message (format "`%s' will run the command `%s'"
                                      hotkey-string cmd)
             (sit-for 1.0)))))))
+
+(defun my-count-lines-buffer ()
+  (interactive)
+  (message "%d lines" (count-lines (point-min) (point-max))))
+
+(defun my-just-one-space ()
+  "Like just-one-space, but moves across newlines."
+  (interactive)
+  (when (eolp)
+    (delete-region (point)
+                   (save-excursion
+                     (skip-chars-forward " \t\n\r")
+                     (point))))
+  (call-interactively 'just-one-space))
