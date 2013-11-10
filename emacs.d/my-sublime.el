@@ -77,9 +77,13 @@
 (defun my-comment-line-or-region ()
   "Comment or uncomment the current line or region."
   (interactive "*")
-  (if (region-active-p)
-      (comment-or-uncomment-region (region-beginning) (region-end))
-    (comment-or-uncomment-region (point-at-bol) (point-at-eol))))
+  (cond ((region-active-p)
+         (comment-or-uncomment-region (region-beginning)
+                                      (region-end))
+         (setq deactivate-mark nil))
+        (t
+         (comment-or-uncomment-region (point-at-bol)
+                                      (point-at-eol)))))
 
 (defun my-sublime-like-mouse-dblclick-select-fn ()
   (let ((isearch-word t)
