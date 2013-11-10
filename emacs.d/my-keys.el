@@ -33,9 +33,10 @@
 (global-set-key (kbd "C-(") 'kmacro-end-macro)
 (global-set-key (kbd "<C-return>") 'my-quick-hotkey)
 
-(global-set-key (kbd "S-C-k") 'kill-whole-line)
-(global-set-key (kbd "S-C-j") 'join-line)
 (global-set-key (kbd "S-C-d") 'my-duplicate-line-or-region)
+(global-set-key (kbd "S-C-j") 'join-line)
+(global-set-key (kbd "S-C-k") 'kill-whole-line)
+(global-set-key (kbd "S-C-o") 'jump-to-register)
 
 (global-set-key (kbd "<M-down>") 'scroll-up)
 (global-set-key (kbd "<M-up>") 'scroll-down)
