@@ -9,3 +9,13 @@
            (my-sublime-like-mouse-dblclick-select-fn)))))
 
 (ad-activate 'mouse-drag-region)
+
+(defun my-mouse-ctrl-click (event)
+  (interactive "e")
+  (mouse-minibuffer-check event)
+  (unless (one-window-p t)
+    (let ((window (posn-window (event-start event))))
+      (select-window (if (framep window)
+                         (frame-selected-window window)
+                       window))
+      (delete-other-windows))))

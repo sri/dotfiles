@@ -44,6 +44,38 @@
   (erase-buffer)
   (comint-send-input))
 
+;; If there is a visible "rspec" (*_spec.rb) buffer in the
+;; current frame, running a "rspec" command is a shell process,
+;; will run rspec against that buffer's file name (at the line
+;; where the cursor is in that buffer). Add this to your shell-mode-hook
+;; to enable this feature:
+;;     (add-hook 'shell-mode-hook
+;;               (lambda ()
+;;                 (setq comint-input-sender 'my-shell-rspec-command)))
+;;
+(defun my-shell-rspec-command (proc string)
+  (when (string-match "^rspec\n?$" string)
+    (let ((buffers (mapcar #'window-buffer (window-list)))
+          (spec-buffer nil))
+      (dolist (buf buffers)
+        (when (string-match "_(spec|test)[.]rb$" (or (buffer-file-name buf) ""))
+          (setq spec-buffer buf)))
+      (when spec-buffer
+        (let ((n (with-current-buffer spec-buffer
+                   (line-number-at-pos))))
+          (setq string (format "rspec %s:%d"
+                               (buffer-file-name spec-buffer)
+                               n))
+          (message "Running \"%s\"" string)))))
+  (comint-simple-send proc string))
+
+(defun my-shell-input-sender (proc string)
+  (catch 'dont-proceed
+    (cond ((string-match "^eo \\(.*\\)$" string)
+           (find-file-other-window (match-string 1 string))
+           (throw 'dont-proceed t)))
+    (comint-simple-send proc string)))
+
 (add-hook 'shell-mode-hook
           (lambda ()
             (my-setup-shell-header-line)
@@ -51,7 +83,7 @@
             (setq line-number-mode nil
                   column-number-mode nil)
             (setq comint-input-sender
-                  'my-emacs-rspec-command)
+                  'my-shell-input-sender)
             (toggle-truncate-lines 1)
             ;(buffer-disable-undo)
             (dirtrack-mode)

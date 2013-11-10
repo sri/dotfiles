@@ -47,6 +47,17 @@
       (goto-char (- reg-end (length line)))
       (setq deactivate-mark nil))))
 
+(defvar my-line-or-region-swap-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map [up] 'my-swap-line-or-region-up)
+    (define-key map [down] 'my-swap-line-or-region-down)
+    map))
+
+(defun my-start-line-or-region-swap ()
+  (interactive)
+  (message "Hit [up] or [down] to move region or line in that direction")
+  (set-temporary-overlay-map my-line-or-region-swap-keymap t))
+
 (defun my-duplicate-line-or-region ()
   "Duplicate line or current region."
   (interactive "*")

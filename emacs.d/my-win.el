@@ -11,6 +11,13 @@
     (add-to-list 'default-frame-alist (cons 'top top))
     (add-to-list 'default-frame-alist (cons 'left left))))
 
+(defun my-toggle-fullscreen ()
+  (interactive)
+  (cond ((eq window-system 'x)
+         (let ((fullp (frame-parameter nil 'fullscreen)))
+           (set-frame-parameter nil 'fullscreen
+                                (if fullp nil 'fullscreen))))))
+
 (defun my-frame-transparency (arg)
   (interactive "p")
   (set-frame-parameter nil 'alpha (list arg arg)))
