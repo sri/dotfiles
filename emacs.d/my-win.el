@@ -11,4 +11,8 @@
     (add-to-list 'default-frame-alist (cons 'top top))
     (add-to-list 'default-frame-alist (cons 'left left))))
 
+(defun my-frame-transparency (arg)
+  (interactive "p")
+  (set-frame-parameter nil 'alpha (list arg arg)))
+
 (set-frame-parameter nil 'alpha '(100 100))
