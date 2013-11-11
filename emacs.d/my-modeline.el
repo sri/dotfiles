@@ -1,3 +1,5 @@
+;; (interactive "@") is similar to the below definition,
+;; but selects the window related to the modeline.
 (defmacro def-with-selected-window (name &rest body)
   `(defun ,name (event)
      (interactive "e")
