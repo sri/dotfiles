@@ -70,10 +70,14 @@
   (comint-simple-send proc string))
 
 (defun my-shell-input-sender (proc string)
-  (catch 'dont-proceed
+  (let ((curbuf (current-buffer)))
     (cond ((string-match "^eo \\(.*\\)$" string)
-           (find-file-other-window (match-string 1 string))
-           (throw 'dont-proceed t)))
+           (let ((path (match-string 1 string)))
+             (when (string-match "\\`\n+\\|^\\s-+\\|\\s-+$\\|\n+\\'" path)
+               (setq path (replace-match "" t t path)))
+             (find-file-other-window path)
+             (set-buffer curbuf)
+             (setq string ""))))
     (comint-simple-send proc string)))
 
 (add-hook 'shell-mode-hook
