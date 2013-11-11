@@ -80,6 +80,37 @@
              (setq string ""))))
     (comint-simple-send proc string)))
 
+(defvar my-shell-bash-esc-dot-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "M-.") 'my-shell-bash-esc-dot)
+    map))
+
+(defvar my-shell-bash-esc-dot-counter 0)
+(make-variable-buffer-local 'my-shell-bash-esc-dot-counter)
+
+(defun my-shell-bash-esc-dot ()
+  "Output the last word for the previous command."
+  (interactive)
+  (let* ((continue (eq last-command 'my-shell-bash-esc-dot))
+         (count (if continue (1+ my-shell-bash-esc-dot-counter) 0))
+         (cmd (comint-previous-input-string count))
+         ;; Fix me -- respect quotes, etc
+         (last (car (last (split-string cmd " " t)))))
+    (setq my-shell-bash-esc-dot-counter count)
+    (when last
+      ;; Delete last insertion.
+      (when continue
+        (save-excursion
+          (end-of-line)
+          (re-search-backward "[^ ]" (point-at-bol) nil)
+          (if (search-backward " " (point-at-bol) t)
+              (forward-char 1)
+            (beginning-of-line))
+          (delete-region (point) (point-at-eol))))
+      (insert last))
+    (when continue
+      (set-temporary-overlay-map my-shell-bash-esc-dot-map t))))
+
 (add-hook 'shell-mode-hook
           (lambda ()
             (my-setup-shell-header-line)
@@ -100,4 +131,6 @@
             (define-key shell-mode-map (kbd "<right>")
               'my-shell-forward-char-or-previous-history)
             (define-key shell-mode-map (kbd "<down>")
-              'my-shell-next-line-or-next-history)))
+              'my-shell-next-line-or-next-history)
+            (define-key shell-mode-map (kbd "M-.")
+              'my-shell-bash-esc-dot)))
