@@ -19,7 +19,8 @@
   (dolist (hook trailing-whitespace-mode-hooks)
     (add-hook hook 'my-show-trailing-whitespace)))
 
-; (setq-default visual-line-mode t)
+(visual-line-mode 1)
+(cua-selection-mode 1)
 (setq echo-keystrokes 0.1)
 (setq vc-follow-symlinks t)
 (setq mouse-drag-copy-region t)
