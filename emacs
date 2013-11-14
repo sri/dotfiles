@@ -1,3 +1,4 @@
+;; -*- mode: emacs-lisp -*-
 (defvar my-emacs-start-time (current-time))
 
 (custom-set-faces

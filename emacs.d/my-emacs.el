@@ -39,7 +39,8 @@
 (defvar my-packages
   '(color-theme color-theme-solarized magit bm autopair go-mode org
                 macrostep yasnippet ace-jump-mode expand-region
-                dired-details rainbow-mode browse-kill-ring))
+                dired-details rainbow-mode browse-kill-ring
+                zenburn-theme))
 
 (defvar my-private-dot-emacs
   (expand-file-name "~/.emacs.private.el"))
