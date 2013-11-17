@@ -78,11 +78,6 @@
         try-complete-file-name
         try-complete-lisp-symbol))
 
-(add-hook 'view-mode-hook
-          (lambda ()
-            (define-key view-mode-map (kbd "<up>") 'scroll-down)
-            (define-key view-mode-map (kbd "<down>") 'scroll-up)))
-
 (global-font-lock-mode t)
 
 (setq linum-format 'dynamic)
