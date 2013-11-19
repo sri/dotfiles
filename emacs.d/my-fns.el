@@ -130,7 +130,10 @@
   (yank arg)
   (unless (window-minibuffer-p)
     (message "Press `y' to yank-pop"))
-  (set-temporary-overlay-map my-yank-keymap t))
+  (set-temporary-overlay-map my-yank-keymap
+                             (lambda ()
+                               (memq this-command
+                                     '(yank-pop cua-paste-pop)))))
 
 (defun my-quick-hotkey ()
   "Temporarily bind a key to a hotkey.
