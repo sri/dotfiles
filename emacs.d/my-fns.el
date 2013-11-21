@@ -169,3 +169,10 @@ key. Any other key other than the hotkey exits this mode."
                      (skip-chars-forward " \t\n\r")
                      (point))))
   (call-interactively 'just-one-space))
+
+(defun my-kill-whole-line (&optional arg)
+  "Like kill-whole-line but maintains column position."
+  (interactive "p")
+  (let ((col (current-column)))
+    (kill-whole-line arg)
+    (move-to-column col)))

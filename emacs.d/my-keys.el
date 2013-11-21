@@ -37,7 +37,7 @@
 (global-set-key (kbd "S-C-d") 'my-duplicate-line-or-region)
 (global-set-key (kbd "S-C-j") 'isearch-backward)
 (global-set-key (kbd "S-C-j") 'join-line)
-(global-set-key (kbd "S-C-k") 'kill-whole-line)
+(global-set-key (kbd "S-C-k") 'my-kill-whole-line)
 (global-set-key (kbd "S-C-o") 'jump-to-register)
 (global-set-key (kbd "S-C-r") 'query-replace-regexp)
 
