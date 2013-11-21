@@ -23,3 +23,8 @@
   (set-frame-parameter nil 'alpha (list arg arg)))
 
 (set-frame-parameter nil 'alpha '(100 100))
+
+(setq frame-title-format
+      '((:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name))
+                 "%b"))))
