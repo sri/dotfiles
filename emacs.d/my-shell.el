@@ -84,7 +84,7 @@
 (defvar my-shell-bash-esc-dot-last-insertion nil)
 
 (defun my-shell-bash-esc-dot ()
-  "Same as Esc-. in bash; insert previous commands last word."
+  "Same as Esc-. in bash; insert previous command's last word."
   (interactive)
   (let* ((continue (eq last-command 'my-shell-bash-esc-dot))
          (count (if continue (1+ my-shell-bash-esc-dot-counter) 0))
@@ -113,11 +113,11 @@
           (if (string-match "^[*]shell[*]" (buffer-name buf))
               (push buf shells)
             (push buf others))))
-      ;; Sort the shells name "*shell*", "*shell*<1>" by their names.
+      ;; Sort the shells named "*shell*", "*shell*<1>" by their names.
       (setq shells (sort shells (lambda (x y)
                                   (string-lessp (buffer-name x)
                                                 (buffer-name y)))))
-      ;; Sort the shells not named starting with "*shell*" by their
+      ;; Sort the shells not named "*shell*" etc. by their
       ;; creation time.
       (setq others (sort others (lambda (x y)
                                   (< (with-current-buffer x
