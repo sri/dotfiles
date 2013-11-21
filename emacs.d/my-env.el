@@ -34,6 +34,7 @@
 (setq ring-bell-function (lambda ()))
 (setq disabled-command-hook nil)
 (setq kill-whole-line t)
+(setq kill-read-only-ok t)
 ;; Help char is `?' so C-x ? will list all the
 ;; keys bound to C-x.
 (setq help-char ??)
