@@ -17,7 +17,16 @@
         ;; the "Compiling ..." message, but doesn't
         ;; stop the "Wrote <filename>" one.
         (byte-compile-file source)))
-    (load compiled nil t t)))
+    (condition-case error
+         (load compiled nil t t)
+      (error
+       (find-file source)
+       (let ((msg (format "%s error loading '%s'"
+                          error
+                          (abbreviate-file-name source))))
+         (message msg)
+         (error msg))))))
+
 
 (defun my-load-customization (package-name)
   (when (and (stringp package-name)
