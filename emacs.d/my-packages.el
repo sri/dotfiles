@@ -16,4 +16,4 @@
       (package-install p))))
 
 (when window-system
-  (load-theme 'zenburn t))
+  (load-theme 'solarized-dark t))
