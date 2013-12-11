@@ -1,5 +1,9 @@
 (require 'magit)
 
+;; Don't highlight sections.
+(defun magit-highlight-section ()
+  nil)
+
 (add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
 
 (setq magit-status-buffer-switch-function 'switch-to-buffer)
