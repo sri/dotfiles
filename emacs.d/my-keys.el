@@ -34,6 +34,7 @@
 (global-set-key (kbd "C-(") 'kmacro-end-macro)
 (global-set-key (kbd "<C-return>") 'my-quick-hotkey)
 
+(global-set-key (kbd "S-C-f") 'my-find-in-directory)
 (global-set-key (kbd "S-C-d") 'my-duplicate-line-or-region)
 (global-set-key (kbd "S-C-j") 'isearch-backward)
 (global-set-key (kbd "S-C-j") 'join-line)

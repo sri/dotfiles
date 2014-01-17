@@ -176,3 +176,11 @@ key. Any other key other than the hotkey exits this mode."
   (let ((col (current-column)))
     (kill-whole-line arg)
     (move-to-column col)))
+
+(defun my-find-in-directory ()
+  (interactive)
+  (if (region-active-p)
+      (let* ((string (buffer-substring-no-properties (point) (mark)))
+             (dir (read-directory-name (format "Searching for %s under: " string))))
+        (ag string dir))
+    (call-interactively 'ag)))
