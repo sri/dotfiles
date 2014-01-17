@@ -2,7 +2,10 @@
 
 (defun my-dired ()
   (interactive)
-  (dired default-directory))
+  (let ((file-name buffer-file-name))
+    (dired default-directory)
+    (when file-name
+      (dired-goto-file file-name))))
 
 (defun my-dired-first-file ()
   (interactive)
