@@ -161,7 +161,7 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
   (my-dired))
 
 (setq-default my-mode-line-goto-dired
-  (list (propertize "(D)"
+  (list (propertize "(.)"
                     'mouse-face 'mode-line-highlight
                     'help-echo "dired current directory"
                     'local-map (my-make-mode-line-mouse-map
@@ -169,31 +169,32 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
                                 'mouse-1 #'my-mode-line-goto-dired-fn))))
 
 (setq-default my-mode-line-window-manipulation
-  (list ;; (propertize "[⇨]"
-        ;;             'mouse-face 'mode-line-highlight
-        ;;             'help-echo "split window right"
-        ;;             'local-map (my-make-mode-line-mouse-map
-        ;;                         'down-mouse-1 #'ignore
-        ;;                         'mouse-1 #'my-mode-line-window-split-right))
-        ;; (propertize "[⇩]"
-        ;;             'mouse-face 'mode-line-highlight
-        ;;             'help-echo "split window below"
-        ;;             'local-map (my-make-mode-line-mouse-map
-        ;;                         'down-mouse-1 #'ignore
-        ;;                         'mouse-1 #'my-mode-line-window-split-below))
+  (list "("
+        (propertize "⇨"
+                    'mouse-face 'mode-line-highlight
+                    'help-echo "split window right"
+                    'local-map (my-make-mode-line-mouse-map
+                                'down-mouse-1 #'ignore
+                                'mouse-1 #'my-mode-line-window-split-right))
+        (propertize "⇩"
+                    'mouse-face 'mode-line-highlight
+                    'help-echo "split window below"
+                    'local-map (my-make-mode-line-mouse-map
+                                'down-mouse-1 #'ignore
+                                'mouse-1 #'my-mode-line-window-split-below))
         (propertize "X"
                     'mouse-face 'mode-line-highlight
                     'help-echo "delete window"
                    'local-map (my-make-mode-line-mouse-map
                                 'down-mouse-1 #'ignore
                                 'mouse-1 #'my-mode-line-window-delete))
-        ":"
         (propertize "1"
                     'mouse-face 'mode-line-highlight
                     'help-echo "delete other windows"
                     'local-map (my-make-mode-line-mouse-map
                                 'down-mouse-1 #'ignore
-                                'mouse-1 #'my-mode-line-window-delete-other-windows))))
+                                'mouse-1 #'my-mode-line-window-delete-other-windows))
+         ")"))
 
 (make-variable-buffer-local 'my-mode-line-window-manipulation)
 (put 'my-mode-line-window-manipulation 'risky-local-variable t)
@@ -210,16 +211,18 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
                     my-mode-line-format
                   my-original-mode-line-format)))
 
-(defvar my-mode-line-format
-  '(" "
-    mode-line-modified " "
-    my-mode-line-window-manipulation " "
-;   my-mode-line-goto-dired " "
-    mode-line-buffer-identification " "
-    mode-line-modes " "
-    mode-line-position
-    (defining-kbd-macro " Def")
-    (vc-mode vc-mode)
-    ))
-
-(setq-default mode-line-format my-mode-line-format)
+(progn
+  (defvar my-mode-line-format)
+  (setq my-mode-line-format
+        '(" "
+          mode-line-modified " "
+          my-mode-line-window-manipulation " "
+          my-mode-line-goto-dired " "
+          mode-line-buffer-identification " "
+          mode-line-modes " "
+          mode-line-position
+          (defining-kbd-macro " Def")
+          (vc-mode vc-mode)
+          ))
+  (setq-default mode-line-format my-mode-line-format)
+  )

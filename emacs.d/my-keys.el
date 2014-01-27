@@ -57,6 +57,8 @@
 (global-set-key (kbd "<S-f6>") 'my-find-tag-next)
 (global-set-key (kbd "<f7>") 'pop-tag-mark)
 
+(global-set-key (kbd "<C-S-iso-lefttab>") 'other-frame)
+
 (global-set-key (kbd "<S-return>") 'my-dired)
 
 (when (eq system-type 'darwin)
