@@ -184,3 +184,19 @@ key. Any other key other than the hotkey exits this mode."
              (dir (read-directory-name (format "Searching for %s under: " string))))
         (ag string dir))
     (call-interactively 'ag)))
+
+(defun my-url-decode (&optional arg)
+  "Decode the URL.
+If a region is selected and the universal argument (C-u) is prefixed,
+then the region is replaced with the decoded URL. Otherwise, show the
+decoded URL in the minibuffer."
+  (interactive "P")
+  (let* ((region-active (region-active-p))
+         (url (if region-active
+                  (buffer-substring-no-properties (point) (mark))
+                (read-string "Url: ")))
+         (decoded (url-unhex-string url)))
+    (cond ((and region-active arg)
+           (delete-region (point) (mark))
+           (insert decoded))
+          (t (message "%s" decoded)))))
