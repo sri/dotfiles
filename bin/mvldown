@@ -1,13 +1,35 @@
-#!/bin/bash
-# Move the most recent downloaded item from ~/Downloads
-# to the current directory.
-downloads_dir=~/Downloads
-most_recent_download=`ls -t $downloads_dir| head -1`
-if [ "$most_recent_download" = "" ]; then
-    echo "nothing in downloads directory ($downloads_dir)"
-elif [ -e "$most_recent_download" ]; then
-    echo "'./$most_recent_download' already exists"
-else
-    mv "$downloads_dir/$most_recent_download" .
-    echo "moved '$most_recent_download' to ."
-fi
+#!/usr/bin/env coffee
+
+Path = require 'path'
+Fs   = require 'fs'
+
+exit = (msg) ->
+  console.log msg
+  process.exit 1
+
+mtime = (p) ->
+  Fs.statSync(p).mtime.getTime()
+
+downloadsDir = ->
+  Path.join(process.env['HOME'], 'Downloads')
+
+sortBy = (elts, fn) ->
+  decorate = elts.map (e) -> [fn(e), e]
+  decorate.sort().map (a) -> a[1]
+
+listdirByMostRecent = (d) ->
+  entries = Fs.readdirSync(d).map (p) -> Path.join(d, p)
+  sortBy entries, mtime
+
+main = ->
+  dir = downloadsDir()
+  exit "#{dir} doesn't exist" unless Fs.existsSync(dir)
+  downloads = listdirByMostRecent(dir)
+  exit "Nothing in #{dir}" if downloads.length is 0
+  mostRecent = downloads[downloads.length - 1]
+  base = Path.basename mostRecent
+  exit "./#{base} already exists" if Fs.existsSync(base)
+  Fs.renameSync mostRecent, base
+  console.log "Moved #{base} to ."
+
+main()
