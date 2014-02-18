@@ -2,6 +2,8 @@
 ;(setq filladapt-mode-line-string nil)
 ;(setq-default filladapt-mode t)
 
+(add-to-list 'exec-path "/usr/local/bin")
+
 (set-register ?d '(file . "~/Desktop"))
 (set-register ?e '(file . "~/my/dotfiles/emacs.d"))
 (set-register ?~ '(file . "~"))
@@ -20,7 +22,7 @@
     (add-hook hook 'my-show-trailing-whitespace)))
 
 (visual-line-mode 1)
-(cua-selection-mode 1)
+;; (cua-selection-mode 1)
 (setq echo-keystrokes 0.1)
 (setq vc-follow-symlinks t)
 (setq mouse-drag-copy-region t)
@@ -72,7 +74,7 @@
 
 (setq hippie-expand-try-functions-list
       '(
-        yas/hippie-try-expand
+        ;; yas/hippie-try-expand
         try-expand-dabbrev
         try-expand-dabbrev-all-buffers
         try-expand-dabbrev-from-kill
