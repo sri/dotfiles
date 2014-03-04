@@ -64,6 +64,7 @@
 ;(outline-minor-mode 1)
 
 (ido-mode 1)
+(setq ido-enable-flex-matching t)
 (setq ido-default-file-method 'selected-window)
 (setq ido-default-buffer-method 'selected-window)
 
