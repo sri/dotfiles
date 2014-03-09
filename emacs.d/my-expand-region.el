@@ -1,7 +1,7 @@
 (require 'expand-region)
 (require 'advice)
 
-(global-set-key (kbd "C-,") 'er/expand-region)
+(my-global-set-key (kbd "C-,") 'er/expand-region)
 
 (defadvice er/prepare-for-more-expansions-internal
   (after my-expand-region-extra-bindings (repeat-key-str))

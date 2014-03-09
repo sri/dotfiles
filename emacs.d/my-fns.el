@@ -2,6 +2,53 @@
 ;;; This file uses lexical binding for the
 ;;; function `my-overwrite-key-bindings-in-mode'.
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Helper to quickly toggle between all my keybindings and Emacs'
+;; default keybindings. This is in case another Emacs user is typing
+;; on my Emacs -- be nice to them and provide them with a clean slate
+;; Emacs as far as keybindings are concerned.
+
+(defvar my-key-bindings nil)
+(defvar my-key-bindings-are-used t)
+(defvar my-key-bindings-never-change-commands
+  '(my-toggle-key-bindings))
+
+(defun my-global-set-key (key command)
+  (push (list 'global key (key-binding key) command)
+        my-key-bindings)
+  (global-set-key key command))
+
+(defun my-define-key (keymap key def)
+  (push (list keymap key (key-binding key) def)
+        my-key-bindings)
+  (define-key keymap key def))
+
+(defun my-toggle-key-bindings ()
+  "Toggle between the default key bindings and my modified ones.
+Sometimes my key bindings are defined inside of hooks. And if the
+hooks fire after invoking this command, they will use my modified
+key bindings in those modes."
+  (interactive)
+  (dolist (kb my-key-bindings)
+    (let* ((map (pop kb))
+           (keymap (if (eq map 'global) (current-global-map) map))
+           (key (pop kb))
+           (default-command (pop kb))
+           (my-command (pop kb))
+           (current-key-binding (if my-key-bindings-are-used
+                                    default-command
+                                  my-command)))
+      (unless (memq my-command my-key-bindings-never-change-commands)
+        (define-key keymap key current-key-binding))))
+  (if my-key-bindings-are-used
+      (message "Reverted all key bindings")
+    (message "Back to your key bindings"))
+  (setq my-key-bindings-are-used
+        (not my-key-bindings-are-used)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defvar my-change-inside-pair-overlay nil)
 (make-variable-buffer-local 'my-change-inside-pair-overlay)
 
@@ -113,7 +160,7 @@
                           (when (symbolp current-binding)
                             (message msg current-binding))
                           (call-interactively new-fn)
-                          (define-key (symbol-value map)
+                          (my-define-key (symbol-value map)
                             (kbd key) new-fn))))))))))
 
 (defun my-switch-to-buffer ()
@@ -122,7 +169,7 @@
 
 (defvar my-yank-keymap
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "y") 'yank-pop)
+    (my-define-key map (kbd "y") 'yank-pop)
     map))
 
 (defun my-yank (arg)
@@ -148,7 +195,7 @@ key. Any other key other than the hotkey exits this mode."
              (hotkey (read-key prompt))
              (hotkey-string (format (if (numberp hotkey) "%c" "<%s>") hotkey))
              (map (make-sparse-keymap)))
-        (define-key map (kbd hotkey-string) cmd)
+        (my-define-key map (kbd hotkey-string) cmd)
         (call-interactively cmd)
         (set-temporary-overlay-map map t)
         (unless (window-minibuffer-p)

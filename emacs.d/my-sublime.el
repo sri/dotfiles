@@ -49,8 +49,8 @@
 
 (defvar my-line-or-region-swap-keymap
   (let ((map (make-sparse-keymap)))
-    (define-key map [up] 'my-swap-line-or-region-up)
-    (define-key map [down] 'my-swap-line-or-region-down)
+    (my-define-key map [up] 'my-swap-line-or-region-up)
+    (my-define-key map [down] 'my-swap-line-or-region-down)
     map))
 
 (defun my-start-line-or-region-swap ()
@@ -116,11 +116,11 @@
 
 (setq isearch-allow-scroll t)
 
-(define-key isearch-mode-map (kbd "<return>")
+(my-define-key isearch-mode-map (kbd "<return>")
   'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "<S-return>")
+(my-define-key isearch-mode-map (kbd "<S-return>")
   'isearch-repeat-backward)
-;(define-key isearch-mode-map (kbd "<backspace>") 'my-isearch-delete-region)
+;(my-define-key isearch-mode-map (kbd "<backspace>") 'my-isearch-delete-region)
 
 (defun my-isearch-delete-region ()
   (interactive)

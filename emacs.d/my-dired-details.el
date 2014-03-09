@@ -5,4 +5,4 @@
 
 (add-hook 'dired-mode-hook
           (lambda ()
-            (define-key dired-mode-map "D" 'dired-details-toggle)))
+            (my-define-key dired-mode-map "D" 'dired-details-toggle)))
