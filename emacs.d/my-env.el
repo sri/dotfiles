@@ -2,7 +2,10 @@
 ;(setq filladapt-mode-line-string nil)
 ;(setq-default filladapt-mode t)
 
-(add-to-list 'exec-path "/usr/local/bin")
+(when window-system
+  (let ((shell-path (shell-command-to-string "$SHELL -i -c 'echo $PATH'")))
+    (setenv "PATH" shell-path)
+    (setq exec-path (split-string shell-path path-separator))))
 
 (set-register ?d '(file . "~/Desktop"))
 (set-register ?e '(file . "~/my/dotfiles/emacs.d"))
