@@ -21,10 +21,12 @@
 (my-global-set-key (kbd "C-c d") 'my-toggle-key-bindings)
 (my-global-set-key (kbd "C-c i") 'my-change-inside-pair)
 (my-global-set-key (kbd "C-c l") 'toggle-truncate-lines)
+(my-global-set-key (kbd "C-c r") 'find-library)
 (my-global-set-key (kbd "C-c v") 'view-mode)
+(my-global-set-key (kbd "C-c ;") 'eval-expression)
 
-;; (my-global-set-key (kbd "C-<") 'beginning-of-buffer)
-;; (my-global-set-key (kbd "C->") 'end-of-buffer)
+(my-global-set-key (kbd "C-,") 'beginning-of-buffer)
+(my-global-set-key (kbd "C-.") 'end-of-buffer)
 (my-global-set-key (kbd "C-0") 'delete-window)
 (my-global-set-key (kbd "C-1") 'delete-other-windows)
 (my-global-set-key (kbd "C-2") 'split-window-vertically)
@@ -33,7 +35,7 @@
 
 (my-global-set-key (kbd "S-C-d") 'my-duplicate-line-or-region)
 (my-global-set-key (kbd "S-C-f") 'my-find-in-directory)
-(my-global-set-key (kbd "S-C-j") 'join-line)
+(my-global-set-key (kbd "S-C-j") 'my-join-line)
 (my-global-set-key (kbd "S-C-k") 'my-kill-whole-line)
 (my-global-set-key (kbd "S-C-n") 'make-frame-command)
 (my-global-set-key (kbd "S-C-r") 'query-replace-regexp)
@@ -43,12 +45,10 @@
 (my-global-set-key (kbd "<M-up>") 'scroll-down)
 (my-global-set-key (kbd "<M-SPC>") 'my-just-one-space)
 
-;; (my-global-set-key (kbd "C-x k") 'my-kill-current-buffer)
 (my-global-set-key (kbd "C-x l") 'my-count-lines-buffer)
 (my-global-set-key (kbd "C-x s") 'my-start-line-or-region-swap)
 
 (my-global-set-key (kbd "<f1>") 'magit-status)
-(my-global-set-key (kbd "<f5>") 'my-toggle-key-bindings)
 (my-global-set-key (kbd "<f6>") 'find-tag)
 (my-global-set-key (kbd "<S-f6>") 'my-find-tag-next)
 (my-global-set-key (kbd "<f7>") 'pop-tag-mark)
@@ -66,16 +66,14 @@
 (my-overwrite-key-bindings-in-mode "C-j" 'other-window
                                    '(lisp-interaction-mode))
 
+
 (my-overwrite-key-bindings-in-mode "C-w" 'my-kill-current-buffer
                                    '(magit-log-mode magit-branch-manager-mode
                                                     magit-status-mode
                                                     magit-wazzup-mode
                                                     magit-commit-mode
+
                                                     magit-log-edit-mode
                                                     magit-stash-mode
                                                     magit-reflog-mode
                                                     magit-diff-mode))
-
-;; Try out:
-;; [C-down-mouse-1]
-;; Make join-line respect region

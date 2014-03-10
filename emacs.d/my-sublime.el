@@ -49,8 +49,8 @@
 
 (defvar my-line-or-region-swap-keymap
   (let ((map (make-sparse-keymap)))
-    (my-define-key map [up] 'my-swap-line-or-region-up)
-    (my-define-key map [down] 'my-swap-line-or-region-down)
+    (define-key map [down] 'my-swap-line-or-region-down)
+    (define-key map [up] 'my-swap-line-or-region-up)
     map))
 
 (defun my-start-line-or-region-swap ()

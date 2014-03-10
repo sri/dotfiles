@@ -247,3 +247,24 @@ decoded URL in the minibuffer."
            (delete-region (point) (mark))
            (insert decoded))
           (t (message "%s" decoded)))))
+
+(defun my-join-line-down ()
+  (interactive)
+  (message "down")
+  (join-line 1))
+
+(defun my-join-line-up ()
+  (interactive)
+  (join-line))
+
+(defvar my-join-line-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map [up] 'my-join-line-up)
+    (define-key map [down] 'my-join-line-down)
+    map))
+
+(defun my-join-line (&optional arg)
+  (interactive "*P")
+  (join-line arg)
+  (message "Hit [up] or [down] to join line up or from below")
+  (set-temporary-overlay-map my-join-line-keymap t))

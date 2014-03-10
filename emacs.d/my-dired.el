@@ -26,6 +26,8 @@
             (dired-omit-mode 1)
             (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)
+            (my-define-key dired-mode-map (kbd ",") 'dired-prev-dirline)
+            (my-define-key dired-mode-map (kbd ".") 'dired-next-dirline)
             (my-define-key dired-mode-map [mouse-2] 'dired-find-file)
             (my-define-key dired-mode-map "a" 'my-dired-first-file)
             (my-define-key dired-mode-map "z" 'my-dired-last-file)
