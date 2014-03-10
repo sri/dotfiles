@@ -269,8 +269,9 @@ decoded URL in the minibuffer."
   (message "Hit [up] or [down] to join line up or from below")
   (set-temporary-overlay-map my-join-line-keymap t))
 
-(defun my-eval-last-sexp-or-eval-defun ()
+(defun my-emacs-lisp-eval ()
   (interactive)
-  (call-interactively (if (= (preceding-char) ?\))
-                          'eval-last-sexp
-                        'eval-defun)))
+  (let ((fn (cond ((use-region-p) 'eval-region)
+                  ((= (preceding-char) ?\)) 'eval-last-sexp)
+                  (t 'eval-defun))))
+    (call-interactively fn)))
