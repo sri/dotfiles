@@ -13,10 +13,9 @@
       (setq end (point)))
     (setq line (buffer-substring beg end))
     (delete-region beg end)
-    (save-excursion
-      (when reg-beg (goto-char reg-beg))
-      (beginning-of-line)
-      (insert line))
+    (when reg-beg (goto-char reg-beg))
+    (beginning-of-line)
+    (insert line)
     (when reg-beg
       (set-mark (+ reg-beg (length line)))
       (goto-char (+ reg-end (length line)))
