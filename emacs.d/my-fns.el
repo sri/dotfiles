@@ -271,7 +271,4 @@ decoded URL in the minibuffer."
 
 (defun my-emacs-lisp-eval ()
   (interactive)
-  (let ((fn (cond ((use-region-p) 'eval-region)
-                  ((= (preceding-char) ?\)) 'eval-last-sexp)
-                  (t 'eval-defun))))
-    (call-interactively fn)))
+  (call-interactively (if (use-region-p) 'eval-region 'eval-defun)))

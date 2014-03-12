@@ -105,7 +105,10 @@
       (save-excursion
         (call-interactively 'isearch-forward)
         (goto-char beg)
-        (isearch-yank-string string)))))
+        (isearch-yank-string string)
+        (message "%d matches" (count-matches string
+                                             (point-min)
+                                             (point-max)))))))
 
 (defun my-isearch-forward ()
   (interactive)
