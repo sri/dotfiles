@@ -1,3 +1,4 @@
+(my-global-set-key (kbd "C-a") 'my-beginning-of-line)
 (my-global-set-key (kbd "C-b") 'backward-kill-word)
 (my-global-set-key (kbd "C-d") 'kill-word)
 (my-global-set-key (kbd "C-f") 'my-isearch-forward)

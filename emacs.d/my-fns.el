@@ -272,3 +272,16 @@ decoded URL in the minibuffer."
 (defun my-emacs-lisp-eval ()
   (interactive)
   (call-interactively (if (use-region-p) 'eval-region 'eval-defun)))
+
+(defun my-beginning-of-line ()
+  "Toggle to the beginning of line or beginning of non-whitespace chars."
+  (interactive "^")
+  (if (= (current-column) 0)
+      (back-to-indentation)
+    (let ((point (point))
+          (indentation-start (save-excursion
+                               (back-to-indentation)
+                               (point))))
+      (goto-char (if (<= point indentation-start)
+                     (point-at-bol)
+                   indentation-start)))))
