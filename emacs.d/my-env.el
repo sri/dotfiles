@@ -41,6 +41,7 @@
 (setq disabled-command-hook nil)
 (setq kill-whole-line t)
 (setq kill-read-only-ok t)
+(setq mouse-yank-at-point t)
 ;; Help char is `?' so C-x ? will list all the
 ;; keys bound to C-x.
 (setq help-char ??)

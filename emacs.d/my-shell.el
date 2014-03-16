@@ -150,6 +150,8 @@
                   column-number-mode nil)
             (setq comint-input-sender
                   'my-shell-input-sender)
+            (setq comint-prompt-read-only t)
+            (setq comint-scroll-to-bottom-on-input t)
             (toggle-truncate-lines 1)
             (dirtrack-mode)
             (my-define-key shell-mode-map (kbd "C-<up>")
