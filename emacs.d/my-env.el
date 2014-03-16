@@ -2,6 +2,17 @@
 ;(setq filladapt-mode-line-string nil)
 ;(setq-default filladapt-mode t)
 
+(defun my-set-major-mode ()
+  "For temporary buffers, set the mode based on the name."
+  (and (null (buffer-file-name))
+       (eq major-mode 'fundamental-mode)
+       (let ((mode (assoc-default (buffer-name)
+                                  auto-mode-alist 'string-match)))
+         (and (not (consp mode))
+              (funcall mode)))))
+
+(setq-default major-mode 'my-set-major-mode)
+
 (when window-system
   (let ((shell-path (shell-command-to-string "$SHELL -i -c 'echo $PATH'")))
     (setenv "PATH" shell-path)
