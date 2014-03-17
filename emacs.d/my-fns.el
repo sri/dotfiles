@@ -286,6 +286,8 @@ decoded URL in the minibuffer."
                      (point-at-bol)
                    indentation-start)))))
 
+(require 'ffap)
+
 (defun my-ffap-or-find-file (arg)
   (interactive "P")
   (if arg
