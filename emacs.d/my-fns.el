@@ -285,3 +285,12 @@ decoded URL in the minibuffer."
       (goto-char (if (<= point indentation-start)
                      (point-at-bol)
                    indentation-start)))))
+
+(defun my-ffap-or-find-file (arg)
+  (interactive "P")
+  (if arg
+      (ido-find-file)
+    (let ((file-at-point (ffap-file-at-point)))
+      (if file-at-point
+          (find-file file-at-point)
+        (ido-find-file)))))

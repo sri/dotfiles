@@ -8,8 +8,9 @@
        (eq major-mode 'fundamental-mode)
        (let ((mode (assoc-default (buffer-name)
                                   auto-mode-alist 'string-match)))
-         (and (not (consp mode))
-              (funcall mode)))))
+         (when (and mode (not (consp mode)))
+           (funcall mode)
+           t))))
 
 (setq-default major-mode 'my-set-major-mode)
 
