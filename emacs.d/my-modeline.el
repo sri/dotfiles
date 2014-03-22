@@ -23,13 +23,13 @@
 
 (defvar my-mode-line-buffer-identification-keymap
   (let ((map (make-sparse-keymap)))
-    (my-define-key map [mode-line mouse-1] 'my-mode-line-kill-file-full-path)
-    (my-define-key map [header-line down-mouse-1] 'ignore)
-    (my-define-key map [header-line mouse-1] 'my-mode-line-kill-file-full-path)
-    (my-define-key map [mode-line mouse-3] 'ignore)
-    (my-define-key map [mode-line S-mouse-1] 'my-mode-line-toggle)
-    (my-define-key map [header-line down-mouse-3] 'ignore)
-    (my-define-key map [header-line mouse-3] 'ignore)
+    (define-key map [mode-line mouse-1] 'my-mode-line-kill-file-full-path)
+    (define-key map [header-line down-mouse-1] 'ignore)
+    (define-key map [header-line mouse-1] 'my-mode-line-kill-file-full-path)
+    (define-key map [mode-line mouse-3] 'ignore)
+    (define-key map [mode-line S-mouse-1] 'my-mode-line-toggle)
+    (define-key map [header-line down-mouse-3] 'ignore)
+    (define-key map [header-line mouse-3] 'ignore)
     map))
 
 (defun my-mode-line-buffer-identification-help-echo (window object point)
@@ -64,8 +64,8 @@
 
 (defvar my-mode-line-buffer-modified-p-keymap
   (let ((map (make-sparse-keymap)))
-    (my-define-key map [mode-line mouse-1] 'save-buffer)
-    (my-define-key map [mode-line down-mouse-1] 'ignore)
+    (define-key map [mode-line mouse-1] 'save-buffer)
+    (define-key map [mode-line down-mouse-1] 'ignore)
     map))
 
 (setq-default mode-line-modified
@@ -87,10 +87,10 @@
 
 (setq my-mode-line-buffer-percentage-mode-map
   (let ((map (make-sparse-keymap)))
-    (my-define-key map [mode-line mouse-1] 'my-mode-line-scroll-up)
-    (my-define-key map [mode-line S-mouse-1] 'my-mode-line-scroll-down)
-    (my-define-key map [mode-line C-mouse-1] 'my-mode-line-beginning-or-end-of-buffer)
-    (my-define-key map [mode-line down-mouse-1] 'ignore)
+    (define-key map [mode-line mouse-1] 'my-mode-line-scroll-up)
+    (define-key map [mode-line S-mouse-1] 'my-mode-line-scroll-down)
+    (define-key map [mode-line C-mouse-1] 'my-mode-line-beginning-or-end-of-buffer)
+    (define-key map [mode-line down-mouse-1] 'ignore)
     map))
 
 (def-with-selected-window my-mode-line-goto-line
@@ -99,8 +99,8 @@
 
 (setq my-mode-line-column-line-number-mode-map
       (let ((map (make-sparse-keymap)))
-        (my-define-key map [mode-line mouse-1] 'my-mode-line-goto-line)
-        (my-define-key map [mode-line down-mouse-1] 'ignore)
+        (define-key map [mode-line mouse-1] 'my-mode-line-goto-line)
+        (define-key map [mode-line down-mouse-1] 'ignore)
         map))
 
 (setq-default mode-line-position
@@ -148,13 +148,13 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
 (defun my-make-mode-line-mouse-map (&rest args)
   (let ((map (make-sparse-keymap)))
     (while args
-      (my-define-key map (vector 'mode-line (pop args)) (pop args)))
+      (define-key map (vector 'mode-line (pop args)) (pop args)))
     map))
 
 (defun my-make-header-line-mouse-map (&rest args)
   (let ((map (make-sparse-keymap)))
     (while args
-      (my-define-key map (vector 'header-line (pop args)) (pop args)))
+      (define-key map (vector 'header-line (pop args)) (pop args)))
     map))
 
 (def-with-selected-window my-mode-line-goto-dired-fn

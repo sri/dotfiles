@@ -118,11 +118,11 @@
 
 (setq isearch-allow-scroll t)
 
-(my-define-key isearch-mode-map (kbd "<return>")
+(define-key isearch-mode-map (kbd "<return>")
   'isearch-repeat-forward)
-(my-define-key isearch-mode-map (kbd "<S-return>")
+(define-key isearch-mode-map (kbd "<S-return>")
   'isearch-repeat-backward)
-;(my-define-key isearch-mode-map (kbd "<backspace>") 'my-isearch-delete-region)
+;(define-key isearch-mode-map (kbd "<backspace>") 'my-isearch-delete-region)
 
 (defun my-isearch-delete-region ()
   (interactive)
