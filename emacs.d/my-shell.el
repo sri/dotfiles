@@ -102,6 +102,10 @@
       (setq my-shell-bash-esc-dot-last-insertion last)
       (insert last))))
 
+(defun my-shell-bash-clear-screen ()
+  (interactive)
+  (recenter-top-bottom 0))
+
 (defun my-shell (&optional arg)
   "Create a new shell (with prefix arg) or switch to a shell buffer."
   (interactive "P")
@@ -152,6 +156,7 @@
                   'my-shell-input-sender)
             ;; (setq comint-prompt-read-only t)
             (setq comint-scroll-to-bottom-on-input t)
+            (setq comint-scroll-show-maximum-output nil)
             (toggle-truncate-lines 1)
             (dirtrack-mode)
             (define-key shell-mode-map (kbd "C-<up>")
@@ -160,6 +165,8 @@
               'comint-next-prompt)
             (define-key shell-mode-map (kbd "C-c e")
               'my-shell-erase-buffer)
+            (define-key shell-mode-map (kbd "C-l")
+              'my-shell-bash-clear-screen)
             (define-key shell-mode-map (kbd "<right>")
               'my-shell-forward-char-or-previous-history)
             (define-key shell-mode-map (kbd "<down>")
