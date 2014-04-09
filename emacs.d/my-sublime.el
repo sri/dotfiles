@@ -88,9 +88,17 @@
   "Comment or uncomment the current line or region."
   (interactive "*")
   (cond ((region-active-p)
-         (comment-or-uncomment-region (region-beginning)
-                                      (region-end))
-         (setq deactivate-mark nil))
+         (let ((start (region-beginning))
+               (end (region-end)))
+           (setq start (min start end))
+           (setq end (max start end))
+           (save-excursion
+             (goto-char start)
+             (setq start (point-at-bol))
+             (goto-char end)
+             (setq end (point-at-eol)))
+           (comment-or-uncomment-region start end)
+           (setq deactivate-mark nil)))
         (t
          (comment-or-uncomment-region (point-at-bol)
                                       (point-at-eol)))))
