@@ -24,10 +24,16 @@
 (global-set-key (kbd "C-c d") 'my-toggle-key-bindings)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
-(global-set-key (kbd "C-c r") 'find-library)
+;; (global-set-key (kbd "C-c r") 'find-library)
 (global-set-key (kbd "C-c s") 'sort-lines)
 (global-set-key (kbd "C-c v") 'view-mode)
 (global-set-key (kbd "C-c w") 'compare-windows)
+
+(defvar ctl-c-r-map)
+(define-prefix-command 'ctl-c-r-map)
+(define-key global-map (kbd "C-c r") ctl-c-r-map)
+
+(global-set-key (kbd "C-c r n") 'my-remove-non-ascii-chars)
 
 (global-set-key (kbd "C-'") 'eval-last-sexp)
 (global-set-key (kbd "C-,") 'beginning-of-buffer)
@@ -46,6 +52,7 @@
 (global-set-key (kbd "S-C-j") 'my-join-line)
 (global-set-key (kbd "S-C-k") 'my-kill-whole-line)
 (global-set-key (kbd "S-C-n") 'make-frame-command)
+(global-set-key (kbd "S-C-o") 'my-find-file-literally)
 (global-set-key (kbd "S-C-r") 'query-replace-regexp)
 (global-set-key (kbd "S-C-w") 'delete-frame)
 

@@ -251,3 +251,13 @@ decoded URL in the minibuffer."
       (if file-at-point
           (find-file file-at-point)
         (ido-find-file)))))
+
+(defun my-remove-non-ascii-chars ()
+  (interactive)
+  (query-replace-regexp "[^[:ascii:]]" ""))
+
+(defun my-find-file-literally ()
+  (interactive)
+  (let ((path (buffer-file-name)))
+    (kill-buffer (current-buffer))
+    (find-file-literally path)))
