@@ -261,3 +261,15 @@ decoded URL in the minibuffer."
   (let ((path (buffer-file-name)))
     (kill-buffer (current-buffer))
     (find-file-literally path)))
+
+(defvar my-selective-display-level 0)
+(make-variable-buffer-local 'my-selective-display-level)
+
+(defun my-selective-display-next (&optional arg)
+  (interactive "P")
+  (setq my-selective-display-level (or arg
+                                       (if (> my-selective-display-level 8)
+                                           0
+                                         (+ my-selective-display-level 2))))
+  (message "Selective display level: %s" my-selective-display-level)
+  (set-selective-display my-selective-display-level))
