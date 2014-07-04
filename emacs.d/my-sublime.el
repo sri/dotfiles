@@ -96,7 +96,14 @@
              (goto-char start)
              (setq start (point-at-bol))
              (goto-char end)
-             (setq end (point-at-eol)))
+             (setq end
+                   ;; Sublime-like behavior: If the region extends to
+                   ;; the beginning of a line, don't include that
+                   ;; line.
+                   (cond ((bolp)
+                          (forward-char -1)
+                          (point))
+                         (t (point-at-eol)))))
            (comment-or-uncomment-region start end)
            (setq deactivate-mark nil)))
         (t
