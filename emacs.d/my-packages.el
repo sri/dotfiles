@@ -19,5 +19,5 @@
   (load-theme 'solarized-dark t)
   (custom-theme-set-faces
    'solarized-dark
-   '(dired-header ((t (:foreground "#268bd2" :weight bold)))))
+   '(dired-header ((t (:foreground "#268bd2" :underline t :background nil)))))
   )
