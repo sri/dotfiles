@@ -46,7 +46,7 @@
     "my-mouse-hacks" "my-packages"))
 
 (defvar my-packages
-  '(color-theme color-theme-solarized magit bm autopair go-mode org
+  '(solarized-theme magit bm autopair go-mode org
                 macrostep yasnippet ace-jump-mode expand-region
                 dired-details rainbow-mode browse-kill-ring
                 zenburn-theme ag flycheck elisp-slime-nav
