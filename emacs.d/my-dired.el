@@ -27,7 +27,8 @@
 
 (defun my-dired-right-arrow-key ()
   (interactive)
-  (if (or (use-region-p)
+  (if (or (let ((use-empty-active-region t))
+            (use-region-p))
           (= (line-beginning-position) 1))
       (forward-char 1)
     (dired-find-file)))
