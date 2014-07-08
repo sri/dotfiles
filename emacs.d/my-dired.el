@@ -7,6 +7,14 @@
     (when file-name
       (dired-goto-file file-name))))
 
+(defun my-dired-find-file ()
+  (interactive)
+  (if (/= (line-beginning-position) 1)
+      (dired-find-file)
+    (let ((dir (expand-file-name default-directory)))
+      (kill-new dir)
+      (message "Copied: '%s'" dir))))
+
 (defun my-dired-first-file ()
   (interactive)
   (goto-char (point-min))
@@ -30,6 +38,7 @@
             (define-key dired-mode-map "z" 'my-dired-last-file)
             (define-key dired-mode-map "f" 'my-isearch-forward)
             (define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
+            (define-key dired-mode-map (kbd "C-m") 'my-dired-find-file)
             (define-key dired-mode-map (kbd "SPC") 'scroll-up)
             (define-key dired-mode-map (kbd "S-SPC") 'scroll-down)
             (define-key dired-mode-map [left] 'dired-up-directory)
