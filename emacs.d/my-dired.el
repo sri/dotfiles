@@ -25,6 +25,13 @@
   (goto-char (point-max))
   (dired-previous-line 1))
 
+(defun my-dired-right-arrow-key ()
+  (interactive)
+  (if (or (use-region-p)
+          (= (line-beginning-position) 1))
+      (forward-char 1)
+    (dired-find-file)))
+
 (add-hook 'dired-mode-hook
           (lambda ()
             (linum-mode -1)
@@ -42,4 +49,4 @@
             (define-key dired-mode-map (kbd "SPC") 'scroll-up)
             (define-key dired-mode-map (kbd "S-SPC") 'scroll-down)
             (define-key dired-mode-map [left] 'dired-up-directory)
-            (define-key dired-mode-map [right] 'dired-find-file)))
+            (define-key dired-mode-map [right] 'my-dired-right-arrow-key)))
