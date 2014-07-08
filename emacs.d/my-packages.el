@@ -16,4 +16,8 @@
       (package-install p))))
 
 (when window-system
-  (load-theme 'solarized-dark t))
+  (load-theme 'solarized-dark t)
+  (custom-theme-set-faces
+   'solarized-dark
+   '(dired-header ((t (:foreground "#268bd2" :weight bold)))))
+  )
