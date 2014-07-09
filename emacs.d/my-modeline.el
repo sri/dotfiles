@@ -216,8 +216,8 @@ Ctrl mouse-1: toggle between Beginning & End of buffer"))
   (setq my-mode-line-format
         '(" "
           mode-line-modified " "
-          my-mode-line-window-manipulation " "
-          my-mode-line-goto-dired " "
+          ;; my-mode-line-window-manipulation " "
+          ;; my-mode-line-goto-dired " "
           mode-line-buffer-identification " "
           mode-line-modes " "
           mode-line-position

@@ -46,6 +46,7 @@
 (global-set-key (kbd "C-\"") 'my-emacs-lisp-eval)
 ;; (global-set-key (kbd "C-\\") ')
 
+(global-set-key (kbd "S-C-b") 'bm-next)
 (global-set-key (kbd "S-C-d") 'my-duplicate-line-or-region)
 (global-set-key (kbd "S-C-f") 'my-find-in-directory)
 (global-set-key (kbd "S-C-h") 'my-quick-hotkey)
