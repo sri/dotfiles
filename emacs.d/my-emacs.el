@@ -11,6 +11,10 @@
           (t
            (setq source (concat name ".el"))
            (setq compiled (concat name ".elc"))))
+    (when (and (file-exists-p compiled)
+               (not (file-exists-p source)))
+      (error "Compiled file '%s' exists but its source file doesn't: %s"
+             compiled source))
     (when (file-newer-than-file-p source compiled)
       (let (byte-compile-verbose)
         ;; Binding byte-compile-verbose to nil stops
