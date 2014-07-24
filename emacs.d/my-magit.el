@@ -1,5 +1,27 @@
 (require 'magit)
 
+;; For when I am view the diff -- have "," close
+;; the current diff and open the next one, if it
+;; is there.
+(defun my-magit-close-current-section ()
+  (interactive)
+  (let* ((current (magit-current-section))
+         (type (magit-section-type current)))
+    (when (eq type 'hunk)
+      (setq current (magit-section-parent current))
+      (setq type (magit-section-type current)))
+    (unless (eq type 'diff)
+      (error "unknow type %s" type))
+    (goto-char (magit-section-beginning current))
+    (magit-section-hideshow t)
+    (when (magit-find-section-after (point))
+      (magit-goto-next-section)
+      (recenter 0)
+      (magit-section-hideshow nil))))
+
+(define-key magit-status-mode-map (kbd ",")
+  'my-magit-close-current-section)
+
 ;; Don't highlight sections.
 (defun magit-highlight-section ()
   nil)
