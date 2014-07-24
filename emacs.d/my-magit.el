@@ -11,7 +11,7 @@
       (setq current (magit-section-parent current))
       (setq type (magit-section-type current)))
     (unless (eq type 'diff)
-      (error "unknow type %s" type))
+      (error "Unknown magit section type %s" type))
     (goto-char (magit-section-beginning current))
     (magit-section-hideshow t)
     (when (magit-find-section-after (point))
