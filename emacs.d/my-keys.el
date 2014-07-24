@@ -53,10 +53,11 @@
 (global-set-key (kbd "S-C-j") 'my-join-line)
 (global-set-key (kbd "S-C-k") 'my-kill-whole-line)
 (global-set-key (kbd "S-C-n") 'make-frame-command)
-(global-set-key (kbd "S-C-o") 'my-find-file-literally)
+(global-set-key (kbd "S-C-o") 'open-line)
 (global-set-key (kbd "S-C-r") 'query-replace-regexp)
 (global-set-key (kbd "S-C-w") 'delete-frame)
 
+(global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "<M-SPC>") 'my-just-one-space)
 (global-set-key (kbd "<M-down>") 'scroll-up)
 (global-set-key (kbd "<M-up>") 'scroll-down)
