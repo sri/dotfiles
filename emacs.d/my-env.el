@@ -78,6 +78,9 @@
 (show-paren-mode t)
 (global-hl-line-mode 1)
 
+(make-variable-buffer-local 'line-number-mode)
+(make-variable-buffer-local 'column-number-mode)
+
 (ido-mode 1)
 (setq ido-enable-flex-matching t)
 (setq ido-default-file-method 'selected-window)
