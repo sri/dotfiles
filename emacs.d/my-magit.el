@@ -1,8 +1,9 @@
 (require 'magit)
 
-;; For when I am view the diff -- have "," close
-;; the current diff and open the next one, if it
-;; is there.
+;; When I'm in the Magit Status buffer, I would like to review the
+;; diffs. This function lets me do that with a single keystroke: this
+;; will close the current file diff, show the next one and move the
+;; starting line to the top of the window.
 (defun my-magit-close-current-section ()
   (interactive)
   (let* ((current (magit-current-section))
