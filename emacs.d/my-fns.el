@@ -35,7 +35,10 @@
           (setq end (1- (point))))))
     (cond ((null start) (message "Couldn't find starting `%s'" start-string))
           ((null end) (message "Couldn't find ending `%s'" end-string))
-          (arg (kill-ring-save start end)
+          (arg
+           (goto-char end)
+           (delete-region start end))
+          (t (kill-ring-save start end)
                ;; Briefly highlight the copied region if its visible
                ;; to the user.
                (when (and (pos-visible-in-window-p start (selected-window))
@@ -50,9 +53,7 @@
                                (current-buffer))
                  (run-at-time 0.3 nil 'my-change-inside-pair-unhighlight))
                (message "Copied `%s'"
-                        (buffer-substring-no-properties start end)))
-          (t (goto-char end)
-             (delete-region start end)))))
+                        (buffer-substring-no-properties start end))))))
 
 (defun my-kill-line-or-region (&optional arg)
   (interactive "P")
@@ -165,12 +166,14 @@ key. Any other key other than the hotkey exits this mode."
 (defun my-just-one-space ()
   "Like just-one-space, but moves across newlines."
   (interactive)
-  (when (eolp)
-    (delete-region (point)
-                   (save-excursion
-                     (skip-chars-forward " \t\n\r")
-                     (point))))
-  (call-interactively 'just-one-space))
+  (just-one-space -1))
+
+(defun my-delete-horizontal-space ()
+  (interactive "*")
+  (delete-region (progn (skip-chars-backward " \t\n\r")
+                        (point))
+                 (progn (skip-chars-forward " \t\n\r")
+                        (point))))
 
 (defun my-kill-whole-line (&optional arg)
   "Like kill-whole-line but maintains column position."

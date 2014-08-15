@@ -61,6 +61,7 @@
 (global-set-key (kbd "<M-SPC>") 'my-just-one-space)
 (global-set-key (kbd "<M-down>") 'scroll-up)
 (global-set-key (kbd "<M-up>") 'scroll-down)
+(global-set-key (kbd "M-\\") 'my-delete-horizontal-space)
 
 (global-set-key (kbd "C-x l") 'my-count-lines-buffer)
 (global-set-key (kbd "C-x s") 'my-start-line-or-region-swap)
