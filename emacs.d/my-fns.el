@@ -1,6 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 ;;; This file uses lexical binding for the
 ;;; function `my-overwrite-key-bindings-in-mode'.
+(require 'dash)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -279,14 +280,12 @@ decoded URL in the minibuffer."
 
 (defun my-open-latest-downloaded-file ()
   (interactive)
-  (let ((downloads (sort (directory-files "~/Downloads" 'full nil 'nosort)
-                         'file-newer-than-file-p))
-        (latest nil))
-    (while (null latest)
-      (let* ((full (pop downloads))
-             (base (file-name-nondirectory full)))
-        (unless (member base '("." ".."))
-          (setq latest (cons full base))
-          (setq done t))))
-    (when (and latest (y-or-n-p (format "Visit `%s'? " (cdr latest))))
-      (find-file (car latest)))))
+  (let* ((downloads (directory-files "~/Downloads" 'full nil 'nosort))
+         (sorted-by-last-mod (sort downloads 'file-newer-than-file-p))
+         (cleaned (-remove (lambda (f)
+                             (member (file-name-nondirectory f) '("." "..")))
+                           sorted-by-last-mod)))
+    (when (and cleaned
+               (y-or-n-p (format "Visit `%s'? "
+                                 (file-name-nondirectory (car cleaned)))))
+      (find-file (car cleaned)))))
