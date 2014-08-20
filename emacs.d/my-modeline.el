@@ -48,7 +48,7 @@
     )
 
 (defun my-mode-line-buffer-name ()
-  (let* ((boxsize 20)
+  (let* ((boxsize 25)
          (bn (buffer-name))
          (len (length bn)))
     (if (> len boxsize)

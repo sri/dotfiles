@@ -57,6 +57,7 @@
 (global-set-key (kbd "S-C-r") 'query-replace-regexp)
 (global-set-key (kbd "S-C-w") 'delete-frame)
 
+(global-set-key (kbd "M-n") 'my-sticky-buf-new)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "<M-SPC>") 'my-just-one-space)
 (global-set-key (kbd "<M-down>") 'scroll-up)
