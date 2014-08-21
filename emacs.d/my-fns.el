@@ -289,3 +289,39 @@ decoded URL in the minibuffer."
                (y-or-n-p (format "Visit `%s'? "
                                  (file-name-nondirectory (car cleaned)))))
       (find-file (car cleaned)))))
+
+(require 'rect) ; for killed-rectangle
+(defun my-copy-from-starting-col-till-eol (start end &optional evenly-sized-strings)
+  "Copy from starting column till end of line for all lines in region.
+With a prefix argument, makes all the copied lines the same
+length -- spaces are appended to lines that aren't long enough.
+Sets the result to `killed-rectangle', so that a `yank-rectangle'
+will bring it back."
+  (interactive "r\nP")
+  (when (region-active-p)
+    (let ((lines '())
+          (line nil)
+          (max 0)
+          (start-column nil))
+      (save-excursion
+        (goto-char start)
+        (setq start-column (current-column))
+        ;; Don't include the last line unless the
+        ;; cursor is at the end of the line.
+        (while (<= (point-at-eol) end)
+          (if (< (current-column) start-column)
+              (push "" lines)
+            (setq line (buffer-substring (point) (point-at-eol)))
+            (setq max (max (length line) max))
+            (push line lines))
+          (forward-line 1)
+          (move-to-column start-column))
+        (setq lines (nreverse lines))
+        (setq killed-rectangle
+              (if evenly-sized-strings
+                  (mapcar (lambda (s)
+                            (concat s (make-string (- max (length s)) ? )))
+                          lines)
+                lines))
+        (setq deactivate-mark t)
+        (message "Invoke `yank-rectangle' to get this rectangle")))))

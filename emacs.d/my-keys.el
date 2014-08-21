@@ -65,6 +65,7 @@
 (global-set-key (kbd "M-\\") 'my-delete-horizontal-space)
 
 (global-set-key (kbd "C-x l") 'my-count-lines-buffer)
+(global-set-key (kbd "C-x r K") 'my-copy-from-starting-col-till-eol)
 (global-set-key (kbd "C-x s") 'my-start-line-or-region-swap)
 
 (global-set-key (kbd "<S-f6>") 'my-find-tag-next)
