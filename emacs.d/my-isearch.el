@@ -1,5 +1,3 @@
-(require 'isearch)
-
 ;; TODO: handle wrap around
 (defun my-isearch-goto-next-non-visible-match ()
   "Go to the next (or previous) match that is beyond this window."
@@ -24,3 +22,6 @@
              (recenter -4)))
       (isearch-search)
       (isearch-update))))
+
+(define-key isearch-mode-map (kbd "C-v")
+  'my-isearch-goto-next-non-visible-match)

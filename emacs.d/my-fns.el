@@ -1,7 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 ;;; This file uses lexical binding for the
 ;;; function `my-overwrite-key-bindings-in-mode'.
-(require 'dash)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -233,7 +232,7 @@ decoded URL in the minibuffer."
   (call-interactively (if (use-region-p) 'eval-region 'eval-defun)))
 
 (defun my-beginning-of-line ()
-  "Toggle to the beginning of line or beginning of non-whitespace chars."
+  "Move to the beginning of line or beginning of non-whitespace chars."
   (interactive "^")
   (if (= (current-column) 0)
       (back-to-indentation)
@@ -282,6 +281,7 @@ decoded URL in the minibuffer."
   (interactive)
   (let* ((downloads (directory-files "~/Downloads" 'full nil 'nosort))
          (sorted-by-last-mod (sort downloads 'file-newer-than-file-p))
+         ;; requires dash.el for -remove
          (cleaned (-remove (lambda (f)
                              (member (file-name-nondirectory f) '("." "..")))
                            sorted-by-last-mod)))
