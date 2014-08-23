@@ -16,7 +16,8 @@
 
 (when window-system
   (let ((shell-path (shell-command-to-string "$SHELL -i -c 'echo $PATH'")))
-    (setenv "PATH" shell-path)
+    (setenv "PATH"
+            (subseq shell-path 0 (1- (length shell-path))))
     (setq exec-path (split-string shell-path path-separator))))
 
 (let ((registers '((?d . "~/Desktop")
