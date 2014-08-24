@@ -1,27 +1,59 @@
 (require 'magit)
 
-;; When I'm in the Magit Status buffer, I would like to review the
-;; diffs. This function lets me do that with a single keystroke: this
-;; will close the current file diff, show the next one and move the
-;; starting line to the top of the window.
-(defun my-magit-close-current-section ()
+(defun my-magit-view-diff ()
+  "View each file diff.
+Find the first diff section (after point) and opens it up for
+viewing.  Subsequent calls to this command will either scroll
+thru the diff until the end is visible on the window. After that,
+it'll close the current section and open the next one."
   (interactive)
-  (let* ((current (magit-current-section))
-         (type (magit-section-type current)))
-    (when (eq type 'hunk)
-      (setq current (magit-section-parent current))
-      (setq type (magit-section-type current)))
-    (unless (eq type 'diff)
-      (error "Unknown magit section type %s" type))
-    (goto-char (magit-section-beginning current))
-    (magit-section-hideshow t)
-    (when (magit-find-section-after (point))
-      (magit-goto-next-section)
-      (recenter 0)
-      (magit-section-hideshow nil))))
+  (let ((continue (eq last-command 'my-magit-view-diff))
+        (current (magit-current-section))
+        (done nil))
+    ;; Find a diff or hunk section after point
+    (while (and (not done)
+                (not (member (magit-section-type current) '(diff hunk))))
+      (if (null (magit-find-section-after (point)))
+          (setq done t)
+        (magit-goto-next-section)
+        (setq current (magit-current-section))
+        ;; magit-diff ends with a "back" button and it seems to be
+        ;; considered a magit section.
+        (when (eq (magit-section-type current) 'button)
+          (setq done t))))
+    (cond (done
+           (message "Done"))
+          ((or continue
+               (eq (magit-section-type current) 'hunk))
+           (let ((parent (if (eq (magit-section-type current) 'diff)
+                             current
+                           (magit-section-parent current))))
+             (unless (eq (magit-section-type parent) 'diff)
+               (error "Parent of hunk is not a diff but is %s"
+                      (magit-section-type parent)))
+             ;; If the current diff has more content that is visible
+             ;; in the current window, scroll up and let the user view
+             ;; it.  Otherwise, close this diff section and open the
+             ;; next one.
+             (cond ((pos-visible-in-window-p (magit-section-end parent))
+                    (goto-char (magit-section-beginning parent))
+                    (magit-hide-section)
+                    (recenter 0)
+                    (if (null (magit-find-section-after (point)))
+                        (message "Done")
+                      (magit-goto-next-section)
+                      (if (eq (magit-section-type (magit-current-section)) 'diff)
+                          (magit-show-section)
+                        (message "Done"))))
+                   (t (scroll-up)))))
+          ((eq (magit-section-type current) 'diff)
+           ;; Initial viewing
+           (goto-char (magit-section-beginning current))
+           (magit-show-section)
+           (recenter 0)))))
 
-(define-key magit-status-mode-map (kbd ",")
-  'my-magit-close-current-section)
+(define-key magit-status-mode-map (kbd ",") 'my-magit-view-diff)
+(define-key magit-diff-mode-map (kbd ",") 'my-magit-view-diff)
 
 ;; Don't highlight sections.
 (defun magit-highlight-section ()
