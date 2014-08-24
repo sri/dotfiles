@@ -15,9 +15,8 @@
 (setq-default major-mode 'my-set-major-mode)
 
 (when window-system
-  (let ((shell-path (shell-command-to-string "$SHELL -i -c 'echo $PATH'")))
-    (setenv "PATH"
-            (subseq shell-path 0 (1- (length shell-path))))
+  (let ((shell-path (shell-command-to-string "$SHELL -i -c 'echo -n $PATH'")))
+    (setenv "PATH" shell-path)
     (setq exec-path (split-string shell-path path-separator))))
 
 (let ((registers '((?d . "~/Desktop")
