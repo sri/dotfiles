@@ -57,21 +57,17 @@
   (message "Hit [up] or [down] to move region or line in that direction")
   (set-temporary-overlay-map my-line-or-region-swap-keymap t))
 
-(defun my-duplicate-line-or-region ()
+(defun my-duplicate-line-or-region (start end)
   "Duplicate line or current region."
-  (interactive "*")
+  (interactive "*r")
   (if (use-region-p)
-      (let* ((beg (region-beginning))
-             (end (region-end))
-             (point-at-region-beg (= (point) beg))
-             (region (buffer-substring beg end)))
-        (cond (point-at-region-beg
+      (let ((region (buffer-substring start end)))
+        (cond ((= (point) start)
                (goto-char end)
                (insert region)
-               (goto-char beg)
-               (set-mark end))
-              (t (insert region)
-                 (set-mark end)))
+               (goto-char start))
+              (t (insert region)))
+        (set-mark end)
         (setq deactivate-mark nil))
     (let ((line (buffer-substring (point-at-bol) (point-at-eol)))
           (column (current-column)))
@@ -84,28 +80,24 @@
         (unless (eobp) (insert "\n")))
       (move-to-column column))))
 
-(defun my-comment-line-or-region ()
+(defun my-comment-line-or-region (start end)
   "Comment or uncomment the current line or region."
-  (interactive "*")
+  (interactive "*r")
   (cond ((region-active-p)
-         (let ((start (region-beginning))
-               (end (region-end)))
-           (setq start (min start end))
-           (setq end (max start end))
-           (save-excursion
-             (goto-char start)
-             (setq start (point-at-bol))
-             (goto-char end)
-             (setq end
-                   ;; Sublime-like behavior: If the region extends to
-                   ;; the beginning of a line, don't include that
-                   ;; line.
-                   (cond ((bolp)
-                          (forward-char -1)
-                          (point))
-                         (t (point-at-eol)))))
-           (comment-or-uncomment-region start end)
-           (setq deactivate-mark nil)))
+         (save-excursion
+           (goto-char start)
+           (setq start (point-at-bol))
+           (goto-char end)
+           (setq end
+                 ;; Sublime-like behavior: If the region extends to
+                 ;; the beginning of a line, don't include that
+                 ;; line.
+                 (cond ((bolp)
+                        (forward-char -1)
+                        (point))
+                       (t (point-at-eol)))))
+         (comment-or-uncomment-region start end)
+         (setq deactivate-mark nil))
         (t
          (comment-or-uncomment-region (point-at-bol)
                                       (point-at-eol)))))
