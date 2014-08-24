@@ -79,7 +79,3 @@
   (let ((elapsed (float-time (time-subtract (current-time)
                                             my-emacs-start-time))))
     (message "Finished loading in %.3fs " elapsed)))
-
-;; Local Variables:
-;; eval: (add-hook 'after-save-hook (lambda () (byte-compile-file "my-emacs.el")) nil t)
-;; End:
