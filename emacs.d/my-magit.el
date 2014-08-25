@@ -52,8 +52,12 @@ it'll close the current section and open the next one."
            (magit-show-section)
            (recenter 0)))))
 
-(define-key magit-status-mode-map (kbd ",") 'my-magit-view-diff)
-(define-key magit-diff-mode-map (kbd ",") 'my-magit-view-diff)
+(mapc (lambda (mode-map)
+        (define-key mode-map (kbd ",")
+          'my-magit-view-diff))
+      (list magit-status-mode-map
+            magit-diff-mode-map
+            magit-commit-mode-map))
 
 ;; Don't highlight sections.
 (defun magit-highlight-section ()
