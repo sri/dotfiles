@@ -1,4 +1,6 @@
 (global-set-key (kbd "C-/") 'my-comment-line-or-region)
+(global-set-key (kbd "C-=") 'my-increase-font-size)
+(global-set-key (kbd "C--") 'my-decrease-font-size)
 (global-set-key (kbd "C-a") 'my-beginning-of-line)
 (global-set-key (kbd "C-b") 'backward-kill-word)
 (global-set-key (kbd "C-d") 'kill-word)

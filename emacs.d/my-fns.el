@@ -325,3 +325,24 @@ will bring it back."
                 lines))
         (setq deactivate-mark t)
         (message "Invoke `yank-rectangle' to get this rectangle")))))
+
+
+;; Increase/decrease font size for all buffers.
+;;
+(defvar my-original-font-size nil)
+(defun my-increase-font-size (&optional decrease)
+  (interactive)
+  (let* ((old (face-attribute 'default :height))
+         ;; Increment has to be a multiple of 10.
+         (new (+ old (if decrease (- 10) 10)))
+         (increment (/ (- new my-original-font-size) 10)))
+    (when (null my-original-font-size)
+      (setq my-original-font-size old))
+    (message "%s%s: new font size: %s"
+             (if (>= increment 0) "+" "-")
+             increment
+             new)
+    (set-face-attribute 'default nil :height new)))
+(defun my-decrease-font-size ()
+  (interactive)
+  (my-increase-font-size 'decrease))
