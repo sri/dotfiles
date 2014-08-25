@@ -22,6 +22,7 @@
 (global-set-key (kbd "C-c \\") 'align-regexp)
 (global-set-key (kbd "C-c c") 'calendar)
 (global-set-key (kbd "C-c d") 'my-toggle-key-bindings)
+(global-set-key (kbd "C-c e") 'er/expand-region)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
 ;; (global-set-key (kbd "C-c r") 'find-library)

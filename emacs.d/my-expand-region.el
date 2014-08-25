@@ -1,8 +1,6 @@
 (require 'expand-region)
 (require 'advice)
 
-(global-set-key (kbd "C-c s") 'er/expand-region)
-
 (defadvice er/prepare-for-more-expansions-internal
   (after my-expand-region-extra-bindings (repeat-key-str))
   (let* ((result ad-return-value)
