@@ -58,6 +58,8 @@
 ;; keys bound to C-x.
 (setq help-char ??)
 
+(setq Man-width 80)
+
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (setq eval-expression-print-length nil)
