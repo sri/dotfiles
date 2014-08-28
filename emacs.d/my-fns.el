@@ -335,12 +335,13 @@ will bring it back."
   (let* ((old (face-attribute 'default :height))
          ;; Increment has to be a multiple of 10.
          (new (+ old (if decrease (- 10) 10)))
-         (increment (/ (- new my-original-font-size) 10)))
+         (inc))
     (when (null my-original-font-size)
       (setq my-original-font-size old))
+    (setq inc (/ (- new my-original-font-size) 10))
     (message "%s%s: new font size: %s"
-             (if (>= increment 0) "+" "-")
-             increment
+             (if (>= inc 0) "+" "-")
+             inc
              new)
     (set-face-attribute 'default nil :height new)))
 (defun my-decrease-font-size ()
