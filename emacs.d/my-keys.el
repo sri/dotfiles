@@ -22,6 +22,7 @@
 
 (global-set-key (kbd "C-c TAB") 'yas/expand)
 (global-set-key (kbd "C-c \\") 'align-regexp)
+(global-set-key (kbd "C-c C") 'org-capture)
 (global-set-key (kbd "C-c c") 'calendar)
 (global-set-key (kbd "C-c d") 'my-toggle-key-bindings)
 (global-set-key (kbd "C-c e") 'er/expand-region)
