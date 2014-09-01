@@ -163,17 +163,19 @@ key. Any other key other than the hotkey exits this mode."
   (interactive)
   (message "%d lines" (count-lines (point-min) (point-max))))
 
-(defun my-just-one-space ()
+(defun my-just-one-space (&optional arg)
   "Like just-one-space, but moves across newlines."
-  (interactive)
-  (just-one-space -1))
+  (interactive "*P")
+  (just-one-space (if arg nil -1)))
 
-(defun my-delete-horizontal-space ()
-  (interactive "*")
-  (delete-region (progn (skip-chars-backward " \t\n\r")
-                        (point))
-                 (progn (skip-chars-forward " \t\n\r")
-                        (point))))
+(defun my-delete-horizontal-space (&optional arg)
+  (interactive "*P")
+  (if arg
+      (delete-horizontal-space)
+    (delete-region (progn (skip-chars-backward " \t\n\r")
+                          (point))
+                   (progn (skip-chars-forward " \t\n\r")
+                          (point)))))
 
 (defun my-kill-whole-line (&optional arg)
   "Like kill-whole-line but maintains column position."
