@@ -33,6 +33,11 @@
       (forward-char 1)
     (dired-find-file)))
 
+(when (eq system-type 'darwin)
+  (setq dired-guess-shell-alist-user
+        '(("\\.pdf\\'" "open -a Preview")
+          ("\\.html?\\'" "open -a 'Google Chrome'"))))
+
 (add-hook 'dired-mode-hook
           (lambda ()
             (linum-mode -1)
