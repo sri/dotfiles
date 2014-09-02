@@ -2,6 +2,13 @@
 
 (set-register ?t '(file . "~/Dropbox/Notes/todo.org"))
 
+(add-hook 'org-mode-hook
+          (lambda ()
+            ;; 3rd arg T says to modify the buffer-local hook
+            (remove-hook 'before-save-hook 'delete-trailing-whitespace t)
+            (setq cursor-type 'bar)))
+
+
 ;; (org-babel-do-load-languages
 ;;  'org-babel-load-languages
 ;;  '((awk . t)
@@ -18,7 +25,9 @@
 ;;    (sql . t)
 ;;    (sqlite . t)))
 
+(setq org-hide-leading-stars t)
 (setq org-special-ctrl-a/e t)
+(setq org-special-ctrl-k nil)
 (setq org-return-follows-link t)
 (setq org-use-speed-commands t)
 (setq org-hide-leading-stars nil)
@@ -29,6 +38,7 @@
 
 (my-overwrite-key-bindings-in-mode "C-j" 'other-window '(org-mode))
 (my-overwrite-key-bindings-in-mode "C-," 'beginning-of-buffer '(org-mode))
+(my-overwrite-key-bindings-in-mode "<S-return>" 'my-dired '(org-mode))
 
 (custom-set-faces
   '(org-done ((t (:strike-through t))))
