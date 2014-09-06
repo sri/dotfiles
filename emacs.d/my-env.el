@@ -39,6 +39,7 @@
     (add-hook hook 'my-show-trailing-whitespace)))
 
 (visual-line-mode 1)
+(setq save-interprogram-paste-before-kill t)
 (setq echo-keystrokes 0.1)
 (setq vc-follow-symlinks t)
 (setq mouse-drag-copy-region t)
