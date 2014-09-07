@@ -281,16 +281,14 @@ decoded URL in the minibuffer."
 
 (defun my-open-latest-downloaded-file ()
   (interactive)
-  (let* ((downloads (directory-files "~/Downloads" 'full nil 'nosort))
-         (sorted-by-last-mod (sort downloads 'file-newer-than-file-p))
-         ;; requires dash.el for -remove
-         (cleaned (-remove (lambda (f)
-                             (member (file-name-nondirectory f) '("." "..")))
-                           sorted-by-last-mod)))
-    (when (and cleaned
-               (y-or-n-p (format "Visit `%s'? "
-                                 (file-name-nondirectory (car cleaned)))))
-      (find-file (car cleaned)))))
+  (let (downloads)
+    (dolist (f (directory-files "~/Downloads" 'full nil 'nosort))
+      (unless (member (file-name-nondirectory f) '("." ".."))
+        (push (cons f (nth 5 (file-attributes f))) downloads)))
+    (setq downloads
+          (sort downloads (lambda (x y) (time-less-p (cdr y) (cdr x)))))
+    (when downloads
+      (find-file (caar downloads)))))
 
 (require 'rect) ; for killed-rectangle
 (defun my-copy-from-starting-col-till-eol (start end &optional evenly-sized-strings)

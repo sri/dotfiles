@@ -45,7 +45,7 @@
 
 (defvar my-files
   '("my-env" "my-fns" "my-keys" "my-dired" "my-help"
-    "my-shell" "my-sublime" "my-modeline" "my-win"
+    "my-shell" "my-sublime" "my-win"
     "my-scratch" "my-view" "my-sticky-buf" "my-isearch"
     "my-mouse-hacks" "my-packages"))
 
@@ -54,7 +54,7 @@
                 macrostep yasnippet ace-jump-mode expand-region
                 dired-details rainbow-mode browse-kill-ring
                 zenburn-theme ag flycheck elisp-slime-nav
-                undo-tree))
+                undo-tree smart-mode-line))
 
 (defvar my-private-dot-emacs
   (expand-file-name "~/.emacs.private.el"))
