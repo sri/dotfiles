@@ -88,17 +88,15 @@
 
 (global-set-key (kbd "<C-tab>") 'my-switch-to-buffer)
 
-(my-overwrite-key-bindings-in-mode "C-j" 'other-window
-                                   '(lisp-interaction-mode))
+(my-override-keys "C-j" 'other-window '(lisp-interaction-mode))
 
 
-(my-overwrite-key-bindings-in-mode "C-w" 'my-kill-current-buffer
-                                   '(magit-log-mode magit-branch-manager-mode
-                                                    magit-status-mode
-                                                    magit-wazzup-mode
-                                                    magit-commit-mode
-
-                                                    magit-log-edit-mode
-                                                    magit-stash-mode
-                                                    magit-reflog-mode
-                                                    magit-diff-mode))
+(my-override-keys "C-w" 'my-kill-current-buffer
+                  '(magit-log-mode magit-branch-manager-mode
+                                   magit-status-mode
+                                   magit-wazzup-mode
+                                   magit-commit-mode
+                                   magit-log-edit-mode
+                                   magit-stash-mode
+                                   magit-reflog-mode
+                                   magit-diff-mode))

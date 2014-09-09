@@ -79,7 +79,8 @@
 (auto-compression-mode t)
 (transient-mark-mode 1)
 (show-paren-mode t)
-(global-hl-line-mode 1)
+(when window-system
+  (global-hl-line-mode 1))
 
 (make-variable-buffer-local 'line-number-mode)
 (make-variable-buffer-local 'column-number-mode)

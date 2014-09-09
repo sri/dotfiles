@@ -1,9 +1,3 @@
-;;; -*- lexical-binding: t -*-
-;;; This file uses lexical binding for the
-;;; function `my-overwrite-key-bindings-in-mode'.
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (defvar my-change-inside-pair-overlay nil)
 (make-variable-buffer-local 'my-change-inside-pair-overlay)
 
@@ -94,30 +88,6 @@
       (other-window arg))
     (switch-to-buffer selected-buffer)
     (other-window arg)))
-
-;; Since I have non-standard key bindings (C-j for other-window),
-;; it clashes with some major modes that overrides that key.
-;; For example, lisp-interaction-mode binds C-j to eval-print-last-sexp.
-;; Now when I override that key, I would like to see what
-;; function was shadowed.
-;; CAUTION: this needs Emacs 24's lexical scoping to work.
-(defun my-overwrite-key-bindings-in-mode (key new-fn modes)
-  (dolist (mode modes)
-    (let ((hook (intern (format "%s-hook" mode)))
-          (map (intern (format "%s-map" mode)))
-          (msg (format "%s was bound to `%%s'; it now runs `%s'" key new-fn)))
-      (add-hook hook
-                (lambda ()
-                  (let ((current-binding (key-binding (kbd key) t)))
-                    (unless (eq new-fn current-binding)
-                      (define-key (symbol-value map) (kbd key)
-                        (lambda ()
-                          (interactive)
-                          (when (symbolp current-binding)
-                            (message msg current-binding))
-                          (call-interactively new-fn)
-                          (define-key (symbol-value map)
-                            (kbd key) new-fn))))))))))
 
 (defun my-switch-to-buffer ()
   (interactive)

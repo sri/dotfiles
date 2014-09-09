@@ -36,9 +36,9 @@
 (setq org-log-done 'time)
 (setq org-completion-use-ido t)
 
-(my-overwrite-key-bindings-in-mode "C-j" 'other-window '(org-mode))
-(my-overwrite-key-bindings-in-mode "C-," 'beginning-of-buffer '(org-mode))
-(my-overwrite-key-bindings-in-mode "<S-return>" 'my-dired '(org-mode))
+(my-override-keys "C-j" 'other-window '(org-mode))
+(my-override-keys "C-," 'beginning-of-buffer '(org-mode))
+(my-override-keys "<S-return>" 'my-dired '(org-mode))
 
 (custom-set-faces
   '(org-done ((t (:strike-through t))))
