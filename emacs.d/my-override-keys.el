@@ -28,8 +28,8 @@
               (when (symbolp current-binding)
                 (message "%s previously: `%s'; now: `%s'"
                          key-raw current-binding fn))
-              (call-interactively fn)
-              (define-key (current-local-map) key fn))))))))
+              (define-key (current-local-map) key fn)
+              (call-interactively fn))))))))
 
 (defun my-override-keys (key new-fn modes)
   (dolist (mode modes)
