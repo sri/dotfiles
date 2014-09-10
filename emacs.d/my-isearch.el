@@ -25,3 +25,7 @@
 
 (define-key isearch-mode-map (kbd "C-v")
   'my-isearch-goto-next-non-visible-match)
+
+(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+(define-key isearch-mode-map (kbd "C-k") 'isearch-query-replace)
+(define-key isearch-mode-map (kbd "C-K") 'isearch-query-replace-regexp)
