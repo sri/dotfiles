@@ -38,6 +38,9 @@
   (dolist (hook trailing-whitespace-mode-hooks)
     (add-hook hook 'my-show-trailing-whitespace)))
 
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+
 (visual-line-mode 1)
 (setq save-interprogram-paste-before-kill t)
 (setq echo-keystrokes 0.1)
