@@ -41,8 +41,12 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
+(recentf-mode 1)
+(add-hook 'emacs-startup-hook 'recentf-open-files)
+
 (visual-line-mode 1)
 (setq save-interprogram-paste-before-kill t)
+(setq highlight-nonselected-windows t)
 (setq echo-keystrokes 0.1)
 (setq vc-follow-symlinks t)
 (setq mouse-drag-copy-region t)
@@ -92,6 +96,7 @@
 (setq ido-enable-flex-matching t)
 (setq ido-default-file-method 'selected-window)
 (setq ido-default-buffer-method 'selected-window)
+(setq ido-create-new-buffer 'always)
 
 (require 'hippie-exp)
 

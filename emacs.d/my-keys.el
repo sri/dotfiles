@@ -29,6 +29,7 @@
 (global-set-key (kbd "C-c e") 'er/expand-region)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
+(global-set-key (kbd "C-c o") 'occur)
 ;; (global-set-key (kbd "C-c r") 'find-library)
 (global-set-key (kbd "C-c s") 'sort-lines)
 (global-set-key (kbd "C-c v") 'view-mode)

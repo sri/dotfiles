@@ -27,6 +27,7 @@
   (interactive)
   (isearch-yank-internal
    (lambda ()
+     ;; If in word. select word
      (skip-chars-forward "^ \n\t\r")
      (point))))
 
