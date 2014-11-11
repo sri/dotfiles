@@ -47,6 +47,7 @@
   '("my-env" "my-fns" "my-override-keys" "my-keys" "my-dired" "my-help"
     "my-shell" "my-sublime" "my-win"
     "my-scratch" "my-view" "my-sticky-buf" "my-isearch"
+    "my-occur"
     "my-mouse-hacks" "my-packages"))
 
 (defvar my-packages
