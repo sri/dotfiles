@@ -1,5 +1,3 @@
-(require 'replace)
-
 (defun my-occur-mode-display-occurrence ()
   (interactive)
   (occur-mode-display-occurrence)
