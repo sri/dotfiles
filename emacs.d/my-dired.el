@@ -42,6 +42,8 @@
           (lambda ()
             (linum-mode -1)
             (dired-omit-mode 1)
+            (dired-hide-details-mode 1)
+            (define-key dired-mode-map (kbd "D") 'dired-hide-details-mode)
             (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)
             (define-key dired-mode-map (kbd ",") 'dired-prev-dirline)

@@ -52,7 +52,7 @@
 (defvar my-packages
   '(solarized-theme magit bm autopair go-mode org
                 macrostep yasnippet ace-jump-mode expand-region
-                dired-details rainbow-mode browse-kill-ring
+                rainbow-mode browse-kill-ring
                 zenburn-theme ag flycheck elisp-slime-nav
                 undo-tree smart-mode-line))
 
