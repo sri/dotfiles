@@ -76,7 +76,10 @@
 (when (file-exists-p my-private-dot-emacs)
   (my-load my-private-dot-emacs))
 
-(defun display-startup-echo-area-message ()
-  (let ((elapsed (float-time (time-subtract (current-time)
-                                            my-emacs-start-time))))
-    (message "Finished loading in %.3fs " elapsed)))
+;; Doesnt show up on screen (because other stuff gets initialized via
+;; after-init-hook), but does get saved to the *Messages* buffer for
+;; examination -- which is only done when it takes a long time to
+;; load.
+(let ((elapsed (float-time (time-subtract (current-time)
+                                          my-emacs-start-time))))
+  (message "Finished loading in %.3fs " elapsed))
