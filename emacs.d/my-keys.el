@@ -12,7 +12,7 @@
 (global-set-key (kbd "C-n") 'execute-extended-command)
 (global-set-key (kbd "C-o") 'my-ffap-or-find-file)
 (global-set-key (kbd "C-p") 'my-shell)
-(global-set-key (kbd "C-r") 'query-replace)
+(global-set-key (kbd "C-r") 'vr/query-replace)
 (global-set-key (kbd "C-s") 'save-buffer)
 ;; (global-set-key (kbd "C-t") 'magit-status)
 (global-set-key (kbd "C-v") 'ido-switch-buffer)
