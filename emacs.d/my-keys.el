@@ -23,7 +23,6 @@
 (global-set-key (kbd "C-c TAB") 'yas/expand)
 (global-set-key (kbd "C-c \\") 'align-regexp)
 (global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c b") 'my-diff-buffer-with-file)
 (global-set-key (kbd "C-c C") 'org-capture)
 (global-set-key (kbd "C-c c") 'calendar)
 (global-set-key (kbd "C-c d") 'my-toggle-key-bindings)
@@ -74,6 +73,8 @@
 (global-set-key (kbd "C-x l") 'my-count-lines-buffer)
 (global-set-key (kbd "C-x r K") 'my-copy-from-starting-col-till-eol)
 (global-set-key (kbd "C-x s") 'my-start-line-or-region-swap)
+
+(global-set-key (kbd "C-x v -") 'my-unsaved-changes)
 
 (global-set-key (kbd "<S-f6>") 'my-find-tag-next)
 (global-set-key (kbd "<f1>") 'magit-status)

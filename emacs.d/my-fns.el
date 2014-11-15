@@ -307,7 +307,7 @@ will bring it back."
                  (mapconcat 'key-description
                             (where-is-internal 'yank-rectangle) ", "))))))
 
-(defun my-diff-buffer-with-file ()
+(defun my-unsaved-changes ()
   (interactive)
   (diff-buffer-with-file (current-buffer)))
 
