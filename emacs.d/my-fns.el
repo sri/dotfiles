@@ -224,7 +224,16 @@ decoded URL in the minibuffer."
       (ido-find-file)
     (let ((file-at-point (ffap-file-at-point)))
       (if file-at-point
-          (find-file file-at-point)
+          (let ((linenum
+                 (save-excursion
+                   (goto-char (point-at-bol))
+                   (when (and (search-forward file-at-point (point-at-eol) t 1)
+                              (looking-at ":\\([0-9]+\\)"))
+                     (string-to-int (buffer-substring-no-properties
+                                     (match-beginning 1)
+                                     (match-end 1)))))))
+            (find-file file-at-point)
+            (if linenum (goto-line linenum)))
         (ido-find-file)))))
 
 (defun my-remove-non-ascii-chars ()
