@@ -303,7 +303,9 @@ will bring it back."
                           lines)
                 lines))
         (setq deactivate-mark t)
-        (message "Invoke `yank-rectangle' to get this rectangle")))))
+        (message "Invoke `yank-rectangle' (%s) to get this rectangle"
+                 (mapconcat 'key-description
+                            (where-is-internal 'yank-rectangle) ", "))))))
 
 
 ;; Increase/decrease font size for all buffers.
