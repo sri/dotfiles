@@ -89,6 +89,8 @@
 (when window-system
   (global-hl-line-mode 1))
 
+(setq diff-switches '("-u"))
+
 (make-variable-buffer-local 'line-number-mode)
 (make-variable-buffer-local 'column-number-mode)
 

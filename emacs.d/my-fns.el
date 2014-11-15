@@ -307,6 +307,9 @@ will bring it back."
                  (mapconcat 'key-description
                             (where-is-internal 'yank-rectangle) ", "))))))
 
+(defun my-diff-buffer-with-file ()
+  (interactive)
+  (diff-buffer-with-file (current-buffer)))
 
 ;; Increase/decrease font size for all buffers.
 ;;
