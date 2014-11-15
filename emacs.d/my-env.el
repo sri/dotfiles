@@ -44,6 +44,7 @@
 (recentf-mode 1)
 (add-hook 'emacs-startup-hook 'recentf-open-files)
 
+(setq message-log 16384)
 (visual-line-mode 1)
 (setq save-interprogram-paste-before-kill t)
 (setq highlight-nonselected-windows t)
