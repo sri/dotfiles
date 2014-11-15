@@ -54,7 +54,7 @@
   '(solarized-theme magit bm autopair go-mode org
                 macrostep yasnippet ace-jump-mode expand-region
                 rainbow-mode browse-kill-ring
-                zenburn-theme ag flycheck elisp-slime-nav
+                flycheck elisp-slime-nav
                 undo-tree smart-mode-line neotree visual-regexp))
 
 (defvar my-private-dot-emacs
