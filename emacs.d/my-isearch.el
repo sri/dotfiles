@@ -1,6 +1,6 @@
 ;; TODO: handle wrap around
 (defun my-isearch-goto-next-non-visible-match ()
-  "Go to the next (or previous) match that is beyond this window."
+  "Go to the next (or previous) match that isn't visible on screen."
   (interactive)
   (let ((next-non-visible-match
          (let ((search-spaces-regexp search-whitespace-regexp))
