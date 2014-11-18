@@ -55,7 +55,8 @@
                 macrostep yasnippet ace-jump-mode expand-region
                 rainbow-mode browse-kill-ring
                 flycheck elisp-slime-nav
-                undo-tree smart-mode-line neotree visual-regexp))
+                undo-tree smart-mode-line neotree visual-regexp
+                multiple-cursors))
 
 (defvar my-private-dot-emacs
   (expand-file-name "~/.emacs.private.el"))
