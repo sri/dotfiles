@@ -85,7 +85,7 @@
 (defun my-comment-line-or-region ()
   "Comment or uncomment the current line or region."
   (interactive "*")
-  (cond ((region-active-p)
+  (cond ((use-region-p)
          (let ((start (region-beginning))
                (end (region-end)))
            (save-excursion
@@ -153,7 +153,7 @@ Inspired by Sublime Text."
         (end (point-at-eol)))
     ;; when region is active & transient mark mode is
     ;; turned on, we expand to make that region bigger
-    (when (and (region-active-p) transient-mark-mode)
+    (when (and (use-region-p) transient-mark-mode)
       (setq beg (region-beginning)
             end (region-end))
       (save-excursion

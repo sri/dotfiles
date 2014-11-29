@@ -51,13 +51,13 @@
 
 (defun my-kill-line-or-region (&optional arg)
   (interactive "P")
-  (if (region-active-p)
+  (if (use-region-p)
       (kill-region (point) (mark))
     (kill-line arg)))
 
 (defun my-hippie-tab (arg)
   (interactive "*P")
-  (cond ((and transient-mark-mode (region-active-p))
+  (cond ((and transient-mark-mode (use-region-p))
          (indent-region (region-beginning) (region-end) nil))
         ((and (eq (char-syntax (preceding-char)) ?w)
               (not (zerop (current-column))))
@@ -156,7 +156,7 @@ key. Any other key other than the hotkey exits this mode."
 
 (defun my-find-in-directory ()
   (interactive)
-  (if (region-active-p)
+  (if (use-region-p)
       (let* ((string (buffer-substring-no-properties (point) (mark)))
              (dir (read-directory-name (format "Searching for %s under: " string))))
         (ag string dir))
@@ -168,7 +168,7 @@ If a region is selected and the universal argument (C-u) is prefixed,
 then the region is replaced with the decoded URL. Otherwise, show the
 decoded URL in the minibuffer."
   (interactive "P")
-  (let* ((region-active (region-active-p))
+  (let* ((region-active (use-region-p))
          (url (if region-active
                   (buffer-substring-no-properties (point) (mark))
                 (read-string "Url: ")))
@@ -277,7 +277,7 @@ length -- spaces are appended to lines that aren't long enough.
 Sets the result to `killed-rectangle', so that a `yank-rectangle'
 will bring it back."
   (interactive "r\nP")
-  (when (region-active-p)
+  (when (use-region-p)
     (let ((lines '())
           (line nil)
           (max 0)
