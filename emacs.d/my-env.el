@@ -39,6 +39,7 @@
                         c++-mode-hook
                         js-mode-hook
                         java-mode-hook
+                        diff-mode-hook
                         emacs-lisp-mode-hook)))
   (dolist (hook trailing-whitespace-mode-hooks)
     (add-hook hook 'my-show-trailing-whitespace)))
