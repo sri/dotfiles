@@ -123,7 +123,8 @@
 
 (defun my-isearch-forward ()
   (interactive)
-  (if (and transient-mark-mode (region-active-p))
+  (if (let (use-empty-active-region)
+        (use-region-p))
       (my-sublime-like-mouse-dblclick-select-fn)
     (call-interactively 'isearch-forward)))
 
