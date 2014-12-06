@@ -1,5 +1,23 @@
 (require 'magit)
 
+(defun my-git-grep ()
+  (interactive)
+  (let* ((search (if (use-region-p)
+                     (buffer-substring-no-properties (region-beginning)
+                                                     (region-end))
+                   (completing-read "git grep: "
+                                    nil nil nil (current-word))))
+         (cmd (concat "cd \"%s\" && "
+                      "git --no-pager grep -P -n \"%s\" "
+                      "`git rev-parse --show-toplevel`"))
+         (buffer-name (format "*git grep: %s*" search))
+         (compilation-buffer-name-function
+          ;; Fix me: should return unique name
+          (lambda (ignore) buffer-name)))
+    (with-current-buffer (get-buffer-create buffer-name)
+      (setq truncate-lines t))
+    (grep-find (format cmd default-directory search))))
+
 (defun my-magit-view-diff ()
   "View each file diff.
 Find the first diff section (after point) and opens it up for
