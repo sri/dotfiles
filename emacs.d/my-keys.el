@@ -51,6 +51,7 @@
 (global-set-key (kbd "C-3") 'split-window-horizontally)
 (global-set-key (kbd "C-;") 'eval-expression)
 (global-set-key (kbd "C-\"") 'my-emacs-lisp-eval)
+(global-set-key (kbd "<C-return>") 'kill-ring-save)
 ;; (global-set-key (kbd "C-\\") ')
 
 (global-set-key (kbd "S-C-b") 'bm-next)
