@@ -8,4 +8,4 @@ These are my personal dotfiles:
 
 Here is how to set them up on a new machine:
 
-bash <(curl -s https://raw.github.com/sri/dotfiles/master/bin/refresh_dotfiles)
+bash <(curl -s https://raw.githubusercontent.com/sri/dotfiles/master/bin/get_dotfiles)
