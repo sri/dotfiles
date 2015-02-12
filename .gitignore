@@ -4,6 +4,6 @@ emacs.d/.emacs.desktop
 emacs.d/.emacs.desktop.lock
 emacs/emacs.d/auto-save-list/
 emacs/emacs.d/elpa/
-emacs.d/url/
+emacs/emacs.d/url/
 *.elc
 emacs.d/scratch
