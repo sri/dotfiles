@@ -25,7 +25,7 @@
     (setq exec-path (split-string shell-path path-separator))))
 
 (let ((registers '((?d . "~/Desktop")
-                   (?e . "~/my/dotfiles/emacs.d")
+                   (?e . "~/my/dotfiles/emacs/emacs.d")
                    (?~ . "~"))))
   (dolist (reg registers)
     (set-register (car reg) (cons 'file (cdr reg)))))
