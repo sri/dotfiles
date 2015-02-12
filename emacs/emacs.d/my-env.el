@@ -101,11 +101,11 @@
 (make-variable-buffer-local 'line-number-mode)
 (make-variable-buffer-local 'column-number-mode)
 
-(ido-mode 1)
-(setq ido-enable-flex-matching t)
-(setq ido-default-file-method 'selected-window)
-(setq ido-default-buffer-method 'selected-window)
-(setq ido-create-new-buffer 'always)
+;; (ido-mode 1)
+;; (setq ido-enable-flex-matching t)
+;; (setq ido-default-file-method 'selected-window)
+;; (setq ido-default-buffer-method 'selected-window)
+;; (setq ido-create-new-buffer 'always)
 
 (require 'hippie-exp)
 

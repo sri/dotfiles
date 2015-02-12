@@ -1,35 +1,60 @@
-#!/usr/bin/env coffee
+#! /usr/bin/env python
 
-Path = require 'path'
-Fs   = require 'fs'
+# Move the last downloaded file in ~/Downloads to the current
+# directory. An argument specifies the new name for that downloaded
+# file.
 
-exit = (msg) ->
-  console.log msg
-  process.exit 1
+import os
+import sys
 
-mtime = (p) ->
-  Fs.statSync(p).mtime.getTime()
+def by_most_recent(path):
+    """Return files in path ordered by last modified time, most recent
+       last."""
+    files = [ os.path.join(path, f) for f in os.listdir(path) ]
+    return sorted(files, key=os.path.getmtime)
 
-downloadsDir = ->
-  Path.join(process.env['HOME'], 'Downloads')
+def path_relative_to_user_home(path):
+    """Return path with user home directory replaced with `~', if
+       possible."""
+    path = os.path.abspath(path)
+    userhome = os.path.expanduser("~").rstrip(os.sep)
+    if path.startswith(userhome):
+        return os.path.join("~", path[len(userhome):].lstrip(os.sep))
+    else:
+        return path
 
-sortBy = (elts, fn) ->
-  decorate = elts.map (e) -> [fn(e), e]
-  decorate.sort().map (a) -> a[1]
+def mvldown(path, new_name):
+    files = by_most_recent(path)
 
-listdirByMostRecent = (d) ->
-  entries = Fs.readdirSync(d).map (p) -> Path.join(d, p)
-  sortBy entries, mtime
+    if len(files) == 0:
+        print "nothing in %s" % path_relative_to_user_home(path)
+        return
 
-main = ->
-  dir = downloadsDir()
-  exit "#{dir} doesn't exist" unless Fs.existsSync(dir)
-  downloads = listdirByMostRecent(dir)
-  exit "Nothing in #{dir}" if downloads.length is 0
-  mostRecent = downloads[downloads.length - 1]
-  base = Path.basename mostRecent
-  exit "./#{base} already exists" if Fs.existsSync(base)
-  Fs.renameSync mostRecent, base
-  console.log "Moved #{base} to ."
+    latest = files[-1]
+    if not new_name:
+        new_name = os.path.basename(latest)
 
-main()
+    if os.path.exists(new_name):
+        print "./%s already exists" % new_name
+        return
+
+    # Ignore the race condition between checking above if new_name
+    # exists and the rename below, since rename will silently
+    # overwrite the new_name, if it exists.
+    os.rename(latest, new_name)
+    print "moved %s to %s" % (path_relative_to_user_home(latest),
+                              new_name)
+
+
+def main():
+    new_name = (sys.argv[1] if len(sys.argv) == 2 else None)
+    downloads_dir = os.path.expanduser("~/Downloads")
+
+    try:
+        mvldown(downloads_dir, new_name)
+    except Exception, err:
+        print err
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()

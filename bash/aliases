@@ -1,29 +1,46 @@
 # Git
-alias g=git
+alias g='git '
 alias ga='git add'
-alias gb='git branch'
-alias gc='git checkout'
+alias gcontains='git branch -a --contains'
+alias gco='git checkout'
 alias gd='git diff'
-alias gf='git fetch'
+alias gds='git diff --staged'
+alias gg='git grep --break -n'
 alias gl='git log --date-order --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset" --graph'
-alias gs='git status -sb'
+alias gs='git status'
 alias gss='git show -p'
-alias gg='git grep --break -n '
+alias gwhich='git branch -a | grep '
 
-# Misc
-alias rm_rf='command rm -rf'
+alias s='git status'
+alias d='git diff'
+
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en1"
+
 alias ..='c ..'
 alias ...='c ../..'
-alias r=irb
-alias x='chmod +x'
-alias rr='. ~/.bashrc'
-alias brc='vim ~/.bashrc; . ~/.bashrc'
-alias topcmds='cat ~/.bash_history | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
-
 alias dt='c ~/Desktop'
 alias dotfiles='c ~/my/dotfiles'
 
-# Function commands
+alias r=irb
+alias p=python
+
+alias x='chmod +x'
+
+alias rr='. ~/.bashrc'
+alias brc='emacsclient ~/.bashrc; . ~/.bashrc'
+
+alias df='df -h'
+alias du='du -c -h'
+alias du1='du --max-depth=1'
+
+alias topcmds='cat ~/.bash_history | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
+
+alias ll='ls -la --color=auto'
+alias ldt='ls -ltr --color=auto'
+alias lsz='ls -lSrh --color=auto'
+
+# Run `less' if argument is a file, otherwise `ls'.
 alias l='my_ls'
 function my_ls() {
   if [ $# = 1 ]; then
@@ -32,7 +49,7 @@ function my_ls() {
       return
     fi
   fi
-  ls -G $*;
+  ll $*;
 }
 
 alias c="cd_ls"
@@ -42,9 +59,4 @@ function cd_ls () {
    else
       cd "$*" && ls -G
    fi
-}
-
-alias d='my_dir'
-function my_dir() {
-  mkdir -p $1
 }

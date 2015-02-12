@@ -1,0 +1,18 @@
+[user]
+	name = Sriram Thaiyar
+	email = sriram.thaiyar@gmail.com
+[core]
+	editor = /Applications/Emacs.app/Contents/MacOS/bin/emacsclient
+[color]
+	ui = true
+[merge]
+	conflictstyle = diff3
+# [merge]
+# 	tool = emerge
+# [mergetool "emerge"]
+# 	path = /Users/sri/Desktop/emerge-test/emerge-for-git
+[push]
+	default = simple
+[alias]
+        contains = branch -a --contains
+        which = !git branch -a | grep

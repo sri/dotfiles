@@ -1,9 +1,0 @@
-#!/bin/bash --login
-
-# This makes sure that ~/.bash_profile is read. Which
-# in turn ready ~/.bashrc and sets up the env per
-# a normal interactive session. This helps emacs started
-# from the launcher find RVM stuff.
-# See:
-# http://stackoverflow.com/questions/4477328/bashrc-not-read-when-shell-script-is-invoked-from-desktop-shortcut
-exec /home/sthaiyar/my/installs/emacs/bin/emacs
