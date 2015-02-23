@@ -14,13 +14,8 @@
 
 (setq-default major-mode 'my-set-major-mode)
 
-;; Without the -i, shell-command-to-string has errors in its output:
-;; "bash: cannot set terminal process group (-1): Invalid argument",
-;; and "bash: no job control in this shell"
-(setq shell-command-switch "-ic")
-
 (when window-system
-  (let ((shell-path (shell-command-to-string "$SHELL -i -c 'echo -n $PATH'")))
+  (let ((shell-path (shell-command-to-string "$SHELL -c 'echo -n $PATH'")))
     (setenv "PATH" shell-path)
     (setq exec-path (split-string shell-path path-separator))))
 
@@ -120,4 +115,4 @@
 (cond (window-system
        (server-start))
       (t
-       (xterm-mouse-mode)))
+       '(xterm-mouse-mode)))
