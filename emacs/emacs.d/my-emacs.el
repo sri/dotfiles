@@ -56,7 +56,7 @@
                 rainbow-mode browse-kill-ring
                 flycheck elisp-slime-nav
                 undo-tree smart-mode-line neotree visual-regexp
-                multiple-cursors))
+                multiple-cursors coffee-mode))
 
 (defvar my-private-dot-emacs
   (expand-file-name "~/.emacs.private.el"))
