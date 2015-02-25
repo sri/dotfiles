@@ -130,6 +130,9 @@
 
 (setq isearch-allow-scroll t)
 
+(define-key isearch-mode-map "\r"
+  'isearch-repeat-forward)
+
 (define-key isearch-mode-map (kbd "<return>")
   'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "<S-return>")
