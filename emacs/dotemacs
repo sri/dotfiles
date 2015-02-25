@@ -11,7 +11,7 @@
  '(magit-diff-del ((t (:foreground "red"))))
  '(magit-diff-file-header ((t (:foreground "yellow"))))
  '(magit-diff-hunk-header ((t (:foreground "yellow"))))
- '(mode-line ((t (:background "brightblack" :foreground "gray60" :inverse-video nil))))
+ '(mode-line ((t (:background "#404045" :foreground "gray60" :inverse-video nil))))
  '(org-done ((t (:strike-through t))))
  '(org-headline-done ((t (:strike-through t)))))
 
