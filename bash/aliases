@@ -10,6 +10,7 @@ alias gl='git log --date-order --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %
 alias gs='git status'
 alias gss='git show -p'
 alias gwhich='git branch -a | grep '
+alias gup='cd "$(git rev-parse --show-toplevel)"'
 
 alias s='git status'
 alias d='git diff'
