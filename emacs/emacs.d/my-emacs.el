@@ -51,12 +51,28 @@
     "my-mouse-hacks" "my-packages"))
 
 (defvar my-packages
-  '(solarized-theme magit bm autopair go-mode org
-                macrostep yasnippet ace-jump-mode expand-region
-                rainbow-mode browse-kill-ring
-                flycheck elisp-slime-nav
-                undo-tree smart-mode-line neotree visual-regexp
-                multiple-cursors coffee-mode))
+  '(
+    ace-jump-mode
+    autopair
+    bm
+    browse-kill-ring
+    coffee-mode
+    elisp-slime-nav
+    expand-region
+    flycheck
+    go-mode
+    macrostep
+    magit
+    multiple-cursors
+    neotree
+    org
+    rainbow-mode
+    smart-mode-line
+    solarized-theme
+    undo-tree
+    visual-regexp
+    yasnippet
+    ))
 
 (defvar my-private-dot-emacs
   (expand-file-name "~/.emacs.private.el"))
