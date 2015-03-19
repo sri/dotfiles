@@ -1,4 +1,4 @@
-# name : (current date)
+# name: date
 # key: date
 # --
-`(format-time-string "%Y-%m-%d")`
+`(format-time-string "%Y-%m-%d")` $0

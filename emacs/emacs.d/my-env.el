@@ -3,14 +3,17 @@
 ;(setq-default filladapt-mode t)
 
 (defun my-set-major-mode ()
-  "For temporary buffers, set the mode based on the name."
+  "For temporary buffers, set the mode based on the name.
+Defaults to text mode. Yasnippets won't be turned on for
+Fundamental mode."
   (and (null (buffer-file-name))
        (eq major-mode 'fundamental-mode)
        (let ((mode (assoc-default (buffer-name)
                                   auto-mode-alist 'string-match)))
-         (when (and mode (not (consp mode)))
-           (funcall mode)
-           t))))
+         (if (and mode (not (consp mode)))
+             (funcall mode)
+           (text-mode))
+         t)))
 
 (setq-default major-mode 'my-set-major-mode)
 
@@ -103,7 +106,7 @@
 
 (setq hippie-expand-try-functions-list
       '(
-        yas/hippie-try-expand
+        yas-hippie-try-expand
         try-expand-dabbrev
         try-expand-dabbrev-all-buffers
         try-expand-dabbrev-from-kill
