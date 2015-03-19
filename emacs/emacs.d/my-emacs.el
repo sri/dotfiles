@@ -67,6 +67,7 @@
     neotree
     org
     rainbow-mode
+    ruby-end
     smart-mode-line
     solarized-theme
     undo-tree
