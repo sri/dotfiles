@@ -112,6 +112,12 @@
 
 (global-font-lock-mode t)
 
+(add-hook 'focus-out-hook
+          (lambda ()
+            (when (and buffer-file-name
+                       (buffer-modified-p))
+              (save-buffer))))
+
 (cond (window-system
        (server-start))
       (t
