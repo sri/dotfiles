@@ -233,7 +233,9 @@ decoded URL in the minibuffer."
                                      (match-beginning 1)
                                      (match-end 1)))))))
             (find-file file-at-point)
-            (if linenum (goto-line linenum)))
+            (when linenum
+              (goto-line linenum)
+              (linum-mode 1)))
         (ido-find-file)))))
 
 (defun my-remove-non-ascii-chars ()
