@@ -64,6 +64,7 @@ Fundamental mode."
 (setq kill-whole-line t)
 (setq kill-read-only-ok t)
 (setq mouse-yank-at-point t)
+(setq sentence-end-double-space nil)
 ;; Help char is `?' so C-x ? will list all the
 ;; keys bound to C-x.
 (setq help-char ??)
