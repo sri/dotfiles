@@ -25,17 +25,14 @@
 
 (defun my-isearch-yank-whole-word ()
   (interactive)
+  (skip-chars-backward "a-zA-Z0-9_-")
   (isearch-yank-internal
    (lambda ()
-     ;; If in word. select word
-     (skip-chars-forward "^ \n\t\r")
+     (skip-chars-forward "a-zA-Z0-9_-")
      (point))))
 
-
-(define-key isearch-mode-map (kbd "C-v")
-  'my-isearch-goto-next-non-visible-match)
-
-(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
-(define-key isearch-mode-map (kbd "C-k") 'isearch-query-replace)
 (define-key isearch-mode-map (kbd "C-K") 'isearch-query-replace-regexp)
 (define-key isearch-mode-map (kbd "C-d") 'my-isearch-yank-whole-word)
+(define-key isearch-mode-map (kbd "C-k") 'isearch-query-replace)
+(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+(define-key isearch-mode-map (kbd "C-v") 'my-isearch-goto-next-non-visible-match)
