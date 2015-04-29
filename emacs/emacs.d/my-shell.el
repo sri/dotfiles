@@ -152,6 +152,7 @@
             (linum-mode -1)
             (setq line-number-mode nil
                   column-number-mode nil)
+            (setq comint-input-ignoredups t)
             (setq comint-input-sender
                   'my-shell-input-sender)
             ;; (setq comint-prompt-read-only t)
