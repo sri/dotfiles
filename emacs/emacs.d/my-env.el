@@ -68,7 +68,7 @@ Fundamental mode."
 ;; Help char is `?' so C-x ? will list all the
 ;; keys bound to C-x.
 (setq help-char ??)
-(setq scroll-errot-top-bottom t)
+(setq scroll-error-top-bottom t)
 
 (setq Man-width 80)
 
