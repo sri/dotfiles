@@ -1,6 +1,7 @@
 # Git
 alias g='git '
 alias ga='git add'
+alias gp='git pull'
 alias gcontains='git branch -a --contains'
 alias gco='git checkout'
 alias gd='git diff'
