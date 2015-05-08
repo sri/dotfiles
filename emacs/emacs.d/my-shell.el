@@ -77,6 +77,10 @@
                (setq path (replace-match "" t t path)))
              (find-file-other-window path)
              (set-buffer curbuf)
+             (setq string "")))
+          ((string-match "^rb \\(.*\\)$" string)
+           (let ((new-buffer-name (match-string 1 string)))
+             (rename-buffer (format "*%s*" new-buffer-name))
              (setq string ""))))
     (comint-simple-send proc string)))
 
