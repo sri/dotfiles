@@ -8,3 +8,4 @@ emacs/emacs.d/.mc-lists.el
 emacs/emacs.d/url/
 *.elc
 emacs.d/scratch
+emacs/emacs.d/ido.last
