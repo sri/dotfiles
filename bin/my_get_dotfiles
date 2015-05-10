@@ -11,4 +11,5 @@ if [ ! -d ~/my/dotfiles ]; then
         mv ~/.bashrc ~/.bashrc.old
     fi
     ln -s ~/my/dotfiles/bash/bashrc ~/.bashrc
+    ln -s ~/my/dotfiles/tmux/tmux.conf ~/.tmux.conf
 fi
