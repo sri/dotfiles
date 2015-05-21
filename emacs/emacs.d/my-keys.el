@@ -19,6 +19,7 @@
 (global-set-key (kbd "C-w") 'my-kill-current-buffer)
 (global-set-key (kbd "C-y") 'my-yank)
 (global-set-key (kbd "C-z") 'undo)
+(global-set-key (kbd "C-\\") 'other-frame)
 
 (global-set-key (kbd "<home>") 'beginning-of-buffer)
 (global-set-key (kbd "<end>") 'end-of-buffer)
