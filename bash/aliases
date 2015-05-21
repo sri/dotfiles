@@ -12,6 +12,7 @@ alias gs='git status'
 alias gss='git show -p'
 alias gwhich='git branch -a | grep '
 alias groot='cd "$(git rev-parse --show-toplevel)"'
+alias gall='git log -p --all --no-merges'
 
 alias s='git status'
 alias d='git diff'
