@@ -37,7 +37,6 @@
 (setq org-fontify-done-headline t)
 (setq org-closed-keep-when-no-todo t)
 (setq org-log-done 'time)
-(setq org-completion-use-ido t)
 
 (my-override-keys "C-j" 'other-window '(org-mode))
 (my-override-keys "C-," 'beginning-of-buffer '(org-mode))

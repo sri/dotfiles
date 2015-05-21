@@ -15,7 +15,7 @@
 (global-set-key (kbd "C-r") 'vr/query-replace)
 (global-set-key (kbd "C-s") 'save-buffer)
 ;; (global-set-key (kbd "C-t") 'magit-status)
-(global-set-key (kbd "C-v") 'ido-switch-buffer)
+(global-set-key (kbd "C-v") 'helm-buffers-list)
 (global-set-key (kbd "C-w") 'my-kill-current-buffer)
 (global-set-key (kbd "C-y") 'my-yank)
 (global-set-key (kbd "C-z") 'undo)

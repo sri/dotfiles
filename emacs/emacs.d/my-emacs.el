@@ -52,27 +52,23 @@
 
 (defvar my-packages
   '(
-    ace-jump-mode
     autopair
     bm
     browse-kill-ring
     coffee-mode
     elisp-slime-nav
-    expand-region
     flycheck
     go-mode
     macrostep
     magit
-    multiple-cursors
-    neotree
     org
     rainbow-mode
     ruby-end
     smart-mode-line
     solarized-theme
-    undo-tree
     visual-regexp
     yasnippet
+    helm
     ))
 
 (defvar my-private-dot-emacs
