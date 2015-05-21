@@ -18,7 +18,8 @@
           (lambda (ignore) buffer-name)))
     (with-current-buffer (get-buffer-create buffer-name)
       (setq truncate-lines t))
-    (grep-find (format cmd default-directory search))))
+    (grep-find (format cmd (expand-file-name default-directory)
+                       search))))
 
 (defun my-magit-view-diff ()
   "View each file diff.
