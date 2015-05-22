@@ -3,7 +3,6 @@ then
   . ~/.bashrc_private
 fi
 
-. ~/my/dotfiles/bash/git-prompt.sh
 . ~/my/dotfiles/bash/git-completion.bash
 
 . ~/my/dotfiles/bash/aliases
