@@ -1,17 +1,70 @@
+if [ -e ~/.bashrc_private ];
+then
+  . ~/.bashrc_private
+fi
+
 . ~/my/dotfiles/bash/git-prompt.sh
 . ~/my/dotfiles/bash/git-completion.bash
 
 . ~/my/dotfiles/bash/aliases
 
-if [ "$TERM" = "dumb" ]; then
-    PS1='\w \$ '
-else
-    PS1='\w$(__git_ps1)\$ '
-fi
-export PS1
+export COLOR_BLACK='\e[0;30m'
+export COLOR_BLUE='\e[0;34m'
+export COLOR_BROWN='\e[0;33m'
+export COLOR_CYAN='\e[0;36m'
+export COLOR_GRAY='\e[0;30m'
+export COLOR_GREEN='\e[0;32m'
+export COLOR_LIGHT_BLUE='\e[1;34m'
+export COLOR_LIGHT_CYAN='\e[1;36m'
+export COLOR_LIGHT_GRAY='\e[0;37m'
+export COLOR_LIGHT_GREEN='\e[1;32m'
+export COLOR_LIGHT_PURPLE='\e[1;35m'
+export COLOR_LIGHT_RED='\e[1;31m'
+export COLOR_NC='\e[0m' # No Color
+export COLOR_PURPLE='\e[0;35m'
+export COLOR_RED='\e[0;31m'
+export COLOR_WHITE='\e[1;37m'
+export COLOR_YELLOW='\e[1;33m'
+
+function __my_prompt_command() {
+  local exitcode="$?"
+  local gitbranch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  local cwd="$COLOR_LIGHT_BLUE\w"
+
+  local whoami=$(whoami)
+  local final_prompt="\$"
+  local timestamp=""
+
+  if [ "$whoami" != "dev" ]
+  then
+    whoami="$COLOR_RED$whoami$COLOR_NO"
+    final_prompt="#"
+  fi
+  timestamp=" $COLOR_NO<$whoami@\h \D{%F %T}>"
+
+  if [ "$gitbranch" != "" ]
+  then
+    gitbranch="$COLOR_BROWN($gitbranch) "
+  fi
+
+  if [ "$exitcode" != "0" ]
+  then
+    exitcode=" $COLOR_LIGHT_RED[$exitcode]$COLOR_NC"
+  else
+    exitcode=""
+  fi
+
+  # Write to ~/.bash_history immediately after each command is typed in.
+  history -a
+
+  PS1="$gitbranch$cwd$COLOR_NC$exitcode$timestamp$COLOR_NC\n$final_prompt "
+}
+
+export PROMPT_COMMAND=__my_prompt_command
 
 export PATH=~/my/dotfiles/bin:$PATH
 
+# TODO -- there are Mac specific
 export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
 
@@ -30,17 +83,6 @@ HISTSIZE=10000
 # Number of commands Bash will keep in memory
 HISTFILESIZE=10000
 
-# Write to ~/.bash_history immediately after each command is typed in.
-export PROMPT_COMMAND='history -a'
-
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
-
-if [ -e ~/.bashrc_private ];
-then
-  . ~/.bashrc_private
-fi
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
