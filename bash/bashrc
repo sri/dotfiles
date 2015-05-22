@@ -29,7 +29,7 @@ export COLOR_YELLOW='\e[1;33m'
 function __my_prompt_command() {
   local exitcode="$?"
   local gitbranch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-  local cwd="$COLOR_LIGHT_BLUE\w"
+  local cwd="$COLOR_LIGHT_BLUE\w "
 
   local whoami=$(whoami)
   local final_prompt="\$"
@@ -40,7 +40,7 @@ function __my_prompt_command() {
     whoami="$COLOR_RED$whoami$COLOR_NO"
     final_prompt="#"
   fi
-  timestamp=" $COLOR_NO<$whoami@\h \D{%F %T}>"
+  timestamp="$COLOR_NO<$whoami@\h \D{%F %T}>"
 
   if [ "$gitbranch" != "" ]
   then
@@ -49,7 +49,7 @@ function __my_prompt_command() {
 
   if [ "$exitcode" != "0" ]
   then
-    exitcode=" $COLOR_LIGHT_RED[$exitcode]$COLOR_NC"
+    exitcode="$COLOR_LIGHT_RED[$exitcode]$COLOR_NC "
   else
     exitcode=""
   fi
@@ -57,7 +57,7 @@ function __my_prompt_command() {
   # Write to ~/.bash_history immediately after each command is typed in.
   history -a
 
-  PS1="$gitbranch$cwd$COLOR_NC$exitcode$timestamp$COLOR_NC\n$final_prompt "
+  PS1="$cwd$gitbranch$COLOR_NC$exitcode$timestamp$COLOR_NC\n$final_prompt "
 }
 
 export PROMPT_COMMAND=__my_prompt_command
