@@ -59,16 +59,17 @@
     elisp-slime-nav
     flycheck
     go-mode
+    helm
     macrostep
     magit
     org
+    projectile
     rainbow-mode
     ruby-end
     smart-mode-line
     solarized-theme
     visual-regexp
     yasnippet
-    helm
     ))
 
 (defvar my-private-dot-emacs
