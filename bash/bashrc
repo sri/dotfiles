@@ -34,9 +34,9 @@ function __my_prompt_command() {
   local final_prompt="\$"
   local timestamp=""
 
-  if [ "$whoami" != "dev" ]
+  if [ "$whoami" == "root" ]
   then
-    whoami="$COLOR_RED$whoami$COLOR_NO"
+    whoami="$COLOR_RED$whoami$COLOR_NC"
     final_prompt="#"
   fi
   timestamp="$COLOR_NO<$whoami@\h \D{%F %T}>"
