@@ -76,6 +76,7 @@ Fundamental mode."
 
 (setq eval-expression-print-length nil)
 (setq eval-expression-print-level nil)
+(setq enable-recursive-minibuffers t)
 
 (put 'erase-buffer 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
