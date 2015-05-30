@@ -1,17 +1,5 @@
 (setenv "PAGER" "cat")
 
-(require 'dirtrack)
-(setq-default dirtrack-list (list "^\\([^(]+\\)\\( .*?\\)?[$] $" 1))
-;;
-;; (let ((possibles '("/$ " "~$ " "~/my/test (master)$ "))
-;;       (results '()))
-;;   (dolist (p possibles)
-;;     (push (cons p
-;;                 (and (string-match (car dirtrack-list) p)
-;;                      (match-string (cadr dirtrack-list) p)))
-;;           results))
-;;   results)
-
 (defun my-setup-shell-header-line ()
   (setq header-line-format
         (list (propertize " [↩]"
@@ -163,7 +151,6 @@
             (setq comint-scroll-to-bottom-on-input nil)
             (setq comint-scroll-show-maximum-output nil)
             (toggle-truncate-lines 1)
-            (dirtrack-mode)
             (define-key shell-mode-map (kbd "C-<up>")
               'comint-previous-prompt)
             (define-key shell-mode-map (kbd "C-<down>")
