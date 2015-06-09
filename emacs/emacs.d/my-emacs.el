@@ -60,6 +60,7 @@
     flycheck
     go-mode
     helm
+    helm-projectile
     macrostep
     magit
     org
