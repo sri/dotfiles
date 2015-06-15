@@ -1,4 +1,11 @@
 (require 'magit)
+(require 'advice)
+
+(defadvice magit-show-level-1-all (after my-magit-show-level-1-all)
+  (goto-char (point-max))
+  (next-line -1)
+  (magit-toggle-section))
+(ad-activate 'magit-show-level-1-all)
 
 (setq magit-last-seen-setup-instructions "1.4.0")
 

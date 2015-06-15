@@ -29,10 +29,7 @@
           (setq end (1- (point))))))
     (cond ((null start) (message "Couldn't find starting `%s'" start-string))
           ((null end) (message "Couldn't find ending `%s'" end-string))
-          (arg
-           (goto-char end)
-           (delete-region start end))
-          (t (kill-ring-save start end)
+          (arg (kill-ring-save start end)
                ;; Briefly highlight the copied region if its visible
                ;; to the user.
                (when (and (pos-visible-in-window-p start (selected-window))
@@ -47,7 +44,10 @@
                                (current-buffer))
                  (run-at-time 0.3 nil 'my-change-inside-pair-unhighlight))
                (message "Copied `%s'"
-                        (buffer-substring-no-properties start end))))))
+                        (buffer-substring-no-properties start end)))
+          (t
+           (goto-char end)
+           (delete-region start end)))))
 
 (defun my-kill-line-or-region (&optional arg)
   (interactive "P")
@@ -201,7 +201,10 @@ decoded URL in the minibuffer."
 
 (defun my-emacs-lisp-eval ()
   (interactive)
-  (call-interactively (if (use-region-p) 'eval-region 'eval-defun)))
+  (let ((fn (cond ((= (preceding-char) ?\)) 'eval-last-sexp)
+                  ((use-region-p) 'eval-region)
+                  (t 'eval-defun))))
+    (call-interactively fn)))
 
 (defun my-beginning-of-line ()
   "Move to the beginning of line or beginning of non-whitespace chars."
