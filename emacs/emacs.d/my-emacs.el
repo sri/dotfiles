@@ -1,3 +1,4 @@
+(require 'cl)
 (require 'bytecomp)
 
 (defun my-load (name)
@@ -44,7 +45,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar my-files
-  '("my-env" "my-fns" "my-override-keys" "my-keys" "my-dired" "my-help"
+  '("my-env" "my-fns" "my-keys" "my-dired" "my-help"
     "my-shell" "my-sublime" "my-win"
     "my-view" "my-isearch"
     "my-occur"

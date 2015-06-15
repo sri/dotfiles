@@ -8,7 +8,6 @@
 (global-set-key (kbd "C-j") 'other-window)
 (global-set-key (kbd "C-k") 'my-kill-line-or-region)
 (global-set-key (kbd "C-m") 'newline-and-indent)
-;; (global-set-key (kbd "C-n") 'helm-M-x)
 (global-set-key (kbd "C-o") 'my-ffap-or-find-file)
 (global-set-key (kbd "C-p") 'my-shell)
 (global-set-key (kbd "C-r") 'vr/query-replace)
@@ -73,23 +72,28 @@
 (global-set-key (kbd "C-x s") 'my-start-line-or-region-swap)
 (global-set-key (kbd "C-x v -") 'my-unsaved-changes)
 
-(my-override-keys "C-j" 'other-window '(lisp-interaction-mode))
-(my-override-keys "C-w" 'my-kill-current-buffer '(magit-log-mode
-                                                  magit-branch-manager-mode
-                                                  magit-status-mode
-                                                  magit-wazzup-mode
-                                                  magit-commit-mode
-                                                  magit-log-edit-mode
-                                                  magit-stash-mode
-                                                  magit-reflog-mode
-                                                  magit-diff-mode))
+;; Unbind
+(cl-flet ((unset-key-in-mode (mode &rest keys)
+            (lexical-let ((keys keys)
+                          (hook (intern (format "%s-hook" mode))))
+              (add-hook hook
+                        (lambda ()
+                          (dolist (key keys)
+                            (local-unset-key (kbd key))))))))
 
-(add-hook 'magit-status-mode
-          (lambda ()
-            (local-unset-key "M-1")
-            (local-unset-key "M-2")
-            (local-unset-key "M-3")))
+  (unset-key-in-mode 'lisp-interaction-mode "C-j")
+  (unset-key-in-mode 'magit-status-mode "M-1" "M-2" "M-3")
 
-(my-override-keys "M-1" nil '(magit-status-mode))
-(my-override-keys "M-2" nil '(magit-status-mode))
-(my-override-keys "M-3" nil '(magit-status-mode))
+  (let ((magit-modes '(magit-log-mode
+                       magit-branch-manager-mode
+                       magit-status-mode
+                       magit-wazzup-mode
+                       magit-commit-mode
+                       magit-log-edit-mode
+                       magit-stash-mode
+                       magit-reflog-mode
+                       magit-diff-mode)))
+    (dolist (mode magit-modes)
+      (unset-key-in-mode mode "C-w")))
+
+  )
