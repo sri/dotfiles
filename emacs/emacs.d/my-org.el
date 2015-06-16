@@ -38,10 +38,6 @@
 (setq org-closed-keep-when-no-todo t)
 (setq org-log-done 'time)
 
-(my-override-keys "C-j" 'other-window '(org-mode))
-(my-override-keys "C-," 'beginning-of-buffer '(org-mode))
-(my-override-keys "<S-return>" 'my-dired '(org-mode))
-
 (custom-set-faces
   '(org-done ((t (:strike-through t))))
   '(org-headline-done ((t (:strike-through t)))))

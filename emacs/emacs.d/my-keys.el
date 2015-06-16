@@ -8,6 +8,7 @@
 (global-set-key (kbd "C-j") 'other-window)
 (global-set-key (kbd "C-k") 'my-kill-line-or-region)
 (global-set-key (kbd "C-m") 'newline-and-indent)
+(global-set-key (kbd "C-n") 'helm-M-x)
 (global-set-key (kbd "C-o") 'my-ffap-or-find-file)
 (global-set-key (kbd "C-p") 'my-shell)
 (global-set-key (kbd "C-r") 'vr/query-replace)
@@ -43,14 +44,16 @@
 (global-set-key (kbd "M-<up>") 'scroll-down)
 (global-set-key (kbd "M-D") 'my-duplicate-line-or-region)
 (global-set-key (kbd "M-E") 'mc/edit-lines)
+(global-set-key (kbd "M-N") 'bm-previous)
 (global-set-key (kbd "M-\\") 'my-delete-horizontal-space)
+(global-set-key (kbd "M-b") 'bm-toggle)
 (global-set-key (kbd "M-d") 'my-dired)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "M-i") 'my-change-inside-pair)
 (global-set-key (kbd "M-k") 'my-kill-whole-line)
 (global-set-key (kbd "M-m") 'magit-status)
 (global-set-key (kbd "M-n") 'bm-next)
-(global-set-key (kbd "M-o") 'bm-toggle)
+(global-set-key (kbd "M-o") 'helm-projectile)
 
 (global-set-key (kbd "<home>") 'beginning-of-buffer)
 (global-set-key (kbd "<end>") 'end-of-buffer)
@@ -90,5 +93,7 @@
       (unset-key-in-mode mode "C-w")))
 
   (unset-key-in-mode 'shell-mode "C-d")
+
+  (unset-key-in-mode 'org-mode "C-j" "C-," "<S-return>")
 
   )
