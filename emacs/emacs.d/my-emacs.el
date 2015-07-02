@@ -60,8 +60,7 @@
     elisp-slime-nav
     flycheck
     go-mode
-    helm
-    helm-projectile
+    swiper
     macrostep
     magit
     org
