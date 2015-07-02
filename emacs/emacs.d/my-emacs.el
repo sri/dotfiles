@@ -16,6 +16,7 @@
                (not (file-exists-p source)))
       (error "Compiled file '%s' exists but its source file doesn't: %s"
              compiled source))
+    (message "newer? %s" (file-newer-than-file-p source compiled))
     (when (file-newer-than-file-p source compiled)
       (let (byte-compile-verbose)
         ;; Binding byte-compile-verbose to nil stops
@@ -45,11 +46,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar my-files
-  '("my-env" "my-fns" "my-keys" "my-dired" "my-help"
-    "my-shell" "my-sublime" "my-win"
-    "my-view" "my-isearch"
-    "my-occur"
-    "my-mouse-hacks" "my-packages"))
+  '("my-env" "my-fns" "my-keys" "my-sublime" "my-win"
+    "my-isearch" "my-packages"))
 
 (defvar my-packages
   '(
@@ -81,12 +79,12 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(let ((default-directory "~/.emacs.d"))
+(let ((default-directory (file-name-directory load-file-name)))
+  (mapc 'my-load my-third-party-non-installable-files)
 
   (mapc 'my-load my-files)
   (mapc 'my-load-customization my-packages)
 
-  (mapc 'my-load my-third-party-non-installable-files)
   (mapc 'my-load-customization my-third-party-non-installable-files))
 
 (when (file-exists-p my-private-dot-emacs)

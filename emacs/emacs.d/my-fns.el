@@ -224,7 +224,7 @@ decoded URL in the minibuffer."
 (defun my-ffap-or-find-file (arg)
   (interactive "P")
   (if arg
-      (helm-find-files-1 default-directory)
+      (call-interactively 'find-file)
     (let ((file-at-point (ffap-file-at-point)))
       (if file-at-point
           (let ((linenum
@@ -239,7 +239,7 @@ decoded URL in the minibuffer."
             (when linenum
               (goto-line linenum)
               (linum-mode 1)))
-        (helm-find-files-1 default-directory)))))
+        (call-interactively 'find-file)))))
 
 (defun my-remove-non-ascii-chars ()
   (interactive)
