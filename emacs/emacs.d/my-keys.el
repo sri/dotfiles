@@ -84,7 +84,6 @@
                        magit-branch-manager-mode
                        magit-status-mode
                        magit-wazzup-mode
-                       magit-commit-mode
                        magit-log-edit-mode
                        magit-stash-mode
                        magit-reflog-mode
