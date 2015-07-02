@@ -94,6 +94,10 @@ Fundamental mode."
 (when window-system
   (global-hl-line-mode 1))
 
+(global-linum-mode 1)
+(setq linum-format
+      (if window-system "%d" "%d "))
+
 (setq diff-switches '("-u"))
 
 (make-variable-buffer-local 'line-number-mode)
