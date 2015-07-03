@@ -251,8 +251,6 @@ Fundamental mode."
             (setq line-number-mode nil
                   column-number-mode nil)
             (setq comint-input-ignoredups t)
-            (setq comint-input-sender
-                  'my-shell-input-sender)
             (setq comint-scroll-to-bottom-on-input nil)
             (setq comint-scroll-show-maximum-output nil)
             (toggle-truncate-lines 1)
