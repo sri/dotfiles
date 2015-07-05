@@ -1,7 +1,3 @@
-;(require 'filladapt)
-;(setq filladapt-mode-line-string nil)
-;(setq-default filladapt-mode t)
-
 (defun my-set-major-mode ()
   "For temporary buffers, set the mode based on the name.
 Defaults to text mode. Yasnippets won't be turned on for
@@ -91,6 +87,8 @@ Fundamental mode."
 (auto-compression-mode t)
 (transient-mark-mode 1)
 (show-paren-mode t)
+(server-start)
+
 (when window-system
   (global-hl-line-mode 1))
 
@@ -121,11 +119,6 @@ Fundamental mode."
             (when (and buffer-file-name
                        (buffer-modified-p))
               (save-buffer))))
-
-(cond (window-system
-       (server-start))
-      (t
-       '(xterm-mouse-mode)))
 
 ;; Help mode:
 (require 'help-mode)
