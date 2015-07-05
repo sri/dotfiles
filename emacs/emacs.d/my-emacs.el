@@ -16,7 +16,6 @@
                (not (file-exists-p source)))
       (error "Compiled file '%s' exists but its source file doesn't: %s"
              compiled source))
-    (message "newer? %s" (file-newer-than-file-p source compiled))
     (when (file-newer-than-file-p source compiled)
       (let (byte-compile-verbose)
         ;; Binding byte-compile-verbose to nil stops
