@@ -8,7 +8,7 @@
 (ad-activate 'magit-show-level-1-all)
 
 (setq magit-last-seen-setup-instructions "1.4.0")
-
+(setq magit-diff-highlight-hunk-body nil)
 (defun my-git-grep ()
   (interactive)
   (let* ((search (if (use-region-p)
