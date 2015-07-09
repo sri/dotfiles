@@ -106,47 +106,6 @@
          (comment-or-uncomment-region (point-at-bol)
                                       (point-at-eol)))))
 
-(defun my-sublime-like-mouse-dblclick-select-fn ()
-  (let ((isearch-word t)
-        (isearch-forward t)
-        (beg (min (mark) (point)))
-        (string (buffer-substring-no-properties (mark) (point))))
-    (unless (string-match "^\n*$" string)
-      (deactivate-mark)
-      (save-excursion
-        (call-interactively 'isearch-forward)
-        (goto-char beg)
-        (isearch-yank-string string)
-        (message "%d matches" (count-matches string
-                                             (point-min)
-                                             (point-max)))))))
-
-(defun my-isearch-forward ()
-  (interactive)
-  (if (let (use-empty-active-region)
-        (use-region-p))
-      (my-sublime-like-mouse-dblclick-select-fn)
-    (call-interactively 'isearch-forward)))
-
-(setq isearch-allow-scroll t)
-
-(define-key isearch-mode-map "\r"
-  'isearch-repeat-forward)
-
-(define-key isearch-mode-map (kbd "<return>")
-  'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "<S-return>")
-  'isearch-repeat-backward)
-;(define-key isearch-mode-map (kbd "<backspace>") 'my-isearch-delete-region)
-
-(defun my-isearch-delete-region ()
-  (interactive)
-  (when isearch-other-end
-    (delete-region (point) isearch-other-end)
-    (isearch-done)))
-
-(setq isearch-lazy-highlight-initial-delay 0)
-
 (defun my-sublime-expand-selection-to-indentation ()
   (interactive)
   "Expand selection to the next indentation level.

@@ -1,3 +1,30 @@
+(defun my-isearch-search-for-selected ()
+  (let ((isearch-word t)
+        (isearch-forward t)
+        (beg (min (mark) (point)))
+        (string (buffer-substring-no-properties (mark) (point))))
+    (unless (string-match "^\n*$" string)
+      (deactivate-mark)
+      (save-excursion
+        (call-interactively 'isearch-forward)
+        (goto-char beg)
+        (isearch-yank-string string)
+        (message "%d matches" (count-matches string
+                                             (point-min)
+                                             (point-max)))))))
+(defun my-isearch-forward ()
+  (interactive)
+  (if (let (use-empty-active-region)
+        (use-region-p))
+      (my-isearch-search-for-selected)
+    (call-interactively 'isearch-forward)))
+
+(defun my-isearch-delete-region ()
+  (interactive)
+  (when isearch-other-end
+    (delete-region (point) isearch-other-end)
+    (isearch-done)))
+
 ;; TODO: handle wrap around
 (defun my-isearch-goto-next-non-visible-match ()
   "Go to the next (or previous) match that isn't visible on screen."
@@ -31,6 +58,13 @@
      (skip-chars-forward "a-zA-Z0-9_-")
      (point))))
 
+(setq isearch-allow-scroll t)
+(setq isearch-lazy-highlight-initial-delay 0)
+
+(define-key isearch-mode-map "\r" 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "<return>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "<S-return>") 'isearch-repeat-backward)
+;(define-key isearch-mode-map (kbd "<backspace>") 'my-isearch-delete-region)
 (define-key isearch-mode-map (kbd "C-K") 'isearch-query-replace-regexp)
 (define-key isearch-mode-map (kbd "C-d") 'my-isearch-yank-whole-word)
 (define-key isearch-mode-map (kbd "C-k") 'isearch-query-replace)
