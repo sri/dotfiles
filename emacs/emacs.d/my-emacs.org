@@ -589,7 +589,7 @@ Inspired by Sublime Text."
 #+END_SRC
 
 ** My: dired
-#+BEGIN_SRC: emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (require 'dired-x)
 
 (defun my-dired ()
