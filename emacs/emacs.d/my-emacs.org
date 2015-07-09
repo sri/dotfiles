@@ -96,6 +96,67 @@ Like it turned on globally.
 (add-hook 'emacs-lisp-mode-hook 'turn-on-elisp-slime-nav-mode)
 #+END_SRC
 
+** smart-mode-line
+
+#+BEGIN_SRC emacs-lisp
+(require 'advice)
+(require 'smart-mode-line)
+
+(sml/setup)
+(sml/apply-theme 'dark)
+
+(defun my-mode-line-copy-full-path ()
+  "Copies the buffer name to the kill ring.
+If that is nil, then it is mode specific as to what gets copied:
+ - shell or magit modes, copies the default directory."
+  (interactive)
+  (let ((name (or (buffer-file-name)
+                  (cond ((eq major-mode 'shell-mode)
+                         default-directory)
+                        ((string-prefix-p "Magit" mode-name)
+                         default-directory)))))
+    (when name
+      (kill-new name)
+      (message "Copied `%s'" name))))
+
+(defadvice sml/generate-buffer-identification (after my-mode-line-mouse-click (&rest ignored))
+  (add-text-properties 0 (length sml/buffer-identification)
+                       '(help-echo "Click to copy buffer name to kill ring")
+                       sml/buffer-identification)
+  ad-return-value)
+(ad-activate 'sml/generate-buffer-identification)
+
+(define-key mode-line-buffer-identification-keymap
+  [mode-line mouse-1] 'my-mode-line-copy-full-path)
+#+END_SRC
+
+** yasnippet
+#+BEGIN_SRC emacs-lisp
+(require 'advice)
+
+(require 'yasnippet)
+
+(setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+(yas-global-mode 1)
+
+;; I have yas working with hippie-expand.
+(define-key yas-minor-mode-map [(tab)] nil)
+(define-key yas-minor-mode-map (kbd "TAB") nil)
+
+(defadvice yas--modes-to-activate (after my-yas-activate-global-mode ())
+  (let ((modes ad-return-value))
+    (setq ad-return-value (append modes (list 'global-mode)))))
+
+(ad-activate 'yas--modes-to-activate)
+#+END_SRC
+
+** swiper
+#+BEGIN_SRC emacs-lisp
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+#+END_SRC
+
 * Non-packages (not installable thru the package manager)
 ** eval-expr
 
@@ -104,6 +165,351 @@ for the minibuffer.
 
 #+BEGIN_SRC emacs-lisp
 (load (expand-file-name "~/.emacs.d/third-party/eval-expr.el"))
+#+END_SRC
+
+* My enhancements
+** Magit
+#+BEGIN_SRC emacs-lisp
+(require 'magit)
+(require 'advice)
+
+(defadvice magit-show-level-1-all (after my-magit-show-level-1-all)
+  (goto-char (point-max))
+  (next-line -1)
+  (magit-toggle-section))
+(ad-activate 'magit-show-level-1-all)
+
+(setq magit-last-seen-setup-instructions "1.4.0")
+(setq magit-diff-highlight-hunk-body nil)
+(defun my-git-grep ()
+  (interactive)
+  (let* ((search (if (use-region-p)
+                     (buffer-substring-no-properties (region-beginning)
+                                                     (region-end))
+                   (completing-read "git grep: "
+                                    nil nil nil (current-word))))
+         (cmd (concat "cd \"%s\" && "
+                      "git --no-pager grep -P -n \"%s\" "
+                      "`git rev-parse --show-toplevel`"))
+         (buffer-name (format "*git grep: %s*" search))
+         (compilation-buffer-name-function
+          ;; Fix me: should return unique name
+          (lambda (ignore) buffer-name)))
+    (with-current-buffer (get-buffer-create buffer-name)
+      (setq truncate-lines t))
+    (grep-find (format cmd (expand-file-name default-directory)
+                       search))))
+
+(defun my-magit-view-diff ()
+  "View each file diff.
+Find the first diff section (after point) and opens it up for
+viewing.  Subsequent calls to this command will either scroll
+thru the diff until the end is visible on the window. After that,
+it'll close the current section and open the next one."
+  (interactive)
+  (let ((continue (eq last-command 'my-magit-view-diff))
+        (current (magit-current-section))
+        (done nil))
+    ;; Find a diff or hunk section after point
+    (while (and (not done)
+                (not (member (magit-section-type current) '(diff hunk))))
+      (if (null (magit-find-section-after (point)))
+          (setq done t)
+        (magit-goto-next-section)
+        (setq current (magit-current-section))
+        ;; magit-diff ends with a "back" button and it seems to be
+        ;; considered a magit section.
+        (when (eq (magit-section-type current) 'button)
+          (setq done t))))
+    (cond (done
+           (message "Done"))
+          ((or continue
+               (eq (magit-section-type current) 'hunk))
+           (let ((parent (if (eq (magit-section-type current) 'diff)
+                             current
+                           (magit-section-parent current))))
+             (unless (eq (magit-section-type parent) 'diff)
+               (error "Parent of hunk is not a diff but is %s"
+                      (magit-section-type parent)))
+             ;; If the current diff has more content that is visible
+             ;; in the current window, scroll up and let the user view
+             ;; it.  Otherwise, close this diff section and open the
+             ;; next one.
+             (cond ((pos-visible-in-window-p (magit-section-end parent))
+                    (goto-char (magit-section-beginning parent))
+                    (magit-hide-section)
+                    (recenter 0)
+                    (if (null (magit-find-section-after (point)))
+                        (message "Done")
+                      (magit-goto-next-section)
+                      (if (eq (magit-section-type (magit-current-section)) 'diff)
+                          (magit-show-section)
+                        (message "Done"))))
+                   (t (scroll-up)))))
+          ((eq (magit-section-type current) 'diff)
+           ;; Initial viewing
+           (goto-char (magit-section-beginning current))
+           (magit-show-section)
+           (recenter 0)))))
+
+(mapc (lambda (mode-map)
+        (define-key mode-map (kbd ",")
+          'my-magit-view-diff))
+      (list magit-status-mode-map
+            magit-diff-mode-map))
+
+;; Don't highlight sections.
+(defun magit-highlight-section ()
+  nil)
+
+(add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
+
+(setq magit-status-buffer-switch-function 'switch-to-buffer)
+
+;; (defun my-magit-close-current-open-next ()
+;;   (interactive)
+;;   (magit-goto-parent-section)
+;;   (magit-toggle-section)
+;;   (magit-goto-next-section)
+;;   (recenter 0))
+
+;; (defun my-magit-click ()
+;;   (cond ((memq major-mode '(magit-log-mode magit-branch-manager-mode))
+;;          (magit-show-item-or-scroll-up))
+;;         ((eq major-mode 'magit-status-mode)
+;;          (let* ((current (magit-current-section))
+;;                 (current-title (format "%s" (magit-section-title current)))
+;;                 (parent (magit-section-parent current)))
+;;            (if (and parent
+;;                     (eq (magit-section-title parent) 'stashes))
+;;                (magit-show-item-or-scroll-up)
+;;              (unless (string-prefix-p "@@" current-title)
+;;                (magit-toggle-section)))))
+;;         ((memq major-mode '(magit-wazzup-mode
+;;                             magit-commit-mode
+;;                             magit-log-edit-mode
+;;                             magit-stash-mode
+;;                             magit-reflog-mode
+;;                             magit-diff-mode))
+;;          (magit-toggle-section))))
+
+#+END_SRC
+
+** Org mode
+#+BEGIN_SRC emacs-lisp
+(require 'org)
+
+(set-register ?t '(file . "~/Dropbox/Notes/todo.org"))
+
+(setq org-agenda-files '("~/Dropbox/Notes"))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            ;; 3rd arg T says to modify the buffer-local hook
+            (remove-hook 'before-save-hook 'delete-trailing-whitespace t)
+            (setq cursor-type 'bar)))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   ;; (awk . t)
+   ;; (calc . t)
+   ;; (clojure . t)
+   (emacs-lisp . t)
+   ;; (gnuplot . t)
+   ;; (haskell . t)
+   ;; (ocaml . t)
+   ;; (org . t)
+   (python . t)
+   (ruby . t)
+   ;; (sh . t)
+   ;; (sql . t)
+   ;; (sqlite . t)
+   ))
+
+(setq org-hide-leading-stars t)
+(setq org-special-ctrl-a/e t)
+(setq org-special-ctrl-k nil)
+(setq org-return-follows-link t)
+(setq org-use-speed-commands t)
+(setq org-hide-leading-stars nil)
+(setq org-fontify-done-headline t)
+(setq org-closed-keep-when-no-todo t)
+(setq org-log-done 'time)
+
+(custom-set-faces
+  '(org-done ((t (:strike-through t))))
+  '(org-headline-done ((t (:strike-through t)))))
+
+(defun my-org-insert-chrome-link ()
+  (interactive)
+  (let ((subject (do-applescript "tell application \"Google Chrome\"
+                                  title of active tab of front window
+                                  end tell"))
+        (url (do-applescript "tell application \"Google Chrome\"
+                              URL of active tab of front window
+                              end tell")))
+    (insert (org-make-link-string url subject))))
+
+#+END_SRC
+
+** Sublime-like helpers
+#+BEGIN_SRC emacs-lisp
+(defun my-swap-line-or-region-down ()
+  "Move the current line or region down one line."
+  (interactive "*")
+  (let (beg end line reg-beg reg-end)
+    (when (use-region-p)
+      (setq reg-beg (region-beginning))
+      (setq reg-end (region-end)))
+    ;; Save & delete the next line.
+    (save-excursion
+      (forward-line 1)
+      (setq beg (point))
+      (forward-line 1)
+      (setq end (point)))
+    (setq line (buffer-substring beg end))
+    (delete-region beg end)
+    (when reg-beg (goto-char reg-beg))
+    (beginning-of-line)
+    (insert line)
+    (when reg-beg
+      (set-mark (+ reg-beg (length line)))
+      (goto-char (+ reg-end (length line)))
+      (setq deactivate-mark nil))))
+
+(defun my-swap-line-or-region-up ()
+  "Move the current line or region up one line."
+  (interactive "*")
+  (let (beg end line reg-beg reg-end)
+    (when (use-region-p)
+      (setq reg-beg (region-beginning))
+      (setq reg-end (region-end)))
+    ;; Save & delete the previous line.
+    (save-excursion
+      (when reg-beg (goto-char reg-beg))
+      (forward-line -1)
+      (setq beg (point))
+      (forward-line 1)
+      (setq end (point)))
+    (setq line (buffer-substring beg end))
+    (delete-region beg end)
+    (save-excursion
+      (when reg-end (goto-char (- reg-end (length line))))
+      (forward-line 1)
+      (insert line))
+    (when reg-end
+      (set-mark (- reg-beg (length line)))
+      (goto-char (- reg-end (length line)))
+      (setq deactivate-mark nil))))
+
+(defvar my-line-or-region-swap-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map [down] 'my-swap-line-or-region-down)
+    (define-key map [up] 'my-swap-line-or-region-up)
+    map))
+
+(defun my-start-line-or-region-swap ()
+  (interactive)
+  (message "Hit [up] or [down] to move region or line in that direction")
+  (set-temporary-overlay-map my-line-or-region-swap-keymap t))
+
+(defun my-duplicate-line-or-region ()
+  "Duplicate line or current region."
+  (interactive "*")
+  (if (use-region-p)
+      (let* ((start (region-beginning))
+             (end (region-end))
+             (region (buffer-substring start end)))
+        (cond ((= (point) start)
+               (goto-char end)
+               (insert region)
+               (goto-char start))
+              (t (insert region)))
+        (set-mark end)
+        (setq deactivate-mark nil))
+    (let ((line (buffer-substring (point-at-bol) (point-at-eol)))
+          (column (current-column)))
+      (end-of-line)
+      (if (eobp)
+          (insert "\n")
+        (forward-char 1))
+      (save-excursion
+        (insert line)
+        (unless (eobp) (insert "\n")))
+      (move-to-column column))))
+
+(defun my-comment-line-or-region ()
+  "Comment or uncomment the current line or region."
+  (interactive "*")
+  (cond ((use-region-p)
+         (let ((start (region-beginning))
+               (end (region-end)))
+           (save-excursion
+             (goto-char start)
+             (setq start (point-at-bol))
+             (goto-char end)
+             (setq end
+                   ;; Sublime-like behavior: If the region extends to
+                   ;; the beginning of a line, don't include that
+                   ;; line.
+                   (cond ((bolp)
+                          (forward-char -1)
+                          (point))
+                         (t (point-at-eol)))))
+           (comment-or-uncomment-region start end)
+           (setq deactivate-mark nil)))
+        (t
+         (comment-or-uncomment-region (point-at-bol)
+                                      (point-at-eol)))))
+
+(defun my-sublime-expand-selection-to-indentation ()
+  (interactive)
+  "Expand selection to the next indentation level.
+Inspired by Sublime Text."
+  (let ((n (current-indentation))
+        (beg (point-at-bol))
+        (end (point-at-eol)))
+    ;; when region is active & transient mark mode is
+    ;; turned on, we expand to make that region bigger
+    (when (and (use-region-p) transient-mark-mode)
+      (setq beg (region-beginning)
+            end (region-end))
+      (save-excursion
+        ;; get the min indentation within the region
+        (goto-char beg)
+        (forward-line 1)
+        (while (< (point) end)
+          (setq n (min n (current-indentation)))
+          (forward-line 1))
+        ;; get the min indentation of line before
+        ;; region start, line after region start or n
+        (setq n
+              (max (progn
+                     (goto-char beg)
+                     (forward-line -1)
+                     (if (bobp) 0 (current-indentation)))
+                   (progn
+                     (goto-char end)
+                     (forward-line 1)
+                     (if (eobp) 0 (current-indentation)))))))
+    ;; now expand the region
+    (save-excursion
+      (goto-char beg)
+      (forward-line -1)
+      (while (and (>= (current-indentation) n) (not (bobp)))
+        (forward-line -1))
+      (forward-line 1)
+      (setq beg (point-at-bol))
+      (goto-char end)
+      (forward-line 1)
+      (while (and (>= (current-indentation) n) (not (eobp)))
+        (forward-line 1))
+      (forward-line -1)
+      (setq end (point-at-eol)))
+    (goto-char beg)
+    (set-mark beg)
+    (goto-char end)))
 #+END_SRC
 
 * My env
@@ -665,411 +1071,6 @@ Fundamental mode."
   (unset-key-in-mode 'org-mode "C-j" "C-," "<S-return>")
 
   )
-#+END_SRC
-
-** Magit
-#+BEGIN_SRC emacs-lisp
-(require 'magit)
-(require 'advice)
-
-(defadvice magit-show-level-1-all (after my-magit-show-level-1-all)
-  (goto-char (point-max))
-  (next-line -1)
-  (magit-toggle-section))
-(ad-activate 'magit-show-level-1-all)
-
-(setq magit-last-seen-setup-instructions "1.4.0")
-(setq magit-diff-highlight-hunk-body nil)
-(defun my-git-grep ()
-  (interactive)
-  (let* ((search (if (use-region-p)
-                     (buffer-substring-no-properties (region-beginning)
-                                                     (region-end))
-                   (completing-read "git grep: "
-                                    nil nil nil (current-word))))
-         (cmd (concat "cd \"%s\" && "
-                      "git --no-pager grep -P -n \"%s\" "
-                      "`git rev-parse --show-toplevel`"))
-         (buffer-name (format "*git grep: %s*" search))
-         (compilation-buffer-name-function
-          ;; Fix me: should return unique name
-          (lambda (ignore) buffer-name)))
-    (with-current-buffer (get-buffer-create buffer-name)
-      (setq truncate-lines t))
-    (grep-find (format cmd (expand-file-name default-directory)
-                       search))))
-
-(defun my-magit-view-diff ()
-  "View each file diff.
-Find the first diff section (after point) and opens it up for
-viewing.  Subsequent calls to this command will either scroll
-thru the diff until the end is visible on the window. After that,
-it'll close the current section and open the next one."
-  (interactive)
-  (let ((continue (eq last-command 'my-magit-view-diff))
-        (current (magit-current-section))
-        (done nil))
-    ;; Find a diff or hunk section after point
-    (while (and (not done)
-                (not (member (magit-section-type current) '(diff hunk))))
-      (if (null (magit-find-section-after (point)))
-          (setq done t)
-        (magit-goto-next-section)
-        (setq current (magit-current-section))
-        ;; magit-diff ends with a "back" button and it seems to be
-        ;; considered a magit section.
-        (when (eq (magit-section-type current) 'button)
-          (setq done t))))
-    (cond (done
-           (message "Done"))
-          ((or continue
-               (eq (magit-section-type current) 'hunk))
-           (let ((parent (if (eq (magit-section-type current) 'diff)
-                             current
-                           (magit-section-parent current))))
-             (unless (eq (magit-section-type parent) 'diff)
-               (error "Parent of hunk is not a diff but is %s"
-                      (magit-section-type parent)))
-             ;; If the current diff has more content that is visible
-             ;; in the current window, scroll up and let the user view
-             ;; it.  Otherwise, close this diff section and open the
-             ;; next one.
-             (cond ((pos-visible-in-window-p (magit-section-end parent))
-                    (goto-char (magit-section-beginning parent))
-                    (magit-hide-section)
-                    (recenter 0)
-                    (if (null (magit-find-section-after (point)))
-                        (message "Done")
-                      (magit-goto-next-section)
-                      (if (eq (magit-section-type (magit-current-section)) 'diff)
-                          (magit-show-section)
-                        (message "Done"))))
-                   (t (scroll-up)))))
-          ((eq (magit-section-type current) 'diff)
-           ;; Initial viewing
-           (goto-char (magit-section-beginning current))
-           (magit-show-section)
-           (recenter 0)))))
-
-(mapc (lambda (mode-map)
-        (define-key mode-map (kbd ",")
-          'my-magit-view-diff))
-      (list magit-status-mode-map
-            magit-diff-mode-map))
-
-;; Don't highlight sections.
-(defun magit-highlight-section ()
-  nil)
-
-(add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
-
-(setq magit-status-buffer-switch-function 'switch-to-buffer)
-
-;; (defun my-magit-close-current-open-next ()
-;;   (interactive)
-;;   (magit-goto-parent-section)
-;;   (magit-toggle-section)
-;;   (magit-goto-next-section)
-;;   (recenter 0))
-
-;; (defun my-magit-click ()
-;;   (cond ((memq major-mode '(magit-log-mode magit-branch-manager-mode))
-;;          (magit-show-item-or-scroll-up))
-;;         ((eq major-mode 'magit-status-mode)
-;;          (let* ((current (magit-current-section))
-;;                 (current-title (format "%s" (magit-section-title current)))
-;;                 (parent (magit-section-parent current)))
-;;            (if (and parent
-;;                     (eq (magit-section-title parent) 'stashes))
-;;                (magit-show-item-or-scroll-up)
-;;              (unless (string-prefix-p "@@" current-title)
-;;                (magit-toggle-section)))))
-;;         ((memq major-mode '(magit-wazzup-mode
-;;                             magit-commit-mode
-;;                             magit-log-edit-mode
-;;                             magit-stash-mode
-;;                             magit-reflog-mode
-;;                             magit-diff-mode))
-;;          (magit-toggle-section))))
-
-#+END_SRC
-
-** Org mode
-#+BEGIN_SRC emacs-lisp
-(require 'org)
-
-(set-register ?t '(file . "~/Dropbox/Notes/todo.org"))
-
-(setq org-agenda-files '("~/Dropbox/Notes"))
-
-(add-hook 'org-mode-hook
-          (lambda ()
-            ;; 3rd arg T says to modify the buffer-local hook
-            (remove-hook 'before-save-hook 'delete-trailing-whitespace t)
-            (setq cursor-type 'bar)))
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(
-   ;; (awk . t)
-   ;; (calc . t)
-   ;; (clojure . t)
-   (emacs-lisp . t)
-   ;; (gnuplot . t)
-   ;; (haskell . t)
-   ;; (ocaml . t)
-   ;; (org . t)
-   (python . t)
-   (ruby . t)
-   ;; (sh . t)
-   ;; (sql . t)
-   ;; (sqlite . t)
-   ))
-
-(setq org-hide-leading-stars t)
-(setq org-special-ctrl-a/e t)
-(setq org-special-ctrl-k nil)
-(setq org-return-follows-link t)
-(setq org-use-speed-commands t)
-(setq org-hide-leading-stars nil)
-(setq org-fontify-done-headline t)
-(setq org-closed-keep-when-no-todo t)
-(setq org-log-done 'time)
-
-(custom-set-faces
-  '(org-done ((t (:strike-through t))))
-  '(org-headline-done ((t (:strike-through t)))))
-
-(defun my-org-insert-chrome-link ()
-  (interactive)
-  (let ((subject (do-applescript "tell application \"Google Chrome\"
-                                  title of active tab of front window
-                                  end tell"))
-        (url (do-applescript "tell application \"Google Chrome\"
-                              URL of active tab of front window
-                              end tell")))
-    (insert (org-make-link-string url subject))))
-
-#+END_SRC
-
-** smart-mode-line
-
-#+BEGIN_SRC emacs-lisp
-(require 'advice)
-(require 'smart-mode-line)
-
-(sml/setup)
-(sml/apply-theme 'dark)
-
-(defun my-mode-line-copy-full-path ()
-  "Copies the buffer name to the kill ring.
-If that is nil, then it is mode specific as to what gets copied:
- - shell or magit modes, copies the default directory."
-  (interactive)
-  (let ((name (or (buffer-file-name)
-                  (cond ((eq major-mode 'shell-mode)
-                         default-directory)
-                        ((string-prefix-p "Magit" mode-name)
-                         default-directory)))))
-    (when name
-      (kill-new name)
-      (message "Copied `%s'" name))))
-
-(defadvice sml/generate-buffer-identification (after my-mode-line-mouse-click (&rest ignored))
-  (add-text-properties 0 (length sml/buffer-identification)
-                       '(help-echo "Click to copy buffer name to kill ring")
-                       sml/buffer-identification)
-  ad-return-value)
-(ad-activate 'sml/generate-buffer-identification)
-
-(define-key mode-line-buffer-identification-keymap
-  [mode-line mouse-1] 'my-mode-line-copy-full-path)
-#+END_SRC
-
-** yasnippet
-#+BEGIN_SRC emacs-lisp
-(require 'advice)
-
-(require 'yasnippet)
-
-(setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-(yas-global-mode 1)
-
-;; I have yas working with hippie-expand.
-(define-key yas-minor-mode-map [(tab)] nil)
-(define-key yas-minor-mode-map (kbd "TAB") nil)
-
-(defadvice yas--modes-to-activate (after my-yas-activate-global-mode ())
-  (let ((modes ad-return-value))
-    (setq ad-return-value (append modes (list 'global-mode)))))
-
-(ad-activate 'yas--modes-to-activate)
-#+END_SRC
-
-** Sublime-like helpers
-#+BEGIN_SRC emacs-lisp
-(defun my-swap-line-or-region-down ()
-  "Move the current line or region down one line."
-  (interactive "*")
-  (let (beg end line reg-beg reg-end)
-    (when (use-region-p)
-      (setq reg-beg (region-beginning))
-      (setq reg-end (region-end)))
-    ;; Save & delete the next line.
-    (save-excursion
-      (forward-line 1)
-      (setq beg (point))
-      (forward-line 1)
-      (setq end (point)))
-    (setq line (buffer-substring beg end))
-    (delete-region beg end)
-    (when reg-beg (goto-char reg-beg))
-    (beginning-of-line)
-    (insert line)
-    (when reg-beg
-      (set-mark (+ reg-beg (length line)))
-      (goto-char (+ reg-end (length line)))
-      (setq deactivate-mark nil))))
-
-(defun my-swap-line-or-region-up ()
-  "Move the current line or region up one line."
-  (interactive "*")
-  (let (beg end line reg-beg reg-end)
-    (when (use-region-p)
-      (setq reg-beg (region-beginning))
-      (setq reg-end (region-end)))
-    ;; Save & delete the previous line.
-    (save-excursion
-      (when reg-beg (goto-char reg-beg))
-      (forward-line -1)
-      (setq beg (point))
-      (forward-line 1)
-      (setq end (point)))
-    (setq line (buffer-substring beg end))
-    (delete-region beg end)
-    (save-excursion
-      (when reg-end (goto-char (- reg-end (length line))))
-      (forward-line 1)
-      (insert line))
-    (when reg-end
-      (set-mark (- reg-beg (length line)))
-      (goto-char (- reg-end (length line)))
-      (setq deactivate-mark nil))))
-
-(defvar my-line-or-region-swap-keymap
-  (let ((map (make-sparse-keymap)))
-    (define-key map [down] 'my-swap-line-or-region-down)
-    (define-key map [up] 'my-swap-line-or-region-up)
-    map))
-
-(defun my-start-line-or-region-swap ()
-  (interactive)
-  (message "Hit [up] or [down] to move region or line in that direction")
-  (set-temporary-overlay-map my-line-or-region-swap-keymap t))
-
-(defun my-duplicate-line-or-region ()
-  "Duplicate line or current region."
-  (interactive "*")
-  (if (use-region-p)
-      (let* ((start (region-beginning))
-             (end (region-end))
-             (region (buffer-substring start end)))
-        (cond ((= (point) start)
-               (goto-char end)
-               (insert region)
-               (goto-char start))
-              (t (insert region)))
-        (set-mark end)
-        (setq deactivate-mark nil))
-    (let ((line (buffer-substring (point-at-bol) (point-at-eol)))
-          (column (current-column)))
-      (end-of-line)
-      (if (eobp)
-          (insert "\n")
-        (forward-char 1))
-      (save-excursion
-        (insert line)
-        (unless (eobp) (insert "\n")))
-      (move-to-column column))))
-
-(defun my-comment-line-or-region ()
-  "Comment or uncomment the current line or region."
-  (interactive "*")
-  (cond ((use-region-p)
-         (let ((start (region-beginning))
-               (end (region-end)))
-           (save-excursion
-             (goto-char start)
-             (setq start (point-at-bol))
-             (goto-char end)
-             (setq end
-                   ;; Sublime-like behavior: If the region extends to
-                   ;; the beginning of a line, don't include that
-                   ;; line.
-                   (cond ((bolp)
-                          (forward-char -1)
-                          (point))
-                         (t (point-at-eol)))))
-           (comment-or-uncomment-region start end)
-           (setq deactivate-mark nil)))
-        (t
-         (comment-or-uncomment-region (point-at-bol)
-                                      (point-at-eol)))))
-
-(defun my-sublime-expand-selection-to-indentation ()
-  (interactive)
-  "Expand selection to the next indentation level.
-Inspired by Sublime Text."
-  (let ((n (current-indentation))
-        (beg (point-at-bol))
-        (end (point-at-eol)))
-    ;; when region is active & transient mark mode is
-    ;; turned on, we expand to make that region bigger
-    (when (and (use-region-p) transient-mark-mode)
-      (setq beg (region-beginning)
-            end (region-end))
-      (save-excursion
-        ;; get the min indentation within the region
-        (goto-char beg)
-        (forward-line 1)
-        (while (< (point) end)
-          (setq n (min n (current-indentation)))
-          (forward-line 1))
-        ;; get the min indentation of line before
-        ;; region start, line after region start or n
-        (setq n
-              (max (progn
-                     (goto-char beg)
-                     (forward-line -1)
-                     (if (bobp) 0 (current-indentation)))
-                   (progn
-                     (goto-char end)
-                     (forward-line 1)
-                     (if (eobp) 0 (current-indentation)))))))
-    ;; now expand the region
-    (save-excursion
-      (goto-char beg)
-      (forward-line -1)
-      (while (and (>= (current-indentation) n) (not (bobp)))
-        (forward-line -1))
-      (forward-line 1)
-      (setq beg (point-at-bol))
-      (goto-char end)
-      (forward-line 1)
-      (while (and (>= (current-indentation) n) (not (eobp)))
-        (forward-line 1))
-      (forward-line -1)
-      (setq end (point-at-eol)))
-    (goto-char beg)
-    (set-mark beg)
-    (goto-char end)))
-#+END_SRC
-
-** swiper
-#+BEGIN_SRC emacs-lisp
-(ivy-mode 1)
-(setq ivy-use-virtual-buffers t)
-(global-set-key (kbd "C-c C-r") 'ivy-resume)
 #+END_SRC
 
 * Some Miscellaneous functions
