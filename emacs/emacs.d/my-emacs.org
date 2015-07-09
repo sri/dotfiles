@@ -4,7 +4,7 @@ Trying the all emacs config in one org mode file. Before I had a file
 for each category (eg, my-isearch.el) and had those byte-compiled
 before loading them into Emacs.
 
-* My packages
+** Packages
 
 The packages that I currently like.
 
@@ -52,7 +52,7 @@ Add MELPA and install any missing packages.
 
 #+END_SRC
 
-** Load up solarized
+** Theme: solarized
 
 It doesn't work well on terminals.
 
@@ -64,7 +64,7 @@ It doesn't work well on terminals.
    '(dired-header ((t (:foreground "#268bd2" :underline t :background nil))))))
 #+END_SRC
 
-** Autopair
+** Package: autopair
 
 Like it turned on globally.
 
@@ -73,7 +73,7 @@ Like it turned on globally.
 (autopair-global-mode)
 #+END_SRC
 
-** bm: buffer bookmarks
+** Package: bm
 
 #+BEGIN_SRC emacs-lisp
 (require 'bm)
@@ -84,19 +84,19 @@ Like it turned on globally.
 
 #+END_SRC
 
-** coffee-mode
+** Package: coffee-mode
 #+BEGIN_SRC emacs-lisp
 (require 'coffee-mode)
 (setq coffee-tab-width 2)
 #+END_SRC
 
-** elisp-slime-nav
+** Package: elisp-slime-nav
 #+BEGIN_SRC emacs-lisp
 (require 'elisp-slime-nav)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-elisp-slime-nav-mode)
 #+END_SRC
 
-** smart-mode-line
+** Package: smart-mode-line
 
 #+BEGIN_SRC emacs-lisp
 (require 'advice)
@@ -130,7 +130,7 @@ If that is nil, then it is mode specific as to what gets copied:
   [mode-line mouse-1] 'my-mode-line-copy-full-path)
 #+END_SRC
 
-** yasnippet
+** Package: yasnippet
 #+BEGIN_SRC emacs-lisp
 (require 'advice)
 
@@ -150,15 +150,14 @@ If that is nil, then it is mode specific as to what gets copied:
 (ad-activate 'yas--modes-to-activate)
 #+END_SRC
 
-** swiper
+** Package: swiper
 #+BEGIN_SRC emacs-lisp
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
 (global-set-key (kbd "C-c C-r") 'ivy-resume)
 #+END_SRC
 
-* Non-packages (not installable thru the package manager)
-** eval-expr
+** Non-package: eval-expr
 
 Pretty prints eval-expression (ESC-:, Alt-:) in a buffer if too big
 for the minibuffer.
@@ -167,8 +166,7 @@ for the minibuffer.
 (load (expand-file-name "~/.emacs.d/third-party/eval-expr.el"))
 #+END_SRC
 
-* My enhancements
-** Magit
+** My: magit
 #+BEGIN_SRC emacs-lisp
 (require 'magit)
 (require 'advice)
@@ -295,65 +293,66 @@ it'll close the current section and open the next one."
 
 #+END_SRC
 
-** Org mode
+** My: org mode
 #+BEGIN_SRC emacs-lisp
-(require 'org)
+  (require 'org)
 
-(set-register ?t '(file . "~/Dropbox/Notes/todo.org"))
+  (set-register ?t '(file . "~/Dropbox/Notes/todo.org"))
 
-(setq org-agenda-files '("~/Dropbox/Notes"))
+  (setq org-agenda-files '("~/Dropbox/Notes"))
 
-(add-hook 'org-mode-hook
-          (lambda ()
-            ;; 3rd arg T says to modify the buffer-local hook
-            (remove-hook 'before-save-hook 'delete-trailing-whitespace t)
-            (setq cursor-type 'bar)))
+  (add-hook 'org-mode-hook
+            (lambda ()
+              ;; 3rd arg T says to modify the buffer-local hook
+              (remove-hook 'before-save-hook 'delete-trailing-whitespace t)
+              (linum-mode -1)
+              (setq cursor-type 'bar)))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(
-   ;; (awk . t)
-   ;; (calc . t)
-   ;; (clojure . t)
-   (emacs-lisp . t)
-   ;; (gnuplot . t)
-   ;; (haskell . t)
-   ;; (ocaml . t)
-   ;; (org . t)
-   (python . t)
-   (ruby . t)
-   ;; (sh . t)
-   ;; (sql . t)
-   ;; (sqlite . t)
-   ))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '(
+     ;; (awk . t)
+     ;; (calc . t)
+     ;; (clojure . t)
+     (emacs-lisp . t)
+     ;; (gnuplot . t)
+     ;; (haskell . t)
+     ;; (ocaml . t)
+     ;; (org . t)
+     (python . t)
+     (ruby . t)
+     ;; (sh . t)
+     ;; (sql . t)
+     ;; (sqlite . t)
+     ))
 
-(setq org-hide-leading-stars t)
-(setq org-special-ctrl-a/e t)
-(setq org-special-ctrl-k nil)
-(setq org-return-follows-link t)
-(setq org-use-speed-commands t)
-(setq org-hide-leading-stars nil)
-(setq org-fontify-done-headline t)
-(setq org-closed-keep-when-no-todo t)
-(setq org-log-done 'time)
+  (setq org-hide-leading-stars t)
+  (setq org-special-ctrl-a/e t)
+  (setq org-special-ctrl-k nil)
+  (setq org-return-follows-link t)
+  (setq org-use-speed-commands t)
+  (setq org-hide-leading-stars nil)
+  (setq org-fontify-done-headline t)
+  (setq org-closed-keep-when-no-todo t)
+  (setq org-log-done 'time)
 
-(custom-set-faces
-  '(org-done ((t (:strike-through t))))
-  '(org-headline-done ((t (:strike-through t)))))
+  (custom-set-faces
+    '(org-done ((t (:strike-through t))))
+    '(org-headline-done ((t (:strike-through t)))))
 
-(defun my-org-insert-chrome-link ()
-  (interactive)
-  (let ((subject (do-applescript "tell application \"Google Chrome\"
-                                  title of active tab of front window
-                                  end tell"))
-        (url (do-applescript "tell application \"Google Chrome\"
-                              URL of active tab of front window
-                              end tell")))
-    (insert (org-make-link-string url subject))))
+  (defun my-org-insert-chrome-link ()
+    (interactive)
+    (let ((subject (do-applescript "tell application \"Google Chrome\"
+                                    title of active tab of front window
+                                    end tell"))
+          (url (do-applescript "tell application \"Google Chrome\"
+                                URL of active tab of front window
+                                end tell")))
+      (insert (org-make-link-string url subject))))
 
 #+END_SRC
 
-** Sublime-like helpers
+** My: Sublime-like
 #+BEGIN_SRC emacs-lisp
 (defun my-swap-line-or-region-down ()
   "Move the current line or region down one line."
@@ -512,7 +511,88 @@ Inspired by Sublime Text."
     (goto-char end)))
 #+END_SRC
 
-* My env
+** My: isearch
+#+BEGIN_SRC emacs-lisp
+(defun my-isearch-search-for-selected ()
+  (let ((isearch-word t)
+        (isearch-forward t)
+        (beg (min (mark) (point)))
+        (string (buffer-substring-no-properties (mark) (point))))
+    (unless (string-match "^\n*$" string)
+      (deactivate-mark)
+      (save-excursion
+        (call-interactively 'isearch-forward)
+        (goto-char beg)
+        (isearch-yank-string string)
+        (message "%d matches" (count-matches string
+                                             (point-min)
+                                             (point-max)))))))
+(defun my-isearch-forward ()
+  (interactive)
+  (if (let (use-empty-active-region)
+        (use-region-p))
+      (my-isearch-search-for-selected)
+    (call-interactively 'isearch-forward)))
+
+(defun my-isearch-delete-region ()
+  (interactive)
+  (when isearch-other-end
+    (delete-region (point) isearch-other-end)
+    (isearch-done)))
+
+;; TODO: handle wrap around
+(defun my-isearch-goto-next-non-visible-match ()
+  "Go to the next (or previous) match that isn't visible on screen."
+  (interactive)
+  (let ((next-non-visible-match
+         (let ((search-spaces-regexp search-whitespace-regexp))
+           (save-excursion
+             (cond (isearch-forward
+                    (goto-char (window-end))
+                    (re-search-forward (regexp-quote isearch-string) nil t))
+                   (t
+                    (goto-char (window-start))
+                    (re-search-backward (regexp-quote isearch-string) nil t)))))))
+    (if (null next-non-visible-match)
+        (message "No matches found beyond this window")
+      (goto-char next-non-visible-match)
+      (cond (isearch-forward
+             (goto-char (point-at-bol))
+             (recenter 4))
+            (t
+             (goto-char (point-at-eol))
+             (recenter -4)))
+      (isearch-search)
+      (isearch-update))))
+
+(defun my-isearch-yank-whole-word ()
+  (interactive)
+  (skip-chars-backward "a-zA-Z0-9_-")
+  (isearch-yank-internal
+   (lambda ()
+     (skip-chars-forward "a-zA-Z0-9_-")
+     (point))))
+
+(setq isearch-allow-scroll t)
+(setq isearch-lazy-highlight-initial-delay 0)
+
+(define-key isearch-mode-map "\r" 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "<return>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "<S-return>") 'isearch-repeat-backward)
+;(define-key isearch-mode-map (kbd "<backspace>") 'my-isearch-delete-region)
+(define-key isearch-mode-map (kbd "C-K") 'isearch-query-replace-regexp)
+(define-key isearch-mode-map (kbd "C-d") 'my-isearch-yank-whole-word)
+(define-key isearch-mode-map (kbd "C-k") 'isearch-query-replace)
+(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+(define-key isearch-mode-map (kbd "C-v") 'my-isearch-goto-next-non-visible-match)
+
+#+END_SRC
+
+** My Env
+*** set-major-mode
+
+When creating a new buffer, use the extension to set the major mode.
+
 #+BEGIN_SRC emacs-lisp
 (defun my-set-major-mode ()
   "For temporary buffers, set the mode based on the name.
@@ -528,12 +608,19 @@ Fundamental mode."
          t)))
 
 (setq-default major-mode 'my-set-major-mode)
+#+END_SRC
 
+*** Registers hold some useful Dired locations
+
+#+BEGIN_SRC emacs-lisp
 (let ((registers '((?d . "~/Desktop")
-                   (?e . "~/my/dotfiles/emacs/emacs.d")
+                   (?e . "~/my/dotfiles/emacs/emacs.d/my-emacs.org")
                    (?~ . "~"))))
   (dolist (reg registers)
     (set-register (car reg) (cons 'file (cdr reg)))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
 
 (defun my-show-trailing-whitespace ()
   (setq show-trailing-whitespace t))
@@ -894,84 +981,7 @@ Fundamental mode."
 
 #+END_SRC
 
-* isearch improvements
-#+BEGIN_SRC emacs-lisp
-(defun my-isearch-search-for-selected ()
-  (let ((isearch-word t)
-        (isearch-forward t)
-        (beg (min (mark) (point)))
-        (string (buffer-substring-no-properties (mark) (point))))
-    (unless (string-match "^\n*$" string)
-      (deactivate-mark)
-      (save-excursion
-        (call-interactively 'isearch-forward)
-        (goto-char beg)
-        (isearch-yank-string string)
-        (message "%d matches" (count-matches string
-                                             (point-min)
-                                             (point-max)))))))
-(defun my-isearch-forward ()
-  (interactive)
-  (if (let (use-empty-active-region)
-        (use-region-p))
-      (my-isearch-search-for-selected)
-    (call-interactively 'isearch-forward)))
-
-(defun my-isearch-delete-region ()
-  (interactive)
-  (when isearch-other-end
-    (delete-region (point) isearch-other-end)
-    (isearch-done)))
-
-;; TODO: handle wrap around
-(defun my-isearch-goto-next-non-visible-match ()
-  "Go to the next (or previous) match that isn't visible on screen."
-  (interactive)
-  (let ((next-non-visible-match
-         (let ((search-spaces-regexp search-whitespace-regexp))
-           (save-excursion
-             (cond (isearch-forward
-                    (goto-char (window-end))
-                    (re-search-forward (regexp-quote isearch-string) nil t))
-                   (t
-                    (goto-char (window-start))
-                    (re-search-backward (regexp-quote isearch-string) nil t)))))))
-    (if (null next-non-visible-match)
-        (message "No matches found beyond this window")
-      (goto-char next-non-visible-match)
-      (cond (isearch-forward
-             (goto-char (point-at-bol))
-             (recenter 4))
-            (t
-             (goto-char (point-at-eol))
-             (recenter -4)))
-      (isearch-search)
-      (isearch-update))))
-
-(defun my-isearch-yank-whole-word ()
-  (interactive)
-  (skip-chars-backward "a-zA-Z0-9_-")
-  (isearch-yank-internal
-   (lambda ()
-     (skip-chars-forward "a-zA-Z0-9_-")
-     (point))))
-
-(setq isearch-allow-scroll t)
-(setq isearch-lazy-highlight-initial-delay 0)
-
-(define-key isearch-mode-map "\r" 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "<return>") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "<S-return>") 'isearch-repeat-backward)
-;(define-key isearch-mode-map (kbd "<backspace>") 'my-isearch-delete-region)
-(define-key isearch-mode-map (kbd "C-K") 'isearch-query-replace-regexp)
-(define-key isearch-mode-map (kbd "C-d") 'my-isearch-yank-whole-word)
-(define-key isearch-mode-map (kbd "C-k") 'isearch-query-replace)
-(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
-(define-key isearch-mode-map (kbd "C-v") 'my-isearch-goto-next-non-visible-match)
-
-#+END_SRC
-
-* Key bindings
+** Key bindings
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "<C-tab>") 'my-switch-to-buffer)
 (global-set-key (kbd "C-\\") 'other-frame)
@@ -1073,7 +1083,7 @@ Fundamental mode."
   )
 #+END_SRC
 
-* Some Miscellaneous functions
+** Some Miscellaneous functions
 #+BEGIN_SRC emacs-lisp
 (defvar my-change-inside-pair-overlay nil)
 (make-variable-buffer-local 'my-change-inside-pair-overlay)
@@ -1427,7 +1437,7 @@ will bring it back."
 
 #+END_SRC
 
-* Load any private (work specific or home specific) files at the end
+** Load any private (work specific or home specific) files at the end
 
 #+BEGIN_SRC emacs-lisp
   (let ((private (expand-file-name "~/.emacs.private.el")))
