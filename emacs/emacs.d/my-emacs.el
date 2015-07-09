@@ -45,7 +45,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar my-files
-  '("my-env" "my-fns" "my-keys" "my-sublime" "my-win"
+  '("my-env" "my-fns" "my-keys" "my-sublime"
     "my-isearch" "my-packages"))
 
 (defvar my-packages

@@ -336,3 +336,14 @@ will bring it back."
 (defun my-decrease-font-size ()
   (interactive)
   (my-increase-font-size 'decrease))
+
+(defun my-toggle-fullscreen ()
+  (interactive)
+  (cond ((eq window-system 'x)
+         (let ((fullp (frame-parameter nil 'fullscreen)))
+           (set-frame-parameter nil 'fullscreen
+                                (if fullp nil 'fullscreen))))))
+
+(defun my-frame-transparency (arg)
+  (interactive "p")
+  (set-frame-parameter nil 'alpha (list arg arg)))
