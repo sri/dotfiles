@@ -1,5 +1,6 @@
 .DS_Store
 **/.DS_Store
+emacs/emacs.d/my-emacs.el
 emacs.d/.emacs.desktop
 emacs.d/.emacs.desktop.lock
 emacs/emacs.d/auto-save-list/
