@@ -17,6 +17,11 @@
   (erase-buffer)
   (comint-send-input))
 
+(defun my-shell-rename-buffer ()
+  (interactive)
+  (let ((new-name (read-string "New buffer name: ")))
+    (rename-buffer (format "*%s*" new-name))))
+
 (defvar my-shell-bash-esc-dot-counter 0)
 (defvar my-shell-bash-esc-dot-last-insertion nil)
 
@@ -44,47 +49,41 @@
   (recenter-top-bottom 0))
 
 (defun my-shell (&optional arg)
-  "Create a new shell (with prefix arg) or switch to a shell buffer."
+  "Switch to the most recently active shell buffer.
+With a prefix arg, create a new shell.
+Also, creates a shell when there are no other shells."
   (interactive "P")
-  (if arg
-      (shell (generate-new-buffer-name "*shell*"))
-    (let (shells others)
-      (dolist (buf (buffer-list))
-        (when (eq (with-current-buffer buf major-mode) 'shell-mode)
-          (if (string-match "^[*]shell[*]" (buffer-name buf))
-              (push buf shells)
-            (push buf others))))
-      ;; Sort the shells named "*shell*", "*shell*<1>" by their names.
-      (setq shells (sort shells (lambda (x y)
-                                  (string-lessp (buffer-name x)
-                                                (buffer-name y)))))
-      ;; Sort the shells not named "*shell*" etc. by their
-      ;; creation time.
-      (setq others (sort others (lambda (x y)
-                                  (< (with-current-buffer x
-                                       my-shell-mode-created-at)
-                                     (with-current-buffer y
-                                       my-shell-mode-created-at)))))
-      (cond ((and (null shells) (null others))
-             (shell))
-            ((eq major-mode 'shell-mode)
-             (let ((cur (current-buffer)))
-               (switch-to-buffer (if (string-match "^[*]shell[*]" (buffer-name))
-                                     (or (cadr (memq cur shells))
-                                         (car others)
-                                         (car shells))
-                                   (or (cadr (memq cur others))
-                                       (car shells)
-                                       (car others))))))
-            (t (switch-to-buffer (or (car shells)
-                                     (car others))))))))
+  (cond (arg
+         (shell (generate-new-buffer-name "*shell*")))
+        (t (let ((shells (-filter (lambda (buffer)
+                                    (with-current-buffer buffer
+                                      (eq major-mode 'shell-mode)))
+                                  (buffer-list))))
+             (setq shells
+                   (sort shells
+                         (lambda (x y)
+                           (> (with-current-buffer x
+                                my-shell-last-active-time)
+                              (with-current-buffer y
+                                my-shell-last-active-time)))))
+             (cond ((null shells)
+                    (shell))
+                   ((eq major-mode 'shell-mode)
+                    (switch-to-buffer (or (cadr (memq (current-buffer) shells))
+                                          (car shells))))
+                   (t
+                    (switch-to-buffer (car shells))))))))
 
-(defvar my-shell-mode-created-at nil)
-(make-variable-buffer-local 'my-shell-mode-created-at)
+(defvar-local my-shell-last-active-time nil)
+
+(defun my-shell-update-last-active-time (&optional string)
+  (setq my-shell-last-active-time (float-time)))
 
 (add-hook 'shell-mode-hook
           (lambda ()
-            (setq my-shell-mode-created-at (float-time))
+            (my-shell-update-last-active-time)
+            (add-hook 'comint-input-filter-functions
+                      'my-shell-update-last-active-time)
             (linum-mode -1)
             (setq line-number-mode nil
                   column-number-mode nil)
@@ -98,6 +97,8 @@
               'comint-next-prompt)
             (define-key shell-mode-map (kbd "C-c e")
               'my-shell-erase-buffer)
+            (define-key shell-mode-map (kbd "C-c n")
+              'my-shell-rename-buffer)
             (define-key shell-mode-map (kbd "C-l")
               'my-shell-bash-clear-screen)
             (define-key shell-mode-map (kbd "<right>")
