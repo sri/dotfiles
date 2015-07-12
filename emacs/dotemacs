@@ -62,4 +62,34 @@ error if SRC is missing."
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
+(defvar my-packages
+  '(
+    autopair
+    bm
+    browse-kill-ring
+    coffee-mode
+    elisp-slime-nav
+    flycheck
+    go-mode
+    swiper
+    macrostep
+    magit
+    org
+    projectile
+    rainbow-mode
+    ruby-end
+    smart-mode-line
+    solarized-theme
+    visual-regexp
+    yasnippet
+    ))
+
+(let (missing)
+  (dolist (package my-packages)
+    (cond ((package-installed-p package))
+          (t (push package missing))))
+  (cond (missing
+         (package-refresh-contents)
+         (mapc 'package-install missing))))
+
 (my-load "~/.emacs.d/my-emacs")
