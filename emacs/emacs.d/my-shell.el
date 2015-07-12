@@ -22,28 +22,6 @@
   (let ((new-name (read-string "New buffer name: ")))
     (rename-buffer (format "*%s*" new-name))))
 
-(defvar my-shell-bash-esc-dot-counter 0)
-(defvar my-shell-bash-esc-dot-last-insertion nil)
-
-(defun my-shell-bash-esc-dot ()
-  "Same as Esc-. in bash; insert previous command's last word."
-  (interactive)
-  (let* ((continue (eq last-command 'my-shell-bash-esc-dot))
-         (count (if continue (1+ my-shell-bash-esc-dot-counter) 0))
-         (cmd (comint-previous-input-string count))
-         (last (if (string-match "\\([`'\"]\\)[^`'\"]+?\\1\\s-*$" cmd)
-                   (match-string 0 cmd)
-                 (car (last (split-string cmd " " t))))))
-    (setq my-shell-bash-esc-dot-counter count)
-    (when last
-      (when continue
-        (delete-region (point)
-                       (save-excursion
-                         (search-backward my-shell-bash-esc-dot-last-insertion
-                                          (point-at-bol)))))
-      (setq my-shell-bash-esc-dot-last-insertion last)
-      (insert last))))
-
 (defun my-shell-bash-clear-screen ()
   (interactive)
   (recenter-top-bottom 0))
@@ -106,4 +84,4 @@ Also, creates a shell when there are no other shells."
             (define-key shell-mode-map (kbd "<down>")
               'my-shell-next-line-or-next-history)
             (define-key shell-mode-map (kbd "M-.")
-              'my-shell-bash-esc-dot)))
+              'comint-insert-previous-argument)))
