@@ -2,10 +2,13 @@
   (load-theme 'solarized-dark t)
   (custom-theme-set-faces
    'solarized-dark
-   '(dired-header ((t (:foreground "#268bd2" :underline t :background nil))))))
+   '(dired-header ((t (:foreground "#268bd2" :underline t :background nil)))))
 
+  (add-hook 'focus-out-hook
+            (lambda ()
+              (when (and buffer-file-name (buffer-modified-p))
+                (save-buffer))))
 
-(when window-system
   (global-hl-line-mode 1)
 
   (let ((shell-path (shell-command-to-string "$SHELL -c 'echo -n $PATH'")))

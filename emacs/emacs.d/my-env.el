@@ -37,6 +37,8 @@ Fundamental mode."
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
+(setq large-file-warning-threshold nil)
+(set-language-environment "UTF-8")
 (setq message-log 16384)
 (visual-line-mode 1)
 (setq save-interprogram-paste-before-kill t)
@@ -94,24 +96,34 @@ Fundamental mode."
 (make-variable-buffer-local 'line-number-mode)
 (make-variable-buffer-local 'column-number-mode)
 
+(global-font-lock-mode t)
+
+
+
 (require 'hippie-exp)
 
 (setq hippie-expand-try-functions-list
       '(
         yas-hippie-try-expand
+        try-complete-file-name-partially
+        try-complete-file-name
         try-expand-dabbrev
         try-expand-dabbrev-all-buffers
         try-expand-dabbrev-from-kill
-        try-complete-file-name
+        try-complete-lisp-symbol-partially
         try-complete-lisp-symbol))
 
-(global-font-lock-mode t)
+;; Ediff:
+(require 'ediff)
 
-(add-hook 'focus-out-hook
-          (lambda ()
-            (when (and buffer-file-name
-                       (buffer-modified-p))
-              (save-buffer))))
+(setq ediff-diff-options "-w")
+(setq ediff-highlight-all-diffs nil)
+(setq ediff-show-clashes-only t)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq ediff-combination-pattern
+      '("<<<<<<< A: HEAD" A
+        "||||||| Ancestor" Ancestor
+        "=======" B ">>>>>>> B: Incoming"))
 
 ;; Eval expr:
 (require 'eval-expr)
