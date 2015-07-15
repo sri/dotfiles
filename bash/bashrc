@@ -1,8 +1,3 @@
-if [ -e ~/.bashrc_private ];
-then
-  . ~/.bashrc_private
-fi
-
 . ~/my/dotfiles/bash/git-completion.bash
 . ~/my/dotfiles/bash/git-prompt.sh
 
@@ -86,3 +81,8 @@ HISTFILESIZE=10000
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
+
+if [ -e ~/.bashrc_private ];
+then
+  . ~/.bashrc_private
+fi
