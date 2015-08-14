@@ -38,6 +38,8 @@
         '(("\\.pdf\\'" "open -a Preview")
           ("\\.html?\\'" "open -a 'Google Chrome'"))))
 
+(setq-default dired-listing-switches "-alh")
+
 (add-hook 'dired-mode-hook
           (lambda ()
             (linum-mode -1)

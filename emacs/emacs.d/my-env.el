@@ -64,6 +64,7 @@ Fundamental mode."
 ;; keys bound to C-x.
 (setq help-char ??)
 (setq scroll-error-top-bottom t)
+(setq js-indent-level 2)
 
 (setq Man-width 80)
 
