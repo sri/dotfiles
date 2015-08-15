@@ -59,9 +59,10 @@ export PROMPT_COMMAND=__my_prompt_command
 
 export PATH=~/my/dotfiles/bin:$PATH
 
-# TODO -- there are Mac specific
-export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
-export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
+if [ "$(uname)" = "Darwin" ]; then
+  export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
+  export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
+fi
 
 export LESS='-r -i-P%f (%i/%m) Line %lt/%L'
 export EDITOR=emacsclient
