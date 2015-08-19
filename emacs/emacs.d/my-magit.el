@@ -9,6 +9,8 @@
 
 (setq magit-last-seen-setup-instructions "1.4.0")
 (setq magit-diff-highlight-hunk-body nil)
+(setq magit-push-always-verify nil)
+
 (defun my-git-grep ()
   (interactive)
   (let* ((search (if (use-region-p)
