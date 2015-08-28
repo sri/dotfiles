@@ -25,6 +25,7 @@
 (global-set-key (kbd "C-c TAB") 'yas/expand)
 (global-set-key (kbd "C-c \\") 'align-regexp)
 (global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c b") 'rename-buffer)
 (global-set-key (kbd "C-c c") 'calendar)
 (global-set-key (kbd "C-c g") 'my-git-grep)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
