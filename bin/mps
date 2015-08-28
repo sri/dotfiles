@@ -1,0 +1,26 @@
+#! /usr/bin/env ruby
+
+if ARGV.size != 1
+  abort("Usage: mps <process name to match>")
+end
+
+header_line = nil
+matches = []
+
+IO.popen("ps aux") do |f|
+  while line = f.gets
+    line.chomp!
+    if header_line.nil?
+      header_line = line
+    elsif line =~ /#{ARGV[0]}/i
+      user, pid = line.split(nil, 3)
+      next if Process.pid == pid.to_i
+      matches << line
+    end
+  end
+end
+
+if matches.size > 0
+  puts header_line
+  matches.each { |m| puts m }
+end
