@@ -4,6 +4,7 @@ if ARGV.size != 1
   abort("Usage: mps <process name to match>")
 end
 
+match = ARGV[0]
 header_line = nil
 matches = []
 
@@ -12,7 +13,7 @@ IO.popen("ps aux") do |f|
     line.chomp!
     if header_line.nil?
       header_line = line
-    elsif line =~ /#{ARGV[0]}/i
+    elsif line =~ /#{match}/i
       user, pid = line.split(nil, 3)
       next if Process.pid == pid.to_i
       matches << line
