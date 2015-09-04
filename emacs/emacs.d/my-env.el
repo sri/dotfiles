@@ -89,6 +89,12 @@ Fundamental mode."
 (show-paren-mode t)
 (server-start)
 
+(ido-mode 1)
+(setq ido-enable-flex-matching t)
+(setq ido-default-file-method 'selected-window)
+(setq ido-default-buffer-method 'selected-window)
+(setq ido-create-new-buffer 'always)
+
 (global-linum-mode 1)
 (setq linum-format
       (if window-system "%d" "%d "))
