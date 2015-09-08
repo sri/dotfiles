@@ -33,3 +33,7 @@ if [ -e ~/.bashrc_private ];
 then
   . ~/.bashrc_private
 fi
+
+if [ "$PROMPT_COMMAND" = "" ]; then
+  . ~/my/dotfiles/bash/prompt
+fi
