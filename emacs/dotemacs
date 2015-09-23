@@ -72,7 +72,7 @@ error if SRC is missing."
     flycheck
     go-mode
     helm
-    ;; swiper
+    helm-projectile
     macrostep
     magit
     org
