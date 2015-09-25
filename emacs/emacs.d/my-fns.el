@@ -56,8 +56,16 @@
     (kill-line arg)))
 
 (defun my-hippie-tab (arg)
+  "Hippie expand, do what I mean.
+If in the middle of `hippie-expand' running thru all the
+expansions (see `hippie-expand-try-functions-list'), then
+continue with that. If a region is selected, indent that region.
+If at the beginning of the line, call `indent-for-tab-command'.
+Othewise, invoke `hippie-expand'."
   (interactive "*P")
-  (cond ((and transient-mark-mode (use-region-p))
+  (cond ((eq last-command 'hippie-expand)
+         (hippie-expand arg))
+        ((and transient-mark-mode (use-region-p))
          (indent-region (region-beginning) (region-end) nil))
         ((and (eq (char-syntax (preceding-char)) ?w)
               (not (zerop (current-column))))
