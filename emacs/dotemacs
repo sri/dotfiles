@@ -1,4 +1,6 @@
 ;; -*- mode: emacs-lisp -*-
+(require 'cl)
+
 (defvar my-emacs-start-time (current-time))
 
 (custom-set-faces
@@ -79,12 +81,9 @@ error if SRC is missing."
     yasnippet
     ))
 
-(let (missing)
-  (dolist (package my-packages)
-    (cond ((package-installed-p package))
-          (t (push package missing))))
-  (cond (missing
-         (package-refresh-contents)
-         (mapc 'package-install missing))))
+(let ((missing (remove-if 'package-installed-p my-packages)))
+  (when missing
+    (package-refresh-contents)
+    (mapc 'package-install missing)))
 
 (my-load "~/.emacs.d/my-emacs")
