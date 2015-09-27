@@ -35,25 +35,19 @@
   "Load the byte-compiled version of SRC.
 If IGNORE-IF-MISSING is non-NIL, then don't throw an
 error if SRC is missing."
-  (let (compiled done)
-    (setq src (expand-file-name src))
-    (cond ((not (string-suffix-p ".el" src))
-           (setq src (concat src ".el"))))
-    (setq compiled (concat src "c"))
-    (cond ((not (file-exists-p src))
-           ;; Sometime I delete an el file and
-           ;; forget to delete the elc.
-           (cond ((file-exists-p compiled)
-                  (delete-file compiled)))
-           (cond (ignore-if-missing
-                  (setq done t))
-                 (t
-                  (error "Missing %s" src)))))
-    (cond (done)
-          (t (cond ((file-newer-than-file-p src compiled)
-                    (let (byte-compile-verbose)
-                      (byte-compile-file src))))
-             (load compiled nil t t)))))
+  (setq src (expand-file-name (if (string-suffix-p ".el" src)
+                                  src
+                                (concat src ".el"))))
+  (let ((compiled (concat src "c")))
+    (cond ((file-exists-p src)
+           (if (file-newer-than-file-p src compiled)
+               (let (byte-compile-verbose)
+                 (byte-compile-file src)))
+           (load compiled nil t t))
+          (t (if (file-exists-p compiled)
+                 (delete-file compiled))
+             (if (not ignore-if-missing)
+                 (error "Missing `%s'" src))))))
 
 (byte-compile 'my-load)
 
