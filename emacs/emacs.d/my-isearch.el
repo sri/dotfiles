@@ -52,7 +52,8 @@
 
 (defun my-isearch-yank-whole-word ()
   (interactive)
-  (skip-chars-backward "a-zA-Z0-9_-")
+  (when (= (length isearch-string) 0)
+    (skip-chars-backward "a-zA-Z0-9_-"))
   (isearch-yank-internal
    (lambda ()
      (skip-chars-forward "a-zA-Z0-9_-")
