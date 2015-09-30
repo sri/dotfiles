@@ -230,9 +230,11 @@ decoded URL in the minibuffer."
 (require 'ffap)
 
 (defun my-ffap-or-find-file (arg)
+  "Find the file at point or ask the user for file's path.
+The latter method uses `helm-find-files'."
   (interactive "P")
   (if arg
-      (call-interactively 'find-file)
+      (call-interactively 'helm-find-files)
     (let ((file-at-point (ffap-file-at-point)))
       (if file-at-point
           (let ((linenum
@@ -246,8 +248,9 @@ decoded URL in the minibuffer."
             (find-file file-at-point)
             (when linenum
               (goto-line linenum)
-              (linum-mode 1)))
-        (call-interactively 'find-file)))))
+              (linum-mode 1)
+              (recenter))
+        (call-interactively 'helm-find-files)))))
 
 (defun my-remove-non-ascii-chars ()
   (interactive)
