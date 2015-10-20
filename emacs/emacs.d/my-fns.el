@@ -250,7 +250,7 @@ The latter method uses `helm-find-files'."
               (goto-line linenum)
               (linum-mode 1)
               (recenter))
-        (call-interactively 'helm-find-files)))))
+        (call-interactively 'helm-find-files))))))
 
 (defun my-remove-non-ascii-chars ()
   (interactive)
