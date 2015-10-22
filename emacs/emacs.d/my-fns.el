@@ -111,7 +111,7 @@ Othewise, invoke `hippie-expand'."
   (yank arg)
   (unless (window-minibuffer-p)
     (message "Press `y' to yank-pop"))
-  (set-temporary-overlay-map my-yank-keymap
+  (set-transient-map my-yank-keymap
                              (lambda ()
                                (memq this-command
                                      '(yank-pop cua-paste-pop)))))
@@ -131,7 +131,7 @@ key. Any other key other than the hotkey exits this mode."
              (map (make-sparse-keymap)))
         (define-key map (kbd hotkey-string) cmd)
         (call-interactively cmd)
-        (set-temporary-overlay-map map t)
+        (set-transient-map map t)
         (unless (window-minibuffer-p)
           (with-temp-message (format "`%s' will run the command `%s'"
                                      hotkey-string cmd)
@@ -205,7 +205,7 @@ decoded URL in the minibuffer."
   (interactive "*P")
   (join-line arg)
   (message "Hit [up] or [down] to join line up or from below")
-  (set-temporary-overlay-map my-join-line-keymap t))
+  (set-transient-map my-join-line-keymap t))
 
 (defun my-emacs-lisp-eval ()
   (interactive)
@@ -242,12 +242,12 @@ The latter method uses `helm-find-files'."
                    (goto-char (point-at-bol))
                    (when (and (search-forward file-at-point (point-at-eol) t 1)
                               (looking-at ":\\([0-9]+\\)"))
-                     (string-to-int (buffer-substring-no-properties
-                                     (match-beginning 1)
-                                     (match-end 1)))))))
+                     (string-to-number (buffer-substring-no-properties
+                                        (match-beginning 1)
+                                        (match-end 1)))))))
             (find-file file-at-point)
             (when linenum
-              (goto-line linenum)
+              (forward-line linenum)
               (linum-mode 1)
               (recenter))
         (call-interactively 'helm-find-files))))))
