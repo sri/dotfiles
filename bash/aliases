@@ -1,30 +1,24 @@
-# Git
-alias g='git '
-alias ga='git add'
-alias gp='git pull'
+alias d='git diff'
+alias gall='glp --all --no-merges'
 alias gcontains='git branch -a --contains'
-alias gco='git checkout'
 alias gd='git diff'
 alias gds='git diff --staged'
 alias gg='git grep --break -n'
 alias gl='git log --date-order --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset" --graph'
-alias glp='git log -p'
+alias glp='gl -p'
+alias gp='git pull'
 alias gs='git status'
 alias gss='git show -p'
 alias gwhich='git branch -a | grep '
-alias groot='cd "$(git rev-parse --show-toplevel)"'
-alias gall='git log -p --all --no-merges'
-
 alias s='git status'
-alias d='git diff'
+
+alias cdr='cd "$(git rev-parse --show-toplevel)"'
 
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-alias localip="ipconfig getifaddr en1"
 
 alias ..='c ..'
-alias ...='c ../..'
 alias dt='c ~/Desktop'
-alias dotfiles='c ~/my/dotfiles'
+alias cddotfiles='c ~/my/dotfiles'
 
 alias r=irb
 alias p=python
