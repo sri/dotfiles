@@ -1,3 +1,4 @@
+# -*- mode: sh mode -*-
 alias d='git diff'
 alias gall='glp --all --no-merges'
 alias gcontains='git branch -a --contains'
