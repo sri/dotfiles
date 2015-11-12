@@ -71,6 +71,7 @@ error if SRC is missing."
     helm-projectile
     macrostep
     magit
+    nlinum
     org
     projectile
     rainbow-mode
@@ -87,3 +88,4 @@ error if SRC is missing."
     (mapc 'package-install missing)))
 
 (my-load "~/.emacs.d/my-emacs")
+(setq my-time-diff-secs (float-time (time-since my-emacs-start-time)))

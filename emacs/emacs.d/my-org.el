@@ -8,7 +8,7 @@
           (lambda ()
             ;; 3rd arg T says to modify the buffer-local hook
             (remove-hook 'before-save-hook 'delete-trailing-whitespace t)
-            (linum-mode -1)
+            (nlinum-mode -1)
             (setq cursor-type 'bar)))
 
 (org-babel-do-load-languages

@@ -248,7 +248,7 @@ The latter method uses `helm-find-files'."
             (find-file file-at-point)
             (when linenum
               (forward-line linenum)
-              (linum-mode 1)
+              (nlinum-mode 1)
               (recenter))
         (call-interactively 'helm-find-files))))))
 
