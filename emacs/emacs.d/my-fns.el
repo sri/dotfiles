@@ -73,29 +73,10 @@ Othewise, invoke `hippie-expand'."
         (t
          (indent-for-tab-command))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun my-find-tag-next ()
-  (interactive)
-  (find-tag nil t nil))
-
 (defun my-kill-current-buffer ()
   "Kill the current buffer without prompting."
   (interactive)
   (kill-buffer (current-buffer)))
-
-(defun my-transpose-buffers (&optional arg)
-  (interactive "p")
-  (let* ((windows (window-list nil 'never-minibuffer))
-         (selected (pop windows))
-         (selected-buffer (window-buffer selected)))
-    (when (< arg 0)
-      (setq windows (reverse windows)))
-    (dotimes (i (length windows))
-      (switch-to-buffer (window-buffer (pop windows)))
-      (other-window arg))
-    (switch-to-buffer selected-buffer)
-    (other-window arg)))
 
 (defun my-switch-to-buffer ()
   (interactive)
@@ -115,27 +96,6 @@ Othewise, invoke `hippie-expand'."
                              (lambda ()
                                (memq this-command
                                      '(yank-pop cua-paste-pop)))))
-
-(defun my-quick-hotkey ()
-  "Temporarily bind a key to a hotkey.
-Key can be any key that invokes a command.  Hotkey is a single
-key. Any other key other than the hotkey exits this mode."
-  (interactive)
-  (let* ((cmd-key (read-key-sequence "Command key: " nil t))
-         (cmd (intern-soft (key-binding cmd-key))))
-    (if (null cmd)
-        (message "No command associated with key `%s'" cmd-key)
-      (let* ((prompt (format "Hot key to run `%s': " cmd))
-             (hotkey (read-key prompt))
-             (hotkey-string (format (if (numberp hotkey) "%c" "<%s>") hotkey))
-             (map (make-sparse-keymap)))
-        (define-key map (kbd hotkey-string) cmd)
-        (call-interactively cmd)
-        (set-transient-map map t)
-        (unless (window-minibuffer-p)
-          (with-temp-message (format "`%s' will run the command `%s'"
-                                     hotkey-string cmd)
-            (sit-for 1.0)))))))
 
 (defun my-count-lines-buffer ()
   (interactive)
@@ -162,14 +122,6 @@ key. Any other key other than the hotkey exits this mode."
     (kill-whole-line arg)
     (move-to-column col)))
 
-(defun my-find-in-directory ()
-  (interactive)
-  (if (use-region-p)
-      (let* ((string (buffer-substring-no-properties (point) (mark)))
-             (dir (read-directory-name (format "Searching for %s under: " string))))
-        (ag string dir))
-    (call-interactively 'ag)))
-
 (defun my-url-decode (&optional arg)
   "Decode the URL.
 If a region is selected and the universal argument (C-u) is prefixed,
@@ -185,34 +137,6 @@ decoded URL in the minibuffer."
            (delete-region (point) (mark))
            (insert decoded))
           (t (message "%s" decoded)))))
-
-(defun my-join-line-down ()
-  (interactive)
-  (message "down")
-  (join-line 1))
-
-(defun my-join-line-up ()
-  (interactive)
-  (join-line))
-
-(defvar my-join-line-keymap
-  (let ((map (make-sparse-keymap)))
-    (define-key map [up] 'my-join-line-up)
-    (define-key map [down] 'my-join-line-down)
-    map))
-
-(defun my-join-line (&optional arg)
-  (interactive "*P")
-  (join-line arg)
-  (message "Hit [up] or [down] to join line up or from below")
-  (set-transient-map my-join-line-keymap t))
-
-(defun my-emacs-lisp-eval ()
-  (interactive)
-  (let ((fn (cond ((= (preceding-char) ?\)) 'eval-last-sexp)
-                  ((use-region-p) 'eval-region)
-                  (t 'eval-defun))))
-    (call-interactively fn)))
 
 (defun my-beginning-of-line ()
   "Move to the beginning of line or beginning of non-whitespace chars."
@@ -255,24 +179,6 @@ The latter method uses `helm-find-files'."
 (defun my-remove-non-ascii-chars ()
   (interactive)
   (query-replace-regexp "[^[:ascii:]]" ""))
-
-(defun my-find-file-literally ()
-  (interactive)
-  (let ((path (buffer-file-name)))
-    (kill-buffer (current-buffer))
-    (find-file-literally path)))
-
-(defvar my-selective-display-level 0)
-(make-variable-buffer-local 'my-selective-display-level)
-
-(defun my-selective-display-next (&optional arg)
-  (interactive "P")
-  (setq my-selective-display-level (or arg
-                                       (if (> my-selective-display-level 8)
-                                           0
-                                         (+ my-selective-display-level 2))))
-  (message "Selective display level: %s" my-selective-display-level)
-  (set-selective-display my-selective-display-level))
 
 (defun my-open-latest-downloaded-file ()
   (interactive)
@@ -326,35 +232,3 @@ will bring it back."
 (defun my-unsaved-changes ()
   (interactive)
   (diff-buffer-with-file (current-buffer)))
-
-;; Increase/decrease font size for all buffers.
-;;
-(defvar my-original-font-size nil)
-(defun my-increase-font-size (&optional decrease)
-  (interactive)
-  (let* ((old (face-attribute 'default :height))
-         ;; Increment has to be a multiple of 10.
-         (new (+ old (if decrease (- 10) 10)))
-         (inc))
-    (when (null my-original-font-size)
-      (setq my-original-font-size old))
-    (setq inc (/ (- new my-original-font-size) 10))
-    (message "%s%s: new font size: %s"
-             (if (>= inc 0) "+" "-")
-             inc
-             new)
-    (set-face-attribute 'default nil :height new)))
-(defun my-decrease-font-size ()
-  (interactive)
-  (my-increase-font-size 'decrease))
-
-(defun my-toggle-fullscreen ()
-  (interactive)
-  (cond ((eq window-system 'x)
-         (let ((fullp (frame-parameter nil 'fullscreen)))
-           (set-frame-parameter nil 'fullscreen
-                                (if fullp nil 'fullscreen))))))
-
-(defun my-frame-transparency (arg)
-  (interactive "p")
-  (set-frame-parameter nil 'alpha (list arg arg)))
