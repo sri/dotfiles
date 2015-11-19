@@ -53,6 +53,11 @@ export COLOR_RED='\e[0;31m'
 export COLOR_WHITE='\e[1;37m'
 export COLOR_YELLOW='\e[1;33m'
 
+export _my_extra_prompt=
+
+set_extra() {
+  export _my_extra_prompt=$1
+}
 
 __my_prompt_command() {
   local exitcode="$?"
@@ -62,6 +67,12 @@ __my_prompt_command() {
   local whoami=$(whoami)
   local final_prompt="\$"
   local timestamp=""
+  local extra=""
+
+  if [ "$_my_extra_prompt" != "" ]
+  then
+    extra="$_my_extra_prompt "
+  fi
 
   if [ "$whoami" == "root" ]
   then
@@ -85,7 +96,12 @@ __my_prompt_command() {
   # Write to ~/.bash_history immediately after each command is typed in.
   history -a
 
-  PS1="$cwd$gitbranch$COLOR_NC$exitcode$timestamp$COLOR_NC\n$final_prompt "
+  PS1="$cwd$gitbranch$COLOR_NC$exitcode$timestamp$COLOR_NC\n$extra$final_prompt "
 }
 
-export PROMPT_COMMAND="__my_prompt_command; $PROMPT_COMMAND"
+if [ "$PROMPT_COMMAND" == "" ]
+then
+    export PROMPT_COMMAND="__my_prompt_command"
+else
+    export PROMPT_COMMAND="__my_prompt_command; $PROMPT_COMMAND"
+fi
