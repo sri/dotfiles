@@ -62,6 +62,7 @@
 (setq isearch-allow-scroll t)
 (setq isearch-lazy-highlight-initial-delay 0)
 
+(define-key isearch-mode-map (kbd "C-e") 'isearch-exit)
 (define-key isearch-mode-map "\r" 'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "<return>") 'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "<S-return>") 'isearch-repeat-backward)
