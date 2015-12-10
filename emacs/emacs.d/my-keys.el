@@ -51,7 +51,7 @@
 (global-set-key (kbd "M-E") 'mc/edit-lines)
 (global-set-key (kbd "M-N") 'bm-previous)
 (global-set-key (kbd "M-\\") 'my-delete-horizontal-space)
-(global-set-key (kbd "M-b") 'bm-toggle)
+;; (global-set-key (kbd "M-b") 'bm-toggle)
 (global-set-key (kbd "M-d") 'my-dired)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "M-k") 'my-kill-whole-line)
