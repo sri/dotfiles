@@ -74,6 +74,7 @@
 (global-set-key (kbd "C-x r K") 'my-copy-from-starting-col-till-eol)
 (global-set-key (kbd "C-x s") 'my-start-line-or-region-swap)
 (global-set-key (kbd "C-x v -") 'my-unsaved-changes)
+(global-set-key (kbd "C-x C-v") 'my-find-file-as-sudo)
 
 ;; Unbind
 (cl-flet ((unset-key-in-mode (mode &rest keys)

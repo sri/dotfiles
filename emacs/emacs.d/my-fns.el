@@ -232,3 +232,9 @@ will bring it back."
 (defun my-unsaved-changes ()
   (interactive)
   (diff-buffer-with-file (current-buffer)))
+
+(defun my-find-file-as-sudo ()
+  (interactive)
+  (let ((file-name (buffer-file-name)))
+    (when file-name
+      (find-alternate-file (concat "/sudo::" file-name)))))
