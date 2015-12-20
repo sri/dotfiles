@@ -1,6 +1,8 @@
 (require 'magit)
 (require 'advice)
 
+(add-hook 'magit-mode-hook (lambda () (nlinum-mode -1)))
+
 (defadvice magit-show-level-1-all (after my-magit-show-level-1-all)
   (goto-char (point-max))
   (next-line -1)
