@@ -1,12 +1,16 @@
 # -*- mode: sh mode -*-
 alias d='git diff'
+__git_complete d _git_diff
 alias gall='glp --all --no-merges'
 alias gcontains='git branch -a --contains'
 alias gd='git diff'
+__git_complete gd _git_diff
 alias gds='git diff --staged'
 alias gg='git grep --break -n'
 alias gl='git log --date-order --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset"'
+__git_complete gl _git_log
 alias glp='gl -p'
+__git_complete glp _git_log
 alias gp='git pull'
 alias gs='git status'
 alias gss='git show -p'
