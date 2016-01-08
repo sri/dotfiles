@@ -55,7 +55,6 @@
 (global-set-key (kbd "M-d") 'my-dired)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "M-k") 'my-kill-whole-line)
-(global-set-key (kbd "M-m") 'magit-status)
 (global-set-key (kbd "M-n") 'bm-next)
 (global-set-key (kbd "M-o") 'helm-projectile)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -70,6 +69,7 @@
 (global-set-key (kbd "C-c r n") 'my-remove-non-ascii-chars)
 
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
+(global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x l") 'my-count-lines-buffer)
 (global-set-key (kbd "C-x r K") 'my-copy-from-starting-col-till-eol)
 (global-set-key (kbd "C-x s") 'my-start-line-or-region-swap)
