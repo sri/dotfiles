@@ -2,8 +2,6 @@
 . ~/my/dotfiles/bash/git-completion.bash
 . ~/my/dotfiles/bash/git-prompt.sh
 
-. ~/my/dotfiles/bash/aliases
-
 export PATH=~/my/dotfiles/bin:$PATH
 
 if [ "$(uname)" = "Darwin" ]; then
@@ -105,3 +103,8 @@ then
 else
     export PROMPT_COMMAND="__my_prompt_command; $PROMPT_COMMAND"
 fi
+
+. ~/my/dotfiles/bash/aliases
+
+export NVM_DIR="/home/dev/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
