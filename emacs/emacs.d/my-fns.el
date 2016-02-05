@@ -173,8 +173,8 @@ The latter method uses `helm-find-files'."
             (when linenum
               (forward-line linenum)
               (nlinum-mode 1)
-              (recenter))
-        (call-interactively 'helm-find-files))))))
+              (recenter)))
+        (call-interactively 'helm-find-files)))))
 
 (defun my-remove-non-ascii-chars ()
   (interactive)
