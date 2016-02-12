@@ -138,3 +138,8 @@ Fundamental mode."
 (setq eval-expr-print-function 'pp
       eval-expr-print-level nil
       eval-expr-print-length nil)
+
+;; Recent files:
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
