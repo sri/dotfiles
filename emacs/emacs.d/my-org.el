@@ -9,7 +9,7 @@
             ;; 3rd arg T says to modify the buffer-local hook
             (remove-hook 'before-save-hook 'delete-trailing-whitespace t)
             (nlinum-mode -1)
-            (setq cursor-type 'bar)))
+            (setq cursor-type 'hbar)))
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -29,15 +29,19 @@
    ;; (sqlite . t)
    ))
 
+(setq org-startup-indented t)
 (setq org-hide-leading-stars t)
 (setq org-special-ctrl-a/e t)
 (setq org-special-ctrl-k nil)
 (setq org-return-follows-link t)
 (setq org-use-speed-commands t)
-(setq org-hide-leading-stars nil)
 (setq org-fontify-done-headline t)
 (setq org-closed-keep-when-no-todo t)
 (setq org-log-done 'time)
+
+(setq org-todo-keywords
+        '((sequence "☛ TODO" "○ IN-PROGRESS" "⚑ WAITING" "|" "✓ DONE" "✗ CANCELED")))
+
 
 (custom-set-faces
   '(org-done ((t (:strike-through t))))
