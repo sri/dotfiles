@@ -10,6 +10,7 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:height 150))))
  '(bm-face ((t (:background "#eab700" :weight bold :foreground "black"))))
+ '(comint-highlight-prompt ((t nil)))
  '(magit-diff-added ((t (:foreground "green"))))
  '(magit-diff-added-highlight ((t (:foreground "#22aa22"))))
  '(magit-diff-context-highlight ((t nil)))
@@ -20,6 +21,7 @@
  '(magit-diff-removed ((t (:foreground "#aa2222"))))
  '(magit-diff-removed-highlight ((t (:foreground "#aa2222"))))
  '(magit-section-highlight ((t nil)))
+ '(minibuffer-prompt ((t (:foreground "#839496"))))
  '(mode-line ((t (:background "#404045" :foreground "gray60" :inverse-video nil))))
  '(org-done ((t (:strike-through t))))
  '(org-headline-done ((t (:strike-through t))))
