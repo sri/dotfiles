@@ -104,3 +104,7 @@
   (unset-key-in-mode 'org-mode "C-j" "C-," "<S-return>")
 
   )
+
+(when (eq system-type 'darwin)
+  ;; Command-<enter>
+  (global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen))
