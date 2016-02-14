@@ -25,8 +25,10 @@
  '(mode-line ((t (:background "#404045" :foreground "gray60" :inverse-video nil))))
  '(org-done ((t (:strike-through t))))
  '(org-headline-done ((t (:strike-through t))))
- '(org-level-1 ((t (:inherit variable-pitch :foreground "#cb4b16" :height 1.0))))
- '(org-level-2 ((t (:inherit variable-pitch :foreground "#859900" :height 1.0)))))
+ '(org-level-1 ((t (:inherit variable-pitch :foreground "#cb4b16" :underline t :height 1.0))))
+ '(org-level-2 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
+ '(org-level-3 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
+ '(org-level-4 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0)))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
