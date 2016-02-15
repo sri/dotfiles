@@ -1,0 +1,9 @@
+# name: work-hdr
+# key: work-hdr
+# --
+`(format-time-string "%Y-%m-%d (week %U)")` $0
+- Mon
+- Tue
+- Wed
+- Thu
+- Fri
