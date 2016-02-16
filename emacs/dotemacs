@@ -89,6 +89,7 @@ error if SRC is missing."
     smart-mode-line
     solarized-theme
     visual-regexp
+    web-mode
     yasnippet
     ))
 
