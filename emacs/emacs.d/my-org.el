@@ -4,6 +4,9 @@
 
 (setq org-agenda-files '("~/Dropbox/Notes"))
 
+;; Show lists as collapsed
+(setq org-cycle-include-plain-lists 'integrate)
+
 (add-hook 'org-mode-hook
           (lambda ()
             ;; 3rd arg T says to modify the buffer-local hook
