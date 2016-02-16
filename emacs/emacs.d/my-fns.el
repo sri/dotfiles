@@ -238,3 +238,10 @@ will bring it back."
   (let ((file-name (buffer-file-name)))
     (when file-name
       (find-alternate-file (concat "/sudo::" file-name)))))
+
+(defun my-occur ()
+  (interactive)
+  (call-interactively
+   (if (eq major-mode 'org-mode)
+       'org-occur
+     'occur)))

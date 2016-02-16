@@ -30,7 +30,7 @@
 (global-set-key (kbd "C-c g") 'my-git-grep)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
-(global-set-key (kbd "C-c o") 'occur)
+(global-set-key (kbd "C-c o") 'my-occur)
 (global-set-key (kbd "C-c s") 'sort-lines)
 
 (global-set-key (kbd "<M-SPC>") 'my-just-one-space)
