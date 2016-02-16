@@ -4,9 +4,6 @@
 
 (setq org-agenda-files '("~/Dropbox/Notes"))
 
-;; Show lists as collapsed
-(setq org-cycle-include-plain-lists 'integrate)
-
 (add-hook 'org-mode-hook
           (lambda ()
             ;; 3rd arg T says to modify the buffer-local hook
@@ -19,7 +16,7 @@
  'org-babel-load-languages
  '(
    ;; (awk . t)
-   ;; (calc . t)
+   (calc . t)
    ;; (clojure . t)
    (emacs-lisp . t)
    ;; (gnuplot . t)
@@ -32,6 +29,15 @@
    ;; (sql . t)
    ;; (sqlite . t)
    ))
+
+;; Show lists as collapsed
+(setq org-cycle-include-plain-lists 'integrate)
+
+;; M-RET while in the middle of a header will now create a new header
+;; (at the same level) below the current one. Old behavior: split the
+;; line and start the next header with the fragment after point of
+;; this line.
+(push '(headline) org-M-RET-may-split-line)
 
 (setq org-startup-indented t)
 (setq org-hide-leading-stars t)
