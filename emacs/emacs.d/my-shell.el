@@ -69,6 +69,7 @@ Also, creates a shell when there are no other shells."
             (setq comint-scroll-to-bottom-on-input nil)
             (setq comint-scroll-show-maximum-output nil)
             (toggle-truncate-lines 1)
+            (local-unset-key (kbd "C-d"))
             (define-key shell-mode-map (kbd "C-<up>")
               'comint-previous-prompt)
             (define-key shell-mode-map (kbd "C-<down>")
