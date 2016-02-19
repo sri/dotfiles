@@ -2,6 +2,13 @@
 
 (set-register ?t '(file . "~/Dropbox/Notes/todo.org"))
 
+;; Fix inserting a new plain list item:
+;; don't insert a newline before the new plain list item. This only
+;; occurs when I'm on the last plain list item and hit
+;; Alt-Shift-Enter.
+(setq org-blank-before-new-entry
+      (assq-delete-all 'plain-list-item org-blank-before-new-entry))
+
 (setq org-agenda-files '("~/Dropbox/Notes"))
 
 (add-hook 'org-mode-hook
