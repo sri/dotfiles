@@ -3,7 +3,7 @@
 (defun my-load-all ()
   (interactive)
   (let ((default-directory "~/my/dotfiles/emacs/emacs.d")
-	(my-files
+        (my-files
          (list "my-fns"
                "my-env"
                "my-keys"
@@ -34,3 +34,4 @@
     (my-load my-private 'ignore-if-missing)))
 
 (my-load-all)
+(recentf-open-files)
