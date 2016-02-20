@@ -58,7 +58,9 @@
 (setq org-log-done 'time)
 
 (setq org-todo-keywords
-        '((sequence "☛ TODO" "✩ IN-PROGRESS" "⚑ WAITING" "|" "✓ DONE" "✗ CANCELED")))
+      '((sequence "☛ TODO" "✩ IN-PROGRESS" "⚑ WAITING"
+                  "|"
+                  "✓ DONE" "✗ CANCELED")))
 
 
 (custom-set-faces
