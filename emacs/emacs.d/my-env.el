@@ -20,20 +20,22 @@ Fundamental mode."
   (dolist (reg registers)
     (set-register (car reg) (cons 'file (cdr reg)))))
 
+(require 'whitespace)
+;; For some reason tabs don't work, but tab-mark does...
+(setq whitespace-style
+      '(face tabs trailing lines-tail space-before-tab newline indentation empty space-after-tab tab-mark))
+(setq whitespace-line-column 78)
 
-(defun my-show-trailing-whitespace ()
-  (setq show-trailing-whitespace t))
-
-(let ((trailing-whitespace-mode-hooks
-       '(ruby-mode-hook python-mode-hook
-                        c-mode-hook
-                        c++-mode-hook
-                        js-mode-hook
-                        java-mode-hook
-                        diff-mode-hook
-                        emacs-lisp-mode-hook)))
-  (dolist (hook trailing-whitespace-mode-hooks)
-    (add-hook hook 'my-show-trailing-whitespace)))
+(mapc (lambda (hook)
+        (add-hook hook (lambda () (whitespace-mode 1))))
+      '(ruby-mode-hook
+        python-mode-hook
+        c-mode-hook
+        c++-mode-hook
+        js-mode-hook
+        java-mode-hook
+        diff-mode-hook
+        emacs-lisp-mode-hook))
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
