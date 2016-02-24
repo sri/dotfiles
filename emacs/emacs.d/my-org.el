@@ -62,11 +62,6 @@
                   "|"
                   "✓ DONE" "✗ CANCELED")))
 
-
-(custom-set-faces
-  '(org-done ((t (:strike-through t))))
-  '(org-headline-done ((t (:strike-through t)))))
-
 (defun my-org-insert-chrome-link ()
   (interactive)
   (let ((subject (do-applescript "tell application \"Google Chrome\"

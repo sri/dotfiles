@@ -22,6 +22,19 @@
  '(magit-section-highlight ((t nil)))
  '(minibuffer-prompt ((t (:foreground "#839496"))))
  '(mode-line ((t (:background "#404045" :foreground "gray60" :inverse-video nil))))
+ '(org-todo-keyword-faces
+(quote
+ (("☛ TODO" :foreground "medium blue" :weight bold)
+  ("✩ IN-PROGRESS" :foreground "medium blue" :weight bold)
+  ("⚑ WAITING" :foreground "medium blue" :weight bold)
+  ("APPT" :foreground "medium blue" :weight bold)
+  ("NOTE" :foreground "brown" :weight bold)
+  ("STARTED" :foreground "dark orange" :weight bold)
+  ("WAITING" :foreground "red" :weight bold)
+  ("DELEGATED" :foreground "dark violet" :weight bold)
+  ("DEFERRED" :foreground "dark blue" :weight bold)
+  ("SOMEDAY" :foreground "dark blue" :weight bold)
+  ("PROJECT" :foreground "#088e8e" :weight bold))))
  '(org-done ((t (:strike-through t))))
  '(org-headline-done ((t (:strike-through t))))
  '(org-level-1 ((t (:inherit variable-pitch :foreground "#cb4b16" :height 1.0))))
@@ -29,10 +42,6 @@
  '(org-level-3 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-level-4 ((t (:inherit variable-pitch :foreground "#839496" :height 1.1))))
  '(whitespace-line ((t (:underline t)))))
-
-(when window-system
-  (custom-theme-set-faces 'user
-                          '(default ((t (:inherit nil :stipple nil :background "#002b36" :foreground "#839496" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "Monaco"))))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
