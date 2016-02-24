@@ -28,7 +28,7 @@
  '(org-level-2 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-level-3 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-level-4 ((t (:inherit variable-pitch :foreground "#839496" :height 1.1))))
- '(whitespace-line ((t (:foreground "#dc322f")))))
+ '(whitespace-line ((t (:underline t)))))
 
 (when window-system
   (custom-theme-set-faces 'user
