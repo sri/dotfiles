@@ -171,8 +171,8 @@ The latter method uses `helm-find-files'."
                                         (match-end 1)))))))
             (find-file file-at-point)
             (when linenum
-              (forward-line linenum)
-              (nlinum-mode 1)
+              (goto-line linenum)
+              (linum-mode 1)
               (recenter)))
         (call-interactively 'helm-find-files)))))
 
