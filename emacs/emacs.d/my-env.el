@@ -35,6 +35,7 @@ Fundamental mode."
         js-mode-hook
         java-mode-hook
         diff-mode-hook
+        web-mode-hook
         emacs-lisp-mode-hook))
 
 (require 'uniquify)
