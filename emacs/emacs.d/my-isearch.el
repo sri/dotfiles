@@ -17,6 +17,7 @@
   (if (let (use-empty-active-region)
         (use-region-p))
       (my-isearch-search-for-selected)
+    (setq last-command 'isearch-forward)
     (call-interactively 'isearch-forward)))
 
 (defun my-isearch-delete-region ()
