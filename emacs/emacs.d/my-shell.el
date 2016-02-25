@@ -62,7 +62,7 @@ Also, creates a shell when there are no other shells."
             (my-shell-update-last-active-time)
             (add-hook 'comint-input-filter-functions
                       'my-shell-update-last-active-time)
-            (nlinum-mode -1)
+            (linum-mode -1)
             (setq line-number-mode nil
                   column-number-mode nil)
             (setq comint-input-ignoredups t)

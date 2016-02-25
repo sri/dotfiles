@@ -97,7 +97,7 @@ Fundamental mode."
 (setq ido-default-buffer-method 'selected-window)
 (setq ido-create-new-buffer 'always)
 
-(global-nlinum-mode 1)
+(global-linum-mode 1)
 
 (setq diff-switches '("-u"))
 

@@ -17,7 +17,7 @@
             (remove-hook 'before-save-hook 'delete-trailing-whitespace t)
             (turn-on-auto-fill)
             (org-bullets-mode 1)
-            (nlinum-mode -1)
+            (linum-mode -1)
             (setq cursor-type 'hbar)))
 
 (org-babel-do-load-languages

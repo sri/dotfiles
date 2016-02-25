@@ -42,7 +42,7 @@
 
 (add-hook 'dired-mode-hook
           (lambda ()
-            (nlinum-mode -1)
+            (linum-mode -1)
             (dired-omit-mode 1)
             (dired-hide-details-mode 1)
             (define-key dired-mode-map (kbd "D") 'dired-hide-details-mode)

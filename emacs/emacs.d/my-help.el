@@ -14,4 +14,4 @@
 
 (add-hook 'help-mode-hook
           (lambda ()
-            (nlinum-mode -1)))
+            (linum-mode -1)))
