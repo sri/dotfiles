@@ -40,6 +40,13 @@
 
 (setq-default dired-listing-switches "-alh")
 
+;; From jwiegley's dotfiles:
+(defun my-recentf-add-dired-directory ()
+  (when (and dired-directory
+             (file-directory-p dired-directory)
+             (not (string= dired-directory "/")))
+    (recentf-add-file dired-directory)))
+
 (add-hook 'dired-mode-hook
           (lambda ()
             (linum-mode -1)
@@ -48,6 +55,7 @@
             (define-key dired-mode-map (kbd "D") 'dired-hide-details-mode)
             (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)
+            (my-recentf-add-dired-directory)
             (define-key dired-mode-map (kbd ",") 'dired-prev-dirline)
             (define-key dired-mode-map (kbd ".") 'dired-next-dirline)
             (define-key dired-mode-map [mouse-2] 'dired-find-file)
