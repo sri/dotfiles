@@ -99,6 +99,17 @@ Fundamental mode."
 (setq ido-create-new-buffer 'always)
 
 (global-linum-mode 1)
+(setq linum-format
+      (if window-system
+          'dynamic
+        ;; Just like the existing dynamic formatting
+        ;; but add a space at the end of the number.
+        (lambda (line)
+          (let* ((nlines (count-lines (point-min) (point-max)))
+                 (width (length (number-to-string nlines)))
+                 (fmt (concat "%" (number-to-string width) "d ")))
+             (propertize (format fmt line) 'face 'linum)))))
+
 
 (setq diff-switches '("-u"))
 
