@@ -203,19 +203,22 @@ will bring it back."
     (let ((lines '())
           (line nil)
           (max 0)
+          (done nil)
           (start-column nil))
       (save-excursion
         (goto-char start)
         (setq start-column (current-column))
         ;; Don't include the last line unless the
         ;; cursor is at the end of the line.
-        (while (<= (point-at-eol) end)
+        (while (and (not done)
+                    (<= (point-at-eol) end))
           (if (< (current-column) start-column)
               (push "" lines)
             (setq line (buffer-substring (point) (point-at-eol)))
             (setq max (max (length line) max))
             (push line lines))
           (forward-line 1)
+          (when (eobp) (setq done t))
           (move-to-column start-column))
         (setq lines (nreverse lines))
         (setq killed-rectangle
