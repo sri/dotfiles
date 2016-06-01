@@ -47,7 +47,7 @@
 ;; this line.
 (push '(headline) org-M-RET-may-split-line)
 
-(setq org-startup-indented t)
+(setq org-startup-indented nil)
 (setq org-hide-leading-stars t)
 (setq org-special-ctrl-a/e t)
 (setq org-special-ctrl-k nil)
@@ -58,9 +58,9 @@
 (setq org-log-done 'time)
 
 (setq org-todo-keywords
-      '((sequence "☛ TODO" "✩ IN-PROGRESS" "⚑ WAITING"
+      '((sequence "TODO" "IN-PROGRESS" "WAITING"
                   "|"
-                  "✓ DONE" "✗ CANCELED")))
+                  "DONE" "CANCELED")))
 
 (defun my-org-insert-chrome-link ()
   (interactive)
