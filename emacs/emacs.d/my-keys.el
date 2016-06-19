@@ -71,6 +71,11 @@
 (global-set-key (kbd "C-x v -") 'my-unsaved-changes)
 (global-set-key (kbd "C-x C-v") 'my-find-file-as-sudo)
 
+(global-set-key (kbd "C-x <up>") 'windmove-up)
+(global-set-key (kbd "C-x <down>") 'windmove-down)
+(global-set-key (kbd "C-x <left>") 'windmove-left)
+(global-set-key (kbd "C-x <right>") 'windmove-right)
+
 ;; Add keys that should always be present in all modes. Some modes
 ;; override these keys (for example, Magit overrides M-0 to show/hide
 ;; parts of the buffer contents). We can't have all keys use this
