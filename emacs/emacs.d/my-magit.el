@@ -1,6 +1,9 @@
 (require 'magit)
 
 (setq magit-save-repository-buffers 'dontask)
+(setq magit-diff-refine-hunk 'all)
+
+(set-face-attribute 'magit-diff-added-highlight nil :foreground "#22aa22")
 
 (add-hook 'magit-mode-hook
           (lambda ()
