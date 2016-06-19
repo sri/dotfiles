@@ -2,7 +2,8 @@
 . ~/my/dotfiles/bash/git-completion.bash
 . ~/my/dotfiles/bash/git-prompt.sh
 
-export PATH=~/my/dotfiles/bin:$PATH
+export PATH=~/my/dotfiles/bin:~/go/bin:$PATH
+export GOPATH=~/go
 
 if [ "$(uname)" = "Darwin" ]; then
   export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
