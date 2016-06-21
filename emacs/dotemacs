@@ -10,6 +10,8 @@
  ;; If there is more than one, they won't work right.
  '(bm-face ((t (:background "#eab700" :weight bold :foreground "black"))))
  '(comint-highlight-prompt ((t nil)))
+ '(diff-refine-added ((t (:background "green" :foreground "black"))))
+ '(diff-refine-removed ((t (:background "red" :foreground "black"))))
  '(magit-diff-added ((t (:foreground "green"))))
  '(magit-diff-added-highlight ((t (:foreground "#22aa22"))))
  '(magit-diff-context-highlight ((t nil)))
@@ -77,20 +79,20 @@ error if SRC is missing."
 
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
 (defvar my-packages
   '(
     autopair
     bm
-    browse-kill-ring
     coffee-mode
     elisp-slime-nav
     flycheck
     go-mode
     helm
-    helm-projectile
+    helm-ls-git
+    ;; helm-projectile
     macrostep
     magit
     org
