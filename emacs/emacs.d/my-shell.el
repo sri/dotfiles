@@ -1,5 +1,9 @@
 (setenv "PAGER" "cat")
 
+;; Disable "Pinging 4.to (Tonga)..." message
+;; when you TAB complete
+(setq ffap-machine-p-known nil)
+
 (defun my-shell-forward-char-or-previous-history (&optional arg)
   (interactive "p")
   (if (eobp)
