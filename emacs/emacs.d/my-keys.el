@@ -29,9 +29,11 @@
 (global-set-key (kbd "C-c g") 'helm-grep-do-git-grep)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
-(global-set-key (kbd "C-c o") 'my-occur)
+(global-set-key (kbd "C-c o") 'helm-occur)
 (global-set-key (kbd "C-c s") 'sort-lines)
 (global-set-key (kbd "C-c v") 'helm-ls-git-ls)
+
+(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
 
 (global-set-key (kbd "<M-SPC>") 'my-just-one-space)
 (global-set-key (kbd "<M-return>") 'my-dired)
