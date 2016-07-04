@@ -30,7 +30,6 @@
  '(org-level-2 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-level-3 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-level-4 ((t (:inherit variable-pitch :foreground "#839496" :height 1.1))))
- '(org-todo-keyword-faces (quote (("☛ TODO" :foreground "medium blue" :weight bold) ("✩ IN-PROGRESS" :foreground "medium blue" :weight bold) ("⚑ WAITING" :foreground "medium blue" :weight bold) ("APPT" :foreground "medium blue" :weight bold) ("NOTE" :foreground "brown" :weight bold) ("STARTED" :foreground "dark orange" :weight bold) ("WAITING" :foreground "red" :weight bold) ("DELEGATED" :foreground "dark violet" :weight bold) ("DEFERRED" :foreground "dark blue" :weight bold) ("SOMEDAY" :foreground "dark blue" :weight bold) ("PROJECT" :foreground "#088e8e" :weight bold))))
  '(whitespace-line ((t (:underline t)))))
 
 (custom-set-variables
