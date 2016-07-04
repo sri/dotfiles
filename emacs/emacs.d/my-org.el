@@ -71,3 +71,32 @@
                               URL of active tab of front window
                               end tell")))
     (insert (org-make-link-string url subject))))
+
+(defun my-org-insert-week-template ()
+  "Insert org headline template for the week.
+
+Example:
+
+** 2016-07-04 (week 27)
+*** <2016-07-04 Mon - day 186>
+*** <2016-07-05 Tue - day 187>
+*** <2016-07-06 Wed - day 188>
+*** <2016-07-07 Thu - day 189>
+*** <2016-07-08 Fri - day 190>
+*** <2016-07-09 Sat - day 191>
+*** <2016-07-10 Sun - day 192>"
+
+  (interactive)
+  (let ((week-start (current-time))
+        (oneday (seconds-to-time 86400)))
+    (loop
+      (if (string= (format-time-string "%w" week-start) "1")
+          (return)
+        (setq week-start (time-subtract week-start oneday))))
+    (save-excursion
+      (insert "** " (format-time-string "%Y-%m-%d (week %U)" week-start) "\n")
+      (dotimes (i 7)
+        (insert "*** "
+                (format-time-string "<%Y-%m-%d %a - day %j>" week-start)
+                "\n")
+        (setq week-start (time-add week-start oneday))))))
