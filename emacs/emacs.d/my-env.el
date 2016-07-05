@@ -71,7 +71,11 @@ Fundamental mode."
 
 (setq Man-width 80)
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(defun my-delete-trailing-whitespace ()
+  (unless (memq major-mode '(org-mode))
+    (delete-trailing-whitespace)))
+
+(add-hook 'before-save-hook 'my-delete-trailing-whitespace)
 
 (setq eval-expression-print-length nil)
 (setq eval-expression-print-level nil)
