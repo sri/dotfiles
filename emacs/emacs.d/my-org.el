@@ -100,3 +100,11 @@ Example:
                 (format-time-string "<%Y-%m-%d %a - day %j>" week-start)
                 "\n")
         (setq week-start (time-add week-start oneday))))))
+
+
+;; Links:
+(org-add-link-type "gitsha" 'my-org-show-git-sha)
+
+(require 'magit)
+(defun my-org-show-git-sha (sha)
+  (magit-show-commit sha))
