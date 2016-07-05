@@ -93,13 +93,13 @@ Example:
       (if (string= (format-time-string "%w" week-start) "1")
           (return)
         (setq week-start (time-subtract week-start oneday))))
+    (let ((week-hdr "%Y-%m-%d (week %U)")
+          (day-hdr "<%Y-%m-%d %a - day %j>"))
     (save-excursion
-      (insert "** " (format-time-string "%Y-%m-%d (week %U)" week-start) "\n")
+      (insert "** " (format-time-string week-hdr week-start) "\n")
       (dotimes (i 7)
-        (insert "*** "
-                (format-time-string "<%Y-%m-%d %a - day %j>" week-start)
-                "\n")
-        (setq week-start (time-add week-start oneday))))))
+        (insert "*** " (format-time-string day-hdr week-start) "\n")
+        (setq week-start (time-add week-start oneday)))))))
 
 
 ;; Links:
