@@ -1,4 +1,7 @@
 (require 'org)
+(require 'org-bullets)
+
+(setq org-bullets-bullet-list '("◉" "○" "✸"))
 
 (set-register ?t '(file . "~/Dropbox/Notes/todo.org"))
 
