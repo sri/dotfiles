@@ -50,7 +50,7 @@
 ;; this line.
 (push '(headline) org-M-RET-may-split-line)
 
-(setq org-startup-indented nil)
+(setq org-startup-indented t)
 (setq org-hide-leading-stars t)
 (setq org-special-ctrl-a/e t)
 (setq org-special-ctrl-k nil)
@@ -125,6 +125,10 @@ Example:
 ;; for an example of how this is done in Org mode.
 ;; Another way to achieve this is with `goto-address-mode'.
 
+(defface my-org-dynamic-link-face
+  '((t :foreground "#268bd2" :box 1 :weight bold :inherit unspecified))
+  "Face for Org dynamic links.")
+
 (defvar my-org-dynamic-links-matcher
   '()
   "Matcher for dynamic links.
@@ -165,7 +169,7 @@ word. If that isn't present, then the URL-PREFIX is visited.")
             (org-remove-flyspell-overlays-in (match-beginning 0) (match-end 0))
             (add-text-properties (match-beginning 0) (match-end 0)
                                  (list 'mouse-face 'highlight
-                                       'face 'org-link
+                                       'face 'my-org-dynamic-link-face
                                        'htmlize-link `(:uri ,link)
                                        'keymap org-mouse-map))
             (org-rear-nonsticky-at (match-end 0))
@@ -176,7 +180,7 @@ word. If that isn't present, then the URL-PREFIX is visited.")
 (add-hook 'org-font-lock-set-keywords-hook
           (lambda ()
             (nconc org-font-lock-extra-keywords
-                   (list '(my-org-activate-dynamic-links (0 'org-link t))))))
+                   (list '(my-org-activate-dynamic-links (0 'my-org-dynamic-link-face t))))))
 
 ;; Open the link when it clicked on.
 (add-hook 'org-open-at-point-functions
