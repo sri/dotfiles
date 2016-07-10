@@ -182,7 +182,7 @@ word. If that isn't present, then the URL-PREFIX is visited.")
             (nconc org-font-lock-extra-keywords
                    (list '(my-org-activate-dynamic-links (0 'my-org-dynamic-link-face t))))))
 
-;; Open the link when it clicked on.
+;; Open the link when it is clicked on.
 (add-hook 'org-open-at-point-functions
           (lambda ()
             (let ((link (get-text-property (point) 'htmlize-link)))
