@@ -15,6 +15,7 @@
                "my-isearch"
                "my-help"
                "my-dired"
+               "my-update-dot-emacs"
                ))
         (my-non-packages
          ;; Files that aren't on MELPA or any other
