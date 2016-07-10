@@ -16,8 +16,6 @@
 
 (add-hook 'org-mode-hook
           (lambda ()
-            ;; 3rd arg T says to modify the buffer-local hook
-            (remove-hook 'before-save-hook 'delete-trailing-whitespace t)
             (turn-on-auto-fill)
             (org-bullets-mode 1)
             (linum-mode -1)
