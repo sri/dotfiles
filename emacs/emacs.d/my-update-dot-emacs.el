@@ -56,26 +56,19 @@
                   (format "         master: %s" master)
                   (format "  origin/master: %s" origin/master))
 
-          (cond ((string= master origin/master)
-                 (pop-to-buffer (current-buffer) nil t)
-                 (insert "Your .emacs dotfiles are up-to-date.\n")
-                 (insert-button "Quit"
-                                'action
-                                (lambda (button)
-                                  (delete-window))))
-                (t
-                 (let* ((diff (shell-command-to-string "git diff"))
-                        (stash-first (> (length diff) 0)))
-                   (if stash-first
-                       (insert "Local changes:\n" diff)
-                     (insert "No local changes"))
-                   (insert "\n\n")
-                   (insert-button (if stash-first
-                                      "Git Stash and Update Dot Emacs"
-                                    "Update Dot Emacs (no local changes)")
-                                  'action #'do-update
-                                  'stash-first stash-first)
-                   (show-maximum-output))))
-          (beginning-of-line))))))
+          (unless (string= master origin/master)
+            (let* ((diff (shell-command-to-string "git diff"))
+                   (stash-first (> (length diff) 0)))
+              (if stash-first
+                  (insert "Local changes:\n" diff)
+                (insert "No local changes"))
+              (insert "\n\n")
+              (insert-button (if stash-first
+                                 "Git Stash and Update Dot Emacs"
+                               "Update Dot Emacs (no local changes)")
+                             'action #'do-update
+                             'stash-first stash-first)
+              (show-maximum-output)
+              (beginning-of-line))))))))
 
 (run-with-idle-timer 10 nil #'my-update-dot-emacs)
