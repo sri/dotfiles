@@ -70,6 +70,7 @@ error if SRC is missing."
   '(
     autopair
     bm
+    button-lock
     coffee-mode
     elisp-slime-nav
     flycheck
