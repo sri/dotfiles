@@ -73,7 +73,8 @@
                               end tell")))
     (insert (org-make-link-string url subject))))
 
-(defun my-org-insert-week-template ()
+;;;
+(defun my-org-insert-week-template (&optional arg)
   "Insert org headline template for the week.
 
 Example:
@@ -87,21 +88,78 @@ Example:
 *** <2016-07-09 Sat - day 191>
 *** <2016-07-10 Sun - day 192>"
 
-  (interactive)
-  (let ((week-start (current-time))
-        (oneday (seconds-to-time 86400)))
-    (loop
-      (if (string= (format-time-string "%w" week-start) "1")
-          (return)
-        (setq week-start (time-subtract week-start oneday))))
-    (let ((week-hdr "%Y-%m-%d (week %U)")
-          (day-hdr "<%Y-%m-%d %a - day %j>"))
-    (save-excursion
-      (insert "** " (format-time-string week-hdr week-start) "\n")
-      (dotimes (i 7)
-        (insert "*** " (format-time-string day-hdr week-start) "\n")
-        (setq week-start (time-add week-start oneday)))))))
+  (interactive "P")
+  (lexical-let ((current nil)
+                (oneday (seconds-to-time 86400)))
 
+    (labels ((find-week-start-or-end (spec cur)
+               (let ((stop (if (eq spec 'start) "1" "7"))
+                     (fn (if (eq spec 'start) 'time-subtract 'time-add)))
+                 (loop (if (string= (format-time-string "%u" cur) stop)
+                           (return cur)
+                         (setq cur (funcall fn cur oneday))))))
+
+             (current-week ()
+               (let* ((day "%a %b %d, %Y")
+                      (week (format-time-string "%U" current))
+                      (start (format-time-string day current))
+                      (end (format-time-string day
+                                               (find-week-start-or-end 'end current))))
+                 (format "Week %s (%s - %s)" week start end)))
+
+             (display-current-in-minibuffer ()
+               (delete-region (point-at-bol) (point-at-eol))
+               (insert (current-week)))
+
+             (prev-week ()
+               (interactive)
+               (when (minibufferp)
+                 (let ((start-of-current-week
+                        (find-week-start-or-end 'start current)))
+                   (setq current
+                         (find-week-start-or-end 'start
+                                                 (time-subtract start-of-current-week
+                                                                oneday)))
+                   (display-current-in-minibuffer))))
+
+             (next-week ()
+               (interactive)
+               (when (minibufferp)
+                 (let ((end-of-current-week
+                        (find-week-start-or-end 'end current)))
+                   (setq current (time-add end-of-current-week oneday))
+                   (display-current-in-minibuffer)))))
+
+      (setq current (find-week-start-or-end 'start (current-time)))
+
+      (let* ((minibuf-map (let ((map (make-sparse-keymap)))
+                            (define-key map (kbd "<left>")
+                              (lambda ()
+                                (interactive)
+                                (prev-week)))
+                            (define-key map (kbd "<right>")
+                              (lambda ()
+                                (interactive)
+                                (next-week)))
+                            (define-key map (kbd "<return>") 'exit-minibuffer)
+                            (define-key map (kbd "C-g") 'exit-minibuffer)
+                            map))
+             (week-start (cond (arg
+                                (read-from-minibuffer "Insert week: "
+                                                      (current-week)
+                                                      minibuf-map)
+                                current)
+                               (t
+                                (find-week-start-or-end 'start
+                                                        (current-time)))))
+             (week-header "%Y-%m-%d (week %U)")
+             (day-header "<%Y-%m-%d %a - day %j>"))
+
+        (save-excursion
+          (insert "** " (format-time-string week-header week-start) "\n")
+          (dotimes (i 7)
+            (insert "*** " (format-time-string day-header week-start) "\n")
+            (setq week-start (time-add week-start oneday))))))))
 
 ;; Links:
 (org-add-link-type "gitsha" 'my-org-show-git-sha)
