@@ -144,14 +144,11 @@ Example:
                             (define-key map (kbd "<return>") 'exit-minibuffer)
                             (define-key map (kbd "C-g") 'exit-minibuffer)
                             map))
-             (week-start (cond (arg
-                                (read-from-minibuffer "Insert week: "
-                                                      (current-week)
-                                                      minibuf-map)
-                                current)
-                               (t
-                                (find-week-start-or-end 'start
-                                                        (current-time)))))
+             (week-start (if (not arg)
+                             (find-week-start-or-end 'start (current-time))
+                           (read-from-minibuffer "Insert week: "
+                                                 (current-week) minibuf-map)
+                           current))
              (week-header "%Y-%m-%d (week %U)")
              (day-header "<%Y-%m-%d %a - day %j>"))
 
