@@ -100,11 +100,12 @@ Example:
                          (setq cur (funcall fn cur oneday))))))
 
              (current-week ()
-               (let* ((day "%a %b %d, %Y")
+               (let* ((week-end (find-week-start-or-end 'end current))
+                      ;; Tue Jul 19, 2016
+                      (day (format-time-string "%a %b %d, %Y"))
                       (week (format-time-string "%U" current))
                       (start (format-time-string day current))
-                      (end (format-time-string day
-                                               (find-week-start-or-end 'end current))))
+                      (end (format-time-string day week-end)))
                  (format "Week %s (%s - %s)" week start end)))
 
              (display-current-in-minibuffer ()
@@ -114,20 +115,16 @@ Example:
              (prev-week ()
                (interactive)
                (when (minibufferp)
-                 (let ((start-of-current-week
-                        (find-week-start-or-end 'start current)))
-                   (setq current
-                         (find-week-start-or-end 'start
-                                                 (time-subtract start-of-current-week
-                                                                oneday)))
+                 (let ((week-start (find-week-start-or-end 'start current)))
+                   (setq week-start (time-subtract week-start oneday))
+                   (setq current (find-week-start-or-end 'start week-start))
                    (display-current-in-minibuffer))))
 
              (next-week ()
                (interactive)
                (when (minibufferp)
-                 (let ((end-of-current-week
-                        (find-week-start-or-end 'end current)))
-                   (setq current (time-add end-of-current-week oneday))
+                 (let ((week-end (find-week-start-or-end 'end current)))
+                   (setq current (time-add week-end oneday))
                    (display-current-in-minibuffer)))))
 
       (setq current (find-week-start-or-end 'start (current-time)))
