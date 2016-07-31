@@ -102,7 +102,7 @@ Example:
              (current-week ()
                (let* ((week-end (find-week-start-or-end 'end current))
                       ;; Tue Jul 19, 2016
-                      (day (format-time-string "%a %b %d, %Y"))
+                      (day "%a %b %d, %Y")
                       (week (format-time-string "%U" current))
                       (start (format-time-string day current))
                       (end (format-time-string day week-end)))
