@@ -248,3 +248,11 @@ will bring it back."
    (if (eq major-mode 'org-mode)
        'org-occur
      'occur)))
+
+(defun my-pp-json ()
+  (interactive)
+  (shell-command-on-region (point-min)
+                           (point-max)
+                           "python -mjson.tool"
+                           (current-buffer)
+                           t))
