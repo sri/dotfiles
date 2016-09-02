@@ -26,7 +26,7 @@
     (add-to-list 'default-frame-alist (cons 'width 80))
     (add-to-list 'default-frame-alist (cons 'top top))
     (add-to-list 'default-frame-alist (cons 'left left))
-    (add-to-list 'default-frame-alist '(font . "Monaco 14")))
+    (add-to-list 'default-frame-alist '(font . "Monaco 18")))
 
   (set-frame-parameter nil 'alpha '(100 100))
 
