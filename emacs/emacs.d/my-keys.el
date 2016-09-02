@@ -28,6 +28,7 @@
 (global-set-key (kbd "C-c f") 'recentf-open-files)
 (global-set-key (kbd "C-c g") 'helm-grep-do-git-grep)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
+(global-set-key (kbd "C-c j") 'ace-jump-mode)
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
 (global-set-key (kbd "C-c m") 'imenu)
 (global-set-key (kbd "C-c o") 'my-occur)
