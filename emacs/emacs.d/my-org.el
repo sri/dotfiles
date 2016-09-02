@@ -1,7 +1,7 @@
 (require 'org)
 (require 'org-bullets)
 
-(setq org-bullets-bullet-list '("◉" "○" "✸"))
+(setq org-bullets-bullet-list '("◉" "○"))
 
 (set-register ?t '(file . "~/Dropbox/Notes/todo.org"))
 
@@ -185,4 +185,4 @@ Example:
                        (format url-template matched-string)
                      url-template)))
          (browse-url url)))
-     :face 'my-org-ticket-face)))
+     :face 'link)))
