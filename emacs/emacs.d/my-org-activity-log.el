@@ -5,7 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Activity Log -- Date Functions
 
-(defvar my-activity-log-oneday (seconds-to-time 86400))
+(defvar my-activity-log-oneday (days-to-time 1))
 
 (defun my-activity-log-week-range (&optional time)
   (let ((week-start-day 1)) ; Monday
@@ -89,14 +89,14 @@
         (setq start (time-add start my-activity-log-oneday))))))
 
 (defun my-activity-log-insert-template (&optional arg)
-  "Inserts activity log template for the week.
+  "Inserts an activity log template for a week.
+
+Without a prefix arg, appends to the current buffer, either for
+the current date or the week after the latest template present in
+the current buffer.
 
 With a prefix arg, inserts for a user selected range of weeks at
 the current point.
-
-Without the prefix arg, appends to the current buffer, either for
-the current date or the week after the latest template present in
-the current buffer.
 
 Example template:
 
