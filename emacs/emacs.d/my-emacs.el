@@ -15,6 +15,7 @@
                "my-isearch"
                "my-help"
                "my-dired"
+               "my-org-activity-log"
                "my-update-dot-emacs"
                ))
         (my-non-packages
