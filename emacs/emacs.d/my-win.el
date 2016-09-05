@@ -1,4 +1,9 @@
-(when window-system
+(if window-system
+    ;; Terminal
+    (progn
+      (load-theme 'tango-dark))
+
+  ;; GUI
   (load-theme 'solarized-dark t)
   (custom-theme-set-faces
    'solarized-dark

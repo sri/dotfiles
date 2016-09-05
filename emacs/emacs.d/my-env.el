@@ -162,6 +162,3 @@ Fundamental mode."
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 100)
-
-(unless window-system
-  (load-theme 'tango-dark))
