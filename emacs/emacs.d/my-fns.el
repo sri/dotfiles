@@ -142,15 +142,13 @@ decoded URL in the minibuffer."
 (defun my-beginning-of-line ()
   "Move to the beginning of line or beginning of non-whitespace chars."
   (interactive "^")
-  (if (= (current-column) 0)
-      (back-to-indentation)
-    (let ((point (point))
-          (indentation-start (save-excursion
-                               (back-to-indentation)
-                               (point))))
-      (goto-char (if (<= point indentation-start)
-                     (point-at-bol)
-                   indentation-start)))))
+  (let ((indentation-start (save-excursion
+                             (back-to-indentation)
+                             (point))))
+    (if (or (= (current-column) 0)
+            (> (point) indentation-start))
+        (goto-char indentation-start)
+      (beginning-of-line))))
 
 (require 'ffap)
 
