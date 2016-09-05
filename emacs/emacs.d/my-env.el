@@ -35,8 +35,7 @@ Fundamental mode."
         js-mode-hook
         java-mode-hook
         diff-mode-hook
-        web-mode-hook
-        emacs-lisp-mode-hook))
+        web-mode-hook))
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
