@@ -7,7 +7,6 @@
          (list "my-fns"
                "my-env"
                "my-keys"
-               "my-win"
                "my-view"
                "my-sublime"
                "my-shell"
@@ -23,6 +22,8 @@
          ;; package archive.
          (directory-files "~/.emacs.d/third-party" 'full "\\.el$" t))
         (my-private "~/.emacs.private.el"))
+
+    (my-load (if window-system "my-gui" "my-terminal"))
 
     (mapc 'my-load my-non-packages)
     ;; Load all my files: main reason to load this
