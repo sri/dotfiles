@@ -67,6 +67,7 @@ Fundamental mode."
 (setq help-char ??)
 (setq scroll-error-top-bottom t)
 (setq js-indent-level 2)
+(global-eldoc-mode -1)
 
 (setq Man-width 80)
 
@@ -129,12 +130,12 @@ Fundamental mode."
 
 (setq hippie-expand-try-functions-list
       '(
-        yas-hippie-try-expand
-        try-complete-file-name-partially
-        try-complete-file-name
         try-expand-dabbrev
         try-expand-dabbrev-all-buffers
         try-expand-dabbrev-from-kill
+        yas-hippie-try-expand
+        try-complete-file-name-partially
+        try-complete-file-name
         try-complete-lisp-symbol-partially
         try-complete-lisp-symbol))
 
