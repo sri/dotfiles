@@ -78,7 +78,6 @@ error if SOURCE is missing."
     ace-jump-mode
     autopair
     bm
-    button-lock
     coffee-mode
     elisp-slime-nav
     flycheck
