@@ -245,7 +245,7 @@ will bring it back."
   (interactive)
   (call-interactively
    (if (eq major-mode 'org-mode)
-       'org-occur
+       'org-sparse-tree
      'occur)))
 
 (defun my-pp-json ()
