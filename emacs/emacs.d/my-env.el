@@ -127,13 +127,12 @@ Fundamental mode."
 
 
 (require 'hippie-exp)
-
 (setq hippie-expand-try-functions-list
       '(
+        yas-hippie-try-expand
         try-expand-dabbrev
         try-expand-dabbrev-all-buffers
         try-expand-dabbrev-from-kill
-        yas-hippie-try-expand
         try-complete-file-name-partially
         try-complete-file-name
         try-complete-lisp-symbol-partially
