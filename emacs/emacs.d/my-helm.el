@@ -8,7 +8,9 @@
 (setq helm-buffers-fuzzy-matching t)
 
 (require 'helm-ls-git)
+
 (setq helm-ls-git-show-abs-or-relative 'relative)
+(setq helm-ls-git-default-sources '(helm-source-ls-git))
 
 ;; (setq helm-ff-skip-boring-files t)
 ;; ;; TODO: these don't work. Looks like having the '.' and '..' on top
