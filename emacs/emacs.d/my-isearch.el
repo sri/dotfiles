@@ -60,12 +60,35 @@
      (skip-chars-forward "a-zA-Z0-9_-")
      (point))))
 
+(defun my-isearch-goto-first-match ()
+  (interactive)
+  (widen)
+  (goto-char (point-min))
+  (isearch-repeat-forward)
+  (isearch-update))
+
+(defun my-isearch-goto-last-match ()
+  (interactive)
+  (widen)
+  (goto-char (point-max))
+  (isearch-repeat-backward)
+  (isearch-update))
+
+(defun my-isearch-repeat ()
+  (interactive)
+  (if isearch-forward
+      (isearch-repeat-forward)
+    (isearch-repeat-backward)))
+
 (setq isearch-allow-scroll t)
 (setq isearch-lazy-highlight-initial-delay 0)
 
+(define-key isearch-mode-map (kbd "M-a") 'my-isearch-goto-first-match)
+(define-key isearch-mode-map (kbd "M-e") 'my-isearch-goto-last-match)
 (define-key isearch-mode-map (kbd "C-e") 'isearch-exit)
 (define-key isearch-mode-map "\r" 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "<return>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "<return>") 'my-isearch-repeat)
+(define-key isearch-mode-map (kbd "RET") 'my-isearch-repeat)
 (define-key isearch-mode-map (kbd "<S-return>") 'isearch-repeat-backward)
 ;(define-key isearch-mode-map (kbd "<backspace>") 'my-isearch-delete-region)
 (define-key isearch-mode-map (kbd "C-K") 'isearch-query-replace-regexp)
