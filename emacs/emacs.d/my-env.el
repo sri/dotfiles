@@ -109,7 +109,7 @@ Fundamental mode."
       (if window-system
           'dynamic
         ;; Just like the existing dynamic formatting
-        ;; but add a space at the end of the number.
+        ;; but adds a space at the end of the number.
         (lambda (line)
           (let* ((nlines (count-lines (point-min) (point-max)))
                  (width (length (number-to-string nlines)))
