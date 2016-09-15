@@ -104,7 +104,11 @@ Fundamental mode."
 (setq ido-default-buffer-method 'selected-window)
 (setq ido-create-new-buffer 'always)
 
-(global-linum-mode 1)
+
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (linum-mode 1)))
+
 (setq linum-format
       (if window-system
           'dynamic

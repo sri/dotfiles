@@ -11,7 +11,3 @@
 (define-key help-mode-map (kbd "p") 'backward-button)
 (define-key help-mode-map (kbd "x") 'delete-window)
 (define-key help-mode-map (kbd "g") 'my-help-push-next-button)
-
-(add-hook 'help-mode-hook
-          (lambda ()
-            (linum-mode -1)))
