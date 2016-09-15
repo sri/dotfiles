@@ -27,15 +27,10 @@ Fundamental mode."
 (setq whitespace-line-column 78)
 
 (mapc (lambda (hook)
-        (add-hook hook (lambda () (whitespace-mode 1))))
-      '(ruby-mode-hook
-        python-mode-hook
-        c-mode-hook
-        c++-mode-hook
-        js-mode-hook
-        java-mode-hook
-        diff-mode-hook
-        web-mode-hook))
+        (add-hook hook
+                  (lambda () (whitespace-mode 1))))
+      '(prog-mode-hook
+        diff-mode-hook))
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
