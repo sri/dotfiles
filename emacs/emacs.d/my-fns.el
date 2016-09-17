@@ -255,3 +255,34 @@ will bring it back."
                            "python -mjson.tool"
                            (current-buffer)
                            t))
+
+(defun my-toggle-camel-case-and-underscore ()
+  (interactive)
+  (let* ((bounds (bounds-of-thing-at-point 'sexp))
+         (word (and bounds
+                    (buffer-substring-no-properties (car bounds)
+                                                    (cdr bounds)))))
+    (when word
+      (let ((underscore (string-match "_" word))
+            (camelcase (let (case-fold-search)
+                         (string-match "[A-Z]" word))))
+        (when (or underscore camelcase)
+          (let ((original-column (current-column))
+                (result (if underscore
+                            ;; Convert underscore to camel case:
+                            (let ((parts (split-string word "_")))
+                              (concat (car parts)
+                                      (mapconcat #'capitalize (cdr parts) "")))
+                          ;; Convert camel case to underscore:
+                          (let* ((case-fold-search nil)
+                                 (str (replace-regexp-in-string
+                                       "\\([A-Z]\\)"
+                                       (lambda (x) (concat "_" (downcase x)))
+                                       word
+                                       t)))
+                            (if (string-match "^_" str)
+                                (substring str 1)
+                              str)))))
+            (delete-region (car bounds) (cdr bounds))
+            (insert result)
+            (move-to-column original-column)))))))
