@@ -1,4 +1,4 @@
-# -*- mode: sh mode -*-
+# -*- mode: sh -*-
 . ~/my/dotfiles/bash/git-completion.bash
 . ~/my/dotfiles/bash/git-prompt.sh
 
