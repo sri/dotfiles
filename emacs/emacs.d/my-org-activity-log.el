@@ -78,15 +78,36 @@
         (setq result (date-to-time (format "%s 00:00:00" (match-string 1)))))
       result)))
 
+(defvar my-activity-log-week-header-template "%Y-%m-%d (week %U)")
+(defvar my-activity-log-day-header-template "<%Y-%m-%d %a - day %j>")
+
 (defun my-activity-log-insert-for-week (&optional time)
   (let* ((range (my-activity-log-week-range time))
          (start (car range))
-         (header (format-time-string "%Y-%m-%d (week %U)" start)))
+         (header (format-time-string my-activity-log-week-header-template start)))
     (insert "** " header "\n")
     (dotimes (i 7)
-      (let ((day (format-time-string "<%Y-%m-%d %a - day %j>" start)))
+      (let ((day (format-time-string my-activity-log-day-header-template start)))
         (insert "*** " day "\n")
         (setq start (time-add start my-activity-log-oneday))))))
+
+(defun my-activity-log-goto-today (&optional buffer)
+  (let* ((range (my-activity-log-week-range))
+         (week-heading (format-time-string my-activity-log-week-header-template
+                                           (car range)))
+         (day-heading (format-time-string my-activity-log-day-header-template)))
+  (with-current-buffer (or buffer (current-buffer))
+    (org-cycle)
+    (sit-for 0.1)
+    (goto-char (point-max))
+    (when (search-backward week-heading nil t)
+      (outline-show-branches)
+      (sit-for 0.3)
+      (recenter 0)
+      (when (search-forward day-heading nil t)
+        (outline-get-next-sibling)
+        (previous-line)
+        (end-of-line))))))
 
 (defun my-activity-log-insert-template (&optional arg)
   "Inserts an activity log template for a week.
