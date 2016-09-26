@@ -37,4 +37,6 @@
     (my-load my-private 'ignore-if-missing)))
 
 (my-load-all)
-(recentf-open-files)
+
+(unless window-system
+  (recentf-open-files))
