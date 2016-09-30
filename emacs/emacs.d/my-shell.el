@@ -1,5 +1,8 @@
 (setenv "PAGER" "cat")
 
+(add-to-list 'display-buffer-alist
+             '("^\\*shell\\*" . (display-buffer-same-window)))
+
 ;; Disable "Pinging 4.to (Tonga)..." message
 ;; when you TAB complete
 (setq ffap-machine-p-known nil)

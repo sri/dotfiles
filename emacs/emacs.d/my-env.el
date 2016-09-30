@@ -92,6 +92,7 @@ Fundamental mode."
 (transient-mark-mode 1)
 (show-paren-mode t)
 (server-start)
+(electric-pair-mode)
 
 (ido-mode 1)
 (setq ido-enable-flex-matching t)
