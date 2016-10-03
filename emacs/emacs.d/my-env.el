@@ -32,6 +32,9 @@ Fundamental mode."
       '(prog-mode-hook
         diff-mode-hook))
 
+(add-hook 'emacs-lisp-mode-hook
+          (lambda () (whitespace-mode -1)))
+
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
