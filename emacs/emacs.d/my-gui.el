@@ -1,4 +1,6 @@
-(let ((theme (if (= (random 2) 1)
+(load-theme 'zenburn t)
+
+'(let ((theme (if (= (random 2) 1)
                  'solarized-dark
                'solarized-light)))
   (load-theme theme t)

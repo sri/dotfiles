@@ -2,7 +2,7 @@
 (require 'smart-mode-line)
 
 (sml/setup)
-(sml/apply-theme 'dark)
+(sml/apply-theme 'respectful)
 
 (defun my-mode-line-copy-full-path ()
   "Copies the buffer name to the kill ring.
