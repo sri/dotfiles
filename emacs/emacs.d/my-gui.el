@@ -1,7 +1,11 @@
-(load-theme 'solarized-dark t)
-(custom-theme-set-faces
- 'solarized-dark
- '(dired-header ((t (:foreground "#268bd2" :underline t :background nil)))))
+(let ((theme (if (= (random 2) 1)
+                 'solarized-dark
+               'solarized-light)))
+  (load-theme theme t)
+  (custom-theme-set-faces theme
+                          '(dired-header ((t (:foreground "#268bd2"
+                                                          :underline t
+                                                          :background nil))))))
 
 (add-hook 'focus-out-hook
           (lambda ()
