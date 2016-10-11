@@ -1,4 +1,4 @@
-(load-theme 'zenburn t)
+(load-theme 'spacemacs-dark t)
 
 '(let ((theme (if (= (random 2) 1)
                  'solarized-dark
