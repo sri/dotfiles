@@ -32,7 +32,7 @@
     ;; dependencies like that).
     (mapc 'my-load my-files)
 
-    (dolist (package my-packages)
+    (dolist (package package-selected-packages)
       (my-load (format "my-%s.el" package) 'ignore-if-missing))
     (my-load my-private 'ignore-if-missing)))
 
