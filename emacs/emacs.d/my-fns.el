@@ -158,22 +158,25 @@ The latter method uses `helm-find-files'."
   (interactive "P")
   (if arg
       (call-interactively 'helm-find-files)
-    (let ((file-at-point (ffap-file-at-point)))
-      (if file-at-point
-          (let ((linenum
-                 (save-excursion
-                   (goto-char (point-at-bol))
-                   (when (and (search-forward file-at-point (point-at-eol) t 1)
-                              (looking-at ":\\([0-9]+\\)"))
-                     (string-to-number (buffer-substring-no-properties
-                                        (match-beginning 1)
-                                        (match-end 1)))))))
-            (find-file file-at-point)
-            (when linenum
-              (goto-line linenum)
-              (linum-mode 1)
-              (recenter)))
-        (call-interactively 'helm-find-files)))))
+    (if-let (file-at-point (ffap-file-at-point))
+        (let ((linenum
+               (save-excursion
+                 (goto-char (point-at-bol))
+                 (when (and (search-forward file-at-point (point-at-eol) t 1)
+                            (looking-at ":\\([0-9]+\\)"))
+                   (string-to-number (buffer-substring-no-properties
+                                      (match-beginning 1)
+                                      (match-end 1)))))))
+          (find-file file-at-point)
+          (when linenum
+            (goto-line linenum)
+            (linum-mode 1)
+            (recenter)))
+      ;; No file at point
+      (call-interactively
+       (if (helm-ls-git-root-dir)
+           'helm-ls-git-ls
+         'helm-find-files)))))
 
 (defun my-remove-non-ascii-chars ()
   (interactive)

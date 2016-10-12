@@ -33,7 +33,6 @@
 (global-set-key (kbd "C-c m") 'imenu)
 (global-set-key (kbd "C-c o") 'my-occur)
 (global-set-key (kbd "C-c s") 'sort-lines)
-(global-set-key (kbd "C-c v") 'helm-ls-git-ls)
 (global-set-key (kbd "C-c G") 'magit-blame)
 
 (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
