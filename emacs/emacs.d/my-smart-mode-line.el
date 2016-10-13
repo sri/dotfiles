@@ -2,7 +2,7 @@
 ;; (require 'smart-mode-line)
 
 ;; (sml/setup)
-;; (sml/apply-theme 'respectful)
+;; (sml/apply-theme 'powerline)
 
 ;; (defun my-mode-line-copy-full-path ()
 ;;   "Copies the buffer name to the kill ring.
@@ -27,4 +27,3 @@
 
 ;; (define-key mode-line-buffer-identification-keymap
 ;;   [mode-line mouse-1] 'my-mode-line-copy-full-path)
-(powerline-default-theme)

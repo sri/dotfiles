@@ -17,6 +17,11 @@
                "my-org-activity-log"
                "my-update-dot-emacs"
                ))
+        (packages-custom-order
+         ;; Load order of packages customized by me.
+         ;; Gets loaded in this order after
+         ;; other package custom files.
+         '(diminish))
         (my-non-packages
          ;; Files that aren't on MELPA or any other
          ;; package archive.
@@ -32,8 +37,12 @@
     ;; dependencies like that).
     (mapc 'my-load my-files)
 
-    (dolist (package package-selected-packages)
-      (my-load (format "my-%s.el" package) 'ignore-if-missing))
+    (dolist (pkg package-selected-packages)
+      (unless (memq pkg packages-custom-order)
+        (my-load (format "my-%s.el" pkg) 'ignore-if-missing)))
+    (dolist (pkg packages-custom-order)
+      (my-load (format "my-%s.el" pkg) 'ignore-if-missing))
+
     (my-load my-private 'ignore-if-missing)))
 
 (my-load-all)
