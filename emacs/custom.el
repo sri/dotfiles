@@ -1,14 +1,3 @@
-;; -*- mode: emacs-lisp -*-
-(require 'cl)
-
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-
-(package-initialize)
-
-(defvar my-emacs-start-time (current-time))
-
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -56,32 +45,3 @@
  '(package-selected-packages
    (quote
     (diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav coffee-mode bm ace-jump-mode))))
-
-(defun my-load (source &optional ignore-if-missing)
-  "Load the byte-compiled version of SOURCE.
-If IGNORE-IF-MISSING is non-NIL, then don't throw an
-error if SOURCE is missing."
-  (unless (string-suffix-p ".el" source)
-    (setq source (concat source ".el")))
-  (let* ((source (expand-file-name source))
-         (compiled (concat source "c")))
-    (cond ((file-exists-p source)
-           (when (file-newer-than-file-p source compiled)
-             (let (byte-compile-verbose)
-               (byte-compile-file source)))
-           (load compiled nil t t))
-          (t (when (file-exists-p compiled)
-               (delete-file compiled))
-             (unless ignore-if-missing
-               (error "my-load: missing `%s'" source))))))
-
-(byte-compile 'my-load)
-
-(let* ((package--builtins '())
-       (missing (remove-if 'package-installed-p package-selected-packages)))
-  (when missing
-    (package-refresh-contents)
-    (mapc 'package-install missing)))
-
-(my-load "~/.emacs.d/my-emacs")
-(setq my-time-diff-secs (float-time (time-since my-emacs-start-time)))

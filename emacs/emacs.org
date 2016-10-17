@@ -1,0 +1,1696 @@
+* MY STUFF
+** My Packages init
+#+BEGIN_SRC emacs-lisp
+(let* ((package--builtins '())
+       (missing (remove-if 'package-installed-p package-selected-packages)))
+  (when missing
+    (package-refresh-contents)
+    (mapc 'package-install missing)))
+
+(eval-when-compile
+  (add-to-list 'load-path (expand-file-name "third-party") t))
+
+(require 'dash)
+#+END_SRC
+** My Startup
+#+BEGIN_SRC emacs-lisp
+(defvar my-emacs-start-time (current-time))
+#+END_SRC
+** My Env
+#+BEGIN_SRC emacs-lisp
+(defun my-set-major-mode ()
+  "For temporary buffers, set the mode based on the name.
+Defaults to text mode. Yasnippets won't be turned on for
+Fundamental mode."
+  (when (and (eq major-mode 'fundamental-mode)
+             (null (buffer-file-name)))
+    (let ((mode (assoc-default (buffer-name)
+                               auto-mode-alist 'string-match)))
+      (if (and mode
+               (not (consp mode)))
+          (funcall mode)
+        (text-mode))
+      t)))
+
+(setq-default major-mode 'my-set-major-mode)
+
+(let ((registers '((?d . "~/Desktop")
+                   (?e . "~/my/dotfiles/emacs/emacs.d")
+                   (?~ . "~"))))
+  (dolist (reg registers)
+    (set-register (car reg) (cons 'file (cdr reg)))))
+
+(require 'whitespace)
+;; For some reason tabs don't work, but tab-mark does...
+(setq whitespace-style
+      '(face tabs trailing lines-tail space-before-tab newline indentation empty space-after-tab tab-mark))
+(setq whitespace-line-column 78)
+
+(mapc (lambda (hook)
+        (add-hook hook
+                  (lambda () (whitespace-mode 1))))
+      '(prog-mode-hook
+        diff-mode-hook))
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda () (whitespace-mode -1)))
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+
+(setq large-file-warning-threshold nil)
+(set-language-environment "UTF-8")
+(setq message-log 16384)
+(visual-line-mode 1)
+(setq save-interprogram-paste-before-kill t)
+(setq highlight-nonselected-windows t)
+(setq echo-keystrokes 0.1)
+(setq vc-follow-symlinks t)
+(setq mouse-drag-copy-region t)
+(setq-default indent-tabs-mode nil)
+(setq make-backup-files nil)
+(setq inhibit-splash-screen t)
+(setq inhibit-startup-message t)
+(setq inhibit-startup-echo-area-message "sri")
+(setq initial-scratch-message nil)
+(setq visible-bell nil)
+(setq ring-bell-function (lambda ()))
+(setq disabled-command-hook nil)
+(setq kill-whole-line t)
+(setq kill-read-only-ok t)
+(setq mouse-yank-at-point t)
+(setq sentence-end-double-space nil)
+;; Help char is `?' so C-x ? will list all the
+;; keys bound to C-x.
+(setq help-char ??)
+(setq scroll-error-top-bottom t)
+(setq js-indent-level 2)
+(global-eldoc-mode -1)
+
+(setq Man-width 80)
+
+(defun my-delete-trailing-whitespace ()
+  (unless (memq major-mode '(org-mode))
+    (delete-trailing-whitespace)))
+
+(add-hook 'before-save-hook 'my-delete-trailing-whitespace)
+
+(setq eval-expression-print-length nil)
+(setq eval-expression-print-level nil)
+(setq enable-recursive-minibuffers t)
+
+(put 'erase-buffer 'disabled nil)
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(winner-mode 1)
+(if (and (fboundp 'menu-bar-mode)
+         (null window-system))
+    (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(line-number-mode t)
+(column-number-mode t)
+(blink-cursor-mode -1)
+(auto-compression-mode t)
+(transient-mark-mode 1)
+(show-paren-mode t)
+(server-start)
+(electric-pair-mode)
+
+(ido-mode 1)
+(setq ido-enable-flex-matching t)
+(setq ido-default-file-method 'selected-window)
+(setq ido-default-buffer-method 'selected-window)
+(setq ido-create-new-buffer 'always)
+
+
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (linum-mode 1)))
+
+(setq linum-format
+      (if window-system
+          'dynamic
+        ;; Just like the existing dynamic formatting
+        ;; but adds a space at the end of the number.
+        (lambda (line)
+          (let* ((nlines (count-lines (point-min) (point-max)))
+                 (width (length (number-to-string nlines)))
+                 (fmt (concat "%" (number-to-string width) "d ")))
+             (propertize (format fmt line) 'face 'linum)))))
+
+
+(setq diff-switches '("-u"))
+
+(make-variable-buffer-local 'line-number-mode)
+(make-variable-buffer-local 'column-number-mode)
+
+(global-font-lock-mode t)
+
+
+
+(require 'hippie-exp)
+(setq hippie-expand-try-functions-list
+      '(
+        yas-hippie-try-expand
+        try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-file-name-partially
+        try-complete-file-name
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol))
+
+;; Ediff:
+(require 'ediff)
+
+(setq ediff-diff-options "-w")
+(setq ediff-highlight-all-diffs nil)
+(setq ediff-show-clashes-only t)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq ediff-combination-pattern
+      '("<<<<<<< A: HEAD" A
+        "||||||| Ancestor" Ancestor
+        "=======" B ">>>>>>> B: Incoming"))
+
+;; Eval expr:
+(require 'eval-expr)
+
+(eval-expr-install)
+(setq eval-expr-print-function 'pp
+      eval-expr-print-level nil
+      eval-expr-print-length nil)
+
+;; Recent files:
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 100)
+
+(global-hl-line-mode 1)
+#+END_SRC
+** My Shell
+#+BEGIN_SRC emacs-lisp
+(setenv "PAGER" "cat")
+
+(add-to-list 'display-buffer-alist
+             '("^\\*shell\\*" . (display-buffer-same-window)))
+
+;; Disable "Pinging 4.to (Tonga)..." message
+;; when you TAB complete
+(setq ffap-machine-p-known nil)
+
+(defun my-shell-forward-char-or-previous-history (&optional arg)
+  (interactive "p")
+  (if (eobp)
+      (comint-previous-input arg)
+    (forward-char arg)))
+
+(defun my-shell-next-line-or-next-history (&optional arg)
+  (interactive "p")
+  (if (eobp)
+      (comint-next-input arg)
+    (next-line arg)))
+
+(defun my-shell-erase-buffer ()
+  (interactive)
+  (erase-buffer)
+  (comint-send-input))
+
+(defun my-shell-rename-buffer ()
+  (interactive)
+  (let ((new-name (read-string "New buffer name: ")))
+    (rename-buffer (format "*%s*" new-name))))
+
+(defun my-shell-bash-clear-screen ()
+  (interactive)
+  (recenter-top-bottom 0))
+
+(defun my-shell (&optional arg)
+  "Switch to the most recently active shell buffer.
+With a prefix arg, create a new shell.
+Also, creates a shell when there are no other shells."
+  (interactive "P")
+  (cond (arg
+         (shell (generate-new-buffer-name "*shell*")))
+        (t (let ((shells (-filter (lambda (buffer)
+                                    (with-current-buffer buffer
+                                      (eq major-mode 'shell-mode)))
+                                  (buffer-list))))
+             (setq shells
+                   (sort shells
+                         (lambda (x y)
+                           (> (with-current-buffer x
+                                my-shell-last-active-time)
+                              (with-current-buffer y
+                                my-shell-last-active-time)))))
+             (cond ((null shells)
+                    (shell))
+                   ((eq major-mode 'shell-mode)
+                    (switch-to-buffer (or (cadr (memq (current-buffer) shells))
+                                          (car shells))))
+                   (t
+                    (switch-to-buffer (car shells))))))))
+
+(defvar-local my-shell-last-active-time nil)
+
+(defun my-shell-update-last-active-time (&optional string)
+  (setq my-shell-last-active-time (float-time)))
+
+(add-hook 'shell-mode-hook
+          (lambda ()
+            (my-shell-update-last-active-time)
+            (add-hook 'comint-input-filter-functions
+                      'my-shell-update-last-active-time)
+            (setq line-number-mode nil
+                  column-number-mode nil)
+            (setq comint-input-ignoredups t)
+            (setq comint-scroll-to-bottom-on-input nil)
+            (setq comint-scroll-show-maximum-output nil)
+            (toggle-truncate-lines 1)
+            (local-unset-key (kbd "C-d"))
+            (define-key shell-mode-map (kbd "C-c d")
+              'dirs)
+            (define-key shell-mode-map (kbd "C-<up>")
+              'comint-previous-prompt)
+            (define-key shell-mode-map (kbd "C-<down>")
+              'comint-next-prompt)
+            (define-key shell-mode-map (kbd "C-c e")
+              'my-shell-erase-buffer)
+            (define-key shell-mode-map (kbd "C-c n")
+              'my-shell-rename-buffer)
+            (define-key shell-mode-map (kbd "C-l")
+              'my-shell-bash-clear-screen)
+            (define-key shell-mode-map (kbd "<right>")
+              'my-shell-forward-char-or-previous-history)
+            (define-key shell-mode-map (kbd "<down>")
+              'my-shell-next-line-or-next-history)
+            (define-key shell-mode-map (kbd "M-.")
+              'comint-insert-previous-argument)))
+#+END_SRC
+** My Occur
+#+BEGIN_SRC emacs-lisp
+(defun my-occur-mode-display-occurrence ()
+  (interactive)
+  (occur-mode-display-occurrence)
+  (occur-next))
+
+(define-key occur-mode-map (kbd "n")
+  'my-occur-mode-display-occurrence)
+#+END_SRC
+** My Dired
+#+BEGIN_SRC emacs-lisp
+(require 'dired-x)
+
+(defun my-dired ()
+  (interactive)
+  (let ((file-name buffer-file-name))
+    (dired default-directory)
+    (when file-name
+      (dired-goto-file file-name))))
+
+(defun my-dired-find-file ()
+  (interactive)
+  (if (/= (line-beginning-position) 1)
+      (dired-find-file)
+    (let ((dir (expand-file-name default-directory)))
+      (kill-new dir)
+      (message "Copied: '%s'" dir))))
+
+(defun my-dired-first-file ()
+  (interactive)
+  (goto-char (point-min))
+  (dired-next-line 1))
+
+(defun my-dired-last-file ()
+  (interactive)
+  (goto-char (point-max))
+  (dired-previous-line 1))
+
+(defun my-dired-right-arrow-key ()
+  (interactive)
+  (if (or (let ((use-empty-active-region t))
+            (use-region-p))
+          (= (line-beginning-position) 1))
+      (forward-char 1)
+    (dired-find-file)))
+
+(when (eq system-type 'darwin)
+  (setq dired-guess-shell-alist-user
+        '(("\\.pdf\\'" "open -a Preview")
+          ("\\.html?\\'" "open -a 'Google Chrome'"))))
+
+(setq-default dired-listing-switches "-alh")
+
+;; From jwiegley's dotfiles:
+(defun my-recentf-add-dired-directory ()
+  (when (and dired-directory
+             (file-directory-p dired-directory)
+             (not (string= dired-directory "/")))
+    (recentf-add-file dired-directory)))
+
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (dired-omit-mode 1)
+            (dired-hide-details-mode 1)
+            (define-key dired-mode-map (kbd "D") 'dired-hide-details-mode)
+            (setq dired-dwim-target t)
+            (setq dired-omit-size-limit nil)
+            (my-recentf-add-dired-directory)
+            (define-key dired-mode-map (kbd ",") 'dired-prev-dirline)
+            (define-key dired-mode-map (kbd ".") 'dired-next-dirline)
+            (define-key dired-mode-map [mouse-2] 'dired-find-file)
+            (define-key dired-mode-map "a" 'my-dired-first-file)
+            (define-key dired-mode-map "z" 'my-dired-last-file)
+            (define-key dired-mode-map "f" 'my-isearch-forward)
+            (define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
+            (define-key dired-mode-map (kbd "C-o") 'my-ffap-or-find-file)
+            (define-key dired-mode-map (kbd "C-m") 'my-dired-find-file)
+            (define-key dired-mode-map (kbd "SPC") 'scroll-up)
+            (define-key dired-mode-map (kbd "S-SPC") 'scroll-down)
+            (define-key dired-mode-map [left] 'dired-up-directory)
+            (define-key dired-mode-map [right] 'my-dired-right-arrow-key)))
+#+END_SRC
+** My Sublime
+#+BEGIN_SRC emacs-lisp
+(defun my-swap-line-or-region-down ()
+  "Move the current line or region down one line."
+  (interactive "*")
+  (let (beg end line reg-beg reg-end)
+    (when (use-region-p)
+      (setq reg-beg (region-beginning))
+      (setq reg-end (region-end)))
+    ;; Save & delete the next line.
+    (save-excursion
+      (forward-line 1)
+      (setq beg (point))
+      (forward-line 1)
+      (setq end (point)))
+    (setq line (buffer-substring beg end))
+    (delete-region beg end)
+    (when reg-beg (goto-char reg-beg))
+    (beginning-of-line)
+    (insert line)
+    (when reg-beg
+      (set-mark (+ reg-beg (length line)))
+      (goto-char (+ reg-end (length line)))
+      (setq deactivate-mark nil))))
+
+(defun my-swap-line-or-region-up ()
+  "Move the current line or region up one line."
+  (interactive "*")
+  (let (beg end line reg-beg reg-end)
+    (when (use-region-p)
+      (setq reg-beg (region-beginning))
+      (setq reg-end (region-end)))
+    ;; Save & delete the previous line.
+    (save-excursion
+      (when reg-beg (goto-char reg-beg))
+      (forward-line -1)
+      (setq beg (point))
+      (forward-line 1)
+      (setq end (point)))
+    (setq line (buffer-substring beg end))
+    (delete-region beg end)
+    (save-excursion
+      (when reg-end (goto-char (- reg-end (length line))))
+      (forward-line 1)
+      (insert line))
+    (when reg-end
+      (set-mark (- reg-beg (length line)))
+      (goto-char (- reg-end (length line)))
+      (setq deactivate-mark nil))))
+
+(defvar my-line-or-region-swap-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map [down] 'my-swap-line-or-region-down)
+    (define-key map [up] 'my-swap-line-or-region-up)
+    map))
+
+(defun my-start-line-or-region-swap ()
+  (interactive)
+  (message "Hit [up] or [down] to move region or line in that direction")
+  (set-temporary-overlay-map my-line-or-region-swap-keymap t))
+
+(defun my-duplicate-line-or-region ()
+  "Duplicate line or current region."
+  (interactive "*")
+  (if (use-region-p)
+      (let* ((start (region-beginning))
+             (end (region-end))
+             (region (buffer-substring start end)))
+        (cond ((= (point) start)
+               (goto-char end)
+               (insert region)
+               (goto-char start))
+              (t (insert region)))
+        (set-mark end)
+        (setq deactivate-mark nil))
+    (let ((line (buffer-substring (point-at-bol) (point-at-eol)))
+          (column (current-column)))
+      (end-of-line)
+      (if (eobp)
+          (insert "\n")
+        (forward-char 1))
+      (save-excursion
+        (insert line)
+        (unless (eobp) (insert "\n")))
+      (move-to-column column))))
+
+(defun my-comment-line-or-region ()
+  "Comment or uncomment the current line or region."
+  (interactive "*")
+  (cond ((use-region-p)
+         (let ((start (region-beginning))
+               (end (region-end)))
+           (save-excursion
+             (goto-char start)
+             (setq start (point-at-bol))
+             (goto-char end)
+             (setq end
+                   ;; Sublime-like behavior: If the region extends to
+                   ;; the beginning of a line, don't include that
+                   ;; line.
+                   (cond ((bolp)
+                          (forward-char -1)
+                          (point))
+                         (t (point-at-eol)))))
+           (comment-or-uncomment-region start end)
+           (setq deactivate-mark nil)))
+        (t
+         (comment-or-uncomment-region (point-at-bol)
+                                      (point-at-eol)))))
+
+(defun my-sublime-expand-selection-to-indentation ()
+  (interactive)
+  "Expand selection to the next indentation level.
+Inspired by Sublime Text."
+  (let ((n (current-indentation))
+        (beg (point-at-bol))
+        (end (point-at-eol)))
+    ;; when region is active & transient mark mode is
+    ;; turned on, we expand to make that region bigger
+    (when (and (use-region-p) transient-mark-mode)
+      (setq beg (region-beginning)
+            end (region-end))
+      (save-excursion
+        ;; get the min indentation within the region
+        (goto-char beg)
+        (forward-line 1)
+        (while (< (point) end)
+          (setq n (min n (current-indentation)))
+          (forward-line 1))
+        ;; get the min indentation of line before
+        ;; region start, line after region start or n
+        (setq n
+              (max (progn
+                     (goto-char beg)
+                     (forward-line -1)
+                     (if (bobp) 0 (current-indentation)))
+                   (progn
+                     (goto-char end)
+                     (forward-line 1)
+                     (if (eobp) 0 (current-indentation)))))))
+    ;; now expand the region
+    (save-excursion
+      (goto-char beg)
+      (forward-line -1)
+      (while (and (>= (current-indentation) n) (not (bobp)))
+        (forward-line -1))
+      (forward-line 1)
+      (setq beg (point-at-bol))
+      (goto-char end)
+      (forward-line 1)
+      (while (and (>= (current-indentation) n) (not (eobp)))
+        (forward-line 1))
+      (forward-line -1)
+      (setq end (point-at-eol)))
+    (goto-char beg)
+    (set-mark beg)
+    (goto-char end)))
+#+END_SRC
+** My View
+#+BEGIN_SRC emacs-lisp
+(require 'view)
+
+(defun my-view-scroll-down-one-line ()
+  (interactive)
+  (scroll-down 1))
+
+(defun my-view-scroll-up-one-line ()
+  (interactive)
+  (scroll-up 1))
+
+(defun my-view-top-of-window ()
+  (interactive)
+  (recenter 0))
+
+(defun my-view-center-in-window ()
+  (interactive)
+  (recenter))
+
+(defun my-view-botton-of-window ()
+  (interactive)
+  (recenter -1))
+
+(define-key view-mode-map (kbd "SPC") 'View-scroll-page-forward)
+(define-key view-mode-map (kbd "j") 'View-scroll-page-forward)
+(define-key view-mode-map (kbd "S-SPC") 'View-scroll-page-backward)
+(define-key view-mode-map (kbd "k") 'View-scroll-page-backward)
+(define-key view-mode-map "q" 'View-exit-and-edit)
+(define-key view-mode-map (kbd "a") 'beginning-of-buffer)
+(define-key view-mode-map (kbd "z") 'end-of-buffer)
+(define-key view-mode-map (kbd "f") 'my-isearch-forward)
+#+END_SRC
+** My Terminal
+#+BEGIN_SRC emacs-lisp
+(unless window-system
+  (load-theme 'spacemacs-dark)
+  (face-spec-set 'hl-line '((t (:background "color-236" :inherit nil))))
+  ;; (xterm-mouse-mode)
+  )
+#+END_SRC
+** My GUI
+#+BEGIN_SRC emacs-lisp
+(when window-system
+
+  (load-theme 'spacemacs-dark t)
+
+  '(let ((theme (if (= (random 2) 1)
+                    'solarized-dark
+                  'solarized-light)))
+     (load-theme theme t)
+     (custom-theme-set-faces theme
+                             '(dired-header ((t (:foreground "#268bd2"
+                                                             :underline t
+                                                             :background nil))))))
+
+  (add-hook 'focus-out-hook
+            (lambda ()
+              (when (and buffer-file-name (buffer-modified-p))
+                (save-buffer))))
+
+
+  (let ((shell-path (shell-command-to-string "$SHELL -c 'echo -n $PATH'")))
+    (setenv "PATH" shell-path)
+    (setq exec-path (split-string shell-path path-separator)))
+
+  ;; Center Emacs's position on screen
+  (let* ((height 40)
+         (width 80)
+         (screen-height (x-display-pixel-height))
+         (screen-width (x-display-pixel-width))
+         (top (/ (- screen-height (frame-pixel-height)) 2))
+         (left (/ (- screen-width (frame-pixel-width)) 2)))
+    (add-to-list 'default-frame-alist (cons 'height 40))
+    (add-to-list 'default-frame-alist (cons 'width 80))
+    (add-to-list 'default-frame-alist (cons 'top top))
+    (add-to-list 'default-frame-alist (cons 'left left)))
+
+  (set-frame-parameter nil 'alpha '(100 100))
+
+  (setq frame-title-format
+        '((:eval (if (buffer-file-name)
+                     (abbreviate-file-name (buffer-file-name))
+                   "%b"))))
+  )
+#+END_SRC
+** My Org
+#+BEGIN_SRC emacs-lisp
+(require 'org)
+(require 'org-bullets)
+
+(setq org-bullets-bullet-list '("◉" "○"))
+
+(set-register ?t '(file . "~/Dropbox/Notes/todo.org"))
+
+;; Fix inserting a new plain list item:
+;; don't insert a newline before the new plain list item. This only
+;; occurs when I'm on the last plain list item and hit
+;; Alt-Shift-Enter.
+(setq org-blank-before-new-entry
+      (assq-delete-all 'plain-list-item org-blank-before-new-entry))
+
+(setq org-agenda-files '("~/Dropbox/Notes"))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (turn-on-auto-fill)
+            (org-bullets-mode 1)
+            (setq cursor-type 'hbar)))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   ;; (awk . t)
+   (calc . t)
+   ;; (clojure . t)
+   (emacs-lisp . t)
+   ;; (gnuplot . t)
+   ;; (haskell . t)
+   ;; (ocaml . t)
+   ;; (org . t)
+   (python . t)
+   (ruby . t)
+   ;; (sh . t)
+   ;; (sql . t)
+   ;; (sqlite . t)
+   ))
+
+;; Show lists as collapsed
+(setq org-cycle-include-plain-lists 'integrate)
+
+;; M-RET while in the middle of a header will now create a new header
+;; (at the same level) below the current one. Old behavior: split the
+;; line and start the next header with the fragment after point of
+;; this line.
+(push '(headline) org-M-RET-may-split-line)
+
+(setq org-startup-indented t)
+(setq org-hide-leading-stars t)
+(setq org-special-ctrl-a/e t)
+(setq org-special-ctrl-k nil)
+(setq org-return-follows-link t)
+(setq org-use-speed-commands t)
+(setq org-fontify-done-headline t)
+(setq org-closed-keep-when-no-todo t)
+(setq org-log-done 'time)
+
+(setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "WAITING"
+                  "|"
+                  "DONE" "CANCELED")))
+
+(defun my-org-insert-chrome-link ()
+  (interactive)
+  (let ((subject (do-applescript "tell application \"Google Chrome\"
+                                  title of active tab of front window
+                                  end tell"))
+        (url (do-applescript "tell application \"Google Chrome\"
+                              URL of active tab of front window
+                              end tell")))
+    (insert (org-make-link-string url subject))))
+
+;; Links:
+(org-add-link-type "gitsha" 'my-org-show-git-sha)
+
+(require 'magit)
+(defun my-org-show-git-sha (sha)
+  (magit-show-commit sha))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Org Dynamic links
+
+;; In an Org buffer, this converts words such as `JIRA-123' into links
+;; to a JIRA ticket without converting it into a Org link. See
+;; `my-org-dynamic-link-url-prefix' for the URL prefix prepended to
+;; the word before opening the link. Dynamic link can only be clicked
+;; on by the mouse. Hitting Return on them does nothing.
+;;
+;; See `org-activate-plain-links' and `org-set-font-lock-defaults'
+;; for an example of how this is done in Org mode.
+;; Another way to achieve this is with `goto-address-mode'.
+
+(defface my-org-dynamic-link-face
+  '((t :foreground "#268bd2" :box 1 :weight bold :inherit unspecified))
+  "Face for Org dynamic links.")
+
+(defvar my-org-dynamic-links-matcher
+  '()
+  "Matcher for dynamic links.
+Each element must be a 2-element list of the format:
+\(REGEX URL-PREFIX)
+REGEX should match whichever word you want to convert
+to a link. For JIRA tickets, this should be a regexp
+that matches the format `JIRA-123'.
+URL-PREFIX should be the URL to open when the link is clicked. If
+it contains a \"%s\", then it will be replaced with the matched
+word. If that isn't present, then the URL-PREFIX is visited.")
+
+(defun my-org-activate-dynamic-links (limit)
+  (let ((matchers my-org-dynamic-links-matcher)
+        (result nil)
+        (regex)
+        (link-template))
+    (while (and matchers
+                (null result))
+
+      (setq regex (caar matchers)
+            link-template (cadar matchers)
+            matchers (cdr matchers))
+
+      ;; Below is mostly copied from `org-activate-plain-links'.
+      (when (and (re-search-forward regex limit t)
+                 (not (org-in-src-block-p)))
+        (let ((face
+               (get-text-property (max (1- (match-beginning 0)) (point-min))
+                                  'face))
+              (link
+               (if (save-match-data (string-match "%s" link-template))
+                   (format link-template (org-match-string-no-properties 0))
+                 link-template)))
+          (unless (if (consp face) (memq 'org-tag face) (eq 'org-tag face))
+            (org-remove-flyspell-overlays-in (match-beginning 0) (match-end 0))
+            (add-text-properties (match-beginning 0) (match-end 0)
+                                 (list 'mouse-face 'highlight
+                                       'face 'my-org-dynamic-link-face
+                                       'htmlize-link `(:uri ,link)
+                                       'keymap org-mouse-map))
+            (org-rear-nonsticky-at (match-end 0))
+            (setq result t)))))
+    result))
+
+;; Puts our function into the `font-lock-defaults'.
+(add-hook 'org-font-lock-set-keywords-hook
+          (lambda ()
+            (nconc org-font-lock-extra-keywords
+                   (list '(my-org-activate-dynamic-links (0 'org-link t))))))
+                   ;; (list '(my-org-activate-dynamic-links (0 'my-org-dynamic-link-face t))))))
+
+;; Open the link when it clicked on.
+(add-hook 'org-open-at-point-functions
+          (lambda ()
+            (let ((link (get-text-property (point) 'htmlize-link)))
+              (when (cadr link)
+                (browse-url (cadr link))
+                t))))
+#+END_SRC
+** My Helper functions
+#+BEGIN_SRC emacs-lisp
+(defvar my-change-inside-pair-overlay nil)
+(make-variable-buffer-local 'my-change-inside-pair-overlay)
+
+(defun my-change-inside-pair-unhighlight ()
+  (delete-overlay my-change-inside-pair-overlay))
+
+;; This shows a way to briefly highlight a region.
+;; This done using the run-at-time function.
+;; But that function can't delay execution depending
+;; on what emacs is doing. See Emacs's compile.el
+;; and search for pre-command-hook. It adds a pre-command-hook
+;; that cancels the stored timer if execution of run-at-time
+;; takes too long. And function remove itself from the pre-command-hook
+;; after that.
+(defun my-change-inside-pair (arg)
+  (interactive "P")
+  (let* ((start-string (format "%c" (read-event)))
+         (end-string (or (cdr (assoc start-string '(("(" . ")")
+                                                    ("{" . "}")
+                                                    ("[" . "]")
+                                                    ("<" . ">"))))
+                         start-string))
+         (start nil)
+         (end nil))
+    (save-excursion
+      (when (search-forward start-string nil t)
+        (setq start (point))
+        (when (search-forward end-string nil t)
+          (setq end (1- (point))))))
+    (cond ((null start) (message "Couldn't find starting `%s'" start-string))
+          ((null end) (message "Couldn't find ending `%s'" end-string))
+          (arg (kill-ring-save start end)
+               ;; Briefly highlight the copied region if its visible
+               ;; to the user.
+               (when (and (pos-visible-in-window-p start (selected-window))
+                          (pos-visible-in-window-p end (selected-window)))
+                 (when (null my-change-inside-pair-overlay)
+                   (setq my-change-inside-pair-overlay (make-overlay 0 0))
+                   (overlay-put my-change-inside-pair-overlay
+                                'face 'isearch))
+                 (move-overlay my-change-inside-pair-overlay
+                               start
+                               end
+                               (current-buffer))
+                 (run-at-time 0.3 nil 'my-change-inside-pair-unhighlight))
+               (message "Copied `%s'"
+                        (buffer-substring-no-properties start end)))
+          (t
+           (goto-char end)
+           (delete-region start end)))))
+
+(defun my-kill-line-or-region (&optional arg)
+  (interactive "P")
+  (if (use-region-p)
+      (kill-region (point) (mark))
+    (kill-line arg)))
+
+(defun my-hippie-tab (arg)
+  "Hippie expand, do what I mean.
+If in the middle of `hippie-expand' running thru all the
+expansions (see `hippie-expand-try-functions-list'), then
+continue with that. If a region is selected, indent that region.
+If at the beginning of the line, call `indent-for-tab-command'.
+Othewise, invoke `hippie-expand'."
+  (interactive "*P")
+  (cond ((eq last-command 'hippie-expand)
+         (hippie-expand arg))
+        ((and transient-mark-mode (use-region-p))
+         (indent-region (region-beginning) (region-end) nil))
+        ((let ((cs (char-syntax (preceding-char))))
+           ;; See https://www.gnu.org/software/emacs/manual/html_node/elisp/Syntax-Class-Table.html#Syntax-Class-Table
+           (or (= cs ?w) (= cs ?\_)))
+         (hippie-expand arg))
+        (t
+         (indent-for-tab-command))))
+
+(defun my-kill-current-buffer ()
+  "Kill the current buffer without prompting."
+  (interactive)
+  (kill-buffer (current-buffer)))
+
+(defun my-switch-to-buffer ()
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
+
+(defvar my-yank-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "y") 'yank-pop)
+    map))
+
+(defun my-yank (arg)
+  (interactive "*P")
+  (yank arg)
+  (unless (window-minibuffer-p)
+    (message "Press `y' to yank-pop"))
+  (set-transient-map my-yank-keymap
+                             (lambda ()
+                               (memq this-command
+                                     '(yank-pop cua-paste-pop)))))
+
+(defun my-count-lines-buffer ()
+  (interactive)
+  (message "%d lines" (count-lines (point-min) (point-max))))
+
+(defun my-just-one-space (&optional arg)
+  "Like just-one-space, but moves across newlines."
+  (interactive "*P")
+  (just-one-space (if arg nil -1)))
+
+(defun my-delete-horizontal-space (&optional arg)
+  (interactive "*P")
+  (if arg
+      (delete-horizontal-space)
+    (delete-region (progn (skip-chars-backward " \t\n\r")
+                          (point))
+                   (progn (skip-chars-forward " \t\n\r")
+                          (point)))))
+
+(defun my-kill-whole-line (&optional arg)
+  "Like kill-whole-line but maintains column position."
+  (interactive "p")
+  (let ((col (current-column)))
+    (kill-whole-line arg)
+    (move-to-column col)))
+
+(defun my-url-decode (&optional arg)
+  "Decode the URL.
+If a region is selected and the universal argument (C-u) is prefixed,
+then the region is replaced with the decoded URL. Otherwise, show the
+decoded URL in the minibuffer."
+  (interactive "P")
+  (let* ((region-active (use-region-p))
+         (url (if region-active
+                  (buffer-substring-no-properties (point) (mark))
+                (read-string "Url: ")))
+         (decoded (url-unhex-string url)))
+    (cond ((and region-active arg)
+           (delete-region (point) (mark))
+           (insert decoded))
+          (t (message "%s" decoded)))))
+
+(defun my-beginning-of-line ()
+  "Move to the beginning of line or beginning of non-whitespace chars."
+  (interactive "^")
+  (let ((indentation-start (save-excursion
+                             (back-to-indentation)
+                             (point))))
+    (if (or (= (current-column) 0)
+            (> (point) indentation-start))
+        (goto-char indentation-start)
+      (beginning-of-line))))
+
+(require 'ffap)
+
+(defun my-ffap-or-find-file (arg)
+  "Find the file at point or ask the user for file's path.
+The latter method uses `helm-find-files'."
+  (interactive "P")
+  (if arg
+      (call-interactively 'helm-find-files)
+    (let (file)
+      (unless (memq major-mode '(dired-mode))
+        (setq file (ffap-file-at-point)))
+      (if file
+          (let ((linenum
+                 (save-excursion
+                   (goto-char (point-at-bol))
+                   (when (and (search-forward file-at-point (point-at-eol) t 1)
+                              (looking-at ":\\([0-9]+\\)"))
+                     (string-to-number (buffer-substring-no-properties
+                                        (match-beginning 1)
+                                        (match-end 1)))))))
+            (find-file file-at-point)
+            (when linenum
+              (goto-line linenum)
+              (linum-mode 1)
+              (recenter)))
+        ;; No file at point
+        (call-interactively
+         (if (helm-ls-git-root-dir)
+           'helm-ls-git-ls
+         'helm-find-files))))))
+
+(defun my-remove-non-ascii-chars ()
+  (interactive)
+  (query-replace-regexp "[^[:ascii:]]" ""))
+
+(defun my-open-latest-downloaded-file ()
+  (interactive)
+  (let (downloads)
+    (dolist (f (directory-files "~/Downloads" 'full nil 'nosort))
+      (unless (member (file-name-nondirectory f) '("." ".."))
+        (push (cons f (nth 5 (file-attributes f))) downloads)))
+    (setq downloads
+          (sort downloads (lambda (x y) (time-less-p (cdr y) (cdr x)))))
+    (when downloads
+      (find-file (caar downloads)))))
+
+(require 'rect) ; for killed-rectangle
+(defun my-copy-from-starting-col-till-eol (start end &optional evenly-sized-strings)
+  "Copy from starting column till end of line for all lines in region.
+With a prefix argument, makes all the copied lines the same
+length -- spaces are appended to lines that aren't long enough.
+Sets the result to `killed-rectangle', so that a `yank-rectangle'
+will bring it back."
+  (interactive "r\nP")
+  (when (use-region-p)
+    (let ((lines '())
+          (line nil)
+          (max 0)
+          (done nil)
+          (start-column nil))
+      (save-excursion
+        (goto-char start)
+        (setq start-column (current-column))
+        ;; Don't include the last line unless the
+        ;; cursor is at the end of the line.
+        (while (and (not done)
+                    (<= (point-at-eol) end))
+          (if (< (current-column) start-column)
+              (push "" lines)
+            (setq line (buffer-substring (point) (point-at-eol)))
+            (setq max (max (length line) max))
+            (push line lines))
+          (forward-line 1)
+          (when (eobp) (setq done t))
+          (move-to-column start-column))
+        (setq lines (nreverse lines))
+        (setq killed-rectangle
+              (if evenly-sized-strings
+                  (mapcar (lambda (s)
+                            (concat s (make-string (- max (length s)) ? )))
+                          lines)
+                lines))
+        (setq deactivate-mark t)
+        (message "Invoke `yank-rectangle' (%s) to get this rectangle"
+                 (mapconcat 'key-description
+                            (where-is-internal 'yank-rectangle) ", "))))))
+
+(defun my-unsaved-changes ()
+  (interactive)
+  (diff-buffer-with-file (current-buffer)))
+
+(defun my-find-file-as-sudo ()
+  (interactive)
+  (let ((file-name (buffer-file-name)))
+    (when file-name
+      (find-alternate-file (concat "/sudo::" file-name)))))
+
+(defun my-occur ()
+  (interactive)
+  (call-interactively
+   (if (eq major-mode 'org-mode)
+       'org-sparse-tree
+     'occur)))
+
+(defun my-pp-json ()
+  (interactive)
+  (shell-command-on-region (point-min)
+                           (point-max)
+                           "python -mjson.tool"
+                           (current-buffer)
+                           t))
+
+(defun my-toggle-camel-case-and-underscore ()
+  (interactive)
+  (let (original-col bounds word underscore camelcase result)
+
+    (when (and (setq bounds (bounds-of-thing-at-point 'sexp))
+               (setq word (buffer-substring-no-properties (car bounds)
+                                                          (cdr bounds))))
+
+      (setq underscore (string-match "_" word))
+      (setq camelcase
+            (let (case-fold-search) (string-match "[A-Z]" word)))
+
+      (when (or underscore camelcase)
+        (setq original-col (current-column))
+
+        (setq result (if underscore
+                         ;; Convert underscore to camel case:
+                         (let ((parts (split-string word "_")))
+                           (concat (car parts)
+                                   (mapconcat #'capitalize (cdr parts) "")))
+                       ;; Convert camel case to underscore:
+                       (let* ((case-fold-search nil)
+                              (str (replace-regexp-in-string
+                                    "\\([A-Z]\\)"
+                                    (lambda (x) (concat "_" (downcase x)))
+                                    word
+                                    t)))
+                         (if (string-match "^_" str)
+                             (substring str 1)
+                           str))))
+
+        (delete-region (car bounds) (cdr bounds))
+        (insert result)
+        (move-to-column original-col)))))
+#+END_SRC
+** My Key bindings
+#+BEGIN_SRC emacs-lisp
+(eval-when-compile
+  (require 'cl))
+
+(global-set-key (kbd "<C-tab>") 'my-switch-to-buffer)
+(global-set-key (kbd "C-\\") 'other-frame)
+(global-set-key (kbd "C-a") 'my-beginning-of-line)
+(global-set-key (kbd "C-b") 'backward-kill-word)
+(global-set-key (kbd "C-d") 'kill-word)
+(global-set-key (kbd "C-f") 'my-isearch-forward)
+(global-set-key (kbd "C-i") 'my-hippie-tab)
+(global-set-key (kbd "C-k") 'my-kill-line-or-region)
+(global-set-key (kbd "C-m") 'newline-and-indent)
+(global-set-key (kbd "C-n") 'helm-M-x)
+(global-set-key (kbd "C-o") 'my-ffap-or-find-file)
+(global-set-key (kbd "C-p") 'my-shell)
+(global-set-key (kbd "C-r") 'vr/query-replace)
+(global-set-key (kbd "C-s") 'save-buffer)
+(global-set-key (kbd "C-v") 'helm-buffers-list)
+(global-set-key (kbd "C-y") 'my-yank)
+(global-set-key (kbd "C-z") 'undo)
+
+(global-set-key (kbd "C-c C") 'org-capture)
+(global-set-key (kbd "C-c TAB") 'yas/expand)
+(global-set-key (kbd "C-c \\") 'align-regexp)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c b") 'rename-buffer)
+(global-set-key (kbd "C-c c") 'calendar)
+(global-set-key (kbd "C-c f") 'recentf-open-files)
+(global-set-key (kbd "C-c g") 'helm-grep-do-git-grep)
+(global-set-key (kbd "C-c i") 'my-change-inside-pair)
+(global-set-key (kbd "C-c j") 'ace-jump-mode)
+(global-set-key (kbd "C-c l") 'toggle-truncate-lines)
+(global-set-key (kbd "C-c m") 'imenu)
+(global-set-key (kbd "C-c o") 'my-occur)
+(global-set-key (kbd "C-c s") 'sort-lines)
+(global-set-key (kbd "C-c G") 'magit-blame)
+
+(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
+
+(global-set-key (kbd "<M-SPC>") 'my-just-one-space)
+(global-set-key (kbd "<M-return>") 'my-dired)
+(global-set-key (kbd "M-;") 'my-comment-line-or-region)
+(global-set-key (kbd "M-<down>") 'scroll-up)
+(global-set-key (kbd "M-<up>") 'scroll-down)
+(global-set-key (kbd "M-D") 'my-duplicate-line-or-region)
+(global-set-key (kbd "M-E") 'mc/edit-lines)
+(global-set-key (kbd "M-\\") 'my-delete-horizontal-space)
+(global-set-key (kbd "M-d") 'my-dired)
+(global-set-key (kbd "M-g") 'goto-line)
+(global-set-key (kbd "M-k") 'my-kill-whole-line)
+(global-set-key (kbd "M-n") 'bm-next)
+(global-set-key (kbd "M-o") 'helm-projectile)
+(global-set-key (kbd "M-p") 'bm-previous)
+(global-set-key (kbd "M-v") 'bm-toggle)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+;; (global-set-key (kbd "<M-down>") 'scroll-up)
+;; (global-set-key (kbd "<M-up>") 'scroll-down)
+;; (global-set-key (kbd "M-'") 'my-emacs-lisp-eval)
+;; (global-set-key (kbd "M-,") 'beginning-of-buffer)
+;; (global-set-key (kbd "M-.") 'end-of-buffer)
+
+(global-set-key (kbd "<home>") 'beginning-of-buffer)
+(global-set-key (kbd "<end>") 'end-of-buffer)
+
+(defvar ctl-c-r-map)
+(define-prefix-command 'ctl-c-r-map)
+(define-key global-map (kbd "C-c r") ctl-c-r-map)
+(global-set-key (kbd "C-c r n") 'my-remove-non-ascii-chars)
+
+(global-set-key (kbd "C-x b") 'helm-buffers-list)
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-x l") 'my-count-lines-buffer)
+(global-set-key (kbd "C-x r K") 'my-copy-from-starting-col-till-eol)
+(global-set-key (kbd "C-x s") 'my-start-line-or-region-swap)
+(global-set-key (kbd "C-x v -") 'my-unsaved-changes)
+(global-set-key (kbd "C-x C-v") 'my-find-file-as-sudo)
+
+(global-set-key (kbd "C-x <up>") 'windmove-up)
+(global-set-key (kbd "C-x <down>") 'windmove-down)
+(global-set-key (kbd "C-x <left>") 'windmove-left)
+(global-set-key (kbd "C-x <right>") 'windmove-right)
+
+;; Add keys that should always be present in all modes. Some modes
+;; override these keys (for example, Magit overrides M-0 to show/hide
+;; parts of the buffer contents). We can't have all keys use this
+;; method as we want modes to provide their specific keys. For
+;; example, TAB in org-mode should show/hide sections/lists and not do
+;; my tab completion.
+(defvar my-keys-map (make-sparse-keymap))
+(define-minor-mode my-keys-mode "My keys." t nil my-keys-map)
+
+(define-key my-keys-map (kbd "C-j") 'other-window)
+(define-key my-keys-map (kbd "C-w") 'my-kill-current-buffer)
+(define-key my-keys-map (kbd "M-0") 'delete-window)
+(define-key my-keys-map (kbd "M-1") 'delete-other-windows)
+(define-key my-keys-map (kbd "M-2") 'split-window-vertically)
+(define-key my-keys-map (kbd "M-3") 'split-window-horizontally)
+
+(when (eq system-type 'darwin)
+  ;; Command-<enter>
+  (global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen))
+#+END_SRC
+** My Activity Log
+#+BEGIN_SRC emacs-lisp
+;; My Activity Log
+(require 'org)
+(require 'org-clock) ; for org-clock-special-range
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Activity Log -- Date Functions
+
+(defvar my-activity-log-oneday (days-to-time 1))
+
+(defun my-activity-log-week-range (&optional time)
+  (let ((week-start-day 1)) ; Monday
+    (org-clock-special-range 'thisweek time nil week-start-day)))
+
+(defun my-activity-log-next-week (time)
+  (let ((range (my-activity-log-week-range time)))
+    (time-add (cadr range) my-activity-log-oneday)))
+
+(defun my-activity-log-prev-week (time)
+  (let ((range (my-activity-log-week-range time)))
+    (time-subtract (car range) my-activity-log-oneday)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Activity Log -- Minibuffer
+(defvar my-activity-log-current-day nil)
+
+(defun my-activity-log-current-week-string ()
+  (let ((range (my-activity-log-week-range my-activity-log-current-day))
+        (day-template "%a %b %d, %Y"))
+    (format "Week %s (%s - %s)"
+            (format-time-string "%W" (car range))
+            (format-time-string day-template (car range))
+            (format-time-string day-template (cadr range)))))
+
+(defun my-activity-log-display-in-minibuffer ()
+  (when (minibufferp)
+    (delete-region (point-at-bol) (point-at-eol))
+    (insert (my-activity-log-current-week-string))))
+
+(defvar my-activity-log-minibuffer-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "<left>")
+      (lambda ()
+        (interactive)
+        (setq my-activity-log-current-day
+              (my-activity-log-prev-week my-activity-log-current-day))
+        (my-activity-log-display-in-minibuffer)))
+
+    (define-key map (kbd "<right>")
+      (lambda ()
+        (interactive)
+        (setq my-activity-log-current-day
+              (my-activity-log-next-week my-activity-log-current-day))
+        (my-activity-log-display-in-minibuffer)))
+
+    ;; RET works both in terminal and GUI, but also binds C-m
+    ;; <return> only works in GUI
+    (define-key map (kbd "RET") 'exit-minibuffer)
+    (define-key map (kbd "C-g") 'abort-recursive-edit)
+    map))
+
+(defun my-activity-log-read-from-minibuffer (spec)
+  (read-from-minibuffer (format "%s week: " (if (eq spec 'start) "Start" "End"))
+                        (my-activity-log-current-week-string)
+                        my-activity-log-minibuffer-map)
+  my-activity-log-current-day)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Buffer functions
+
+(defun my-activity-log-latest-in-current-buffer ()
+  (save-excursion
+    (goto-char (point-max))
+    (let ((header-regex "^[*][*] \\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\).*")
+          (result nil))
+      (while (and (null result)
+                  (re-search-backward header-regex nil t))
+        ;; Date-to-time needs to have all the components present.
+        (setq result (date-to-time (format "%s 00:00:00" (match-string 1)))))
+      result)))
+
+(defvar my-activity-log-week-header-template "%Y-%m-%d (week %U)")
+(defvar my-activity-log-day-header-template "<%Y-%m-%d %a - day %j>")
+
+(defun my-activity-log-insert-for-week (&optional time)
+  (let* ((range (my-activity-log-week-range time))
+         (start (car range))
+         (header (format-time-string my-activity-log-week-header-template start)))
+    (insert "** " header "\n")
+    (dotimes (i 7)
+      (let ((day (format-time-string my-activity-log-day-header-template start)))
+        (insert "*** " day "\n")
+        (setq start (time-add start my-activity-log-oneday))))))
+
+(defun my-activity-log-goto-today (&optional buffer)
+  (let* ((range (my-activity-log-week-range))
+         (week-heading (format-time-string my-activity-log-week-header-template
+                                           (car range)))
+         (day-heading (format-time-string my-activity-log-day-header-template)))
+    (with-current-buffer (or buffer (current-buffer))
+      (re-search-forward "ACTIVITY LOG")
+      (beginning-of-line)
+      (org-cycle)
+      (sit-for 0.1)
+      (goto-char (point-max))
+      (when (search-backward week-heading nil t)
+        (outline-show-branches)
+        (sit-for 0.3)
+        (recenter 0)
+        (when (search-forward day-heading nil t)
+          (outline-get-next-sibling)
+          (previous-line)
+          (end-of-line))))))
+
+(defun my-activity-log-insert-template (&optional arg)
+  "Inserts an activity log template for a week.
+
+Without a prefix arg, appends to the current buffer, either for
+the current date or the week after the latest template present in
+the current buffer.
+
+With a prefix arg, inserts for a user selected range of weeks at
+the current point.
+
+Example template:
+
+\** 2016-09-05 (week 36)
+\*** <2016-09-05 Mon - day 249>
+\*** <2016-09-06 Tue - day 250>
+\*** <2016-09-07 Wed - day 251>
+\*** <2016-09-08 Thu - day 252>
+\*** <2016-09-09 Fri - day 253>
+\*** <2016-09-10 Sat - day 254>
+\*** <2016-09-11 Sun - day 255>"
+  (interactive "P")
+  (if arg
+      (let (start end)
+        (setq my-activity-log-current-day nil)
+        (setq start (my-activity-log-read-from-minibuffer 'start))
+        (setq my-activity-log-current-day (my-activity-log-next-week start))
+        (setq end (my-activity-log-read-from-minibuffer 'end))
+
+        (while (time-less-p start end)
+          (my-activity-log-insert-for-week start)
+          (setq start (my-activity-log-next-week start)))
+        (my-activity-log-insert-for-week end))
+
+    ;; Without arg, append to the current buffer the week's template,
+    ;; which depends on the latest that is already there or the
+    ;; current time now.
+    (let* ((latest (my-activity-log-latest-in-current-buffer))
+           (time (if latest
+                     (my-activity-log-next-week latest)
+                   (current-time))))
+      (goto-char (point-max))
+      (my-activity-log-insert-for-week time))))
+#+END_SRC
+** My Update Dot Emacs
+#+BEGIN_SRC emacs-lisp
+;;; -*- lexical-binding: t -*-
+
+(require 'cl)
+(require 'button)
+
+(defun my-update-dot-emacs ()
+  (lexical-let ((update-buffer-name
+                 (generate-new-buffer "*Update-Dot-Emacs*")))
+    (cl-labels
+        ((run (program &rest args)
+           (let ((running-msg (format "Running `%s %s'..."
+                                      program
+                                      (mapconcat 'identity args " "))))
+             (insert running-msg "\n")
+             (apply #'call-process program nil t nil args)))
+
+         (do-update (button)
+           (let ((default-directory "~/my/dotfiles")
+                 (stash-first (button-get button 'stash-first)))
+             (with-current-buffer update-buffer-name
+               (goto-char (point-max))
+               (insert "\n\nUpdating...\n")
+               (when stash-first
+                 (run "git" "stash" "save" "-u"
+                      "\"DONT DELETE: stashed by my-update-dot-emacs.el\""))
+               (run "git" "pull" "--rebase")
+               (let ((status
+                      (concat (if stash-first
+                                  "Updated & stashed."
+                                "Updated (nothing stashed).")
+                              " Restart Emacs to include changes.")))
+                 (message status)
+                 (insert "\n\n" status)))))
+
+         (show-maximum-output ()
+           (switch-to-buffer (current-buffer) t)
+           (delete-other-windows)
+           ;; If there is a big diff -- I want to see the whole thing.
+           (unless (pos-visible-in-window-p (point-min))
+             (split-window-right)
+             (goto-char (point-min))
+             (follow-mode))))
+
+      (with-current-buffer update-buffer-name
+        (let ((default-directory "~/my/dotfiles")
+              (master)
+              (origin/master))
+
+          (run "git" "fetch")
+
+          ;; Both `master' and `origin/master' will end with newlines.
+          (setq master (shell-command-to-string "git rev-parse master"))
+          (setq origin/master
+                (shell-command-to-string "git rev-parse origin/master"))
+          (insert "Comparing master and origin/master:\n"
+                  (format "         master: %s" master)
+                  (format "  origin/master: %s" origin/master))
+
+          (unless (string= master origin/master)
+            (let* ((diff (shell-command-to-string "git diff"))
+                   (stash-first (> (length diff) 0)))
+              (if stash-first
+                  (insert "Local changes:\n" diff)
+                (insert "No local changes"))
+              (insert "\n\n")
+              (insert-button (if stash-first
+                                 "Git Stash and Update Dot Emacs"
+                               "Update Dot Emacs (no local changes)")
+                             'action #'do-update
+                             'stash-first stash-first)
+              (show-maximum-output)
+              (beginning-of-line))))))))
+
+(run-with-idle-timer 10 nil #'my-update-dot-emacs)
+#+END_SRC
+** My After Init Hook
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook
+            (lambda ()
+              (load "~/.emacs.private.el" 'no-error)
+              (unless window-system
+                (recentf-open-files))
+              (setq my-time-diff-secs
+                    (float-time (time-since my-emacs-start-time))))
+            )
+#+END_SRC
+* PACKAGES
+** Yasnippet
+#+BEGIN_SRC emacs-lisp
+(require 'advice)
+
+(require 'yasnippet)
+
+(setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+(yas-global-mode 1)
+
+;; I have yas working with hippie-expand.
+(define-key yas-minor-mode-map [(tab)] nil)
+(define-key yas-minor-mode-map (kbd "TAB") nil)
+
+(defadvice yas--modes-to-activate (after my-yas-activate-global-mode ())
+  (let ((modes ad-return-value))
+    (setq ad-return-value (append modes (list 'global-mode)))))
+
+(ad-activate 'yas--modes-to-activate)
+#+END_SRC
+** Web Mode
+#+BEGIN_SRC emacs-lisp
+(require 'web-mode)
+
+(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+(setq web-mode-enable-current-column-highlight t)
+(setq web-mode-enable-current-element-highlight t)
+
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (string= web-mode-content-type "javascript")
+              (web-mode-set-content-type "jsx"))
+            (setq web-mode-markup-indent-offset 2)
+            (setq web-mode-css-indent-offset 2)
+            (setq web-mode-sql-indent-offset 2)
+            (setq web-mode-code-indent-offset 2)))
+#+END_SRC
+** Emacs Slime Nav
+#+BEGIN_SRC emacs-lisp
+(require 'elisp-slime-nav)
+(add-hook 'emacs-lisp-mode-hook 'turn-on-elisp-slime-nav-mode)
+#+END_SRC
+** Golang
+#+BEGIN_SRC emacs-lisp
+(require 'go-mode)
+
+(add-to-list 'exec-path (expand-file-name "~/go/bin"))
+
+(setq gofmt-command "goimports")
+(add-hook 'before-save-hook 'gofmt-before-save)
+#+END_SRC
+** Helm
+#+BEGIN_SRC emacs-lisp
+(require 'helm-config)
+(helm-mode 1)
+
+(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+(define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
+
+(setq helm-M-x-fuzzy-match t)
+(setq helm-buffers-fuzzy-matching t)
+
+(require 'helm-ls-git)
+
+(setq helm-ls-git-show-abs-or-relative 'relative)
+
+;; (setq helm-ff-skip-boring-files t)
+;; ;; TODO: these don't work. Looks like having the '.' and '..' on top
+;; ;; of the list is by design.
+;; (push "\\.\\.$" helm-boring-file-regexp-list)
+;; (push "\\.$" helm-boring-file-regexp-list)
+
+#+END_SRC
+** Help
+#+BEGIN_SRC emacs-lisp
+(require 'help-mode)
+
+(defun my-help-push-next-button ()
+  (interactive)
+  (forward-button 1 t)
+  (push-button))
+
+(define-key help-mode-map (kbd "b") 'help-go-back)
+(define-key help-mode-map (kbd "f") 'help-go-forward)
+(define-key help-mode-map (kbd "n") 'forward-button)
+(define-key help-mode-map (kbd "p") 'backward-button)
+(define-key help-mode-map (kbd "x") 'delete-window)
+(define-key help-mode-map (kbd "g") 'my-help-push-next-button)
+#+END_SRC
+** ISearch
+#+BEGIN_SRC emacs-lisp
+(defun my-isearch-search-for-selected ()
+  (let ((isearch-word t)
+        (isearch-forward t)
+        (beg (min (mark) (point)))
+        (string (buffer-substring-no-properties (mark) (point))))
+    (unless (string-match "^\n*$" string)
+      (deactivate-mark)
+      (save-excursion
+        (call-interactively 'isearch-forward)
+        (goto-char beg)
+        (isearch-yank-string string)
+        (message "%d matches" (count-matches string
+                                             (point-min)
+                                             (point-max)))))))
+(defun my-isearch-forward ()
+  (interactive)
+  (if (let (use-empty-active-region)
+        (use-region-p))
+      (my-isearch-search-for-selected)
+    (setq last-command 'isearch-forward)
+    (call-interactively 'isearch-forward)))
+
+(defun my-isearch-delete-region ()
+  (interactive)
+  (when isearch-other-end
+    (delete-region (point) isearch-other-end)
+    (isearch-done)))
+
+;; TODO: handle wrap around
+(defun my-isearch-goto-next-non-visible-match ()
+  "Go to the next (or previous) match that isn't visible on screen."
+  (interactive)
+  (let ((next-non-visible-match
+         (let ((search-spaces-regexp search-whitespace-regexp))
+           (save-excursion
+             (cond (isearch-forward
+                    (goto-char (window-end))
+                    (re-search-forward (regexp-quote isearch-string) nil t))
+                   (t
+                    (goto-char (window-start))
+                    (re-search-backward (regexp-quote isearch-string) nil t)))))))
+    (if (null next-non-visible-match)
+        (message "No matches found beyond this window")
+      (goto-char next-non-visible-match)
+      (cond (isearch-forward
+             (goto-char (point-at-bol))
+             (recenter 4))
+            (t
+             (goto-char (point-at-eol))
+             (recenter -4)))
+      (isearch-search)
+      (isearch-update))))
+
+(defun my-isearch-yank-whole-word ()
+  (interactive)
+  (when (= (length isearch-string) 0)
+    (skip-chars-backward "a-zA-Z0-9_-"))
+  (isearch-yank-internal
+   (lambda ()
+     (skip-chars-forward "a-zA-Z0-9_-")
+     (point))))
+
+(defun my-isearch-goto-first-match ()
+  (interactive)
+  (widen)
+  (goto-char (point-min))
+  (isearch-repeat-forward)
+  (isearch-update))
+
+(defun my-isearch-goto-last-match ()
+  (interactive)
+  (widen)
+  (goto-char (point-max))
+  (isearch-repeat-backward)
+  (isearch-update))
+
+(defun my-isearch-repeat ()
+  (interactive)
+  (if isearch-forward
+      (isearch-repeat-forward)
+    (isearch-repeat-backward)))
+
+(setq isearch-allow-scroll t)
+(setq isearch-lazy-highlight-initial-delay 0)
+
+(define-key isearch-mode-map (kbd "M-a") 'my-isearch-goto-first-match)
+(define-key isearch-mode-map (kbd "M-e") 'my-isearch-goto-last-match)
+(define-key isearch-mode-map (kbd "C-e") 'isearch-exit)
+(define-key isearch-mode-map "\r" 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "<return>") 'my-isearch-repeat)
+(define-key isearch-mode-map (kbd "RET") 'my-isearch-repeat)
+(define-key isearch-mode-map (kbd "<S-return>") 'isearch-repeat-backward)
+;(define-key isearch-mode-map (kbd "<backspace>") 'my-isearch-delete-region)
+(define-key isearch-mode-map (kbd "C-K") 'isearch-query-replace-regexp)
+(define-key isearch-mode-map (kbd "C-d") 'my-isearch-yank-whole-word)
+(define-key isearch-mode-map (kbd "C-k") 'isearch-query-replace)
+(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+(define-key isearch-mode-map (kbd "C-v") 'my-isearch-goto-next-non-visible-match)
+#+END_SRC
+** Magit
+#+BEGIN_SRC emacs-lisp
+(require 'magit)
+
+(setq magit-save-repository-buffers 'dontask)
+(setq magit-diff-refine-hunk nil)
+(setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+
+(set-face-attribute 'magit-diff-added-highlight nil :foreground "#22aa22")
+
+(add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
+
+(add-hook 'magit-mode-hook
+          (lambda ()
+            (define-key magit-mode-map (kbd "1") 'magit-section-show-level-1-all)
+            (define-key magit-mode-map (kbd "2") 'magit-section-show-level-2-all)
+            (define-key magit-mode-map (kbd "3") 'magit-section-show-level-3-all)
+            (define-key magit-mode-map (kbd "4") 'magit-section-show-level-4-all)))
+#+END_SRC
+** Multiple Cursors
+#+BEGIN_SRC emacs-lisp
+(require 'multiple-cursors)
+(require 'region-bindings-mode)
+
+(define-key region-bindings-mode-map "a" 'mc/mark-all-like-this)
+(define-key region-bindings-mode-map "n" 'mc/mark-next-like-this)
+(define-key region-bindings-mode-map "l" 'mc/edit-lines)
+#+END_SRC
+** Powerline
+#+BEGIN_SRC emacs-lisp
+(require 'powerline)
+
+(setq powerline-default-separator 'bar)
+(powerline-default-theme)
+#+END_SRC
+** Region Bindings Mode
+#+BEGIN_SRC emacs-lisp
+(require 'region-bindings-mode)
+(region-bindings-mode-enable)
+#+END_SRC
+** Anzu
+#+BEGIN_SRC emacs-lisp
+(require 'anzu)
+(global-anzu-mode 1)
+#+END_SRC
+** Bm (bookmarks)
+#+BEGIN_SRC emacs-lisp
+(require 'bm)
+
+(setq bm-highlight-style 'bm-highlight-only-line
+      bm-cycle-all-buffers t
+      bm-recenter t
+      bm-buffer-persistence t)
+#+END_SRC
+** Coffee Mode
+#+BEGIN_SRC emacs-lisp
+(require 'coffee-mode)
+(setq coffee-tab-width 2)
+#+END_SRC
+** Diminish
+- This should be loaded last
+#+BEGIN_SRC emacs-lisp
+(require 'diminish)
+
+(let ((modes
+       '(yas-minor-mode
+         anzu-mode
+         auto-fill-function
+         helm-mode
+         elisp-slime-nav-mode
+         org-indent-mode
+         dired-omit-mode
+         region-bindings-mode
+         auto-revert-mode)))
+  (mapc 'diminish modes))
+#+END_SRC
