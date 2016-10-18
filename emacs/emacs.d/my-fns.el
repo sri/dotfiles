@@ -165,12 +165,12 @@ The latter method uses `helm-find-files'."
           (let ((linenum
                  (save-excursion
                    (goto-char (point-at-bol))
-                   (when (and (search-forward file-at-point (point-at-eol) t 1)
+                   (when (and (search-forward file (point-at-eol) t 1)
                               (looking-at ":\\([0-9]+\\)"))
                      (string-to-number (buffer-substring-no-properties
                                         (match-beginning 1)
                                         (match-end 1)))))))
-            (find-file file-at-point)
+            (find-file file)
             (when linenum
               (goto-line linenum)
               (linum-mode 1)
