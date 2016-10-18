@@ -23,7 +23,7 @@ Fundamental mode."
 (require 'whitespace)
 ;; For some reason tabs don't work, but tab-mark does...
 (setq whitespace-style
-      '(face tabs trailing lines-tail space-before-tab newline indentation empty space-after-tab tab-mark))
+      '(face tabs trailing space-before-tab newline indentation empty space-after-tab tab-mark))
 (setq whitespace-line-column 78)
 
 (mapc (lambda (hook)
