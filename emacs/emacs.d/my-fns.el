@@ -264,35 +264,30 @@ will bring it back."
 
 (defun my-toggle-camel-case-and-underscore ()
   (interactive)
-  (let (original-col bounds word underscore camelcase result)
-
-    (when (and (setq bounds (bounds-of-thing-at-point 'sexp))
-               (setq word (buffer-substring-no-properties (car bounds)
-                                                          (cdr bounds))))
-
-      (setq underscore (string-match "_" word))
-      (setq camelcase
-            (let (case-fold-search) (string-match "[A-Z]" word)))
+  (when-let ((bounds (bounds-of-thing-at-point 'sexp)))
+    (let* ((word (buffer-substring-no-properties (car bounds)
+                                                 (cdr bounds)))
+           (underscore (string-match "_" word))
+           (camelcase (let (case-fold-search) (string-match "[A-Z]" word))))
 
       (when (or underscore camelcase)
-        (setq original-col (current-column))
-
-        (setq result (if underscore
-                         ;; Convert underscore to camel case:
-                         (let ((parts (split-string word "_")))
-                           (concat (car parts)
-                                   (mapconcat #'capitalize (cdr parts) "")))
-                       ;; Convert camel case to underscore:
-                       (let* ((case-fold-search nil)
-                              (str (replace-regexp-in-string
-                                    "\\([A-Z]\\)"
-                                    (lambda (x) (concat "_" (downcase x)))
-                                    word
-                                    t)))
-                         (if (string-match "^_" str)
-                             (substring str 1)
-                           str))))
+        (let ((original-col (current-column))
+              (result (if underscore
+                          ;; Convert underscore to camel case:
+                          (let ((parts (split-string word "_")))
+                            (concat (car parts)
+                                    (mapconcat #'capitalize (cdr parts) "")))
+                        ;; Convert camel case to underscore:
+                        (let* ((case-fold-search nil)
+                               (str (replace-regexp-in-string
+                                     "\\([A-Z]\\)"
+                                     (lambda (x) (concat "_" (downcase x)))
+                                     word
+                                     t)))
+                          (if (string-match "^_" str)
+                              (substring str 1)
+                            str)))))
 
         (delete-region (car bounds) (cdr bounds))
         (insert result)
-        (move-to-column original-col)))))
+        (move-to-column original-col))))))
