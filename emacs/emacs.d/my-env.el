@@ -56,6 +56,7 @@ Fundamental mode."
 (setq visible-bell nil)
 (setq ring-bell-function (lambda ()))
 (setq disabled-command-hook nil)
+(setq kill-ring-max 300)
 (setq kill-whole-line t)
 (setq kill-read-only-ok t)
 (setq mouse-yank-at-point t)
