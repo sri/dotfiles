@@ -15,8 +15,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 140 :family "Monaco"))))
- '(bm-face ((t (:background "#eab700" :weight bold :foreground "black"))))
+ '(default ((t (:height 160 :family "Monaco"))))
+ '(bm-face ((t (:background "#9e7b00" :weight bold :foreground "black"))))
  '(comint-highlight-prompt ((t nil)))
  '(diff-refine-added ((t (:background "green" :foreground "black"))))
  '(diff-refine-removed ((t (:background "red" :foreground "black"))))
