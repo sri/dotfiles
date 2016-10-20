@@ -21,13 +21,13 @@
 
 ;; Center Emacs's position on screen
 (let* ((height 40)
-       (width 80)
-       (screen-height (x-display-pixel-height))
-       (screen-width (x-display-pixel-width))
-       (top (/ (- screen-height (frame-pixel-height)) 2))
-       (left (/ (- screen-width (frame-pixel-width)) 2)))
-  (add-to-list 'default-frame-alist (cons 'height 40))
-  (add-to-list 'default-frame-alist (cons 'width 80))
+       (width 82)
+       (top 0)
+       (left (/ (- (display-pixel-width)
+                   (frame-pixel-width))
+                2)))
+  (add-to-list 'default-frame-alist (cons 'height height))
+  (add-to-list 'default-frame-alist (cons 'width width))
   (add-to-list 'default-frame-alist (cons 'top top))
   (add-to-list 'default-frame-alist (cons 'left left)))
 
