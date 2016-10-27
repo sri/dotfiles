@@ -10,6 +10,7 @@
 
 (add-hook 'magit-mode-hook
           (lambda ()
+            (define-key magit-mode-map (kbd "C-c C-w") 'magit-diff-toggle-refine-hunk)
             (define-key magit-mode-map (kbd "1") 'magit-section-show-level-1-all)
             (define-key magit-mode-map (kbd "2") 'magit-section-show-level-2-all)
             (define-key magit-mode-map (kbd "3") 'magit-section-show-level-3-all)
