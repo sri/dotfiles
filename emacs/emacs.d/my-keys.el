@@ -25,7 +25,7 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c b") 'rename-buffer)
 (global-set-key (kbd "C-c c") 'calendar)
-(global-set-key (kbd "C-c f") 'recentf-open-files)
+(global-set-key (kbd "C-c f") 'my-find-file-in-other-window)
 (global-set-key (kbd "C-c g") 'helm-grep-do-git-grep)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
 (global-set-key (kbd "C-c j") 'ace-jump-mode)
@@ -33,6 +33,7 @@
 (global-set-key (kbd "C-c m") 'imenu)
 (global-set-key (kbd "C-c o") 'my-occur)
 (global-set-key (kbd "C-c s") 'sort-lines)
+(global-set-key (kbd "C-c F") 'recentf-open-files)
 (global-set-key (kbd "C-c G") 'magit-blame)
 
 (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)

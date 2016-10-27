@@ -291,3 +291,16 @@ will bring it back."
         (delete-region (car bounds) (cdr bounds))
         (insert result)
         (move-to-column original-col))))))
+
+(defun my-find-file-in-other-window ()
+  (interactive)
+  (let ((dir (read-key "Where (defaults to right)? ")))
+    (unless (memq dir '(left right))
+      (setq dir 'right))
+    (cond ((eq dir 'right)
+           (split-window-right)
+           (windmove-right))
+          (t
+           (split-window-below)
+           (windmove-down)))
+    (call-interactively 'helm-find-files)))
