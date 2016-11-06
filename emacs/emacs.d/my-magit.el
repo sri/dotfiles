@@ -21,7 +21,7 @@
                                     :key #'car))
                    (car vals))))
     (setq magit-diff-refine-hunk (car next))
-    (message "Word-diff: %s" (cdr next)))
+    (message "Word-diff: %s" (cdr next))))
 
 (add-hook 'magit-mode-hook
           (lambda ()
