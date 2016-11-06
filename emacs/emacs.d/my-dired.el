@@ -50,6 +50,7 @@
 (add-hook 'dired-mode-hook
           (lambda ()
             (dired-omit-mode 1)
+            (diminish 'dired-omit-mode)
             (dired-hide-details-mode 1)
             (define-key dired-mode-map (kbd "D") 'dired-hide-details-mode)
             (setq dired-dwim-target t)
