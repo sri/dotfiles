@@ -1,5 +1,6 @@
 (require 'magit)
 
+(setq magit-section-highlight-hook nil)
 (setq magit-save-repository-buffers 'dontask)
 (setq magit-commit-show-diff nil)
 (setq magit-display-buffer-function
