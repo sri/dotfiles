@@ -33,6 +33,18 @@
   (interactive)
   (recenter-top-bottom 0))
 
+(defun my-shell-rename-and-run-command ()
+  "Rename buffer to the name of the command typed in.
+And then run the command."
+  (interactive)
+  (let* ((cmd (buffer-substring-no-properties (point-at-bol)
+                                              (point-at-eol)))
+         (bufname (format "*%s*" cmd)))
+    (if (get-buffer bufname)
+        (message "`%s' already exists" bufname)
+      (rename-buffer bufname)
+      (comint-send-input))))
+
 (defun my-shell (&optional arg)
   "Switch to the most recently active shell buffer.
 With a prefix arg, create a new shell.
@@ -76,6 +88,8 @@ Also, creates a shell when there are no other shells."
             (setq comint-scroll-show-maximum-output nil)
             (toggle-truncate-lines 1)
             (local-unset-key (kbd "C-d"))
+            (define-key shell-mode-map (kbd "C-c C-g")
+              'my-shell-rename-and-run-command)
             (define-key shell-mode-map (kbd "C-c d")
               'dirs)
             (define-key shell-mode-map (kbd "C-<up>")
