@@ -1,19 +1,20 @@
-(load-theme 'spacemacs-dark t)
-
-'(let ((theme (if (= (random 2) 1)
-                 'solarized-dark
-               'solarized-light)))
-  (load-theme theme t)
-  (custom-theme-set-faces theme
-                          '(dired-header ((t (:foreground "#268bd2"
-                                                          :underline t
-                                                          :background nil))))))
+(let ((theme (car '(
+                    ;; spacemacs-dark
+                    ;; solarized-light
+                    solarized-dark
+                    ))))
+  (when theme
+    (load-theme theme t)
+    (custom-theme-set-faces
+     theme
+     '(dired-header ((t (:foreground "#268bd2"
+                                     :underline t
+                                     :background nil)))))))
 
 (add-hook 'focus-out-hook
           (lambda ()
             (when (and buffer-file-name (buffer-modified-p))
               (save-buffer))))
-
 
 (let ((shell-path (shell-command-to-string "$SHELL -c 'echo -n $PATH'")))
   (setenv "PATH" shell-path)
