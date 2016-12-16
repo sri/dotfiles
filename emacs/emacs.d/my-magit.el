@@ -2,7 +2,7 @@
 
 (setq magit-section-highlight-hook nil)
 (setq magit-save-repository-buffers 'dontask)
-(setq magit-commit-show-diff nil)
+(setq magit-commit-show-diff t)
 (setq magit-display-buffer-function
       'magit-display-buffer-same-window-except-diff-v1)
 
