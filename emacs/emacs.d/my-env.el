@@ -26,14 +26,13 @@ Fundamental mode."
       '(face tabs trailing space-before-tab newline indentation empty space-after-tab tab-mark))
 (setq whitespace-line-column 78)
 
-(mapc (lambda (hook)
-        (add-hook hook
-                  (lambda () (whitespace-mode 1))))
-      '(prog-mode-hook
-        diff-mode-hook))
+(let ((on '(prog-mode-hook
+            diff-mode-hook))
+      (off '(emacs-lisp-mode-hook
+             go-mode-hook)))
 
-(add-hook 'emacs-lisp-mode-hook
-          (lambda () (whitespace-mode -1)))
+  (dolist (h on) (add-hook h (lambda () (whitespace-mode 1))))
+  (dolist (h off) (add-hook h (lambda () (whitespace-mode -1)))))
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
