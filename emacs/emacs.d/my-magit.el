@@ -6,9 +6,6 @@
 (setq magit-display-buffer-function
       'magit-display-buffer-same-window-except-diff-v1)
 
-(remove-hook 'magit-status-sections-hook
-             'magit-insert-stashes)
-
 (set-face-attribute 'magit-diff-added-highlight nil :foreground "#22aa22")
 
 (add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
