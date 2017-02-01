@@ -304,3 +304,7 @@ will bring it back."
            (split-window-below)
            (windmove-down)))
     (call-interactively 'helm-find-files)))
+
+(defun my-frame-transparency (arg)
+  (interactive "p")
+  (set-frame-parameter nil 'alpha (list arg arg)))
