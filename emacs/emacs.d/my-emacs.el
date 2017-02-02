@@ -1,5 +1,3 @@
-(require 'dash)
-
 (defun my-load-all ()
   (interactive)
   (let ((default-directory "~/my/dotfiles/emacs/emacs.d"))
@@ -29,8 +27,7 @@
 
     (mapc (lambda (pkg)
             (my-load (format "my-%s" pkg) 'ignore-if-missing))
-          (-remove-item 'diminish
-                        package-selected-packages))
+          (remove 'diminish package-selected-packages))
 
     (my-load "my-diminish")
     (my-load "~/.emacs.private.el" 'ignore-if-missing)))
