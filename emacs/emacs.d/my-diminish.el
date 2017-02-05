@@ -13,7 +13,6 @@
           org-indent-mode
           ruby-end-mode
           region-bindings-mode
-          which-key-mode
           auto-revert-mode)))
 
 (add-hook 'after-init-hook 'my-diminish-all)
