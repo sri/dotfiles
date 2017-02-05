@@ -26,7 +26,6 @@
 (global-set-key (kbd "C-c b") 'rename-buffer)
 (global-set-key (kbd "C-c c") 'calendar)
 (global-set-key (kbd "C-c f") 'my-find-file-in-other-window)
-(global-set-key (kbd "C-c g") 'helm-grep-do-git-grep)
 (global-set-key (kbd "C-c i") 'my-change-inside-pair)
 (global-set-key (kbd "C-c j") 'ace-jump-mode)
 (global-set-key (kbd "C-c l") 'toggle-truncate-lines)
@@ -34,7 +33,14 @@
 (global-set-key (kbd "C-c o") 'my-occur)
 (global-set-key (kbd "C-c s") 'sort-lines)
 (global-set-key (kbd "C-c F") 'recentf-open-files)
-(global-set-key (kbd "C-c G") 'magit-blame)
+
+;; Git related under: C-c g <letter>
+(defvar ctl-c-g-map)
+(define-prefix-command 'ctl-c-g-map)
+(define-key global-map (kbd "C-c g") ctl-c-g-map)
+(define-key ctl-c-g-map (kbd "b") 'magit-blame)
+(define-key ctl-c-g-map (kbd "f") 'magit-log-buffer-file)
+(define-key ctl-c-g-map (kbd "g") 'helm-grep-do-git-grep)
 
 (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
 
