@@ -56,34 +56,24 @@ __my_prompt_command() {
   local exitcode="$?"
   local gitbranch=$(__git_ps1 "%s")
   local cwd="$COLOR_LIGHT_BLUE\w "
-
-  local whoami=$(whoami)
-  local final_prompt="\$"
-  local timestamp=""
-
-  if [ "$whoami" == "root" ]
-  then
-    whoami="$COLOR_RED$whoami$COLOR_NC"
-    final_prompt="#"
-  fi
-  timestamp="$COLOR_NO<$whoami@\h \D{%F %T}>"
+  local final_prompt="λ"
 
   if [ "$gitbranch" != "" ]
   then
-    gitbranch="$COLOR_BROWN($gitbranch) "
+      gitbranch="$COLOR_BROWN($gitbranch) "
   fi
 
   if [ "$exitcode" != "0" ]
   then
-    exitcode="$COLOR_LIGHT_RED[$exitcode]$COLOR_NC "
+      exitcode="$COLOR_LIGHT_RED[$exitcode]$COLOR_NC "
   else
-    exitcode=""
+      exitcode=""
   fi
 
   # Write to ~/.bash_history immediately after each command is typed in.
   history -a
 
-  PS1="$cwd$gitbranch$COLOR_NC$exitcode$timestamp$COLOR_NC\n$final_prompt "
+  PS1="$cwd$gitbranch$exitcode$COLOR_NC\n$final_prompt "
 }
 
 if [ "$PROMPT_COMMAND" == "" ]
