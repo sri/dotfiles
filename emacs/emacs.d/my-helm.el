@@ -1,8 +1,11 @@
 (require 'helm-config)
 (helm-mode 1)
 
-(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-(define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
+(bind-keys :map shell-mode-map
+          ("C-c C-l" . helm-comint-input-ring))
+
+(bind-keys :map minibuffer-local-map
+           ("C-c C-l" . helm-minibuffer-history))
 
 (setq helm-M-x-fuzzy-match t)
 (setq helm-buffers-fuzzy-matching t)

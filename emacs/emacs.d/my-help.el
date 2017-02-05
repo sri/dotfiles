@@ -5,9 +5,10 @@
   (forward-button 1 t)
   (push-button))
 
-(define-key help-mode-map (kbd "b") 'help-go-back)
-(define-key help-mode-map (kbd "f") 'help-go-forward)
-(define-key help-mode-map (kbd "n") 'forward-button)
-(define-key help-mode-map (kbd "p") 'backward-button)
-(define-key help-mode-map (kbd "x") 'delete-window)
-(define-key help-mode-map (kbd "g") 'my-help-push-next-button)
+(bind-keys :map help-mode-map
+           ("b" . help-go-back)
+           ("f" . help-go-forward)
+           ("n" . forward-button)
+           ("p" . backward-button)
+           ("x" . delete-window)
+           ("g" . my-help-push-next-button))

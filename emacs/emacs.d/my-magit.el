@@ -23,9 +23,10 @@
 
 (add-hook 'magit-mode-hook
           (lambda ()
-            (define-key magit-mode-map (kbd "C-c C-s") 'magit-stash-list)
-            (define-key magit-mode-map (kbd "C-c C-w") 'my-magit-diff-toggle-refine-hunk)
-            (define-key magit-mode-map (kbd "1") 'magit-section-show-level-1-all)
-            (define-key magit-mode-map (kbd "2") 'magit-section-show-level-2-all)
-            (define-key magit-mode-map (kbd "3") 'magit-section-show-level-3-all)
-            (define-key magit-mode-map (kbd "4") 'magit-section-show-level-4-all)))
+            (bind-keys :map magit-mode-map
+                       ("C-c C-s" . magit-stash-list)
+                       ("C-c C-w" . my-magit-diff-toggle-refine-hunk)
+                       ("1" . magit-section-show-level-1-all)
+                       ("2" . magit-section-show-level-2-all)
+                       ("3" . magit-section-show-level-3-all)
+                       ("4" . magit-section-show-level-4-all))))
