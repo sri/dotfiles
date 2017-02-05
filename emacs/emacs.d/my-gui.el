@@ -1,6 +1,6 @@
 (let ((theme (car '(
-                    ;; spacemacs-dark
-                    ;; solarized-light
+                    spacemacs-dark
+                    solarized-light
                     solarized-dark
                     ))))
   (when theme
