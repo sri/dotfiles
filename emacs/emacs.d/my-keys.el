@@ -4,6 +4,9 @@
 (require 'bind-key)
 
 (bind-keys
+ ;; Key which don't want to override in all modes.
+ ;; For example, Magit does useful things with C-i
+ ;; (TAB) -- show/hide file diffs.
  ("C-i" . my-hippie-tab)
  ("C-m" . newline-and-indent))
 
@@ -90,4 +93,4 @@
 
 (when (eq system-type 'darwin)
   ;; Command-<enter>
-  (global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen))
+  (bind-key* "<s-return>" 'toggle-frame-fullscreen))
