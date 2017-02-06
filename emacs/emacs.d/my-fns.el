@@ -292,18 +292,15 @@ will bring it back."
         (insert result)
         (move-to-column original-col))))))
 
-(defun my-find-file-in-other-window ()
-  (interactive)
-  (let ((dir (read-key "Where (defaults to right)? ")))
-    (unless (memq dir '(left right))
-      (setq dir 'right))
-    (cond ((eq dir 'right)
-           (split-window-right)
-           (windmove-right))
-          (t
-           (split-window-below)
-           (windmove-down)))
-    (call-interactively 'helm-find-files)))
+(defun my-find-file-in-other-window (&optional arg)
+  (interactive "P")
+  (cond ((not arg)
+         (split-window-right)
+         (windmove-right))
+        (t
+         (split-window-below)
+         (windmove-down)))
+  (call-interactively 'helm-find-files))
 
 (defun my-frame-transparency (arg)
   (interactive "p")
@@ -319,6 +316,7 @@ copied."
                   (and (or (eq major-mode 'shell-mode)
                            (string-prefix-p "Magit" mode-name))
                        default-directory))))
-    (when name
+    (if (not name)
+        (message "Nothing to copy")
       (kill-new name)
       (message "Copied `%s'" name))))
