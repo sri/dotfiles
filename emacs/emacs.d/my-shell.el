@@ -52,17 +52,18 @@ Also, creates a shell when there are no other shells."
   (interactive "P")
   (cond (arg
          (shell (generate-new-buffer-name "*shell*")))
-        (t (let ((shells (-filter (lambda (buffer)
-                                    (with-current-buffer buffer
-                                      (eq major-mode 'shell-mode)))
-                                  (buffer-list))))
+        (t (let (shells)
+
+             (dolist (buf (buffer-list))
+               (with-current-buffer buf
+                 (if (eq major-mode 'shell-mode) (push buf shells))))
+
              (setq shells
                    (sort shells
                          (lambda (x y)
-                           (> (with-current-buffer x
-                                my-shell-last-active-time)
-                              (with-current-buffer y
-                                my-shell-last-active-time)))))
+                           (> (with-current-buffer x my-shell-last-active-time)
+                              (with-current-buffer y my-shell-last-active-time)))))
+
              (cond ((null shells)
                     (shell))
                    ((eq major-mode 'shell-mode)
