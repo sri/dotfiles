@@ -76,6 +76,13 @@ Also, creates a shell when there are no other shells."
 (defun my-shell-update-last-active-time (&optional string)
   (setq my-shell-last-active-time (float-time)))
 
+(defun my-shell-dont-scroll ()
+  (interactive)
+  (let ((point (point)))
+    (comint-send-input)
+    (goto-char point)
+    (recenter 0)))
+
 (add-hook 'shell-mode-hook
           (lambda ()
             (my-shell-update-last-active-time)
@@ -90,15 +97,16 @@ Also, creates a shell when there are no other shells."
             (local-unset-key (kbd "C-d"))
 
             (bind-keys :map shell-mode-map
-                      ("C-c C-g" . my-shell-rename-and-run-command)
-                      ("C-c d" . dirs)
-                      ("C-<up>" . comint-previous-prompt)
-                      ("C-<down>" . comint-next-prompt)
-                      ("C-c e" . my-shell-erase-buffer)
-                      ("C-c n" . my-shell-rename-buffer)
-                      ("C-l" . my-shell-bash-clear-screen)
-                      ("<right>" . my-shell-forward-char-or-previous-history)
-                      ("<down>" . my-shell-next-line-or-next-history)
-                      ("M-." . comint-insert-previous-argument))
+                       ("C-c C-g" . my-shell-rename-and-run-command)
+                       ("C-c d" . dirs)
+                       ("C-c <return>" . my-shell-dont-scroll)
+                       ("C-<up>" . comint-previous-prompt)
+                       ("C-<down>" . comint-next-prompt)
+                       ("C-c e" . my-shell-erase-buffer)
+                       ("C-c n" . my-shell-rename-buffer)
+                       ("C-l" . my-shell-bash-clear-screen)
+                       ("<right>" . my-shell-forward-char-or-previous-history)
+                       ("<down>" . my-shell-next-line-or-next-history)
+                       ("M-." . comint-insert-previous-argument))
 
             ))
