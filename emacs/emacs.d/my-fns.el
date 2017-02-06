@@ -152,12 +152,18 @@ decoded URL in the minibuffer."
 
 (require 'ffap)
 
+(defun my-open-project-file-or-find-files ()
+  (call-interactively
+   (if (helm-ls-git-root-dir)
+       'helm-ls-git-ls
+     'helm-find-files)))
+
 (defun my-ffap-or-find-file (arg)
   "Find the file at point or ask the user for file's path.
 The latter method uses `helm-find-files'."
   (interactive "P")
   (if arg
-      (call-interactively 'helm-find-files)
+      (my-open-project-file-or-find-files)
     (let (file)
       (unless (memq major-mode '(dired-mode))
         (setq file (ffap-file-at-point)))
@@ -176,10 +182,7 @@ The latter method uses `helm-find-files'."
               (linum-mode 1)
               (recenter)))
         ;; No file at point
-        (call-interactively
-         (if (helm-ls-git-root-dir)
-           'helm-ls-git-ls
-         'helm-find-files))))))
+        (my-open-project-file-or-find-files)))))
 
 (defun my-remove-non-ascii-chars ()
   (interactive)
@@ -300,7 +303,7 @@ will bring it back."
         (t
          (split-window-below)
          (windmove-down)))
-  (call-interactively 'helm-find-files))
+  (my-open-project-file-or-find-files))
 
 (defun my-frame-transparency (arg)
   (interactive "p")
