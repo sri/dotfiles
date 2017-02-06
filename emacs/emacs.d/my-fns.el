@@ -308,3 +308,17 @@ will bring it back."
 (defun my-frame-transparency (arg)
   (interactive "p")
   (set-frame-parameter nil 'alpha (list arg arg)))
+
+(defun my-copy-full-path ()
+  "Copies the buffer name to the kill ring.
+If the current buffer isn't associated with a file and the major
+mode is either Shell or Magit, then the current directory is
+copied."
+  (interactive)
+  (let ((name (or (buffer-file-name)
+                  (and (or (eq major-mode 'shell-mode)
+                           (string-prefix-p "Magit" mode-name))
+                       default-directory))))
+    (when name
+      (kill-new name)
+      (message "Copied `%s'" name))))

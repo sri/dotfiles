@@ -41,6 +41,7 @@
  ("C-c l" . toggle-truncate-lines)
  ("C-c m" . imenu)
  ("C-c o" . my-occur)
+ ("C-c p" . my-copy-full-path)
  ("C-c s" . sort-lines)
  ("C-c F" . recentf-open-files)
 
