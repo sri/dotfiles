@@ -101,6 +101,7 @@ Also, creates a shell when there are no other shells."
                        ("C-c C-g" . my-shell-rename-and-run-command)
                        ("C-c d" . dirs)
                        ("C-c <return>" . my-shell-dont-scroll)
+                       ("C-c RET" . my-shell-dont-scroll)
                        ("C-<up>" . comint-previous-prompt)
                        ("C-<down>" . comint-next-prompt)
                        ("C-c e" . my-shell-erase-buffer)
