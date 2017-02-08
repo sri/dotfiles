@@ -323,3 +323,7 @@ copied."
         (message "Nothing to copy")
       (kill-new name)
       (message "Copied `%s'" name))))
+
+(defun my-git-grep-from-root ()
+  (interactive)
+  (helm-grep-do-git-grep 1))

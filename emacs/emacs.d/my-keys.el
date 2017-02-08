@@ -90,6 +90,7 @@
            :prefix "C-c g"
            ("b" . magit-blame)
            ("f" . magit-log-buffer-file)
+           ("r" . my-git-grep-from-root)
            ("g" . helm-grep-do-git-grep))
 
 (when (eq system-type 'darwin)
