@@ -7,6 +7,7 @@
 (bind-keys :map minibuffer-local-map
            ("C-c C-l" . helm-minibuffer-history))
 
+(setq helm-grep-save-buffer-name-no-confirm t)
 (setq helm-M-x-fuzzy-match t)
 (setq helm-buffers-fuzzy-matching t)
 
