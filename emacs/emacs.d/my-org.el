@@ -1,7 +1,7 @@
 (require 'org)
 (require 'org-bullets)
 
-(setq org-bullets-bullet-list '("◉" "○"))
+(setq org-bullets-bullet-list '("○"))
 
 (set-register ?t '(file . "~/Dropbox/Notes/todo.org"))
 
@@ -18,7 +18,7 @@
           (lambda ()
             (turn-on-auto-fill)
             (org-bullets-mode 1)
-            (setq cursor-type 'hbar)))
+            (setq cursor-type 'bar)))
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -71,87 +71,3 @@
                               URL of active tab of front window
                               end tell")))
     (insert (org-make-link-string url subject))))
-
-;; Links:
-(org-add-link-type "gitsha" 'my-org-show-git-sha)
-
-(require 'magit)
-(defun my-org-show-git-sha (sha)
-  (magit-show-commit sha))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Org Dynamic links
-
-;; In an Org buffer, this converts words such as `JIRA-123' into links
-;; to a JIRA ticket without converting it into a Org link. See
-;; `my-org-dynamic-link-url-prefix' for the URL prefix prepended to
-;; the word before opening the link. Dynamic link can only be clicked
-;; on by the mouse. Hitting Return on them does nothing.
-;;
-;; See `org-activate-plain-links' and `org-set-font-lock-defaults'
-;; for an example of how this is done in Org mode.
-;; Another way to achieve this is with `goto-address-mode'.
-
-(defface my-org-dynamic-link-face
-  '((t :foreground "#268bd2" :box 1 :weight bold :inherit unspecified))
-  "Face for Org dynamic links.")
-
-(defvar my-org-dynamic-links-matcher
-  '()
-  "Matcher for dynamic links.
-Each element must be a 2-element list of the format:
-\(REGEX URL-PREFIX)
-REGEX should match whichever word you want to convert
-to a link. For JIRA tickets, this should be a regexp
-that matches the format `JIRA-123'.
-URL-PREFIX should be the URL to open when the link is clicked. If
-it contains a \"%s\", then it will be replaced with the matched
-word. If that isn't present, then the URL-PREFIX is visited.")
-
-(defun my-org-activate-dynamic-links (limit)
-  (let ((matchers my-org-dynamic-links-matcher)
-        (result nil)
-        (regex)
-        (link-template))
-    (while (and matchers
-                (null result))
-
-      (setq regex (caar matchers)
-            link-template (cadar matchers)
-            matchers (cdr matchers))
-
-      ;; Below is mostly copied from `org-activate-plain-links'.
-      (when (and (re-search-forward regex limit t)
-                 (not (org-in-src-block-p)))
-        (let ((face
-               (get-text-property (max (1- (match-beginning 0)) (point-min))
-                                  'face))
-              (link
-               (if (save-match-data (string-match "%s" link-template))
-                   (format link-template (org-match-string-no-properties 0))
-                 link-template)))
-          (unless (if (consp face) (memq 'org-tag face) (eq 'org-tag face))
-            (org-remove-flyspell-overlays-in (match-beginning 0) (match-end 0))
-            (add-text-properties (match-beginning 0) (match-end 0)
-                                 (list 'mouse-face 'highlight
-                                       'face 'my-org-dynamic-link-face
-                                       'htmlize-link `(:uri ,link)
-                                       'keymap org-mouse-map))
-            (org-rear-nonsticky-at (match-end 0))
-            (setq result t)))))
-    result))
-
-;; Puts our function into the `font-lock-defaults'.
-(add-hook 'org-font-lock-set-keywords-hook
-          (lambda ()
-            (nconc org-font-lock-extra-keywords
-                   (list '(my-org-activate-dynamic-links (0 'org-link t))))))
-                   ;; (list '(my-org-activate-dynamic-links (0 'my-org-dynamic-link-face t))))))
-
-;; Open the link when it clicked on.
-(add-hook 'org-open-at-point-functions
-          (lambda ()
-            (let ((link (get-text-property (point) 'htmlize-link)))
-              (when (cadr link)
-                (browse-url (cadr link))
-                t))))
