@@ -57,7 +57,7 @@
             (my-recentf-add-dired-directory)
 
             (bind-keys :map dired-mode-map
-                       ("D" . dired-hide-details-mode)
+                       ("C-c C-d" . dired-hide-details-mode)
                        ("," . dired-prev-dirline)
                        ("." . dired-next-dirline)
                        ([mouse-2] . dired-find-file)
