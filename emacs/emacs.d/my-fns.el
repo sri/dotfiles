@@ -162,11 +162,10 @@ decoded URL in the minibuffer."
   "Find the file at point or ask the user for file's path.
 The latter method uses `helm-find-files'."
   (interactive "P")
-  (if arg
+  (if (or arg
+          (memq major-mode '(dired-mode)))
       (my-open-project-file-or-find-files)
-    (let (file)
-      (unless (memq major-mode '(dired-mode))
-        (setq file (ffap-file-at-point)))
+    (let ((file (ffap-file-at-point)))
       (if file
           (let ((linenum
                  (save-excursion
