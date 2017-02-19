@@ -316,9 +316,10 @@ mode is either Shell or Magit, then the current directory is
 copied."
   (interactive)
   (let ((name (or (buffer-file-name)
-                  (and (or (eq major-mode 'shell-mode)
+                  (and (or (memq major-mode '(shell-mode dired-mode))
                            (string-prefix-p "Magit" mode-name))
                        default-directory))))
+    (setq name (expand-file-name name))
     (if (not name)
         (message "Nothing to copy")
       (kill-new name)
