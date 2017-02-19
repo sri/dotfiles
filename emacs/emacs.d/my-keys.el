@@ -8,6 +8,7 @@
  ;; For example, Magit does useful things with C-i
  ;; (TAB) -- show/hide file diffs.
  ("C-i" . my-hippie-tab)
+ ("<M-return>" . my-dired)
  ("C-m" . newline-and-indent))
 
 (bind-keys*
@@ -52,7 +53,6 @@
  ("M-2" . split-window-vertically)
  ("M-3" . split-window-horizontally)
  ("<M-SPC>" . my-just-one-space)
- ("<M-return>" . my-dired)
  ("M-;" . my-comment-line-or-region)
  ("M-<down>" . scroll-up)
  ("M-<up>" . scroll-down)
