@@ -45,6 +45,7 @@
  ("C-c p" . my-copy-full-path)
  ("C-c s" . sort-lines)
  ("C-c F" . recentf-open-files)
+ ("C-c O" . open-line)
 
  ("C-h SPC" . helm-all-mark-rings)
 
