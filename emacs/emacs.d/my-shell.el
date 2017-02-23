@@ -37,13 +37,18 @@
   "Rename buffer to the name of the command typed in.
 And then run the command."
   (interactive)
-  (let* ((cmd (buffer-substring-no-properties (point-at-bol)
-                                              (point-at-eol)))
-         (bufname (format "*%s*" cmd)))
-    (if (get-buffer bufname)
-        (message "`%s' already exists" bufname)
-      (rename-buffer bufname)
-      (comint-send-input))))
+  (when (comint-after-pmark-p) ; rename only when at command prompt
+    (let* ((cmd (buffer-substring-no-properties (point-at-bol)
+                                                (point-at-eol)))
+           (bufname (format "*%s*" cmd)))
+      (cond ((zerop (length cmd))
+             ;; do nothing
+             )
+            ((get-buffer bufname)
+             (message "`%s' already exists" bufname))
+            (t
+             (rename-buffer bufname)
+             (comint-send-input))))))
 
 (defun my-shell (&optional arg)
   "Switch to the most recently active shell buffer.
