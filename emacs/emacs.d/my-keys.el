@@ -17,7 +17,7 @@
  ("C-a" . my-beginning-of-line)
  ("C-b" . backward-kill-word)
  ("C-d" . kill-word)
- ("C-f" . my-isearch-forward)
+ ("C-f" . isearch-forward)
  ("C-j" . other-window)
  ("C-k" . my-kill-line-or-region)
  ("C-n" . helm-M-x)

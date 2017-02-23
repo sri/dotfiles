@@ -1,25 +1,3 @@
-(defun my-isearch-search-for-selected ()
-  (let ((isearch-word t)
-        (isearch-forward t)
-        (beg (min (mark) (point)))
-        (string (buffer-substring-no-properties (mark) (point))))
-    (unless (string-match "^\n*$" string)
-      (deactivate-mark)
-      (save-excursion
-        (call-interactively 'isearch-forward)
-        (goto-char beg)
-        (isearch-yank-string string)
-        (message "%d matches" (count-matches string
-                                             (point-min)
-                                             (point-max)))))))
-(defun my-isearch-forward ()
-  (interactive)
-  (if (let (use-empty-active-region)
-        (use-region-p))
-      (my-isearch-search-for-selected)
-    (setq last-command 'isearch-forward)
-    (call-interactively 'isearch-forward)))
-
 (defun my-isearch-delete-region ()
   (interactive)
   (when isearch-other-end
