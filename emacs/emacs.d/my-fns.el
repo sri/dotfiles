@@ -245,9 +245,8 @@ will bring it back."
 
 (defun my-find-file-as-sudo ()
   (interactive)
-  (let ((file-name (buffer-file-name)))
-    (when file-name
-      (find-alternate-file (concat "/sudo::" file-name)))))
+  (when-let ((file-name (buffer-file-name)))
+    (find-alternate-file (concat "/sudo::" file-name))))
 
 (defun my-occur ()
   (interactive)
