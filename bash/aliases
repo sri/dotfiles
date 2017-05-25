@@ -9,7 +9,7 @@ alias gs='git status'
 
 alias gg='git grep --break -n -i'
 alias gcontains='git branch -a --contains'
-alias gwhich='git branch -a | grep '
+alias gwhich='git branch -a | grep -i '
 alias gss='git show -p'
 alias gds='git diff --staged'
 
