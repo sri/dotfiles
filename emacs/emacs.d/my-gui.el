@@ -1,8 +1,8 @@
 (let ((theme (car '(
+                    spacemacs-dark
                     leuven
-                    ;; spacemacs-dark
-                    ;; solarized-light
                     solarized-dark
+                    solarized-light
                     ))))
   (when theme
     (load-theme theme t)
