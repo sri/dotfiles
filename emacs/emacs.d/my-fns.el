@@ -327,3 +327,27 @@ copied."
 (defun my-git-grep-from-root ()
   (interactive)
   (helm-grep-do-git-grep 1))
+
+(defun my-google-search ()
+  "Google the currently selected region or the previous word.
+Shows the term before doing so."
+  (interactive)
+  (let ((term
+         (if (use-region-p)
+             (buffer-substring-no-properties (region-beginning) (region-end))
+           (save-excursion
+             (if (not (looking-at "[a-zA-Z0-9_-]"))
+                 (skip-chars-backward "^a-zA-Z0-9_-"))
+             (skip-chars-backward "a-zA-Z0-9_-")
+             (let ((start (point)))
+               (skip-chars-forward "a-zA-Z0-9_-")
+               (buffer-substring-no-properties start (point)))))))
+    (if (string= term "")
+        (message "nothing to google for")
+      (if (y-or-n-p (format "Google for `%s'?" term))
+          (with-current-buffer (get-buffer-create "*my-google-search*")
+            (start-process (buffer-name (current-buffer))
+                           (current-buffer)
+                           "open" "-a" "Google Chrome"
+                           (format "https://www.google.com/search?q=%s"
+                                   (url-encode-url term))))))))
