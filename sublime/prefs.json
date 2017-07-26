@@ -1,14 +1,30 @@
 {
-    "ensure_newline_at_eof_on_save": true,
-    "find_selected_text": true,
-    "font_size": 15,
-    "highlight_line": true,
-    "ignored_packages":
-    [
-        "Vintage"
-    ],
-    "save_on_focus_lost": true,
-    "translate_tabs_to_spaces": true,
-    "color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
-    "trim_trailing_white_space_on_save": true
+	"auto_complete_selector": false,
+	"color_scheme": "Packages/Color Scheme - Default/Mariana.tmTheme",
+	"create_new_pane_if_necessary": false,
+	"drag_text": false,
+	"draw_shadows": true,
+	"ensure_newline_at_eof_on_save": true,
+	"find_selected_text": true,
+	"font_size": 16,
+	"highlight_line": true,
+	"highlight_modified_tabs": true,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"line_padding_bottom": 1,
+	"line_padding_top": 1,
+	"margin": 4,
+	"rulers":
+	[
+		80
+	],
+	"save_on_focus_lost": false,
+	"scroll_past_end": true,
+	"show_definitions": false,
+	"tab_size": 2,
+	"theme": "Adaptive.sublime-theme",
+	"translate_tabs_to_spaces": true,
+	"trim_trailing_white_space_on_save": true
 }
