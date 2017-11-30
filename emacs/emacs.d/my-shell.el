@@ -97,7 +97,7 @@ Also, creates a shell when there are no other shells."
             (setq line-number-mode nil
                   column-number-mode nil)
             (setq comint-input-ignoredups t)
-            (setq comint-scroll-to-bottom-on-input nil)
+            (setq comint-scroll-to-bottom-on-input t)
             (setq comint-scroll-show-maximum-output nil)
             (toggle-truncate-lines 1)
             (local-unset-key (kbd "C-d"))
