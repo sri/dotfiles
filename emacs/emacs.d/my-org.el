@@ -55,7 +55,7 @@
 (setq org-use-speed-commands t)
 (setq org-fontify-done-headline t)
 (setq org-closed-keep-when-no-todo t)
-(setq org-log-done 'time)
+(setq org-log-done nil)
 
 (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING"
