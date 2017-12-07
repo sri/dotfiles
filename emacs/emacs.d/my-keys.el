@@ -12,6 +12,9 @@
  ("C-m" . newline-and-indent))
 
 (bind-keys*
+ ("s-p" . my-ffap-or-find-file))
+
+(bind-keys*
  ("<C-tab>" . my-switch-to-buffer)
  ("C-\\" . other-frame)
  ("C-a" . my-beginning-of-line)
