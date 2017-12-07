@@ -103,23 +103,6 @@ Fundamental mode."
 (setq ido-default-buffer-method 'selected-window)
 (setq ido-create-new-buffer 'always)
 
-
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (linum-mode 1)))
-
-(setq linum-format
-      (if window-system
-          'dynamic
-        ;; Just like the existing dynamic formatting
-        ;; but adds a space at the end of the number.
-        (lambda (line)
-          (let* ((nlines (count-lines (point-min) (point-max)))
-                 (width (length (number-to-string nlines)))
-                 (fmt (concat "%" (number-to-string width) "d ")))
-             (propertize (format fmt line) 'face 'linum)))))
-
-
 (setq diff-switches '("-u"))
 
 (make-variable-buffer-local 'line-number-mode)

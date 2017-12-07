@@ -178,7 +178,6 @@ The latter method uses `helm-find-files'."
             (find-file file)
             (when linenum
               (goto-line linenum)
-              (linum-mode 1)
               (recenter)))
         ;; No file at point
         (my-open-project-file-or-find-files)))))
