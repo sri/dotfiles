@@ -20,6 +20,7 @@
  '(comint-highlight-prompt ((t nil)))
  '(diff-refine-added ((t (:background "green" :foreground "black"))))
  '(diff-refine-removed ((t (:background "red" :foreground "black"))))
+ '(isearch ((t (:background "light green" :foreground "#002b36" :weight normal))))
  '(magit-diff-added ((t (:foreground "green"))))
  '(magit-diff-added-highlight ((t (:foreground "#22aa22"))))
  '(magit-diff-context-highlight ((t nil)))
