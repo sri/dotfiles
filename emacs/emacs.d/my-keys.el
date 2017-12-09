@@ -12,6 +12,7 @@
  ("C-m" . newline-and-indent))
 
 (bind-keys*
+ ("s-g" . magit-status)
  ("s-p" . my-ffap-or-find-file))
 
 (bind-keys*
