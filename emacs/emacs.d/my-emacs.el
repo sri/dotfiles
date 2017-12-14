@@ -22,6 +22,7 @@
             "my-help"
             "my-dired"
             "my-update-dot-emacs"
+            "my-modeline"
             ))
 
     (mapc (lambda (pkg)
