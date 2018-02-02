@@ -12,8 +12,17 @@
  ("C-m" . newline-and-indent))
 
 (bind-keys*
+ ("S-s-g" . helm-grep-do-git-grep)
+ ("s-0" . delete-window)
+ ("s-1" . delete-other-windows)
+ ("s-2" . split-window-vertically)
+ ("s-3" . split-window-horizontally)
  ("s-g" . magit-status)
- ("s-p" . my-ffap-or-find-file))
+ ("s-," . beginning-of-buffer)
+ ("s-o" . my-ffap-or-find-file)
+ ("s-." . end-of-buffer)
+ ("s-j" . other-window)
+ ("s-p" . my-shell))
 
 (bind-keys*
  ("<C-tab>" . my-switch-to-buffer)
