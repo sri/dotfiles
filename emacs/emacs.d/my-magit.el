@@ -6,6 +6,9 @@
 (setq magit-display-buffer-function
       'magit-display-buffer-same-window-except-diff-v1)
 
+;; Don't show "Recent commits" section.
+(setq magit-log-section-commit-count 0)
+
 (set-face-attribute 'magit-diff-added-highlight nil :foreground "#22aa22")
 
 (add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
