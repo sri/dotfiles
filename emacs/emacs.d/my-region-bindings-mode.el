@@ -4,7 +4,6 @@
 (region-bindings-mode-enable)
 
 (bind-keys :map region-bindings-mode-map
-           ("n" . next-line)
            ("p" . previous-line)
            ("e" . end-of-line)
            ("a" . beginning-of-line)
