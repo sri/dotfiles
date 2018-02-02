@@ -1,10 +1,16 @@
-(defun my-mode-line-copy-full-path ()
+(defmacro def-with-selected-window (name &rest body)
+  `(defun ,name (event)
+     (interactive "e")
+     (with-selected-window (posn-window (event-start event))
+       ,@body)))
+
+(def-with-selected-window my-mode-line-copy-full-path ()
   "Copies the buffer name to the kill ring.
 If that is nil, then it is mode specific as to what gets copied:
  - shell or magit modes, copies the default directory."
   (interactive)
   (let ((name (or (buffer-file-name)
-                  (cond ((eq major-mode 'shell-mode)
+                  (cond  ((eq major-mode 'shell-mode)
                          default-directory)
                         ((string-prefix-p "Magit" mode-name)
                          default-directory)))))
@@ -13,11 +19,7 @@ If that is nil, then it is mode specific as to what gets copied:
       (message "Copied `%s'" name))))
 
 (defun my-mode-line-buffer-identification-help-echo (window object point)
-  (let ((buffer (window-buffer window)))
-    (with-current-buffer buffer
-      (format "%s\n%s\nmouse-1: Copy file path to kill ring"
-              (buffer-name buffer)
-              (buffer-file-name buffer)))))
+  "mouse-1: Copy file path to kill ring\nS-mouse-1: Open directory")
 
 (make-face 'my-mode-line-buffer-name-face)
 (set-face-attribute 'my-mode-line-buffer-name-face nil
@@ -27,12 +29,10 @@ If that is nil, then it is mode specific as to what gets copied:
     ;:box '(:line-width 2 :color "#4271ae")
     )
 
-(defun my-mode-line-open-folder ()
-  (interactive)
+(def-with-selected-window my-mode-line-open-folder ()
   (let* ((name (buffer-file-name))
          (dir (if name (file-name-directory name) default-directory)))
     (call-process "open" nil nil nil dir)))
-
 
 (defvar my-mode-line-buffer-identification-keymap
   (let ((map (make-sparse-keymap)))
