@@ -57,8 +57,21 @@
 (setq org-closed-keep-when-no-todo t)
 (setq org-log-done nil)
 
+(setq org-todo-keyword-faces
+      '(;("TODO" :foreground nil :weight bold)
+        ("APPT" :foreground "medium blue" :weight bold)
+        ("NOTE" :foreground "brown" :weight bold)
+        ("STARTED" :foreground "dark orange" :weight bold)
+        ("WAITING" :foreground "red" :weight bold)
+        ("DELEGATED" :foreground "dark violet" :weight bold)
+        ("DEFERRED" :foreground "dark blue" :weight bold)
+        ("SOMEDAY" :foreground "dark blue" :weight bold)
+        ("PROJECT" :foreground "#088e8e" :weight bold)))
+
 (setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "WAITING"
+      '((sequence "TODO" "APPT" "NOTE" "IN-PROGRESS" "WAITING"
+                  "STARTED" "WAITING" "DELEGATED" "DEFERRED"
+                  "SOMEDAY" "PROJECT"
                   "|"
                   "DONE" "CANCELED")))
 
