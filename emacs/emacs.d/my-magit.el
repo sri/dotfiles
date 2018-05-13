@@ -7,7 +7,7 @@
       'magit-display-buffer-same-window-except-diff-v1)
 
 ;; Don't show "Recent commits" section.
-(setq magit-log-section-commit-count 0)
+(setq magit-log-section-commit-count 10)
 
 (set-face-attribute 'magit-diff-added-highlight nil :foreground "#22aa22")
 
