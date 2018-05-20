@@ -57,6 +57,7 @@ __my_prompt_command() {
   local gitbranch=$(__git_ps1 "%s")
   local cwd="$COLOR_LIGHT_BLUE\w "
   local final_prompt="λ"
+  local date="$COLOR_LIGHT_GREEN[\D{%Y-%m-%d %I:%M:%S%p}]$COLOR_NC"
 
   if [ "$gitbranch" != "" ]
   then
@@ -73,7 +74,7 @@ __my_prompt_command() {
   # Write to ~/.bash_history immediately after each command is typed in.
   history -a
 
-  PS1="$cwd$gitbranch$exitcode$COLOR_NC\n$final_prompt "
+  PS1="$date $cwd$gitbranch$exitcode$COLOR_NC\n$final_prompt "
 }
 
 if [ "$PROMPT_COMMAND" == "" ]
