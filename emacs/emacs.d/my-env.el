@@ -43,7 +43,7 @@ Fundamental mode."
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
-(setq mouse-drag-copy-region 'shift)
+(setq mouse-drag-and-drop-region 'shift)
 (setq auto-hscroll-mode 'current-line)
 (setq large-file-warning-threshold nil)
 (set-language-environment "UTF-8")
