@@ -26,17 +26,25 @@ Fundamental mode."
       '(face tabs trailing space-before-tab newline indentation empty space-after-tab tab-mark))
 (setq whitespace-line-column 78)
 
-(let ((on '(prog-mode-hook
-            diff-mode-hook))
-      (off '(emacs-lisp-mode-hook
-             go-mode-hook)))
+(defun my-turn-on-whitespace ()
+  (whitespace-mode 1))
+(add-hook 'prog-mode-hook 'my-turn-on-whitespace)
+(add-hook 'diff-mode-hook 'my-turn-on-whitespace)
 
-  (dolist (h on) (add-hook h (lambda () (whitespace-mode 1))))
-  (dolist (h off) (add-hook h (lambda () (whitespace-mode -1)))))
+(defun my-turn-off-whitespace ()
+  (whitespace-mode -1))
+(add-hook 'emacs-lisp-mode-hook 'my-turn-off-whitespace)
+(add-hook 'go-mode-hook 'my-turn-off-whitespace)
+
+(defun my-turn-on-linenumbers ()
+  (setq display-line-numbers t))
+(add-hook 'prog-mode-hook 'my-turn-on-linenumbers)
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
+(setq mouse-drag-copy-region 'shift)
+(setq auto-hscroll-mode 'current-line)
 (setq large-file-warning-threshold nil)
 (set-language-environment "UTF-8")
 (setq message-log 16384)
