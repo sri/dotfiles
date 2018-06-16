@@ -169,21 +169,31 @@ The latter method uses `helm-find-files'."
           (memq major-mode '(dired-mode)))
       (my-open-project-file-or-find-files)
     (let ((file (ffap-file-at-point)))
-      (if file
-          (let ((linenum
-                 (save-excursion
-                   (goto-char (point-at-bol))
-                   (when (and (search-forward file (point-at-eol) t 1)
-                              (looking-at ":\\([0-9]+\\)"))
+      (if (not file)
+          (my-open-project-file-or-find-files)
+        (let (col line)
+          (save-excursion
+            (goto-char (point-at-bol))
+            (when (search-forward file (point-at-eol) t 1)
+              (cond ((looking-at ":\\([0-9]+\\)")
                      (string-to-number (buffer-substring-no-properties
                                         (match-beginning 1)
-                                        (match-end 1)))))))
-            (find-file file)
-            (when linenum
-              (goto-line linenum)
-              (recenter)))
-        ;; No file at point
-        (my-open-project-file-or-find-files)))))
+                                        (match-end 1))))
+                    ((looking-at "(")
+                     ;; Typescript compiler output file(line, col)
+                     (let ((raw (buffer-substring-no-properties
+                                 (point)
+                                 (forward-list 1))))
+                       (setq raw (substring raw 1 (1- (length raw))))
+                       (setq raw (split-string raw ","))
+                       (setq col (string-to-number (nth 1 raw)))
+                       (setq line (string-to-number (nth 0 raw))))))))
+          (find-file file)
+          (when line
+            (goto-line line)
+            (recenter))
+          (when col
+            (move-to-column col)))))))
 
 (defun my-remove-non-ascii-chars ()
   (interactive)
