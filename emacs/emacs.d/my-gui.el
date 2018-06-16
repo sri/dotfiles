@@ -28,6 +28,8 @@
        (left (/ (- (display-pixel-width)
                    (frame-pixel-width))
                 2)))
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (add-to-list 'default-frame-alist (cons 'height height))
   (add-to-list 'default-frame-alist (cons 'width width))
   (add-to-list 'default-frame-alist (cons 'top top))
@@ -35,7 +37,4 @@
 
 (set-frame-parameter nil 'alpha '(100 100))
 
-(setq frame-title-format
-      '((:eval (if (buffer-file-name)
-                   (abbreviate-file-name (buffer-file-name))
-                 "%b"))))
+(setq frame-title-format nil)
