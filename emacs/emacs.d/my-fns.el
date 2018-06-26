@@ -176,9 +176,10 @@ The latter method uses `helm-find-files'."
             (goto-char (point-at-bol))
             (when (search-forward file (point-at-eol) t 1)
               (cond ((looking-at ":\\([0-9]+\\)")
-                     (string-to-number (buffer-substring-no-properties
-                                        (match-beginning 1)
-                                        (match-end 1))))
+                     (setq line
+                           (string-to-number (buffer-substring-no-properties
+                                              (match-beginning 1)
+                                              (match-end 1)))))
                     ((looking-at "(")
                      ;; Typescript compiler output file(line, col)
                      (let ((raw (buffer-substring-no-properties
