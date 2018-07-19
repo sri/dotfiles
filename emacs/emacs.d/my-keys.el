@@ -60,6 +60,7 @@
  ("C-c s" . sort-lines)
  ("C-c F" . recentf-open-files)
  ("C-c O" . open-line)
+ ("<C-backspace>" . subword-backward-kill)
 
  ("C-h SPC" . helm-all-mark-rings)
 
