@@ -4,14 +4,18 @@
 (region-bindings-mode-enable)
 
 (bind-keys :map region-bindings-mode-map
-           ("p" . previous-line)
-           ("e" . end-of-line)
-           ("a" . beginning-of-line)
-           ("w" . forward-word)
-           ("b" . backward-word)
+           ("l" . mc/edit-lines)
+           ("w" . count-words-region)
+           ("u" . upcase-region)
+           ("d" . downcase-region)
+           ("m" . apply-macro-to-region-lines)
+           ("C" . my-duplicate-line-or-region)
+           (";" . my-comment-line-or-region)
+           ("SPC" . exchange-point-and-mark)
+
            ("a" . mc/mark-all-like-this)
            ("n" . mc/mark-next-like-this)
-           ("l" . mc/edit-lines))
+           )
 
 (add-to-list 'region-bindings-mode-disable-predicates
              'minibufferp)
