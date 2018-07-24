@@ -1,6 +1,7 @@
 (eval-when-compile
   (require 'cl))
 
+(require 'subword)
 (require 'bind-key)
 
 (bind-keys
@@ -61,7 +62,6 @@
  ("C-c F" . recentf-open-files)
  ("C-c O" . open-line)
  ("<C-backspace>" . subword-backward-kill)
-
  ("C-h SPC" . helm-all-mark-rings)
 
  ("M-0" . delete-window)
