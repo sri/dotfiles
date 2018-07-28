@@ -35,7 +35,7 @@
  '(minibuffer-prompt ((t (:foreground "#888888"))))
  '(mode-line ((t (:underline "#526e76"))))
  '(org-done ((t (:foreground "#003d4d" :strike-through t))))
- '(org-headline-done ((t (:foreground "#003d4d" :strike-through nil))))
+ '(org-headline-done ((t (:foreground "#003d4d" :strike-through t))))
  '(org-level-1 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-level-2 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-level-3 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
@@ -46,9 +46,9 @@
  '(org-level-8 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-link ((t (:foreground "#839496"))))
  '(org-todo ((t (:foreground "#6c71c4" :weight bold))))
- '(region ((t (:background "##003D4C" :foreground nil))))
- '(show-paren-match ((t (:foreground "#93A1A1" :background "#073642"))))
- '(show-paren-mismatch ((t (:background "red"))))
+ '(region ((t (:background "#003D4C" :foreground nil))))
+ '(show-paren-match ((t (:foreground "black" :background "#22aa22"))))
+ '(show-paren-mismatch ((t (:foreground "black" :background "red"))))
  '(whitespace-line ((t (:underline t)))))
 
 (custom-set-variables
