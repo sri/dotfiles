@@ -65,12 +65,12 @@
         ("WAITING" :foreground "red" :weight bold)
         ("DELEGATED" :foreground "dark violet" :weight bold)
         ("DEFERRED" :foreground "dark blue" :weight bold)
-        ("SOMEDAY" :foreground "dark blue" :weight bold)
+        ("SOMEDAY" :foreground "#088e8e" :weight bold)
         ("PROJECT" :foreground "#088e8e" :weight bold)))
 
 (setq org-todo-keywords
       '((sequence "TODO" "APPT" "NOTE" "IN-PROGRESS" "WAITING"
-                  "STARTED" "WAITING" "DELEGATED" "DEFERRED"
+                  "DELEGATED" "DEFERRED"
                   "SOMEDAY" "PROJECT"
                   "|"
                   "DONE" "CANCELED")))
