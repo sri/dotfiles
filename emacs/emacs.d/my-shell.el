@@ -1,5 +1,8 @@
 (setenv "PAGER" "cat")
 
+(require 'shell)
+(add-to-list 'explicit-bash-args "--login")
+
 (add-to-list 'display-buffer-alist
              '("^\\*shell\\*" . (display-buffer-same-window)))
 
