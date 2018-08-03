@@ -27,6 +27,7 @@
 
 (bind-keys*
  ("<C-tab>" . my-switch-to-buffer)
+ ("C-`" . my/shell-for-buffer)
  ("C-\\" . other-frame)
  ("C-a" . my-beginning-of-line)
  ("C-b" . backward-kill-word)

@@ -16,6 +16,7 @@
             "my-keys"
             "my-view"
             "my-sublime"
+            "my-vscode"
             "my-shell"
             "my-occur"
             "my-isearch"
