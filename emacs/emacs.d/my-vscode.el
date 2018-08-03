@@ -14,9 +14,13 @@
                  (shell-command-to-string "git rev-parse --show-toplevel")))
              (in-same-dir-or-repo? (buffer)
                (and (with-current-buffer buffer (eq major-mode 'shell-mode))
-                    ;; TODO: slow
-                    (string= (git-root (current-buffer))
-                             (git-root buffer))))
+                    (and (let ((current (expand-file-name default-directory))
+                               (other (with-current-buffer buffer
+                                        (expand-file-name default-directory))))
+                           (or (string-prefix-p current other)
+                               (string-prefix-p other current)))
+                         (string= (git-root (current-buffer))
+                                  (git-root buffer)))))
              (new-shell (&optional name)
                (save-window-excursion
                  (shell (or name
