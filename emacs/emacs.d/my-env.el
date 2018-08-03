@@ -98,6 +98,11 @@ Fundamental mode."
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (line-number-mode t)
 (column-number-mode t)
+;; When `column-number-indicator-zero-based' is nil,
+;; modeline internally uses 1-based indexing.
+;; If you mess with modeline (like I've done), the
+;; you'll need to use "%C".
+(setq-default column-number-indicator-zero-based nil)
 (blink-cursor-mode -1)
 (auto-compression-mode t)
 (transient-mark-mode 1)
