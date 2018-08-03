@@ -6,12 +6,6 @@
      (with-selected-window (posn-window (event-start event))
        ,@body)))
 
-(defun my-make-mode-line-mouse-map (&rest args)
-  (let ((map (make-sparse-keymap)))
-    (while args
-      (define-key map (vector 'mode-line (pop args)) (pop args)))
-    map))
-
 (defmacro def-modeline-var (name &rest body)
   `(progn
      (defvar ,name)
@@ -22,9 +16,12 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Buffer modified
+(def-with-selected-window my-save-buffer ()
+  (save-buffer))
+
 (defvar my-mode-line-buffer-modified-p-keymap
   (let ((map (make-sparse-keymap)))
-    (define-key map [mode-line mouse-1] 'save-buffer)
+    (define-key map [mode-line mouse-1] 'my-save-buffer)
     (define-key map [mode-line down-mouse-1] 'ignore)
     (define-key map [mode-line S-mouse-1] 'my-unsaved-changes)
     map))
@@ -109,7 +106,29 @@
 	    'mouse-face 'mode-line-highlight
 	    'help-echo "mouse-1: goto line")))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; vc mode
+(require 'vc-hooks)
+(require 'vc-git)
+
+(def-with-selected-window my-magit-status ()
+  (magit-status))
+
+(defvar my-vc-mode-line-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map [mode-line mouse-1] 'my-magit-status)
+    map))
+
+;; Let's only care about Git for now.
+(defun vc-mode-line (file &optional backend)
+  (interactive (list buffer-file-name))
+  (when (eq backend 'Git)
+    (setq vc-mode
+          (propertize (format "{%s}" (vc-git--symbolic-ref file))
+                      'mouse-face 'mode-line-highlight
+                      'help-echo "Click for Magit status"
+                      'local-map my-vc-mode-line-keymap))
+    (force-mode-line-update)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Put it all  together
