@@ -12,13 +12,13 @@ With a prefix argument, generates a new shell for the current buffer."
   (interactive "P")
 
   (when (eq major-mode 'shell-mode)
-    (when (window-in-direction 'above) (delete-window))
+    (if (window-in-direction 'above) (delete-window))
     (return-from my/shell-for-buffer))
 
   (cl-flet* ((git-root (buffer)
                (with-current-buffer buffer
                  (shell-command-to-string "git rev-parse --show-toplevel")))
-             (in-same-repo-or-dir? (buffer)
+             (shell-in-same-repo-or-dir? (buffer)
                (and (with-current-buffer buffer
                       (eq major-mode 'shell-mode))
                     (let ((current (expand-file-name default-directory))
@@ -39,13 +39,13 @@ With a prefix argument, generates a new shell for the current buffer."
                name))
 
     (let ((win (window-in-direction 'below)))
-      (if (and win (in-same-repo-or-dir? (window-buffer win)))
+      (if (and win (shell-in-same-repo-or-dir? (window-buffer win)))
           (windmove-down)
         (split-window-below)
         (windmove-down)
         (let ((new (if create-new
                        (new-shell)
-                     (if-let (buffer (cl-find-if #'in-same-repo-or-dir?
+                     (if-let (buffer (cl-find-if #'shell-in-same-repo-or-dir?
                                                  (buffer-list)))
                          (if (get-buffer-process buffer)
                              buffer
