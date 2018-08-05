@@ -137,7 +137,6 @@
                 my-mode-line-modified " "
                 my-mode-line-position " "
                 mode-line-buffer-identification " "
-                mode-line-modes " "
-                (defining-kbd-macro " Def")
                 (vc-mode vc-mode)
-                ))
+                ;; mode-line-modes " "
+                (defining-kbd-macro " def")))
