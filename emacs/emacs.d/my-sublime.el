@@ -1,4 +1,4 @@
-(defun my-swap-line-or-region-down ()
+(defun my/swap-line-or-region-down ()
   "Move the current line or region down one line."
   (interactive "*")
   (let (beg end line reg-beg reg-end)
@@ -21,7 +21,7 @@
       (goto-char (+ reg-end (length line)))
       (setq deactivate-mark nil))))
 
-(defun my-swap-line-or-region-up ()
+(defun my/swap-line-or-region-up ()
   "Move the current line or region up one line."
   (interactive "*")
   (let (beg end line reg-beg reg-end)
@@ -46,18 +46,18 @@
       (goto-char (- reg-end (length line)))
       (setq deactivate-mark nil))))
 
-(defvar my-line-or-region-swap-keymap
+(defvar my/line-or-region-swap-keymap
   (let ((map (make-sparse-keymap)))
-    (define-key map [down] 'my-swap-line-or-region-down)
-    (define-key map [up] 'my-swap-line-or-region-up)
+    (define-key map [down] 'my/swap-line-or-region-down)
+    (define-key map [up] 'my/swap-line-or-region-up)
     map))
 
-(defun my-start-line-or-region-swap ()
+(defun my/start-line-or-region-swap ()
   (interactive)
   (message "Hit [up] or [down] to move region or line in that direction")
-  (set-transient-map my-line-or-region-swap-keymap t))
+  (set-transient-map my/line-or-region-swap-keymap t))
 
-(defun my-duplicate-line-or-region ()
+(defun my/duplicate-line-or-region ()
   "Duplicate line or current region."
   (interactive "*")
   (if (use-region-p)
@@ -82,7 +82,7 @@
         (unless (eobp) (insert "\n")))
       (move-to-column column))))
 
-(defun my-comment-line-or-region ()
+(defun my/comment-line-or-region ()
   "Comment or uncomment the current line or region."
   (interactive "*")
   (cond ((use-region-p)
@@ -106,7 +106,7 @@
          (comment-or-uncomment-region (point-at-bol)
                                       (point-at-eol)))))
 
-(defun my-sublime-expand-selection-to-indentation ()
+(defun my/sublime-expand-selection-to-indentation ()
   (interactive)
   "Expand selection to the next indentation level.
 Inspired by Sublime Text."

@@ -75,7 +75,7 @@
                   "|"
                   "DONE" "CANCELED")))
 
-(defun my-org-insert-chrome-link ()
+(defun my/org-insert-chrome-link ()
   (interactive)
   (let ((subject (do-applescript "tell application \"Google Chrome\"
                                   title of active tab of front window

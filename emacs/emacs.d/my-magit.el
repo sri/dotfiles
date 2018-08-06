@@ -13,7 +13,7 @@
 
 (add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
 
-(defun my-magit-diff-toggle-refine-hunk ()
+(defun my/magit-diff-toggle-refine-hunk ()
   (interactive)
   (let* ((vals '((t . "current hunk")
                  (all . "all")
@@ -28,7 +28,7 @@
           (lambda ()
             (bind-keys :map magit-mode-map
                        ("C-c C-s" . magit-stash-list)
-                       ("C-c C-w" . my-magit-diff-toggle-refine-hunk)
+                       ("C-c C-w" . my/magit-diff-toggle-refine-hunk)
                        ("1" . magit-section-show-level-1-all)
                        ("2" . magit-section-show-level-2-all)
                        ("3" . magit-section-show-level-3-all)

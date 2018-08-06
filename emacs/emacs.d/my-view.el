@@ -1,22 +1,22 @@
 (require 'view)
 
-(defun my-view-scroll-down-one-line ()
+(defun my/view-scroll-down-one-line ()
   (interactive)
   (scroll-down 1))
 
-(defun my-view-scroll-up-one-line ()
+(defun my/view-scroll-up-one-line ()
   (interactive)
   (scroll-up 1))
 
-(defun my-view-top-of-window ()
+(defun my/view-top-of-window ()
   (interactive)
   (recenter 0))
 
-(defun my-view-center-in-window ()
+(defun my/view-center-in-window ()
   (interactive)
   (recenter))
 
-(defun my-view-botton-of-window ()
+(defun my/view-botton-of-window ()
   (interactive)
   (recenter -1))
 
@@ -27,5 +27,5 @@
            ("k" . View-scroll-page-backward)
            ("a" . beginning-of-buffer)
            ("z" . end-of-buffer)
-           ("f" . my-isearch-forward)
+           ("f" . my/isearch-forward)
            ("q" . View-exit-and-edit))

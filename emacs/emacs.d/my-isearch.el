@@ -1,11 +1,11 @@
-(defun my-isearch-delete-region ()
+(defun my/isearch-delete-region ()
   (interactive)
   (when isearch-other-end
     (delete-region (point) isearch-other-end)
     (isearch-done)))
 
 ;; TODO: handle wrap around
-(defun my-isearch-goto-next-non-visible-match ()
+(defun my/isearch-goto-next-non-visible-match ()
   "Go to the next (or previous) match that isn't visible on screen."
   (interactive)
   (let ((next-non-visible-match
@@ -29,7 +29,7 @@
       (isearch-search)
       (isearch-update))))
 
-(defun my-isearch-yank-whole-word ()
+(defun my/isearch-yank-whole-word ()
   (interactive)
   (when (= (length isearch-string) 0)
     (skip-chars-backward "a-zA-Z0-9_-"))
@@ -38,21 +38,21 @@
      (skip-chars-forward "a-zA-Z0-9_-")
      (point))))
 
-(defun my-isearch-goto-first-match ()
+(defun my/isearch-goto-first-match ()
   (interactive)
   (widen)
   (goto-char (point-min))
   (isearch-repeat-forward)
   (isearch-update))
 
-(defun my-isearch-goto-last-match ()
+(defun my/isearch-goto-last-match ()
   (interactive)
   (widen)
   (goto-char (point-max))
   (isearch-repeat-backward)
   (isearch-update))
 
-(defun my-isearch-repeat ()
+(defun my/isearch-repeat ()
   (interactive)
   (if isearch-forward
       (isearch-repeat-forward)
@@ -62,15 +62,15 @@
 (setq isearch-lazy-highlight-initial-delay 0)
 
 (bind-keys :map isearch-mode-map
-           ("M-a" . my-isearch-goto-first-match)
-           ("M-e" . my-isearch-goto-last-match)
+           ("M-a" . my/isearch-goto-first-match)
+           ("M-e" . my/isearch-goto-last-match)
            ("C-e" . isearch-exit)
-           ("<return>" . my-isearch-repeat)
-           ("RET" . my-isearch-repeat)
+           ("<return>" . my/isearch-repeat)
+           ("RET" . my/isearch-repeat)
            ("<S-return>" . isearch-repeat-backward)
            ("C-K" . isearch-query-replace-regexp)
-           ("C-d" . my-isearch-yank-whole-word)
+           ("C-d" . my/isearch-yank-whole-word)
            ("C-k" . isearch-query-replace)
            ("C-o" . isearch-occur)
-           ("C-v" . my-isearch-goto-next-non-visible-match)
+           ("C-v" . my/isearch-goto-next-non-visible-match)
            ("\r" . isearch-repeat-forward))

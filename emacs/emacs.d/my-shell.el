@@ -10,33 +10,33 @@
 ;; when you TAB complete
 (setq ffap-machine-p-known nil)
 
-(defun my-shell-forward-char-or-previous-history (&optional arg)
+(defun my/shell-forward-char-or-previous-history (&optional arg)
   (interactive "p")
   (if (eobp)
       (comint-previous-input arg)
     (forward-char arg)))
 
-(defun my-shell-next-line-or-next-history (&optional arg)
+(defun my/shell-next-line-or-next-history (&optional arg)
   (interactive "p")
   (if (eobp)
       (comint-next-input arg)
     (next-line arg)))
 
-(defun my-shell-erase-buffer ()
+(defun my/shell-erase-buffer ()
   (interactive)
   (erase-buffer)
   (comint-send-input))
 
-(defun my-shell-rename-buffer ()
+(defun my/shell-rename-buffer ()
   (interactive)
   (let ((new-name (read-string "New buffer name: ")))
     (rename-buffer (format "*%s*" new-name))))
 
-(defun my-shell-bash-clear-screen ()
+(defun my/shell-bash-clear-screen ()
   (interactive)
   (recenter-top-bottom 0))
 
-(defun my-shell-rename-and-run-command ()
+(defun my/shell-rename-and-run-command ()
   "Rename buffer to the name of the command typed in.
 And then run the command."
   (interactive)
@@ -53,7 +53,7 @@ And then run the command."
              (rename-buffer bufname)
              (comint-send-input))))))
 
-(defun my-shell (&optional arg)
+(defun my/shell (&optional arg)
   "Switch to the most recently active shell buffer.
 With a prefix arg, create a new shell.
 Also, creates a shell when there are no other shells."
@@ -69,8 +69,8 @@ Also, creates a shell when there are no other shells."
              (setq shells
                    (sort shells
                          (lambda (x y)
-                           (> (with-current-buffer x my-shell-last-active-time)
-                              (with-current-buffer y my-shell-last-active-time)))))
+                           (> (with-current-buffer x my/shell-last-active-time)
+                              (with-current-buffer y my/shell-last-active-time)))))
 
              (cond ((null shells)
                     (shell))
@@ -80,12 +80,12 @@ Also, creates a shell when there are no other shells."
                    (t
                     (switch-to-buffer (car shells))))))))
 
-(defvar-local my-shell-last-active-time nil)
+(defvar-local my/shell-last-active-time nil)
 
-(defun my-shell-update-last-active-time (&optional string)
-  (setq my-shell-last-active-time (float-time)))
+(defun my/shell-update-last-active-time (&optional string)
+  (setq my/shell-last-active-time (float-time)))
 
-(defun my-shell-dont-scroll ()
+(defun my/shell-dont-scroll ()
   (interactive)
   (let ((point (point)))
     (comint-send-input)
@@ -94,9 +94,9 @@ Also, creates a shell when there are no other shells."
 
 (add-hook 'shell-mode-hook
           (lambda ()
-            (my-shell-update-last-active-time)
+            (my/shell-update-last-active-time)
             (add-hook 'comint-input-filter-functions
-                      'my-shell-update-last-active-time)
+                      'my/shell-update-last-active-time)
             (setq line-number-mode nil
                   column-number-mode nil)
             (setq comint-input-ignoredups t)
@@ -107,17 +107,17 @@ Also, creates a shell when there are no other shells."
             (anzu-mode -1)
 
             (bind-keys :map shell-mode-map
-                       ("C-c C-g" . my-shell-rename-and-run-command)
+                       ("C-c C-g" . my/shell-rename-and-run-command)
                        ("C-c d" . dirs)
-                       ("C-c <return>" . my-shell-dont-scroll)
-                       ("C-c RET" . my-shell-dont-scroll)
+                       ("C-c <return>" . my/shell-dont-scroll)
+                       ("C-c RET" . my/shell-dont-scroll)
                        ("C-<up>" . comint-previous-prompt)
                        ("C-<down>" . comint-next-prompt)
-                       ("C-c e" . my-shell-erase-buffer)
-                       ("C-c n" . my-shell-rename-buffer)
-                       ("C-l" . my-shell-bash-clear-screen)
-                       ("<right>" . my-shell-forward-char-or-previous-history)
-                       ("<down>" . my-shell-next-line-or-next-history)
+                       ("C-c e" . my/shell-erase-buffer)
+                       ("C-c n" . my/shell-rename-buffer)
+                       ("C-l" . my/shell-bash-clear-screen)
+                       ("<right>" . my/shell-forward-char-or-previous-history)
+                       ("<down>" . my/shell-next-line-or-next-history)
                        ("M-." . comint-insert-previous-argument))
 
             ))

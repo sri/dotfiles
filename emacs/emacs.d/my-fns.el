@@ -1,8 +1,8 @@
-(defvar my-change-inside-pair-overlay nil)
-(make-variable-buffer-local 'my-change-inside-pair-overlay)
+(defvar my/change-inside-pair-overlay nil)
+(make-variable-buffer-local 'my/change-inside-pair-overlay)
 
-(defun my-change-inside-pair-unhighlight ()
-  (delete-overlay my-change-inside-pair-overlay))
+(defun my/change-inside-pair-unhighlight ()
+  (delete-overlay my/change-inside-pair-overlay))
 
 ;; This shows a way to briefly highlight a region.
 ;; This done using the run-at-time function.
@@ -12,7 +12,7 @@
 ;; that cancels the stored timer if execution of run-at-time
 ;; takes too long. And function remove itself from the pre-command-hook
 ;; after that.
-(defun my-change-inside-pair (arg)
+(defun my/change-inside-pair (arg)
   (interactive "P")
   (let* ((start-string (format "%c" (read-event)))
          (end-string (or (cdr (assoc start-string '(("(" . ")")
@@ -34,28 +34,28 @@
                ;; to the user.
                (when (and (pos-visible-in-window-p start (selected-window))
                           (pos-visible-in-window-p end (selected-window)))
-                 (when (null my-change-inside-pair-overlay)
-                   (setq my-change-inside-pair-overlay (make-overlay 0 0))
-                   (overlay-put my-change-inside-pair-overlay
+                 (when (null my/change-inside-pair-overlay)
+                   (setq my/change-inside-pair-overlay (make-overlay 0 0))
+                   (overlay-put my/change-inside-pair-overlay
                                 'face 'isearch))
-                 (move-overlay my-change-inside-pair-overlay
+                 (move-overlay my/change-inside-pair-overlay
                                start
                                end
                                (current-buffer))
-                 (run-at-time 0.3 nil 'my-change-inside-pair-unhighlight))
+                 (run-at-time 0.3 nil 'my/change-inside-pair-unhighlight))
                (message "Copied `%s'"
                         (buffer-substring-no-properties start end)))
           (t
            (goto-char end)
            (delete-region start end)))))
 
-(defun my-kill-line-or-region (&optional arg)
+(defun my/kill-line-or-region (&optional arg)
   (interactive "P")
   (if (use-region-p)
       (kill-region (point) (mark))
     (kill-line arg)))
 
-(defun my-hippie-tab (arg)
+(defun my/hippie-tab (arg)
   "Hippie expand, do what I mean.
 If in the middle of `hippie-expand' running thru all the
 expansions (see `hippie-expand-try-functions-list'), then
@@ -74,40 +74,40 @@ Othewise, invoke `hippie-expand'."
         (t
          (indent-for-tab-command))))
 
-(defun my-kill-current-buffer ()
+(defun my/kill-current-buffer ()
   "Kill the current buffer without prompting."
   (interactive)
   (kill-buffer (current-buffer)))
 
-(defun my-switch-to-buffer ()
+(defun my/switch-to-buffer ()
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 
-(defvar my-yank-keymap
+(defvar my/yank-keymap
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "y") 'yank-pop)
     map))
 
-(defun my-yank (arg)
+(defun my/yank (arg)
   (interactive "*P")
   (yank arg)
   (unless (window-minibuffer-p)
     (message "Press `y' to yank-pop"))
-  (set-transient-map my-yank-keymap
+  (set-transient-map my/yank-keymap
                              (lambda ()
                                (memq this-command
                                      '(yank-pop cua-paste-pop)))))
 
-(defun my-count-lines-buffer ()
+(defun my/count-lines-buffer ()
   (interactive)
   (message "%d lines" (count-lines (point-min) (point-max))))
 
-(defun my-just-one-space (&optional arg)
+(defun my/just-one-space (&optional arg)
   "Like just-one-space, but moves across newlines."
   (interactive "*P")
   (just-one-space (if arg nil -1)))
 
-(defun my-delete-horizontal-space (&optional arg)
+(defun my/delete-horizontal-space (&optional arg)
   (interactive "*P")
   (if arg
       (delete-horizontal-space)
@@ -116,14 +116,14 @@ Othewise, invoke `hippie-expand'."
                    (progn (skip-chars-forward " \t\n\r")
                           (point)))))
 
-(defun my-kill-whole-line (&optional arg)
+(defun my/kill-whole-line (&optional arg)
   "Like kill-whole-line but maintains column position."
   (interactive "p")
   (let ((col (current-column)))
     (kill-whole-line arg)
     (move-to-column col)))
 
-(defun my-url-decode (&optional arg)
+(defun my/url-decode (&optional arg)
   "Decode the URL.
 If a region is selected and the universal argument (C-u) is prefixed,
 then the region is replaced with the decoded URL. Otherwise, show the
@@ -139,7 +139,7 @@ decoded URL in the minibuffer."
            (insert decoded))
           (t (message "%s" decoded)))))
 
-(defun my-beginning-of-line ()
+(defun my/beginning-of-line ()
   "Move to the beginning of line or beginning of non-whitespace chars."
   (interactive "^")
   (cond ((and (boundp 'multiple-cursors-mode)
@@ -158,22 +158,22 @@ decoded URL in the minibuffer."
 
 (require 'ffap)
 
-(defun my-open-project-file-or-find-files ()
+(defun my/open-project-file-or-find-files ()
   (call-interactively
    (if (helm-ls-git-root-dir)
        'helm-ls-git-ls
      'helm-find-files)))
 
-(defun my-ffap-or-find-file (arg)
+(defun my/ffap-or-find-file (arg)
   "Find the file at point or ask the user for file's path.
 The latter method uses `helm-find-files'."
   (interactive "P")
   (if (or arg
           (memq major-mode '(dired-mode)))
-      (my-open-project-file-or-find-files)
+      (my/open-project-file-or-find-files)
     (let ((file (ffap-file-at-point)))
       (if (not file)
-          (my-open-project-file-or-find-files)
+          (my/open-project-file-or-find-files)
         (let (col line)
           (save-excursion
             (goto-char (point-at-bol))
@@ -199,11 +199,11 @@ The latter method uses `helm-find-files'."
           (when col
             (move-to-column col)))))))
 
-(defun my-remove-non-ascii-chars ()
+(defun my/remove-non-ascii-chars ()
   (interactive)
   (query-replace-regexp "[^[:ascii:]]" ""))
 
-(defun my-open-latest-downloaded-file ()
+(defun my/open-latest-downloaded-file ()
   (interactive)
   (let (downloads)
     (dolist (f (directory-files "~/Downloads" 'full nil 'nosort))
@@ -215,7 +215,7 @@ The latter method uses `helm-find-files'."
       (find-file (caar downloads)))))
 
 (require 'rect) ; for killed-rectangle
-(defun my-copy-from-starting-col-till-eol (start end &optional evenly-sized-strings)
+(defun my/copy-from-starting-col-till-eol (start end &optional evenly-sized-strings)
   "Copy from starting column till end of line for all lines in region.
 With a prefix argument, makes all the copied lines the same
 length -- spaces are appended to lines that aren't long enough.
@@ -255,23 +255,23 @@ will bring it back."
                  (mapconcat 'key-description
                             (where-is-internal 'yank-rectangle) ", "))))))
 
-(defun my-unsaved-changes ()
+(defun my/unsaved-changes ()
   (interactive)
   (diff-buffer-with-file (current-buffer)))
 
-(defun my-find-file-as-sudo ()
+(defun my/find-file-as-sudo ()
   (interactive)
   (when-let ((file-name (buffer-file-name)))
     (find-alternate-file (concat "/sudo::" file-name))))
 
-(defun my-occur ()
+(defun my/occur ()
   (interactive)
   (call-interactively
    (if (eq major-mode 'org-mode)
        'org-sparse-tree
      'occur)))
 
-(defun my-pp-json ()
+(defun my/pp-json ()
   (interactive)
   (shell-command-on-region (point-min)
                            (point-max)
@@ -279,7 +279,7 @@ will bring it back."
                            (current-buffer)
                            t))
 
-(defun my-toggle-camel-case-and-underscore ()
+(defun my/toggle-camel-case-and-underscore ()
   (interactive)
   (when-let ((bounds (bounds-of-thing-at-point 'sexp)))
     (let* ((word (buffer-substring-no-properties (car bounds)
@@ -309,7 +309,7 @@ will bring it back."
         (insert result)
         (move-to-column original-col))))))
 
-(defun my-find-file-in-other-window (&optional arg)
+(defun my/find-file-in-other-window (&optional arg)
   (interactive "P")
   (cond ((not arg)
          (split-window-right)
@@ -317,13 +317,13 @@ will bring it back."
         (t
          (split-window-below)
          (windmove-down)))
-  (my-open-project-file-or-find-files))
+  (my/open-project-file-or-find-files))
 
-(defun my-frame-transparency (arg)
+(defun my/frame-transparency (arg)
   (interactive "p")
   (set-frame-parameter nil 'alpha (list arg arg)))
 
-(defun my-copy-full-path ()
+(defun my/copy-full-path ()
   "Copies the buffer name to the kill ring.
 If the current buffer isn't associated with a file and the major
 mode is either Shell or Magit, then the current directory is
@@ -340,11 +340,11 @@ copied."
       (kill-new name)
       (message "Copied `%s'" name))))
 
-(defun my-git-grep-from-root ()
+(defun my/git-grep-from-root ()
   (interactive)
   (helm-grep-do-git-grep 1))
 
-(defun my-google-search ()
+(defun my/google-search ()
   "Google the currently selected region or the previous word.
 Shows the term before doing so."
   (interactive)
@@ -361,7 +361,7 @@ Shows the term before doing so."
     (if (string= term "")
         (message "nothing to google for")
       (if (y-or-n-p (format "Google for `%s'?" term))
-          (with-current-buffer (get-buffer-create "*my-google-search*")
+          (with-current-buffer (get-buffer-create "*my/google-search*")
             (start-process (buffer-name (current-buffer))
                            (current-buffer)
                            "open" "-a" "Google Chrome"

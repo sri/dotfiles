@@ -9,8 +9,8 @@
            ("u" . upcase-region)
            ("d" . downcase-region)
            ("m" . apply-macro-to-region-lines)
-           ("C" . my-duplicate-line-or-region)
-           (";" . my-comment-line-or-region)
+           ("C" . my/duplicate-line-or-region)
+           (";" . my/comment-line-or-region)
            ("SPC" . exchange-point-and-mark)
 
            ("a" . mc/mark-all-like-this)

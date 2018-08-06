@@ -1,4 +1,4 @@
-(defun my-set-major-mode ()
+(defun my/set-major-mode ()
   "For temporary buffers, set the mode based on the name.
 Defaults to text mode. Yasnippets won't be turned on for
 Fundamental mode."
@@ -12,7 +12,7 @@ Fundamental mode."
         (text-mode))
       t)))
 
-(setq-default major-mode 'my-set-major-mode)
+(setq-default major-mode 'my/set-major-mode)
 
 (let ((registers '((?d . "~/Desktop")
                    (?e . "~/my/dotfiles/emacs/emacs.d")
@@ -26,19 +26,19 @@ Fundamental mode."
       '(face tabs trailing space-before-tab newline indentation empty space-after-tab tab-mark))
 (setq whitespace-line-column 78)
 
-(defun my-turn-on-whitespace ()
+(defun my/turn-on-whitespace ()
   (whitespace-mode 1))
-(add-hook 'prog-mode-hook 'my-turn-on-whitespace)
-(add-hook 'diff-mode-hook 'my-turn-on-whitespace)
+(add-hook 'prog-mode-hook 'my/turn-on-whitespace)
+(add-hook 'diff-mode-hook 'my/turn-on-whitespace)
 
-(defun my-turn-off-whitespace ()
+(defun my/turn-off-whitespace ()
   (whitespace-mode -1))
-(add-hook 'emacs-lisp-mode-hook 'my-turn-off-whitespace)
-(add-hook 'go-mode-hook 'my-turn-off-whitespace)
+(add-hook 'emacs-lisp-mode-hook 'my/turn-off-whitespace)
+(add-hook 'go-mode-hook 'my/turn-off-whitespace)
 
-(defun my-turn-on-linenumbers ()
+(defun my/turn-on-linenumbers ()
   (setq display-line-numbers t))
-(add-hook 'prog-mode-hook 'my-turn-on-linenumbers)
+(add-hook 'prog-mode-hook 'my/turn-on-linenumbers)
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
@@ -77,11 +77,11 @@ Fundamental mode."
 
 (setq Man-width 80)
 
-(defun my-delete-trailing-whitespace ()
+(defun my/delete-trailing-whitespace ()
   (unless (memq major-mode '(org-mode))
     (delete-trailing-whitespace)))
 
-(add-hook 'before-save-hook 'my-delete-trailing-whitespace)
+(add-hook 'before-save-hook 'my/delete-trailing-whitespace)
 
 (setq eval-expression-print-length nil)
 (setq eval-expression-print-level nil)

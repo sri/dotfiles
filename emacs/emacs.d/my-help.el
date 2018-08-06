@@ -1,6 +1,6 @@
 (require 'help-mode)
 
-(defun my-help-push-next-button ()
+(defun my/help-push-next-button ()
   (interactive)
   (forward-button 1 t)
   (push-button))
@@ -11,4 +11,4 @@
            ("n" . forward-button)
            ("p" . backward-button)
            ("x" . delete-window)
-           ("g" . my-help-push-next-button))
+           ("g" . my/help-push-next-button))

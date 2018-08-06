@@ -3,7 +3,7 @@
 (require 'cl)
 (require 'button)
 
-(defun my-update-dot-emacs ()
+(defun my/update-dot-emacs ()
   (lexical-let ((update-buffer-name
                  (generate-new-buffer "*Update-Dot-Emacs*")))
     (cl-labels
@@ -22,7 +22,7 @@
                (insert "\n\nUpdating...\n")
                (when stash-first
                  (run "git" "stash" "save" "-u"
-                      "\"DONT DELETE: stashed by my-update-dot-emacs.el\""))
+                      "\"DONT DELETE: stashed by my/update-dot-emacs.el\""))
                (run "git" "pull" "--rebase")
                (let ((status
                       (concat (if stash-first
@@ -71,4 +71,4 @@
               (show-maximum-output)
               (beginning-of-line))))))))
 
-(run-with-idle-timer 10 nil #'my-update-dot-emacs)
+(run-with-idle-timer 10 nil #'my/update-dot-emacs)
