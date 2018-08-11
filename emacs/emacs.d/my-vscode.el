@@ -4,11 +4,15 @@
 
 (cl-defun my/shell-for-buffer (&optional create-new)
   "Opens a shell for the current buffer in a window below it.
-If there is an existing shell, it is selected if it has the same
-directory or git repo as the current buffer. Invoking this
-command from the shell will close the shell buffer.
+If a shell that belongs to the buffer already exists in a window
+below, it switches to it. A shell is considered to belong to a
+buffer if its in the same directory or in the same git repo as
+the buffer.
 
-With a prefix argument, generates a new shell for the current buffer."
+Invoking this command from the shell will close the shell buffer.
+
+With a prefix argument, it always generates a new shell for the
+current buffer."
   (interactive "P")
 
   (when (eq major-mode 'shell-mode)
