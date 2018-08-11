@@ -1,3 +1,5 @@
+(require 's)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utilities
 (defmacro def-with-selected-window (name &rest body)
@@ -33,6 +35,20 @@
                 local-map ,my/mode-line-buffer-modified-p-keymap))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Buffer name:
+(require 'easymenu)
+
+(defvar my/mode-line-buffer-name-menu-map
+  (easy-menu-create-menu
+   "Path actions"
+   '(["Copy absolute path" my/mode-line-copy-full-path t]
+     ["Copy filename" my/mode-line-copy-file-name t]
+     ["Copy filename in repo w/ line num" my/mode-line-copy-file-name-in-repo t]
+     "---"
+     ["Open in Finder" my/mode-line-open-folder]
+     ["Open in Sublime" my/mode-line-open-in-sublime])))
+
+
 ;; Buffer name: click to copy
 (make-face 'my/mode-line-buffer-name-face)
 (set-face-attribute 'my/mode-line-buffer-name-face nil
@@ -43,28 +59,51 @@
     )
 
 (defun my/mode-line-buffer-identification-help-echo (window object point)
-  "mouse-1: Copy file path to kill ring\nS-mouse-1: Open directory")
+  "Click to open Path actions menu")
 
 (def-with-selected-window my/mode-line-copy-full-path ()
-  (let ((full (buffer-file-name)))
-    (when full
-      (kill-new full)
-      (message "Copied: `%s'" full))))
+  (let ((path buffer-file-name))
+    (when path
+      (kill-new path)
+      (message "Copied: `%s'" path))))
+
+(def-with-selected-window my/mode-line-copy-file-name ()
+  (let ((path (and buffer-file-name
+                   (file-name-nondirectory buffer-file-name))))
+    (when path
+      (kill-new path)
+      (message "Copied: `%s'" path))))
+
+(def-with-selected-window my/mode-line-copy-file-name-in-repo ()
+  (let* ((path buffer-file-name)
+         (git-root (shell-command-to-string "git rev-parse --show-toplevel 2> /dev/null")))
+    (setq git-root (s-trim git-root))
+    (if (or (string= git-root "")
+            (not (string-prefix-p git-root path)))
+        (message "Not in git repo")
+      (setq path
+            (format "%s%s#%d"
+                    (file-name-nondirectory git-root)
+                    (s-chop-prefix git-root path)
+                    (line-number-at-pos)))
+      (kill-new path)
+      (message "Copied: `%s'" path))))
 
 (def-with-selected-window my/mode-line-open-folder ()
   (let* ((name (buffer-file-name))
          (dir (if name (file-name-directory name) default-directory)))
     (call-process "open" nil nil nil dir)))
 
+(def-with-selected-window my/mode-line-open-in-sublime ()
+  (let ((path (or buffer-file-name
+                  default-directory)))
+    (call-process "open" nil nil nil "-a" "Sublime Text (3154)" path)))
+
 (defvar my/mode-line-buffer-identification-keymap
   (let ((map (make-sparse-keymap)))
-    (define-key map [mode-line mouse-1] 'my/mode-line-copy-full-path)
-    (define-key map [header-line down-mouse-1] 'ignore)
-    ;; (define-key map [header-line mouse-1] 'my/mode-line-copy-full-path)
-    ;; (define-key map [mode-line mouse-3] 'ignore)
-    (define-key map [mode-line S-mouse-1] 'my/mode-line-open-folder)
-    ;; (define-key map [header-line down-mouse-3] 'ignore)
-    ;; (define-key map [header-line mouse-3] 'ignore))
+    (bindings--define-key map [mode-line down-mouse-1]
+      `(menu-item "Menu Bar" ignore
+                  :filter ,(lambda (_) '(mouse-menu-major-mode-map) my/mode-line-buffer-name-menu-map)))
     map))
 
 (setq-default mode-line-buffer-identification
@@ -90,7 +129,7 @@
   `((line-number-mode
      ((column-number-mode
        (10 ,(propertize
-	     " %l,%C"
+	     " %l %C"
 	     'local-map my/mode-line-column-line-number-mode-map
 	     'mouse-face 'mode-line-highlight
 	     'help-echo "mouse-1: goto line"))
@@ -114,9 +153,19 @@
 (def-with-selected-window my/magit-status ()
   (magit-status))
 
+(def-with-selected-window my/magit-blame ()
+  (if magit-blame-mode
+      (magit-blame-quit)
+    (magit-blame)))
+
+(def-with-selected-window my/magit-log-buffer ()
+  (magit-log-buffer-file))
+
 (defvar my/vc-mode-line-keymap
   (let ((map (make-sparse-keymap)))
     (define-key map [mode-line mouse-1] 'my/magit-status)
+    (define-key map [mode-line S-mouse-1] 'my/magit-blame)
+    (define-key map [mode-line M-mouse-1] 'my/magit-log-buffer)
     map))
 
 ;; Let's only care about Git for now.
@@ -124,12 +173,23 @@
   (interactive (list buffer-file-name))
   (when (eq backend 'Git)
     (setq vc-mode
-          (propertize (format "{%s}" (vc-git--symbolic-ref file))
+          (propertize (format "(%s)" (vc-git--symbolic-ref file))
                       'mouse-face 'mode-line-highlight
-                      'help-echo "Click for Magit status"
+                      'help-echo "Click for Magit status\nS-mouse-1: Magit blame\nAlt-mouse-1: Magit log buffer"
                       'local-map my/vc-mode-line-keymap))
     (force-mode-line-update)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar my/buffer-mods-git-blame
+  (let ((map (make-sparse-keymap)))
+    (define-key map [mode-line mouse-1] 'my/magit-blame)
+    map))
+
+(def-modeline-var my/buffer-mods
+  `((:propertize (:eval (if buffer-file-name "ß" " "))
+                 help-echo "Git blame current file"
+                 mouse-face mode-line-highlight
+                 local-map ,my/buffer-mods-git-blame)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Put it all  together
 (setq-default mode-line-format
@@ -137,6 +197,6 @@
                 my/mode-line-modified " "
                 my/mode-line-position " "
                 mode-line-buffer-identification " "
-                (vc-mode vc-mode)
-                ;; mode-line-modes " "
+                (vc-mode vc-mode) " "
+                ;; my/buffer-mods
                 (defining-kbd-macro " def")))
