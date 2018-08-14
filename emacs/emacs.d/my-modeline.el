@@ -103,7 +103,7 @@
   (let ((map (make-sparse-keymap)))
     (bindings--define-key map [mode-line down-mouse-1]
       `(menu-item "Menu Bar" ignore
-                  :filter ,(lambda (_) '(mouse-menu-major-mode-map) my/mode-line-buffer-name-menu-map)))
+                  :filter ,(lambda (_)  my/mode-line-buffer-name-menu-map)))
     map))
 
 (setq-default mode-line-buffer-identification
@@ -198,5 +198,6 @@
                 my/mode-line-position " "
                 mode-line-buffer-identification " "
                 (vc-mode vc-mode) " "
+                mode-line-modes
                 ;; my/buffer-mods
                 (defining-kbd-macro " def")))
