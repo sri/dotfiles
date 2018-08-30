@@ -46,7 +46,20 @@
      ["Copy filename in repo w/ line num" my/mode-line-copy-file-name-in-repo t]
      "---"
      ["Open in Finder" my/mode-line-open-folder]
-     ["Open in Sublime" my/mode-line-open-in-sublime])))
+     ["Open in Sublime" my/mode-line-open-in-sublime]
+     ["Copy region for JIRA" my/mode-line-copy-for-jira])))
+
+(def-with-selected-window my/mode-line-copy-for-jira ()
+  (let ((path (my/mode-line-get-file-name-in-repo))
+        (region (and (use-region-p)
+                     (format "{noformat}\n%s\n{noformat}\n"
+                             (buffer-substring-no-properties
+                              (region-beginning)
+                              (region-end))))))
+    (kill-new (if region
+                  (format "*%s*:\n%s" path region)
+                path))
+    (message "Copied `%s' with the region for JIRA" path)))
 
 
 ;; Buffer name: click to copy
@@ -74,7 +87,7 @@
       (kill-new path)
       (message "Copied: `%s'" path))))
 
-(def-with-selected-window my/mode-line-copy-file-name-in-repo ()
+(defun my/mode-line-get-file-name-in-repo ()
   (let* ((path buffer-file-name)
          (git-root (shell-command-to-string "git rev-parse --show-toplevel 2> /dev/null")))
     (setq git-root (s-trim git-root))
@@ -85,9 +98,12 @@
             (format "%s%s#%d"
                     (file-name-nondirectory git-root)
                     (s-chop-prefix git-root path)
-                    (line-number-at-pos)))
-      (kill-new path)
-      (message "Copied: `%s'" path))))
+                    (line-number-at-pos))))))
+
+(def-with-selected-window my/mode-line-copy-file-name-in-repo ()
+  (let ((path (my/mode-line-get-file-name-in-repo)))
+    (kill-new path)
+    (message "Copied: `%s'" path)))
 
 (def-with-selected-window my/mode-line-open-folder ()
   (let* ((name (buffer-file-name))
