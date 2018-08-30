@@ -33,7 +33,6 @@
  '(magit-diff-removed-highlight ((t (:foreground "#aa2222"))))
  '(magit-section-highlight ((t nil)))
  '(minibuffer-prompt ((t (:foreground "#888888"))))
- '(mode-line ((t (:underline "#526e76"))))
  '(org-done ((t (:foreground "#003d4d" :strike-through t))))
  '(org-headline-done ((t (:foreground "#003d4d" :strike-through t))))
  '(org-level-1 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
