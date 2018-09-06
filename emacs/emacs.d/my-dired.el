@@ -63,7 +63,7 @@
                        ([mouse-2] . dired-find-file)
                        ("a" . my/dired-first-file)
                        ("z" . my/dired-last-file)
-                       ("f" . my/isearch-forward)
+                       ("f" . find-name-dired)
                        ("r" . wdired-change-to-wdired-mode)
                        ("C-o" . my/ffap-or-find-file)
                        ("C-m" . my/dired-find-file)
