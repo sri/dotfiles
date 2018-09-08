@@ -15,10 +15,10 @@ function gg() {
 
     if [ "$search" = "$downcased" ]; then
         # If all lowercase, do a case-insensitive search.
-        git grep --break -n -i $1
+        git grep --break -n -i "$1"
     else
         # Otherwise search for that term exactly.
-        git grep --break -n $1
+        git grep --break -n "$1"
     fi
 }
 
