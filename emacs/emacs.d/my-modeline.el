@@ -113,7 +113,7 @@
 (def-with-selected-window my/mode-line-open-in-sublime ()
   (let ((path (or buffer-file-name
                   default-directory)))
-    (call-process "open" nil nil nil "-a" "Sublime Text (3154)" path)))
+    (call-process "open" nil nil nil "-a" "Sublime Text" path)))
 
 (defvar my/mode-line-buffer-identification-keymap
   (let ((map (make-sparse-keymap)))
