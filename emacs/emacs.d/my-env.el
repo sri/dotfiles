@@ -43,6 +43,7 @@ Fundamental mode."
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
+(setq text-quoting-style 'grave)
 (put 'narrow-to-region 'disabled nil)
 (setq mouse-drag-and-drop-region 'shift)
 (setq auto-hscroll-mode 'current-line)
