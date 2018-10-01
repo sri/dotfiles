@@ -43,10 +43,10 @@ Fundamental mode."
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
+(setq auto-hscroll-mode t)
 (setq text-quoting-style 'grave)
 (put 'narrow-to-region 'disabled nil)
 (setq mouse-drag-and-drop-region 'shift)
-(setq auto-hscroll-mode 'current-line)
 (setq large-file-warning-threshold nil)
 (set-language-environment "UTF-8")
 (setq message-log 16384)

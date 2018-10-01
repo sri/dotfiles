@@ -367,3 +367,19 @@ Shows the term before doing so."
                            "open" "-a" "Google Chrome"
                            (format "https://www.google.com/search?q=%s"
                                    (url-encode-url term))))))))
+
+(defun my/toggle-auto-hscroll-mode ()
+  "This comes into play when toggle-truncate-lines is enabled.
+Enabled means that the line gets truncated as opposed to
+showing everything in the current window.
+When enabled, if we scroll to the end of partial line,
+how does scrolling affect the window:
+ - current-line: only horizontally scroll the current line
+ - nil:          don't scroll the window at all
+ - t:            horizontally scroll the whole window"
+  (interactive)
+  (setq auto-hscroll-mode
+        (cond ((eq auto-hscroll-mode t) 'current-line)
+              ((eq auto-hscroll-mode 'current-line) nil)
+              (t t)))
+  (message "auto-hscroll-mode is set to %s" auto-hscroll-mode))

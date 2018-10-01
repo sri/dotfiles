@@ -62,6 +62,7 @@
  ("C-c s" . sort-lines)
  ("C-c F" . recentf-open-files)
  ("C-c O" . open-line)
+ ("C-c C-l" . my/toggle-auto-hscroll-mode)
  ("<C-backspace>" . subword-backward-kill)
  ("C-h SPC" . helm-all-mark-rings)
 
