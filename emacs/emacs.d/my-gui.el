@@ -17,7 +17,7 @@
             (when (and buffer-file-name (buffer-modified-p))
               (save-buffer))))
 
-(let ((shell-path (shell-command-to-string "$SHELL -c 'echo -n $PATH'")))
+(let ((shell-path (shell-command-to-string "$SHELL -l -c 'echo -n $PATH'")))
   (setenv "PATH" shell-path)
   (setq exec-path (split-string shell-path path-separator)))
 
