@@ -153,3 +153,18 @@ Inspired by Sublime Text."
     (goto-char beg)
     (set-mark beg)
     (goto-char end)))
+
+(defun my/copy-line-or-region ()
+  (interactive)
+  (let (start end text)
+    (cond ((use-region-p)
+           (setq start (region-beginning))
+           (setq end (region-end)))
+          (t
+           (setq start (point-at-bol))
+           (setq end (point-at-eol))))
+    (setq text
+          (buffer-substring-no-properties start end))
+    ;; Body of `ns-copy-including-secondary'.
+    (kill-ring-save start end)
+    (gui-set-selection 'SECONDARY text)))
