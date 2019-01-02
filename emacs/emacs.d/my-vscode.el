@@ -23,11 +23,11 @@ current buffer."
                (with-current-buffer buffer
                  (shell-command-to-string "git rev-parse --show-toplevel")))
              (shell-in-same-repo-or-dir? (buffer)
-               (and (with-current-buffer buffer
-                      (eq major-mode 'shell-mode))
+               (and (eq 'shell-mode (buffer-local-value 'major-mode buffer))
                     (let ((current (expand-file-name default-directory))
-                          (other (with-current-buffer buffer
-                                   (expand-file-name default-directory))))
+                          (other (expand-file-name
+                                  (buffer-local-value 'default-directory
+                                                      buffer)))
                       (or (string= current other)
                           (and (or (string-prefix-p current other)
                                    (string-prefix-p other current))

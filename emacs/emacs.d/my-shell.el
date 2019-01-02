@@ -63,14 +63,14 @@ Also, creates a shell when there are no other shells."
         (t (let (shells)
 
              (dolist (buf (buffer-list))
-               (with-current-buffer buf
-                 (if (eq major-mode 'shell-mode) (push buf shells))))
+               (when (eq 'shell-mode (buffer-local-value 'major-mode buf))
+                 (push buf shells))
 
              (setq shells
                    (sort shells
                          (lambda (x y)
-                           (> (with-current-buffer x my/shell-last-active-time)
-                              (with-current-buffer y my/shell-last-active-time)))))
+                           (> (buffer-local-value 'my/shell-last-active-time x)
+                              (buffer-local-value 'my/shell-last-active-time y)))))
 
              (cond ((null shells)
                     (shell))
