@@ -43,6 +43,7 @@ Fundamental mode."
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
+(setq-default bidi-display-reordering nil)
 (setq auto-hscroll-mode t)
 (setq text-quoting-style 'grave)
 (put 'narrow-to-region 'disabled nil)
