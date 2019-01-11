@@ -14,11 +14,6 @@ Fundamental mode."
 
 (setq-default major-mode 'my/set-major-mode)
 
-(let ((registers '((?d . "~/Desktop")
-                   (?e . "~/my/dotfiles/emacs/emacs.d")
-                   (?~ . "~"))))
-  (dolist (reg registers)
-    (set-register (car reg) (cons 'file (cdr reg)))))
 
 (require 'whitespace)
 ;; For some reason tabs don't work, but tab-mark does...
