@@ -12,6 +12,7 @@
     (mapc 'my/load
           '(
             "my-fns"
+            "my-register"
             "my-env"
             "my-keys"
             "my-view"
