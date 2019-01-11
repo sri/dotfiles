@@ -41,9 +41,10 @@
 (defvar my/mode-line-buffer-name-menu-map
   (easy-menu-create-menu
    "Path actions"
-   '(["Copy absolute path" my/mode-line-copy-full-path t]
-     ["Copy filename" my/mode-line-copy-file-name t]
-     ["Copy filename in repo w/ line num" my/mode-line-copy-file-name-in-repo t]
+   '(["Copy filename" my/mode-line-copy-file-name t]
+     ["Copy absolute path" my/mode-line-copy-full-path t]
+     ["Copy path relative to repo" my/mode-line-copy-file-name-relative-to-repo t]
+     ["Copy path with repo name & line num" my/mode-line-copy-file-name-in-repo t]
      "---"
      ["Open in Finder" my/mode-line-open-folder]
      ["Open in Sublime" my/mode-line-open-in-sublime]
@@ -87,21 +88,29 @@
       (kill-new path)
       (message "Copied: `%s'" path))))
 
-(defun my/mode-line-get-file-name-in-repo ()
+(defun my/mode-line-get-file-name-in-repo (&optional exclude-repo-name exclude-line-num)
   (let* ((path buffer-file-name)
          (git-root (shell-command-to-string "git rev-parse --show-toplevel 2> /dev/null")))
+    (message "path %s" path)
     (setq git-root (s-trim git-root))
     (if (or (string= git-root "")
             (not (string-prefix-p git-root path)))
         (message "Not in git repo")
       (setq path
-            (format "%s%s#%d"
-                    (file-name-nondirectory git-root)
-                    (s-chop-prefix git-root path)
-                    (line-number-at-pos))))))
+            (format "%s%s%s"
+                    (if exclude-repo-name "" (file-name-nondirectory git-root))
+                    (if exclude-repo-name
+                        (s-chop-prefix "/" (s-chop-prefix git-root path))
+                        (s-chop-prefix git-root path))
+                    (if exclude-line-num "" (format "#%d" (line-number-at-pos))))))))
 
 (def-with-selected-window my/mode-line-copy-file-name-in-repo ()
   (let ((path (my/mode-line-get-file-name-in-repo)))
+    (kill-new path)
+    (message "Copied: `%s'" path)))
+
+(def-with-selected-window my/mode-line-copy-file-name-relative-to-repo ()
+  (let ((path (my/mode-line-get-file-name-in-repo t t)))
     (kill-new path)
     (message "Copied: `%s'" path)))
 
