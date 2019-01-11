@@ -1,0 +1,4 @@
+# name: hashl
+# key: hashl
+# --
+Hash.new { |h, k| h[k] = [] }$0
