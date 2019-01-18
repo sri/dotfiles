@@ -3,6 +3,7 @@
   (let ((val (get-register register)))
     (cond ((and (consp val) (eq (car val) 'command))
            (funcall (cdr val))
+           ;; Don't proceed with the old function
            t))))
 
 ;; Before-until -- if the function returns `t', don't call the old function.
@@ -10,6 +11,7 @@
 
 (let ((registers '((?d . "~/Desktop")
                    (?e . "~/my/dotfiles/emacs/emacs.d")
+                   (?s . "~/dev")
                    (?~ . "~"))))
   (dolist (reg registers)
     (set-register (car reg) (cons 'file (cdr reg)))))
