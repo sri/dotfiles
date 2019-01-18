@@ -38,3 +38,4 @@
 (set-frame-parameter nil 'alpha '(100 100))
 
 (setq frame-title-format nil)
+(setq ns-use-proxy-icon nil)
