@@ -35,7 +35,7 @@
  '(minibuffer-prompt ((t (:foreground "#888888"))))
  '(org-done ((t (:foreground "#003d4d" :strike-through t))))
  '(org-headline-done ((t (:foreground "#003d4d" :strike-through t))))
- '(org-level-1 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
+ '(org-level-1 ((t (:inherit variable-pitch :foreground "#839496" :height 1.2 :weight bold))))
  '(org-level-2 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-level-3 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-level-4 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
