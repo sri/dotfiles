@@ -1,45 +1,46 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
-# Move the last downloaded file in ~/Downloads to the current
-# directory. An argument specifies the new name for that downloaded
-# file.
+"""Moves the latest downloaded file in ~/Downloads to the current
+directory. An optional argument specifies the new name of that
+file. Otherwise, the basename is used.
+"""
 
-import os
 import sys
+from pathlib import Path
 
-def by_most_recent(path):
-    files = [os.path.join(path, f) for f in os.listdir(path)]
-    return sorted(files, key=os.path.getmtime)
+class MvldownError(Exception):
+    pass
+
+def error(message):
+    raise MvldownError(message)
+
+def last_modified_time(file):
+    return file.stat().st_mtime
 
 def mvldown(path, new_name):
-    files = by_most_recent(path)
+    if not path.exists():
+        error(f"{path} not found")
 
-    if len(files) == 0:
-        print "nothing in %s" % path
-        return
+    files = sorted(path.iterdir(), key=last_modified_time)
+    if not files:
+        error(f"nothing in {path}")
 
     latest = files[-1]
-    if not new_name:
-        new_name = os.path.basename(latest)
+    rename_as = Path(new_name or latest.name)
+    if rename_as.exists():
+        error(f"{rename_as} already exists")
 
-    if os.path.exists(new_name):
-        print "./%s already exists" % new_name
-        return
-
-    # Ignore the race condition between checking above if new_name
-    # exists and the rename below, since rename will silently
-    # overwrite the new_name, if it exists.
-    os.rename(latest, new_name)
-    print "moved %s to %s" % (latest, new_name)
+    latest.rename(rename_as)
+    print(f"moved {latest} to {rename_as}")
 
 def main():
     new_name = (sys.argv[1] if len(sys.argv) == 2 else None)
-    downloads_dir = os.path.expanduser("~/Downloads")
+    downloads_dir = Path.home().joinpath("Downloads")
 
     try:
         mvldown(downloads_dir, new_name)
-    except Exception, err:
-        print err
+    except MvldownError as err:
+        print(err)
         sys.exit(1)
 
 if __name__ == "__main__":
