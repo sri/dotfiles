@@ -3,6 +3,11 @@
 . ~/my/dotfiles/bash/git-prompt.sh
 
 export PATH=~/my/dotfiles/bin:~/go/bin:$PATH
+if [ -e /Applications/Emacs.app/Contents/MacOS/bin ];
+then
+    export PATH=/Applications/Emacs.app/Contents/MacOS/bin:$PATH
+fi
+
 export GOPATH=~/go
 
 if [ "$(uname)" = "Darwin" ]; then
