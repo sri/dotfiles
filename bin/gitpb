@@ -3,7 +3,6 @@
 abort "not in a git repo" unless system("git rev-parse --show-toplevel &> /dev/null")
 current_branch = `git rev-parse --abbrev-ref HEAD`.strip
 abort("not pushing to master") if current_branch =~ /master|^origin\//
-output = `git push -u origin #{current_branch}`
-puts output
-url = (output =~ /(https.*\/pull\/new\/.*)/ && $1)
+output = `git push -u origin #{current_branch} 2>&1`
+url = (output =~ /(https.*\/pull\/new\/.*)/ && $1.strip)
 `open "#{url}"` if url
