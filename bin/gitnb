@@ -1,0 +1,15 @@
+#! /usr/bin/env ruby
+
+abort("not in a git repo") if !system("git rev-parse --show-toplevel &> /dev/null")
+
+new_branch = ARGV[0] || abort("usage: gitnb <new-branch-name>")
+current_branch = `git rev-parse --abbrev-ref HEAD`.strip
+all_branches = `git branch -a`.lines.map { |x| x.gsub(/[*]|remotes\//, '').strip }
+
+abort("invalid branch name") unless /^[A-Za-z0-9_-]+$/ =~ new_branch
+abort("already existing branch") if all_branches.any? { |b| b == new_branch }
+
+if current_branch != "master"
+  `git stash && git checkout master` if !system("git checkout master")
+end
+`git checkout -b #{new_branch}`

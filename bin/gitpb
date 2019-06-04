@@ -1,0 +1,9 @@
+#! /usr/bin/env ruby
+
+abort "not in a git repo" unless system("git rev-parse --show-toplevel &> /dev/null")
+current_branch = `git rev-parse --abbrev-ref HEAD`.strip
+abort("not pushing to master") if current_branch =~ /master|^origin\//
+output = `git push -u origin #{current_branch}`
+puts output
+url = (output =~ /(https.*\/pull\/new\/.*)/ && $1)
+`open "#{url}"` if url
