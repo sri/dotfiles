@@ -72,6 +72,7 @@ Fundamental mode."
 (setq scroll-error-top-bottom t)
 (setq js-indent-level 2)
 (global-eldoc-mode -1)
+(global-hl-line-mode 1)
 
 (setq Man-width 80)
 

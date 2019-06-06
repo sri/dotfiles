@@ -45,7 +45,7 @@
  '(org-level-8 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-link ((t (:foreground "#839496"))))
  '(org-todo ((t (:foreground "#6c71c4" :weight bold))))
- '(region ((t (:background "#003D4C" :foreground nil))))
+ '(region ((t (:background "#073642" :foreground nil))))
  '(show-paren-match ((t (:foreground "black" :background "#22aa22"))))
  '(show-paren-mismatch ((t (:foreground "black" :background "red"))))
  '(whitespace-line ((t (:underline t)))))
