@@ -83,7 +83,9 @@
       (move-to-column column))))
 
 (defun my/comment-line-or-region ()
-  "Comment or uncomment the current line or region."
+  "Comment or uncomment the current line or region.
+Without a selected region, comments or uncomments current line
+and moves to the next line."
   (interactive "*")
   (cond ((use-region-p)
          (let ((start (region-beginning))
@@ -104,7 +106,8 @@
            (setq deactivate-mark nil)))
         (t
          (comment-or-uncomment-region (point-at-bol)
-                                      (point-at-eol)))))
+                                      (point-at-eol))
+         (next-line 1))))
 
 (defun my/sublime-expand-selection-to-indentation ()
   (interactive)
