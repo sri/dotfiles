@@ -65,8 +65,11 @@ Othewise, invoke `hippie-expand'."
   (interactive "*P")
   (cond ((eq last-command 'hippie-expand)
          (hippie-expand arg))
-        ((and transient-mark-mode (use-region-p))
-         (indent-region (region-beginning) (region-end) nil))
+        ((and transient-mark-mode
+              (use-region-p))
+         (indent-region (region-beginning)
+                        (region-end)
+                        nil))
         ((let ((cs (char-syntax (preceding-char))))
            ;; See https://www.gnu.org/software/emacs/manual/html_node/elisp/Syntax-Class-Table.html#Syntax-Class-Table
            (or (= cs ?w) (= cs ?\_)))
@@ -94,9 +97,9 @@ Othewise, invoke `hippie-expand'."
   (unless (window-minibuffer-p)
     (message "Press `y' to yank-pop"))
   (set-transient-map my/yank-keymap
-                             (lambda ()
-                               (memq this-command
-                                     '(yank-pop cua-paste-pop)))))
+                     (lambda ()
+                       (memq this-command
+                             '(yank-pop cua-paste-pop)))))
 
 (defun my/count-lines-buffer ()
   (interactive)

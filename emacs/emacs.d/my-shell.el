@@ -64,7 +64,7 @@ Also, creates a shell when there are no other shells."
 
              (dolist (buf (buffer-list))
                (when (eq 'shell-mode (buffer-local-value 'major-mode buf))
-                 (push buf shells))
+                 (push buf shells)))
 
              (setq shells
                    (sort shells

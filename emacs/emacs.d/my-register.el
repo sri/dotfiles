@@ -17,8 +17,8 @@
     (set-register (car reg) (cons 'file (cdr reg)))))
 
 ;; Location of my work notes & work log files.
-(defvar my/work-notes-file)
-(defvar my/work-log-file)
+(defvar my/work-notes-file nil)
+(defvar my/work-log-file nil)
 
 (defun my/open-work-notes ()
   (interactive)

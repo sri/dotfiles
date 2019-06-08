@@ -47,6 +47,10 @@
              (not (string= dired-directory "/")))
     (recentf-add-file dired-directory)))
 
+(defun my/open-in-finder ()
+  (interactive)
+  (call-process "open" nil nil nil (expand-file-name default-directory)))
+
 (add-hook 'dired-mode-hook
           (lambda ()
             (dired-omit-mode 1)
@@ -68,6 +72,7 @@
                        ("C-o" . my/ffap-or-find-file)
                        ("C-m" . my/dired-find-file)
                        ("SPC" . scroll-up)
+                       ("J"   . my/open-in-finder)
                        ("S-SPC" . scroll-down)
                        ([left] . dired-up-directory)
                        ([right] . my/dired-right-arrow-key))))

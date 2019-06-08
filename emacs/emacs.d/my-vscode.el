@@ -27,7 +27,7 @@ current buffer."
                     (let ((current (expand-file-name default-directory))
                           (other (expand-file-name
                                   (buffer-local-value 'default-directory
-                                                      buffer)))
+                                                      buffer))))
                       (or (string= current other)
                           (and (or (string-prefix-p current other)
                                    (string-prefix-p other current))
