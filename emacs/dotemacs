@@ -63,24 +63,24 @@
    '(typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode))
  '(typescript-indent-level 2))
 
+;; Load the byte-compiled version of file.
 (defun my/load (src &optional ignore-if-missing)
-  "Load the byte-compiled version of SRC.
-If IGNORE-IF-MISSING is non-NIL, then don't throw an
-error if SRC is missing."
-  (let (compiled)
-    (if (not (string-suffix-p ".el" src))
-        (setq src (concat src ".el")))
-    (setq src (expand-file-name src))
-    (setq compiled (concat src "c"))
+  (unless (string-suffix-p ".el" src)
+    (setq src (concat src ".el")))
+
+  (setq src (expand-file-name src))
+
+  (let ((compiled (concat src "c")))
     (cond ((file-exists-p src)
-           (if (file-newer-than-file-p src compiled)
-               (let (byte-compile-verbose)
-                 (byte-compile-file src)))
+           (when (file-newer-than-file-p src compiled)
+             (let (byte-compile-verbose)
+               (unless (byte-compile-file src)
+                 (error "my/load: ERROR byte compiling file: %s" src))))
            (load compiled nil t t))
-          (t (ignore-errors
-               (delete-file compiled))
-             (if (not ignore-if-missing)
-                 (error "my/load: missing `%s'" src))))))
+          (t
+           (ignore-errors (delete-file compiled))
+           (unless ignore-if-missing
+             (error "my/load: missing `%s'" src))))))
 
 (let* ((package--builtins '())
        (missing (remove-if 'package-installed-p package-selected-packages)))
