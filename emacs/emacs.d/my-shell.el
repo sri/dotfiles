@@ -106,7 +106,7 @@ Also, creates a shell when there are no other shells."
             (local-unset-key (kbd "C-d"))
             (anzu-mode -1)
 
-            (bind-keys :map shell-mode-map
+            (bind-keys :map comint-mode-map
                        ("C-c C-g" . my/shell-rename-and-run-command)
                        ("C-c d" . dirs)
                        ("C-c <return>" . my/shell-dont-scroll)
