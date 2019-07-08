@@ -10,7 +10,7 @@
 (add-function :before-until (symbol-function 'jump-to-register) #'my/jump-to-register)
 
 (let ((registers '((?d . "~/Desktop")
-                   (?e . "~/my/dotfiles/emacs/emacs.d")
+                   (?e . "~/my/dotfiles/emacs")
                    (?s . "~/dev")
                    (?~ . "~"))))
   (dolist (reg registers)

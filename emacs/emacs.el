@@ -82,11 +82,51 @@
            (unless ignore-if-missing
              (error "my/load: missing `%s'" src))))))
 
+(defun my/load-all ()
+  (interactive)
+  (let ((default-directory "~/my/dotfiles/emacs"))
+
+    (my/load (if window-system "my-gui" "my-terminal"))
+
+    ;; Files that aren't on MELPA or any other
+    ;; package archive.
+    (mapc 'my/load
+          (directory-files "third-party" 'full "\\.el$" t))
+
+    (mapc 'my/load
+          '(
+            "my-fns"
+            "my-register"
+            "my-env"
+            "my-keys"
+            "my-view"
+            "my-sublime"
+            "my-vscode"
+            "my-shell"
+            "my-occur"
+            "my-isearch"
+            "my-help"
+            "my-dired"
+            "my-update-dot-emacs"
+            "my-modeline"
+            ))
+
+    (mapc (lambda (pkg)
+            (my/load (format "my-%s" pkg) 'ignore-if-missing))
+          (remove 'diminish package-selected-packages))
+
+    (my/load "my-diminish")
+    (my/load "~/.emacs.private.el" 'ignore-if-missing)))
+
+
 (let* ((package--builtins '())
        (missing (remove-if 'package-installed-p package-selected-packages)))
   (when missing
     (package-refresh-contents)
     (mapc 'package-install missing)))
 
-(my/load "~/my/dotfiles/emacs/emacs.d/my-emacs")
 (setq my/time-diff-secs (float-time (time-since my/emacs-start-time)))
+(my/load-all)
+
+(unless window-system
+  (recentf-open-files))

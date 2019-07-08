@@ -2,7 +2,7 @@
 
 (require 'yasnippet)
 
-(setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+(setq yas-snippet-dirs '("~/my/dotfiles/emacs/snippets"))
 (yas-global-mode 1)
 
 ;; I have yas working with hippie-expand.
