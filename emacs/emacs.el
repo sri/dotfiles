@@ -8,8 +8,6 @@
 
 (package-initialize)
 
-(defvar my/emacs-start-time (current-time))
-
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -83,13 +81,17 @@
              (error "my/load: missing `%s'" src))))))
 
 (defun my/load-all ()
-  (interactive)
+  ;; Load packages and install them if necessary.
+  (let* ((package--builtins '())
+         (missing (remove-if 'package-installed-p package-selected-packages)))
+    (when missing
+      (package-refresh-contents)
+      (mapc 'package-install missing)))
+
+  ;; Load my files
   (let ((default-directory "~/my/dotfiles/emacs"))
-
     (my/load (if window-system "my-gui" "my-terminal"))
-
-    ;; Files that aren't on MELPA or any other
-    ;; package archive.
+    ;; Files that aren't on MELPA or any other package archive.
     (mapc 'my/load
           (directory-files "third-party" 'full "\\.el$" t))
 
@@ -108,25 +110,15 @@
             "my-help"
             "my-dired"
             "my-update-dot-emacs"
-            "my-modeline"
-            ))
+            "my-modeline"))
 
     (mapc (lambda (pkg)
             (my/load (format "my-%s" pkg) 'ignore-if-missing))
           (remove 'diminish package-selected-packages))
 
     (my/load "my-diminish")
-    (my/load "~/.emacs.private.el" 'ignore-if-missing)))
+    (my/load "~/.emacs.private.el" 'ignore-if-missing))
 
+  (unless window-system (recentf-open-files)))
 
-(let* ((package--builtins '())
-       (missing (remove-if 'package-installed-p package-selected-packages)))
-  (when missing
-    (package-refresh-contents)
-    (mapc 'package-install missing)))
-
-(setq my/time-diff-secs (float-time (time-since my/emacs-start-time)))
 (my/load-all)
-
-(unless window-system
-  (recentf-open-files))
