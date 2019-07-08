@@ -88,5 +88,5 @@
     (package-refresh-contents)
     (mapc 'package-install missing)))
 
-(my/load "~/.emacs.d/my-emacs")
+(my/load "~/my/dotfiles/emacs/emacs.d/my-emacs")
 (setq my/time-diff-secs (float-time (time-since my/emacs-start-time)))
