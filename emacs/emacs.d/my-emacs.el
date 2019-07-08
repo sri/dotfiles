@@ -7,7 +7,7 @@
     ;; Files that aren't on MELPA or any other
     ;; package archive.
     (mapc 'my/load
-          (directory-files "~/.emacs.d/third-party" 'full "\\.el$" t))
+          (directory-files "third-party" 'full "\\.el$" t))
 
     (mapc 'my/load
           '(
