@@ -62,23 +62,22 @@
  '(typescript-indent-level 2))
 
 ;; Load the byte-compiled version of file.
-(defun my/load (src &optional ignore-if-missing)
-  (unless (string-suffix-p ".el" src)
-    (setq src (concat src ".el")))
-
-  (setq src (expand-file-name src))
-
-  (let ((compiled (concat src "c")))
-    (cond ((file-exists-p src)
-           (when (file-newer-than-file-p src compiled)
-             (let (byte-compile-verbose)
-               (unless (byte-compile-file src)
-                 (error "my/load: ERROR byte compiling file: %s" src))))
+(defun my/load (arg &optional ignore-if-missing)
+  (let* ((source (expand-file-name
+                  (if (string-suffix-p ".el" arg) arg (concat arg ".el"))))
+         (compiled (concat source "c")))
+    (cond ((file-exists-p source)
+           (if (file-newer-than-file-p source compiled)
+               (let ((byte-compile-verbose nil))
+                 (if (null (byte-compile-file source))
+                     (error "my/load: ERROR byte compiling file %s" source))))
            (load compiled nil t t))
           (t
-           (ignore-errors (delete-file compiled))
-           (unless ignore-if-missing
-             (error "my/load: missing `%s'" src))))))
+           (if (file-exists-p compiled)
+               (delete-file compiled))
+           (if (null ignore-if-missing)
+               (error "my/load: missing %s" source))))))
+
 
 (defun my/load-all ()
   ;; Load packages and install them if necessary.
