@@ -14,11 +14,6 @@ Invoking this command from the shell will close the shell buffer.
 With a prefix argument, it always generates a new shell for the
 current buffer."
   (interactive "P")
-
-  (when (eq major-mode 'shell-mode)
-    (if (window-in-direction 'above) (delete-window))
-    (return-from my/shell-for-buffer))
-
   (cl-flet* ((git-root (buffer)
                (with-current-buffer buffer
                  (shell-command-to-string "git rev-parse --show-toplevel")))
@@ -41,6 +36,14 @@ current buffer."
                (save-window-excursion
                  (shell name))
                name))
+
+    (when (eq major-mode 'shell-mode)
+      (when (window-in-direction 'above)
+        ;; we are in shell and there is a buffer above us
+        (if create-new
+            (switch-to-buffer (new-shell))
+          (delete-window)))
+      (return-from my/shell-for-buffer))
 
     (let ((win (window-in-direction 'below)))
       (if (and win (shell-in-same-repo-or-dir? (window-buffer win)))
