@@ -12,6 +12,16 @@
  ("<M-return>" . my/dired)
  ("C-m" . newline-and-indent))
 
+;; Mac trackpad
+;; Problem with wheel (2-finger swipe on os x)
+;; is that the even will keep call the function
+;; over and over again.
+;; (bind-keys*
+ ;; ("<wheel-left>" . (lambda ()
+                     ;; (interactive)
+                     ;; (message "mouse wheel left")
+                     ;; )))
+
 (bind-keys*
  ("S-s-g" . helm-grep-do-git-grep)
  ("s-0" . delete-window)
