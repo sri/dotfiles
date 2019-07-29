@@ -8,45 +8,49 @@
 
 (package-initialize)
 
+;; #9e7b00
+
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:height 160 :family "Monaco" :foreground "#93a1a1"))))
- '(bm-face ((t (:background "#9e7b00" :foreground "#333333"))))
+ '(default ((t (:height 160 :family "Monaco" :foreground "#788486"))))
+ '(bm-face ((t (:background "#333"))))
+ '(show-paren-match ((t (:foreground "#6c71c4"))))
+ '(show-paren-mismatch ((t (:foreground "red"))))
+ '(region ((t (:background "#333" :foreground "#788486"))))
  '(comint-highlight-prompt ((t nil)))
- '(cursor ((t nil)))
- '(diff-refine-added ((t (:background "#22aa22" :foreground "black"))))
- '(diff-refine-removed ((t (:background "red" :foreground "black"))))
- '(isearch ((t (:background "light green" :foreground "#002b36" :weight normal))))
- '(magit-diff-added ((t (:foreground "#22aa22"))))
- '(magit-diff-added-highlight ((t (:foreground "#22aa22"))))
- '(magit-diff-context-highlight ((t nil)))
- '(magit-diff-file-heading ((t nil)))
- '(magit-diff-file-heading-highlight ((t nil)))
- '(magit-diff-hunk-heading ((t (:foreground "#2aa198" :background nil))))
- '(magit-diff-hunk-heading-highlight ((t nil)))
- '(magit-diff-removed ((t (:foreground "#aa2222"))))
- '(magit-diff-removed-highlight ((t (:foreground "#aa2222"))))
- '(magit-section-highlight ((t nil)))
- '(minibuffer-prompt ((t (:foreground "#888888"))))
- '(org-done ((t (:foreground "#003d4d" :strike-through t))))
- '(org-headline-done ((t (:foreground "#003d4d" :strike-through t :slant italic))))
- '(org-level-1 ((t (:inherit variable-pitch :foreground "#5e6e6f" :height 1.1 :weight bold))))
- '(org-level-2 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
- '(org-level-3 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
- '(org-level-4 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
- '(org-level-5 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
- '(org-level-6 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
- '(org-level-7 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
- '(org-level-8 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
- '(org-link ((t (:foreground "#839496"))))
- '(org-todo ((t (:foreground "#6c71c4" :weight bold))))
- '(region ((t (:background "#073642" :foreground nil))))
- '(show-paren-match ((t (:foreground "black" :background "#22aa22"))))
- '(show-paren-mismatch ((t (:foreground "black" :background "red"))))
- '(whitespace-line ((t (:underline t)))))
+ )
+
+ ;; '(whitespace-line ((t (:underline t)))))
+ ;;
+ ;; '(Cursor ((t nil)))
+ ;; '(diff-refine-added ((t (:background "#22aa22" :foreground "black"))))
+ ;; '(diff-refine-removed ((t (:background "red" :foreground "black"))))
+ ;; '(isearch ((t (:background "light green" :foreground "#002b36" :weight normal))))
+ ;; '(magit-diff-added ((t (:foreground "#22aa22"))))
+ ;; '(magit-diff-added-highlight ((t (:foreground "#22aa22"))))
+ ;; '(magit-diff-context-highlight ((t nil)))
+ ;; '(magit-diff-file-heading ((t nil)))
+ ;; '(magit-diff-file-heading-highlight ((t nil)))
+ ;; '(magit-diff-hunk-heading ((t (:foreground "#2aa198" :background nil))))
+ ;; '(magit-diff-hunk-heading-highlight ((t nil)))
+ ;; '(magit-diff-removed ((t (:foreground "#aa2222"))))
+ ;; '(magit-diff-removed-highlight ((t (:foreground "#aa2222"))))
+ ;; '(magit-section-highlight ((t nil)))
+ ;; '(minibuffer-prompt ((t (:foreground "#888888"))))
+ ;; '(org-done ((t (:foreground "#003d4d" :strike-through t))))
+ ;; '(org-headline-done ((t (:foreground "#003d4d" :strike-through t :slant italic))))
+ ;; '(org-level-1 ((t (:inherit variable-pitch :foreground "#5e6e6f" :height 1.1 :weight bold))))
+ ;; '(org-level-2 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
+ ;; '(org-level-3 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
+ ;; '(org-level-4 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
+ ;; '(org-level-5 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
+ ;; '(org-level-6 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
+ ;; '(org-level-7 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
+ ;; '(org-level-8 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
+ ;; '(org-link ((t (:foreground "#839496"))))
+ ;; '(org-todo ((t (:foreground "#6c71c4" :weight bold))))
+ ;; '(region ((t (:background "#073642" :foreground nil))))
+
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -59,7 +63,7 @@
    '(org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-w3m org-velocity))
  '(package-selected-packages
    (quote
-    (centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode)))
+    (kaolin-themes centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode)))
  '(typescript-indent-level 2))
 
 ;; Load the byte-compiled version of file.
