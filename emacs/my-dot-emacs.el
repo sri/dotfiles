@@ -13,11 +13,12 @@
 (custom-set-faces
  '(default ((t (:height 160 :family "Monaco" :foreground "#788486"))))
  '(bm-face ((t (:background "#333"))))
- '(show-paren-match ((t (:foreground "#6c71c4"))))
- '(show-paren-mismatch ((t (:foreground "red"))))
- '(region ((t (:background "#333" :foreground "#788486"))))
  '(comint-highlight-prompt ((t nil)))
- )
+ '(magit-diff-file-heading ((t (:foreground "#788486"))))
+ '(magit-tag ((t (:foreground "#845b1f"))))
+ '(region ((t (:background "#333" :foreground "#788486"))))
+ '(show-paren-match ((t (:foreground "#6c71c4"))))
+ '(show-paren-mismatch ((t (:foreground "red")))))
 
  ;; '(whitespace-line ((t (:underline t)))))
  ;;
