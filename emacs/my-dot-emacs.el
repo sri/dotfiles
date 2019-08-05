@@ -16,16 +16,22 @@
 ;; #9e7b00
 ;; #617556
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(default ((t (:height 160 :family "Monaco" :foreground "#788486"))))
  '(bm-face ((t (:background "#333"))))
  '(comint-highlight-prompt ((t nil)))
  '(cursor ((t (:background "#9e7b00"))))
+ '(custom-documentation ((t (:foreground "#788486"))))
  '(magit-diff-file-heading ((t (:foreground "#788486"))))
  '(magit-section-highlight ((t nil)))
  '(magit-tag ((t (:foreground "#845b1f"))))
  '(minibuffer-prompt ((t (:foreground "#888888"))))
+ '(mode-line ((t (:background "#222225" :foreground "#788486" :box (:line-width 2 :color "#303035") :weight normal))))
  '(org-date ((t :foreground "#6c71c4")))
- '(org-done ((t (:strike-through t :foreground "#788486"))))
+ '(org-done ((t (:strike-through t))))
  '(org-headline-done ((t (:strike-through t))))
  '(org-level-1 ((t (:inherit variable-pitch :foreground "#5e6e6f" :height 1.1 :weight bold))))
  '(org-level-2 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
