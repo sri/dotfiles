@@ -71,7 +71,7 @@
  ("C-c o" . my/occur)
  ("C-c p" . my/copy-full-path)
  ("C-c s" . sort-lines)
- ("C-c F" . recentf-open-files)
+ ("C-c F" . helm-recentf)
  ("C-c O" . open-line)
  ("C-c C-l" . my/toggle-auto-hscroll-mode)
  ("<C-backspace>" . subword-backward-kill)

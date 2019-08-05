@@ -3,6 +3,15 @@
 (require 'shell)
 (add-to-list 'explicit-bash-args "--login")
 
+;; This an be set using the SHELL env var, but on Mac bashrc doesn't
+;; seem to get read when launched from Dock.
+(let ((bash "/usr/local/bin/bash"))
+  (when (file-exists-p bash)
+    ;; M-x shell
+    (setq explicit-shell-file-name bash)
+    ;; shell-command & friends
+    (setq shell-file-name bash)))
+
 (add-to-list 'display-buffer-alist
              '("^\\*shell\\*" . (display-buffer-same-window)))
 
