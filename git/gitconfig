@@ -17,3 +17,4 @@
         contains = branch -a --contains
         which = !git branch -a | grep
         teamlog = log -p --all --no-merges
+        co = checkout
