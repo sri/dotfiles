@@ -1,6 +1,7 @@
 (setenv "PAGER" "cat")
 
 (require 'shell)
+(setq shell-font-lock-keywords nil)
 (add-to-list 'explicit-bash-args "--login")
 
 ;; This an be set using the SHELL env var, but on Mac bashrc doesn't
@@ -103,6 +104,7 @@ Also, creates a shell when there are no other shells."
 
 (add-hook 'shell-mode-hook
           (lambda ()
+            (font-lock-mode t)
             (my/shell-update-last-active-time)
             (add-hook 'comint-input-filter-functions
                       'my/shell-update-last-active-time)

@@ -95,6 +95,7 @@
  ("M-o" . helm-projectile)
  ("M-p" . bm-previous)
  ("M-v" . bm-toggle)
+ ("ESC M-v" . bm-show)
  ("M-x" . helm-M-x)
  ("M-y" . helm-show-kill-ring)
 

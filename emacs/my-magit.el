@@ -7,10 +7,11 @@
 (setq magit-display-buffer-function
       'magit-display-buffer-same-window-except-diff-v1)
 
+(setq magit-diff-highlight-hunk-region-functions nil)
 ;; Don't show "Recent commits" section.
 (setq magit-log-section-commit-count 10)
 
-(set-face-attribute 'magit-diff-added-highlight nil :foreground "#22aa22")
+;(set-face-attribute 'magit-diff-added-highlight nil :foreground "#22aa22")
 
 (add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
 
@@ -25,8 +26,13 @@
     (setq magit-diff-refine-hunk (car next))
     (message "Word-diff: %s" (cdr next))))
 
+(add-hook 'magit-blame-mode-hook
+          (lambda ()
+            (font-lock-mode 1)))
+
 (add-hook 'magit-mode-hook
           (lambda ()
+            (font-lock-mode 1)
             (bind-keys :map magit-mode-map
                        ("C-c C-s" . magit-stash-list)
                        ("C-c C-w" . my/magit-diff-toggle-refine-hunk)

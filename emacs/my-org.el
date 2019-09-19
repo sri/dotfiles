@@ -15,9 +15,12 @@
 (add-hook 'org-mode-hook
           (lambda ()
             (turn-on-auto-fill)
+            (font-lock-mode 1)
             (org-bullets-mode 1)
             (diminish 'org-indent-mode)
             (setq cursor-type 'bar)))
+
+(add-to-list 'org-modules 'habits)
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -56,8 +59,9 @@
 (setq org-closed-keep-when-no-todo t)
 (setq org-log-done nil)
 
-(setq org-todo-keyword-faces
-      '(;("TODO" :foreground nil :weight bold)
+'(setq org-todo-keyword-faces
+      '(("TODO" :foreground "#6c71c4")
+        ("INPROGRESS" :foreground "#6c71c4" :box t)
         ("APPT" :foreground "medium blue" :weight bold)
         ("NOTE" :foreground "brown" :weight bold)
         ("STARTED" :foreground "dark orange" :weight bold)
