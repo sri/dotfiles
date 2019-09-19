@@ -120,9 +120,7 @@ Fundamental mode."
 (make-variable-buffer-local 'line-number-mode)
 (make-variable-buffer-local 'column-number-mode)
 
-(global-font-lock-mode t)
-
-
+(global-font-lock-mode -1)
 
 (require 'hippie-exp)
 (setq hippie-expand-try-functions-list
