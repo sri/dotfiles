@@ -2,37 +2,56 @@
 (require 'cl)
 (require 'subr-x)
 
-;; https://github.com/syl20bnr/spacemacs/issues/12535
-(if (version<= emacs-version "26.2")
-    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-  (warn "remove gnutls-algorithm-priority from .emacs; it might not be need anymore"))
-
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
 (package-initialize)
 
-;; #9e7b00
-;; #617556
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:height 160 :family "Monaco" :foreground "#788486"))))
- '(bm-face ((t (:background "#333"))))
- '(comint-highlight-prompt ((t nil)))
- '(cursor ((t (:background "#9e7b00"))))
- '(custom-documentation ((t (:foreground "#788486"))))
- '(magit-diff-file-heading ((t (:foreground "#788486"))))
+ '(default ((t (:height 150 :family "Monaco" :foreground "#666666"))))
+ '(mode-line ((t (:foreground "#777777"))))
+ '(region ((t (:background "#111111" :foreground "#666666" :distant-foreground nil))))
+ '(custom-documentation ((t (:foreground "#666666"))))
+ '(isearch ((t (:foreground "#3B84CC"))))
+ '(lazy-highlight ((t (:foreground "#3B84CC"))))
+ '(anzu-mode-line ((t (:foreground "#3B84CC"))))
+ '(anzu-mode-line-no-match ((t (:foreground "#3B84CC"))))
+ '(anzu-match-3 ((t (:foreground "#3B84CC"))))
+ '(helm-buffer-size ((t (:foreground "#666666"))))
+ '(helm-buffer-directory ((t (:foreground "#666666"))))
+ '(helm-buffer-file ((t (:foreground "#666666"))))
+ '(helm-buffer-process ((t (:foreground "#666666"))))
+ '(helm-ff-file ((t (:foreground "#666666"))))
+ '(helm-ff-directory ((t (:foreground "#666666"))))
+ '(helm-ff-dirs ((t (:foreground "#666666"))))
+ '(helm-header ((t (:foreground "#666666"))))
+ '(helm-selection ((t (:foreground "#3B84CC"))))
+ '(helm-selection-line ((t (:foreground "#3B84CC"))))
+ '(helm-match ((t (:foreground "#3B84CC"))))
+ '(helm-ls-git-added-copied-face ((t (:foreground "#666666"))))
+ '(helm-ls-git-added-modified-face ((t (:foreground "#666666"))))
+ '(helm-ls-git-conflict-face ((t (:foreground "#666666"))))
+ '(helm-ls-git-deleted-and-staged-face ((t (:foreground "#666666"))))
+ '(helm-ls-git-deleted-not-staged-face ((t (:foreground "#666666"))))
+ '(helm-ls-git-modified-and-staged-face ((t (:foreground "#666666"))))
+ '(helm-ls-git-modified-not-staged-face ((t (:foreground "#666666"))))
+ '(helm-ls-git-renamed-modified-face ((t (:foreground "#666666"))))
+ '(helm-ls-git-untracked-face ((t (:foreground "#666666"))))
+ '(helm-source-header ((t (:foreground "#666666"))))
+ '(magit-diff-file-heading ((t (:foreground "#666666"))))
+ '(magit-diff-file-heading-highlight ((t nil)))
+ '(magit-diff-added ((t (:foreground "#156a15"))))
+ '(magit-diff-added-highlight ((t (:foreground "#156a15"))))
+ '(magit-diff-context-highlight ((t nil)))
+ '(magit-diff-context ((t (:foreground "#666666"))))
+ '(magit-diff-hunk-heading ((t (:foreground "#666666" :background nil))))
+ '(magit-diff-hunk-heading-highlight ((t nil)))
+ '(magit-diff-removed ((t (:foreground "#881b1b"))))
+ '(magit-diff-removed-highlight ((t (:foreground "#881b1b"))))
  '(magit-section-highlight ((t nil)))
- '(magit-tag ((t (:foreground "#845b1f"))))
- '(minibuffer-prompt ((t (:foreground "#888888"))))
- '(mode-line ((t (:background "#222225" :foreground "#788486" :box (:line-width 2 :color "#303035") :weight normal))))
- '(org-date ((t :foreground "#6c71c4")))
- '(org-done ((t (:strike-through t))))
- '(org-headline-done ((t (:strike-through t))))
+ '(org-done ((t (:foreground "#333333" :strike-through t))))
+ '(org-headline-done ((t (:strike-through t :slant italic))))
  '(org-level-1 ((t (:inherit variable-pitch :foreground "#5e6e6f" :height 1.1 :weight bold))))
  '(org-level-2 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-level-3 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
@@ -42,36 +61,15 @@
  '(org-level-7 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-level-8 ((t (:inherit variable-pitch :foreground "#839496" :height 1.0))))
  '(org-link ((t (:foreground "#839496"))))
- '(org-todo ((t (:foreground "#6c71c4" :weight bold))))
- '(region ((t (:background "#333" :foreground "#788486"))))
- '(show-paren-match ((t (:background "#6c71c4" :foreground "#000"))))
- '(show-paren-mismatch ((t (:foreground "red"))))
- '(whitespace-line ((t (:underline t)))))
-
- ;;
- ;;
- ;;
- ;; '(diff-refine-added ((t (:background "#22aa22" :foreground "black"))))
- ;; '(diff-refine-removed ((t (:background "red" :foreground "black"))))
- ;; '(isearch ((t (:background "light green" :foreground "#002b36" :weight normal))))
- ;; '(magit-diff-added ((t (:foreground "#22aa22"))))
- ;; '(magit-diff-added-highlight ((t (:foreground "#22aa22"))))
- ;; '(magit-diff-context-highlight ((t nil)))
- ;; '(magit-diff-file-heading ((t nil)))
- ;; '(magit-diff-file-heading-highlight ((t nil)))
- ;; '(magit-diff-hunk-heading ((t (:foreground "#2aa198" :background nil))))
- ;; '(magit-diff-hunk-heading-highlight ((t nil)))
- ;; '(magit-diff-removed ((t (:foreground "#aa2222"))))
- ;; '(magit-diff-removed-highlight ((t (:foreground "#aa2222"))))
- ;;
- ;;
- ;;
- ;;
- ;;
- ;;
- ;; '(region ((t (:background "#073642" :foreground nil))))
-
-
+ '(org-todo ((t (:foreground "#6c71c4" :weight normal))))
+ '(comint-highlight-prompt ((t nil)))
+ '(cursor ((t (:background "#5e4900"))))
+ '(bm-face ((t (:background "#5e4900" :foreground "#111111"))))
+ '(diff-refine-added ((t (:background "#22aa22" :foreground "black"))))
+ '(diff-refine-removed ((t (:background "red" :foreground "black"))))
+ '(show-paren-match ((t (:foreground "#3B84CC"))))
+ '(show-paren-mismatch ((t (:foreground "#3B84CC"))))
+ )
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -79,14 +77,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   (quote
-    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "0e219d63550634bc5b0c214aced55eb9528640377daf486e13fb18a32bf39856" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
+   '("f8067b7d0dbffb29a79e0843797efabdf5e1cf326639874d8b407e9b034136a4" "97965ccdac20cae22c5658c282544892959dc541af3e9ef8857dbf22eb70e82b" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "0e219d63550634bc5b0c214aced55eb9528640377daf486e13fb18a32bf39856" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default))
  '(org-modules
-   (quote
-    (org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-w3m org-velocity)))
+   '(org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-w3m org-velocity))
  '(package-selected-packages
-   (quote
-    (kaolin-themes centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode)))
+   '(poet-theme gruvbox-theme dracula-theme kaolin-themes centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode))
  '(typescript-indent-level 2))
 
 ;; Load the byte-compiled version of file.
@@ -149,3 +144,10 @@
   (unless window-system (recentf-open-files)))
 
 (my/load-all)
+(put 'downcase-region 'disabled nil)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
