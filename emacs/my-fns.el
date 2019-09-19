@@ -386,3 +386,17 @@ how does scrolling affect the window:
               ((eq auto-hscroll-mode 'current-line) nil)
               (t t)))
   (message "auto-hscroll-mode is set to %s" auto-hscroll-mode))
+
+(defun my/jump-to-matching-bracket ()
+  (interactive)
+  (cond ((or (looking-at "(")
+             (looking-at "\\[")
+             (looking-at "{"))
+         (forward-sexp))
+        ((save-excursion
+           (forward-char -1)
+           (or (looking-at ")")
+               (looking-at "\\]")
+               (looking-at "}")))
+         (backward-sexp))
+        (t (re-search-forward ")\\|\\]\\|}" nil t))))
