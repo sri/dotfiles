@@ -10,6 +10,7 @@
 
 (custom-set-faces
  '(default ((t (:height 190 :family "Inconsolata" :foreground "#666666"))))
+ '(button ((t (:foreground "#666666" :underline nil))))
  '(mode-line ((t (:foreground "#777777"))))
  '(region ((t (:background "#111111" :foreground "#666666" :distant-foreground nil))))
  '(custom-documentation ((t (:foreground "#666666"))))
@@ -156,9 +157,3 @@
 
 (my/load-all)
 (put 'downcase-region 'disabled nil)
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
