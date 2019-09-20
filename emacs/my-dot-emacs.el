@@ -39,6 +39,7 @@
  '(helm-ls-git-renamed-modified-face ((t (:foreground "#666666"))))
  '(helm-ls-git-untracked-face ((t (:foreground "#666666"))))
  '(helm-source-header ((t (:foreground "#666666"))))
+ '(magit-hash ((t :inherit magit-branch-upstream)))
  '(magit-diff-file-heading ((t (:foreground "#666666"))))
  '(magit-diff-file-heading-highlight ((t nil)))
  '(magit-diff-added ((t (:foreground "#156a15"))))
@@ -69,6 +70,11 @@
  '(diff-refine-removed ((t (:background "red" :foreground "black"))))
  '(show-paren-match ((t (:foreground "#3B84CC"))))
  '(show-paren-mismatch ((t (:foreground "#3B84CC"))))
+ '(font-lock-string-face ((t (:foreground "#6f6960"))))
+ '(font-lock-function-name-face ((t (:foreground "#6f6960"))))
+ '(font-lock-type-face ((t (:foreground "#6f6960"))))
+ '(font-lock-constant-face ((t (:foreground "#6f6960"))))
+ '(mode-line-buffer-id ((t (:foreground "#6f6960"))))
  )
 
 (custom-set-variables
