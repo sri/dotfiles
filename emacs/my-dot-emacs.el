@@ -9,7 +9,7 @@
 (package-initialize)
 
 (custom-set-faces
- '(default ((t (:height 150 :family "Monaco" :foreground "#666666"))))
+ '(default ((t (:height 190 :family "Inconsolata" :foreground "#666666"))))
  '(mode-line ((t (:foreground "#777777"))))
  '(region ((t (:background "#111111" :foreground "#666666" :distant-foreground nil))))
  '(custom-documentation ((t (:foreground "#666666"))))
