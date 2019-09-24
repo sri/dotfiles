@@ -41,6 +41,7 @@
  '(helm-ls-git-renamed-modified-face ((t (:foreground "#666666"))))
  '(helm-ls-git-untracked-face ((t (:foreground "#666666"))))
  '(helm-source-header ((t (:foreground "#666666"))))
+ '(magit-diff-file-heading ((t (:weight normal))))
  '(magit-diffstat-added ((t (:foreground "#156a15"))))
  '(magit-branch-local ((t (:foreground "#666666"))))
  '(magit-branch-remote ((t (:foreground "#666666"))))
@@ -85,6 +86,8 @@
  '(font-lock-constant-face ((t (:foreground "#666666"))))
  '(font-lock-builtin-face ((t (:foreground "#666666"))))
  '(mode-line-buffer-id ((t (:foreground "#666666"))))
+ '(mode-line-emphasis ((t (:foreground "#3B84CC"))))
+ '(mode-line-highlight ((t (:foreground "#3B84CC"))))
  '(fringe ((t (:foreground "#888888"))))
  )
 
