@@ -11,6 +11,7 @@
 (custom-set-faces
  '(default ((t (:height 190 :family "Inconsolata" :foreground "#666666"))))
  '(button ((t (:foreground "#666666" :underline nil))))
+ '(link ((t (:foreground "#666666" :underline nil))))
  '(mode-line ((t (:foreground "#777777"))))
  '(region ((t (:background "#111111" :foreground "#666666" :distant-foreground nil))))
  '(custom-documentation ((t (:foreground "#666666"))))
