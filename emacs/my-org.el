@@ -59,9 +59,9 @@
 (setq org-closed-keep-when-no-todo t)
 (setq org-log-done nil)
 
-'(setq org-todo-keyword-faces
-      '(("TODO" :foreground "#6c71c4")
-        ("INPROGRESS" :foreground "#6c71c4" :box t)
+(setq org-todo-keyword-faces
+      '(("TODO" :foreground "#4b4f89")
+        ("INPROGRESS" :foreground "#4b4f89" :box t)
         ("APPT" :foreground "medium blue" :weight bold)
         ("NOTE" :foreground "brown" :weight bold)
         ("STARTED" :foreground "dark orange" :weight bold)
