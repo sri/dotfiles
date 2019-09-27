@@ -181,16 +181,15 @@
 (def-with-selected-window my/magit-blame ()
   (if magit-blame-mode
       (magit-blame-quit)
-    (magit-blame)))
+    (magit-blame-addition)))
 
 (def-with-selected-window my/magit-log-buffer ()
   (magit-log-buffer-file))
 
 (defvar my/vc-mode-line-keymap
   (let ((map (make-sparse-keymap)))
-    (define-key map [mode-line mouse-1] 'my/magit-status)
-    (define-key map [mode-line S-mouse-1] 'my/magit-blame)
-    (define-key map [mode-line M-mouse-1] 'my/magit-log-buffer)
+    (define-key map [mode-line mouse-1] 'my/magit-blame)
+    (define-key map [mode-line S-mouse-1] 'my/magit-log-buffer)
     map))
 
 ;; Let's only care about Git for now.
@@ -200,7 +199,7 @@
     (setq vc-mode
           (propertize (format "(%s)" (vc-git--symbolic-ref file))
                       'mouse-face 'mode-line-highlight
-                      'help-echo "Click for Magit status\nS-mouse-1: Magit blame\nAlt-mouse-1: Magit log buffer"
+                      'help-echo "Click for Magit blame\nS-mouse-1: Magit log buffer"
                       'local-map my/vc-mode-line-keymap))
     (force-mode-line-update)))
 
