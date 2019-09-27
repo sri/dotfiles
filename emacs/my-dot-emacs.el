@@ -14,6 +14,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:height 190 :family "Inconsolata" :foreground "#666666"))))
+ '(minibuffer-prompt ((t (:foreground "#777777"))))
+ '(neo-file-link-face ((t (:foreground "#666666"))))
+ '(neo-dir-link-face ((t (:foreground "#666666"))))
+ '(neo-expand-btn-face ((t (:foreground "#666666"))))
+ '(neo-root-dir-face ((t (:foreground "#666666"))))
  '(line-number-current-line ((t (:foreground "#545c5e"))))
  '(highlight ((t (:foreground "#666666" :background "#222222"))))
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
