@@ -222,6 +222,5 @@
                 my/mode-line-position " "
                 mode-line-buffer-identification " "
                 (vc-mode vc-mode) " "
-                mode-line-modes
+                mode-line-modes))
                 ;; my/buffer-mods
-                (defining-kbd-macro " def")))
