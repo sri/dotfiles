@@ -7,6 +7,11 @@
 (setq magit-display-buffer-function
       'magit-display-buffer-same-window-except-diff-v1)
 
+(add-to-list 'magit-section-initial-visibility-alist
+             '(untracked . hide))
+(add-to-list 'magit-section-initial-visibility-alist
+             '(unpushed . hide))
+
 (setq magit-status-sections-hook
       '(magit-insert-status-headers
         magit-insert-merge-log
@@ -16,8 +21,8 @@
         magit-insert-bisect-output
         magit-insert-bisect-rest
         magit-insert-bisect-log
-        magit-insert-staged-changes
         magit-insert-unstaged-changes
+        magit-insert-staged-changes
         magit-insert-stashes
         magit-insert-unpushed-to-pushremote
         magit-insert-unpushed-to-upstream-or-recent
