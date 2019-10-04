@@ -79,7 +79,7 @@
  '(magit-diff-removed-highlight ((t (:foreground "#881b1b" :background nil))))
  '(magit-diffstat-added ((t (:foreground "#156a15"))))
  '(magit-hash ((t :inherit magit-branch-upstream)))
- '(magit-section-heading ((t (:foreground "#666666"))))
+ '(magit-section-heading ((t (:foreground "#666666" :underline t))))
  '(magit-section-highlight ((t nil)))
  '(mode-line ((t (:foreground "#777777"))))
  '(mode-line-buffer-id ((t (:foreground "#666666"))))
