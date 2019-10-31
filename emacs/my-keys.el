@@ -29,6 +29,7 @@
  ("s-2" . split-window-vertically)
  ("s-3" . split-window-horizontally)
  ("s-c" . my/copy-line-or-region)
+ ("s-x" . my/kill-line-or-region)
  ("s-g" . magit-status)
  ("s-," . beginning-of-buffer)
  ("s-o" . my/ffap-or-find-file)
