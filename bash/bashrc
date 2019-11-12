@@ -97,3 +97,6 @@ __my_prompt_command() {
 export PROMPT_COMMAND="__my_prompt_command"
 
 . ~/my/dotfiles/bash/aliases
+
+eval "$(direnv hook bash)"
+echo added direnv
