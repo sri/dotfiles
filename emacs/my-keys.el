@@ -92,11 +92,14 @@
  ("M-d" . my/dired)
  ("M-g" . goto-line)
  ("M-k" . my/kill-whole-line)
- ("M-n" . bm-next)
  ("M-o" . helm-projectile)
+
+ ("M-n" . bm-next)
  ("M-p" . bm-previous)
+ ("M-N" . bm-show-all)
  ("M-v" . bm-toggle)
  ("ESC M-v" . bm-show)
+
  ("M-x" . helm-M-x)
  ("M-y" . helm-show-kill-ring)
 
