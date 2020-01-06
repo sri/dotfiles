@@ -59,6 +59,7 @@
             (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)
             (my/recentf-add-dired-directory)
+            (font-lock-mode 1)
 
             (bind-keys :map dired-mode-map
                        ("C-c C-d" . dired-hide-details-mode)
