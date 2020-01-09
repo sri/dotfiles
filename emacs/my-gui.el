@@ -1,7 +1,7 @@
 (let ((theme (car '(
+                    solarized-dark
                     kaolin-dark
                     leuven
-                    solarized-dark
                     spacemacs-dark
                     solarized-light
                     ))))

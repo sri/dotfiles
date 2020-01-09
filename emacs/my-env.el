@@ -91,7 +91,7 @@ Fundamental mode."
 
 (winner-mode 1)
 (if (and (fboundp 'menu-bar-mode)
-         (null window-system))
+         (memq window-system '(nil x)))
     (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))

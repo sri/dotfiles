@@ -8,12 +8,19 @@
 
 (package-initialize)
 
-(custom-set-faces
+'(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 190 :family "Inconsolata" :foreground "#7777777"))))
+ '(default ((t (:height 170 :family "Inconsolata" :foreground "#777777"))))
+ '(minibuffer-prompt ((t (:foreground "#777777"))))
+ '(neo-file-link-face ((t (:foreground "#666666"))))
+ '(neo-dir-link-face ((t (:foreground "#666666"))))
+ '(neo-expand-btn-face ((t (:foreground "#666666"))))
+ '(neo-root-dir-face ((t (:foreground "#666666"))))
+ '(line-number-current-line ((t (:foreground "#545c5e"))))
+ '(highlight ((t (:foreground "#666666" :background "#222222"))))
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line-no-match ((t (:foreground "#3B84CC"))))
