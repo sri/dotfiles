@@ -63,32 +63,27 @@ def get_current_branch():
 
 def git_new_branch(*args):
     if len(args) != 1:
-        error("usage: gitnb <new-branch-name>")
-
+        error("usage: g new_branch <new-branch-name>")
     new_branch = args[0]
     if not re.match("^[A-Za-z0-9_/-]+$", new_branch):
         error(f"invalid branch name: {new_branch}")
-
     ensure_in_git_repo()
-
     current_branch = get_current_branch()
-
     if current_branch in all_branch_names():
         error("branch name already exists")
-
     if current_branch != "master":
         if not successful_run("git checkout master"):
             sh("git stash && git checkout master")
-
     sh(f"git checkout -b {new_branch}")
 
 
 def git_push_branch(*args):
+    if args:
+        error("usage: g push_branch")
     ensure_in_git_repo()
     current_branch = get_current_branch()
     if current_branch == "master" or current_branch.startswith("origin"):
         error("not pushing to master or branch named origin")
-
     output = cmd_output(f"git push -u origin {current_branch}")
     print(output)
     if m := re.search("(https.*/pull/new/[^\s]*)", output):
