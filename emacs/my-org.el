@@ -22,6 +22,8 @@
 
 (add-to-list 'org-modules 'habits)
 
+(setq org-babel-python-command "python3")
+
 (org-babel-do-load-languages
  'org-babel-load-languages
  '(
@@ -58,6 +60,7 @@
 (setq org-fontify-done-headline t)
 (setq org-closed-keep-when-no-todo t)
 (setq org-log-done nil)
+(setq org-confirm-babel-evaluate nil)
 
 (setq org-todo-keyword-faces
       '(("TODO" :foreground "#4b4f89")
