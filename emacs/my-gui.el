@@ -1,6 +1,6 @@
 (let ((theme (car '(
-                    solarized-dark
                     kaolin-dark
+                    solarized-dark
                     leuven
                     spacemacs-dark
                     solarized-light
