@@ -18,9 +18,17 @@
             (when (and buffer-file-name (buffer-modified-p))
               (save-buffer))))
 
-(let ((shell-path (shell-command-to-string "$SHELL -l -c 'echo -n $PATH'")))
-  (setenv "PATH" shell-path)
-  (setq exec-path (split-string shell-path path-separator)))
+;; (let ((shell-path (shell-command-to-string "$SHELL -l -c 'echo -n $PATH'")))
+  ;; (when (> (count "\n" shell-path) 0)
+    ;; (warn "my-gui.el: shell path contains newlines:\n%s" shell-path))
+  ;; (setenv "PATH" shell-path)
+  ;; (setq exec-path (split-string shell-path path-separator)))
+
+
+
+(require 'exec-path-from-shell)
+(add-to-list 'exec-path-from-shell-variables "NPM_TOKEN")
+(exec-path-from-shell-initialize)
 
 ;; Center Emacs's position on screen
 (let* ((height 40)

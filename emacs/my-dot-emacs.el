@@ -14,13 +14,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:height 170 :family "Inconsolata" :foreground "#999999"))))
- '(minibuffer-prompt ((t (:foreground "#777777"))))
- '(neo-file-link-face ((t (:foreground "#999999"))))
- '(neo-dir-link-face ((t (:foreground "#999999"))))
- '(neo-expand-btn-face ((t (:foreground "#999999"))))
- '(neo-root-dir-face ((t (:foreground "#999999"))))
- '(line-number-current-line ((t (:foreground "#545c5e"))))
- '(highlight ((t (:foreground "#999999" :background "#222222"))))
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line-no-match ((t (:foreground "#3B84CC"))))
@@ -60,7 +53,7 @@
  '(helm-selection ((t (:foreground "#3B84CC"))))
  '(helm-selection-line ((t (:foreground "#3B84CC"))))
  '(helm-source-header ((t (:foreground "#777777"))))
- '(highlight ((t (:foreground "#777777" :background "#222222"))))
+ '(highlight ((t (:foreground "#999999" :background "#222222"))))
  '(isearch ((t (:foreground "#3B84CC"))))
  '(lazy-highlight ((t (:foreground "#3B84CC"))))
  '(line-number-current-line ((t (:foreground "#545c5e"))))
@@ -83,7 +76,7 @@
  '(magit-log-date ((t (:foreground "#999999"))))
  '(magit-section-heading ((t (:foreground "#999999" :bold t))))
  '(magit-section-highlight ((t nil)))
- '(minibuffer-prompt ((t (:foreground "#999999"))))
+ '(minibuffer-prompt ((t (:foreground "#777777"))))
  '(mode-line ((t (:foreground "#999999"))))
  '(mode-line-buffer-id ((t (:foreground "#999999"))))
  '(mode-line-emphasis ((t (:foreground "#3B84CC"))))
@@ -124,7 +117,7 @@
     (org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-w3m org-velocity)))
  '(package-selected-packages
    (quote
-    (markdown-mode csv-mode swiper ivy poet-theme gruvbox-theme dracula-theme kaolin-themes centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode)))
+    (exec-path-from-shell treemacs helm-projectile markdown-mode csv-mode swiper ivy poet-theme gruvbox-theme dracula-theme kaolin-themes centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode)))
  '(typescript-indent-level 2))
 
 ;; Load the byte-compiled version of file.
