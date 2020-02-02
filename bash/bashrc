@@ -99,5 +99,3 @@ export PROMPT_COMMAND="__my_prompt_command"
 . ~/my/dotfiles/bash/aliases
 
 eval "$(direnv hook bash)"
-
-alias e="sommelier -X --scale=0.8 --dpi=160 emacs &>/dev/null &"
