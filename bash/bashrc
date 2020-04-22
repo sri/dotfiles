@@ -98,4 +98,7 @@ export PROMPT_COMMAND="__my_prompt_command"
 
 . ~/my/dotfiles/bash/aliases
 
-eval "$(direnv hook bash)"
+if [ -e /usr/share/autojump/autojump.sh ];
+then
+    . /usr/share/autojump/autojump.sh
+fi
