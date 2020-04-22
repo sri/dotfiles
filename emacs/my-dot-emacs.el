@@ -13,7 +13,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 170 :family "Inconsolata" :foreground "#999999"))))
+ '(default ((t (:height 130 :family "Inconsolata" :foreground "#999999"))))
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line-no-match ((t (:foreground "#3B84CC"))))
@@ -100,7 +100,7 @@
  '(org-link ((t (:foreground "#839496"))))
  '(org-special-keyword ((t (:foreground "#4b4f89"))))
  '(org-todo ((t (:foreground "#6c71c4" :weight normal))))
- '(region ((t (:background "#1d1c73" :foreground "#999999" :distant-foreground nil))))
+ '(region ((t (:background "#057FB6" :foreground "#999999" :distant-foreground nil))))
  '(show-paren-match ((t (:foreground "#3B84CC"))))
  '(show-paren-mismatch ((t (:foreground "#3B84CC")))))
 
@@ -117,7 +117,7 @@
     (org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-w3m org-velocity)))
  '(package-selected-packages
    (quote
-    (exec-path-from-shell treemacs helm-projectile markdown-mode csv-mode swiper ivy poet-theme gruvbox-theme dracula-theme kaolin-themes centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode)))
+    (company-go company flycheck-golangci-lint gotest exec-path-from-shell treemacs helm-projectile markdown-mode csv-mode swiper ivy poet-theme gruvbox-theme dracula-theme kaolin-themes centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode)))
  '(typescript-indent-level 2))
 
 ;; Load the byte-compiled version of file.
