@@ -122,6 +122,7 @@
 ;; Git related under: C-c g <letter>
 (bind-keys :prefix-map my/ctl-c-g-map
            :prefix "C-c g"
+           ("l" . git-link)
            ("b" . magit-blame-addition)
            ("f" . magit-log-buffer-file)
            ("r" . my/git-grep-from-root)

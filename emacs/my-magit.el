@@ -1,4 +1,8 @@
 (require 'magit)
+(require 'git-link)
+
+(setq git-link-open-in-browser t)
+(setq git-link-use-commit t)
 
 (setq magit-section-visibility-indicator nil)
 (setq magit-section-highlight-hook nil)
