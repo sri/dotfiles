@@ -16,9 +16,8 @@
             (local-set-key (kbd "M-.") #'godef-jump)
             (company-mode)
             (set (make-local-variable 'company-backends) '(company-go))
-            '(go-eldoc-setup)
-
-            ))
+            (go-eldoc-setup)
+            (flycheck-mode 1)))
 
 
 (let ((cmd "goimports"))
@@ -28,5 +27,4 @@
     (message "unable to find %s" cmd)))
 (add-hook 'before-save-hook 'gofmt-before-save)
 
-(add-hook 'after-init-hook #'global-flycheck-mode)
 (add-hook 'flycheck-mode-hook #'flycheck-golangci-lint-setup)
