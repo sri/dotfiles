@@ -74,6 +74,15 @@ Fundamental mode."
 (global-eldoc-mode -1)
 (global-hl-line-mode 1)
 
+;; Ignore accidentally hitting the trackpad while typing and having it
+;; pop up a menu.
+(let ((mouse-keys-to-ignore
+       '("<C-down-mouse-3>"
+         "<C-down-mouse-1>"
+         "<C-mouse-1>")))
+  (dolist (key mouse-keys-to-ignore)
+    (global-set-key (kbd key) (lambda () (interactive)))))
+
 (setq Man-width 80)
 
 (defun my/delete-trailing-whitespace ()
