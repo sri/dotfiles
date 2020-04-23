@@ -180,5 +180,3 @@
   (unless window-system (recentf-open-files)))
 
 (my/load-all)
-(put 'downcase-region 'disabled nil)
-(put 'upcase-region 'disabled nil)
