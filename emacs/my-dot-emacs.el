@@ -100,7 +100,7 @@
  '(org-link ((t (:foreground "#839496"))))
  '(org-special-keyword ((t (:foreground "#4b4f89"))))
  '(org-todo ((t (:foreground "#6c71c4" :weight normal))))
- '(region ((t (:background "#057FB6" :foreground "#999999" :distant-foreground nil))))
+ '(region ((t (:background "#012032" :foreground "#999999" :distant-foreground nil))))
  '(show-paren-match ((t (:foreground "#3B84CC"))))
  '(show-paren-mismatch ((t (:foreground "#3B84CC")))))
 
