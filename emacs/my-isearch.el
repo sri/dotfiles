@@ -62,8 +62,8 @@
 (setq isearch-lazy-highlight-initial-delay 0)
 
 (bind-keys :map isearch-mode-map
-           ("<up>" . isearch-ring-retreat)
-           ("<down>" . isearch-ring-advance)
+           ("C-<up>" . isearch-ring-retreat)
+           ("C-<down>" . isearch-ring-advance)
            ("M-a" . my/isearch-goto-first-match)
            ("M-e" . my/isearch-goto-last-match)
            ("C-e" . isearch-exit)

@@ -63,7 +63,7 @@
  ("C-c a" . org-agenda)
  ("C-c b" . rename-buffer)
  ("C-c c" . calendar)
- ("C-c f" . my/find-file-in-other-window)
+ ("C-c f" . rg)
  ("C-c i" . my/change-inside-pair)
  ("C-c j" . ace-jump-mode)
  ("C-c l" . toggle-truncate-lines)
