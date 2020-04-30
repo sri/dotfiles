@@ -102,9 +102,14 @@ Also, creates a shell when there are no other shells."
     (goto-char point)
     (recenter 0)))
 
+
+(setq comint-output-filter-functions
+      (remove 'ansi-color-process-output comint-output-filter-functions))
+
 (add-hook 'shell-mode-hook
           (lambda ()
-            (font-lock-mode t)
+            (font-lock-mode -1)
+
             (my/shell-update-last-active-time)
             (add-hook 'comint-input-filter-functions
                       'my/shell-update-last-active-time)
@@ -131,4 +136,5 @@ Also, creates a shell when there are no other shells."
                        ("<down>" . my/shell-next-line-or-next-history)
                        ("M-." . comint-insert-previous-argument))
 
+            (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t)
             ))
