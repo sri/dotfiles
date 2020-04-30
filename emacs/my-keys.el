@@ -1,3 +1,5 @@
+;; M-C-s was isearch-forward-regexp; its now S-C-f
+
 (eval-when-compile
   (require 'cl))
 
@@ -17,10 +19,10 @@
 ;; is that the even will keep call the function
 ;; over and over again.
 ;; (bind-keys*
- ;; ("<wheel-left>" . (lambda ()
-                     ;; (interactive)
-                     ;; (message "mouse wheel left")
-                     ;; )))
+;; ("<wheel-left>" . (lambda ()
+;; (interactive)
+;; (message "mouse wheel left")
+;; )))
 
 (bind-keys*
  ("S-s-g" . helm-grep-do-git-grep)
@@ -45,13 +47,16 @@
  ("C-b" . backward-kill-word)
  ("C-d" . kill-word)
  ("C-f" . isearch-forward)
+ ("S-C-f" . isearch-forward-regexp)
  ("C-j" . other-window)
  ("C-k" . my/kill-line-or-region)
+ ("S-C-k" . my/copy-line-or-region)
  ("C-n" . helm-M-x)
  ("C-o" . my/ffap-or-find-file)
  ("C-p" . my/shell)
  ("C-r" . vr/query-replace)
  ("C-s" . save-buffer)
+ ;; ("C-t" . )
  ("C-v" . helm-buffers-list)
  ("C-w" . my/kill-current-buffer)
  ("C-y" . my/yank)
@@ -65,7 +70,8 @@
  ("C-c c" . calendar)
  ("C-c f" . rg)
  ("C-c i" . my/change-inside-pair)
- ("C-c j" . ace-jump-mode)
+ ("C-c j" . ace-jump-word-mode)
+ ("C-c k" . ace-jump-line-mode)
  ("C-c l" . toggle-truncate-lines)
  ("C-c m" . imenu)
  ("C-c n" . my/neotree)
