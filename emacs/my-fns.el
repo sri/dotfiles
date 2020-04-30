@@ -195,7 +195,11 @@ The latter method uses `helm-find-files'."
                        (setq raw (split-string raw ","))
                        (setq col (string-to-number (nth 1 raw)))
                        (setq line (string-to-number (nth 0 raw))))))))
-          (find-file file)
+          (let* ((buf (get-file-buffer file))
+                 (win (and buf (get-buffer-window buf 'visible))))
+            (if win
+                (select-window win)
+              (find-file-other-window file)))
           (when line
             (goto-line line)
             (recenter))

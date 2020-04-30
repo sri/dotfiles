@@ -19,11 +19,17 @@
            ("e" . end-of-line)
            ("f" . forward-word)
            ("j" . next-line)
-           ("k" . previous-line)
+           ("k" . my/region-bindings-k)
            ("l" . mc/edit-lines)
            ("m" . apply-macro-to-region-lines)
            ("r" . er/expand-region)
            )
+
+(defun my/region-bindings-k ()
+  (interactive)
+  (if (eq major-mode 'magit-status-mode)
+      (magit-discard)
+    (previous-line)))
 
 (add-to-list 'region-bindings-mode-disable-predicates
              'minibufferp)
