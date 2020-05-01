@@ -105,3 +105,18 @@ function e() {
         TERM=xterm-256color emacs -nw "$@"
     fi
 }
+
+# Prints value of env var passed in.
+# This is so you don't have to type the variable upcased.
+function ev() {
+    local arg="$1"
+    local envvar="${arg^^}"
+    eval echo $envvar=\${$envvar}
+}
+
+# Same as `ev' but prints all matches
+function evall() {
+    local arg="$1"
+    local envvar="${arg^^}"
+    eval env | grep $envvar | sort
+}
