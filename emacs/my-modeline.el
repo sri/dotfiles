@@ -90,7 +90,7 @@
 
 (defun my/mode-line-get-file-name-in-repo (&optional exclude-repo-name exclude-line-num)
   (let* ((path buffer-file-name)
-         (git-root (shell-command-to-string "git rev-parse --show-toplevel 2> /dev/null")))
+         (git-root (my/git-repo-root)))
     (message "path %s" path)
     (setq git-root (s-trim git-root))
     (if (or (string= git-root "")

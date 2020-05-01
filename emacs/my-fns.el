@@ -404,3 +404,7 @@ how does scrolling affect the window:
                (looking-at "}")))
          (backward-sexp))
         (t (re-search-forward ")\\|\\]\\|}" nil t))))
+
+(defun my/git-repo-root ()
+  (let ((cmd "git rev-parse --show-toplevel 2> /dev/null"))
+    (s-trim (shell-command-to-string cmd))))

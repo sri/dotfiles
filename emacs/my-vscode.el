@@ -16,7 +16,7 @@ current buffer."
   (interactive "P")
   (cl-flet* ((git-root (buffer)
                (with-current-buffer buffer
-                 (shell-command-to-string "git rev-parse --show-toplevel")))
+                 (my/git-repo-root)))
              (shell-in-same-repo-or-dir? (buffer)
                (and (eq 'shell-mode (buffer-local-value 'major-mode buffer))
                     (let ((current (expand-file-name default-directory))
