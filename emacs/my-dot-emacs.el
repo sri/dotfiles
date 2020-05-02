@@ -117,7 +117,7 @@
     (org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-w3m org-velocity)))
  '(package-selected-packages
    (quote
-    (counsel expand-region xterm-color go-eldoc git-link company-go company flycheck-golangci-lint gotest exec-path-from-shell treemacs helm-projectile markdown-mode csv-mode swiper ivy poet-theme gruvbox-theme dracula-theme kaolin-themes centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode)))
+    (rg expand-region xterm-color go-eldoc git-link company-go company flycheck-golangci-lint gotest exec-path-from-shell treemacs helm-projectile markdown-mode csv-mode swiper ivy poet-theme gruvbox-theme dracula-theme kaolin-themes centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode)))
  '(typescript-indent-level 2))
 
 ;; Load the byte-compiled version of file.
