@@ -12,7 +12,12 @@
  ;; (TAB) -- show/hide file diffs.
  ("C-i" . my/hippie-tab)
  ("<M-return>" . my/dired)
- ("C-m" . newline-and-indent))
+ ("C-m" . newline-and-indent)
+ ("M-n" . bm-next)
+ ("M-p" . bm-previous)
+ ("M-N" . bm-show-all)
+ ("M-v" . bm-toggle)
+ ("ESC M-v" . bm-show))
 
 ;; Mac trackpad
 ;; Problem with wheel (2-finger swipe on os x)
@@ -42,6 +47,7 @@
 (bind-keys*
  ("<C-tab>" . my/switch-to-buffer)
  ("C-`" . my/shell-for-buffer)
+ ("C-'" . my/jump-to-matching-char)
  ("C-\\" . other-frame)
  ("C-a" . my/beginning-of-line)
  ("C-b" . backward-kill-word)
@@ -101,11 +107,6 @@
  ("M-k" . my/kill-whole-line)
  ("M-o" . helm-projectile)
 
- ("M-n" . bm-next)
- ("M-p" . bm-previous)
- ("M-N" . bm-show-all)
- ("M-v" . bm-toggle)
- ("ESC M-v" . bm-show)
 
  ("M-x" . helm-M-x)
  ("M-y" . helm-show-kill-ring)
@@ -138,3 +139,5 @@
 (when (eq system-type 'darwin)
   ;; Command-<enter>
   (bind-key* "<s-return>" 'toggle-frame-fullscreen))
+
+(define-key emacs-lisp-mode-map (kbd "C-x x") 'eval-defun)

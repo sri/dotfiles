@@ -20,8 +20,8 @@
            ("f" . forward-word)
            ("j" . next-line)
            ("k" . my/region-bindings-k)
-           ("l" . mc/edit-lines)
-           ("m" . apply-macro-to-region-lines)
+           ("l" . my/select-line)
+           ("m" . mc/edit-lines)
            ("r" . er/expand-region)
            )
 

@@ -391,20 +391,28 @@ how does scrolling affect the window:
               (t t)))
   (message "auto-hscroll-mode is set to %s" auto-hscroll-mode))
 
-(defun my/jump-to-matching-bracket ()
+(defun my/jump-to-matching-char ()
   (interactive)
-  (cond ((or (looking-at "(")
-             (looking-at "\\[")
-             (looking-at "{"))
-         (forward-sexp))
-        ((save-excursion
-           (forward-char -1)
-           (or (looking-at ")")
-               (looking-at "\\]")
-               (looking-at "}")))
-         (backward-sexp))
-        (t (re-search-forward ")\\|\\]\\|}" nil t))))
+  (let ((begins (rx (or "[" "(" "{" "'" "\"")))
+        (ends (rx (or "]" ")" "}" "'" "\""))))
+    (cond ((looking-at begins)
+           (forward-sexp))
+          ((and (not (bobp))
+                (save-excursion
+                  (forward-char -1)
+                  (looking-at ends)))
+           (backward-sexp)))))
 
 (defun my/git-repo-root ()
   (let ((cmd "git rev-parse --show-toplevel 2> /dev/null"))
     (s-trim (shell-command-to-string cmd))))
+
+(defun my/select-line ()
+  "Select the current line when region is active.
+See my-region-bindings-mode.el on how this is activated."
+  (interactive)
+  (when (let ((use-empty-active-region t))
+          (use-region-p))
+    (goto-char (point-at-bol))
+    (exchange-point-and-mark)
+    (goto-char (point-at-eol))))
