@@ -416,3 +416,11 @@ See my-region-bindings-mode.el on how this is activated."
     (goto-char (point-at-bol))
     (exchange-point-and-mark)
     (goto-char (point-at-eol))))
+
+(defun my/select-word ()
+  (interactive)
+  (when (let ((use-empty-active-region t))
+          (use-region-p))
+    (backward-sexp)
+    (exchange-point-and-mark)
+    (forward-sexp)))

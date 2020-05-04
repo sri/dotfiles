@@ -6,10 +6,15 @@
 (bind-keys :map region-bindings-mode-map
            (";" . my/comment-line-or-region)
            ("A" . beginning-of-buffer)
+           ("B" . backward-sexp)
            ("C" . kill-region)
+           ("D" . er/mark-defun)
            ("E" . end-of-buffer)
+           ("E" . er/mark-email)
+           ("F" . forward-sexp)
            ("J" . ace-jump-word-mode)
            ("L" . ace-jump-line-mode)
+           ("M" . mc/edit-lines)
            ("S" . sort-lines)
            ("SPC" . exchange-point-and-mark)
            ("a" . beginning-of-line)
@@ -21,8 +26,10 @@
            ("j" . next-line)
            ("k" . my/region-bindings-k)
            ("l" . my/select-line)
-           ("m" . mc/edit-lines)
+           ("m" . er/mark-method-call)
            ("r" . er/expand-region)
+           ("u" . er/mark-url)
+           ("w" . my/select-word)
            )
 
 (defun my/region-bindings-k ()
@@ -33,3 +40,5 @@
 
 (add-to-list 'region-bindings-mode-disable-predicates
              'minibufferp)
+;; (global-set-key (kbd "C-i") 'calendar)
+;; (global-set-key (kbd "<tab>") 'beginning-of-line)
