@@ -421,6 +421,6 @@ See my-region-bindings-mode.el on how this is activated."
   (interactive)
   (when (let ((use-empty-active-region t))
           (use-region-p))
-    (backward-sexp)
+    (ignore-errors (backward-sexp))
     (exchange-point-and-mark)
     (forward-sexp)))

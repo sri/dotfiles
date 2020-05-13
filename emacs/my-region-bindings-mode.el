@@ -26,7 +26,11 @@
            ("j" . next-line)
            ("k" . my/region-bindings-k)
            ("l" . my/select-line)
-           ("m" . er/mark-method-call)
+
+           ("m" . vr/mc-mark)
+           ("n" . mc/mark-next-like-this)
+           (">" . mc/skip-to-next-like-this)
+           ("<" . mc/skip-to-previous-like-this)
            ("r" . er/expand-region)
            ("u" . er/mark-url)
            ("w" . my/select-word)
