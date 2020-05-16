@@ -1,0 +1,4 @@
+# name: pln
+# key: pln
+# --
+fmt.Println("$1")

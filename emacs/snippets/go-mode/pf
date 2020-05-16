@@ -1,0 +1,4 @@
+# name: pf
+# key: pf
+# --
+fmt.Printf("$1\n")
