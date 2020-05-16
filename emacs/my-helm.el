@@ -13,13 +13,15 @@
 (setq helm-buffers-fuzzy-matching t)
 (setq helm-display-header-line nil)
 (setq helm-display-source-at-screen-top nil)
-(setq helm-move-to-line-cycle-in-source t)
+(setq helm-move-to-line-cycle-in-source nil)
+(setq helm-allow-mouse t)
 
 (setq helm-echo-input-in-header-line t)
 (add-hook 'helm-minibuffer-set-up-hook #'helm-hide-minibuffer-maybe)
 
 (define-key helm-map (kbd "C-n") 'helm-next-source)
 (define-key helm-map (kbd "C-p") 'helm-previous-source)
+(define-key helm-map (kbd "C-b") 'backward-kill-word)
 
 (require 'helm-ls-git)
 
