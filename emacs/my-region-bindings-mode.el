@@ -3,37 +3,57 @@
 
 (region-bindings-mode-enable)
 
+(defun my/which-key-region-bindings ()
+  (interactive)
+  (which-key--show-keymap
+   "Region Bindings"
+   region-bindings-mode-map))
+
 (bind-keys :map region-bindings-mode-map
+           ("?" . my/which-key-region-bindings)
+
            (";" . my/comment-line-or-region)
-           ("A" . beginning-of-buffer)
-           ("B" . backward-sexp)
-           ("C" . kill-region)
+
+           ("c" . my/copy-line-or-region)
+           ("C" . my/kill-line-or-region)
+
            ("D" . er/mark-defun)
+           ("'" . er/mark-inside-quotes)
+
+           ("A" . beginning-of-buffer)
            ("E" . end-of-buffer)
-           ("E" . er/mark-email)
+
+           ("b" . backward-word)
+           ("f" . forward-word)
+           ("w" . my/select-word)
+
+           ("B" . backward-sexp)
            ("F" . forward-sexp)
+
            ("J" . ace-jump-word-mode)
            ("L" . ace-jump-line-mode)
-           ("M" . mc/edit-lines)
-           ("S" . sort-lines)
+
+           ("L" . mc/edit-lines)
+           ("N" . mc/skip-to-next-like-this)
+           ("n" . mc/mark-next-like-this)
+
            ("SPC" . exchange-point-and-mark)
+
+           ("S" . sort-lines)
+
            ("a" . beginning-of-line)
-           ("b" . backward-word)
-           ("c" . kill-ring-save)
-           ("d" . my/duplicate-line-or-region)
            ("e" . end-of-line)
-           ("f" . forward-word)
+
+           ("d" . my/duplicate-line-or-region)
+
            ("j" . next-line)
            ("k" . my/region-bindings-k)
            ("l" . my/select-line)
 
            ("m" . vr/mc-mark)
-           ("n" . mc/mark-next-like-this)
-           (">" . mc/skip-to-next-like-this)
-           ("<" . mc/skip-to-previous-like-this)
+
            ("r" . er/expand-region)
            ("u" . er/mark-url)
-           ("w" . my/select-word)
            )
 
 (defun my/region-bindings-k ()
