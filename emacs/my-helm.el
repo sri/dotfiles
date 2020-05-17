@@ -22,6 +22,7 @@
 (define-key helm-map (kbd "C-n") 'helm-next-source)
 (define-key helm-map (kbd "C-p") 'helm-previous-source)
 (define-key helm-map (kbd "C-b") 'backward-kill-word)
+(define-key helm-map (kbd "C-z") 'undo)
 
 (require 'helm-ls-git)
 
