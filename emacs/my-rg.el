@@ -15,6 +15,7 @@
   ;; parameters of that quickly.
   ;;
   (interactive)
+  (get-buffer-create "*rg*")
   (let ((pattern (rg-read-pattern nil))
         (dir (if use-git-repo-root
                  (my/git-repo-root)
