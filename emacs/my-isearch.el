@@ -58,17 +58,26 @@
       (isearch-repeat-forward)
     (isearch-repeat-backward)))
 
+(defun my/isearch-region ()
+  (interactive)
+  (let ((search-for (buffer-substring-no-properties (region-beginning)
+                                                    (region-end))))
+    (when (use-region-p)
+      (deactivate-mark)
+      (isearch-resume search-for nil nil t search-for nil))))
+
 (setq isearch-allow-scroll t)
 (setq isearch-lazy-highlight-initial-delay 0)
 
 (bind-keys :map isearch-mode-map
-           ("C-<up>" . isearch-ring-retreat)
-           ("C-<down>" . isearch-ring-advance)
+           ("<up>" . isearch-ring-retreat)
+           ("<down>" . isearch-ring-advance)
            ("M-a" . my/isearch-goto-first-match)
            ("M-e" . my/isearch-goto-last-match)
            ("C-e" . isearch-exit)
            ("<return>" . my/isearch-repeat)
            ("RET" . my/isearch-repeat)
+           ("<C-return>" . isearch-exit)
            ("<S-return>" . isearch-repeat-backward)
            ("C-K" . isearch-query-replace-regexp)
            ("C-d" . my/isearch-yank-whole-word)

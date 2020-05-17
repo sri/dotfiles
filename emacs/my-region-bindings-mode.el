@@ -41,6 +41,8 @@
 
            ("S" . sort-lines)
 
+           ("s" . my/isearch-region)
+
            ("a" . beginning-of-line)
            ("e" . end-of-line)
 
