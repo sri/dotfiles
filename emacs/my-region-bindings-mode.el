@@ -31,7 +31,7 @@
            ("F" . forward-sexp)
 
            ("J" . ace-jump-word-mode)
-           ("L" . ace-jump-line-mode)
+           ;; ("L" . ace-jump-line-mode)
 
            ("L" . mc/edit-lines)
            ("N" . mc/skip-to-next-like-this)

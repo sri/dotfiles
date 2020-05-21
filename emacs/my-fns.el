@@ -401,7 +401,10 @@ how does scrolling affect the window:
                 (save-excursion
                   (forward-char -1)
                   (looking-at ends)))
-           (backward-sexp)))))
+           (backward-sexp))
+          ((re-search-forward begins nil t)
+           (backward-char 1)
+           (my/jump-to-matching-char)))))
 
 (defun my/git-repo-root ()
   (let ((cmd "git rev-parse --show-toplevel 2> /dev/null"))

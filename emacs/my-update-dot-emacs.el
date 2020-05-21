@@ -70,5 +70,3 @@
                              'stash-first stash-first)
               (show-maximum-output)
               (beginning-of-line))))))))
-
-(run-with-idle-timer 10 nil #'my/update-dot-emacs)
