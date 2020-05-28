@@ -1,6 +1,7 @@
 (require 'region-bindings-mode)
 (require 'multiple-cursors)
 (require 'which-key)
+(require 'expand-region)
 
 (region-bindings-mode-enable)
 

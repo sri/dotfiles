@@ -1,6 +1,6 @@
 (require 'helm)
 (require 'helm-config)
-(helm-mode 1)
+(helm-mode -1)
 
 (bind-keys :map shell-mode-map
           ("C-c C-l" . helm-comint-input-ring))
@@ -28,13 +28,13 @@
 
 (setq helm-ls-git-show-abs-or-relative 'relative)
 
-(add-hook 'helm-before-initialize-hook
-          (lambda ()
-            (setq-default override-global-mode nil)))
+;; (add-hook 'helm-before-initialize-hook
+;;           (lambda ()
+;;             (setq-default override-global-mode nil)))
 
-(add-hook 'helm-cleanup-hook
-          (lambda ()
-            (setq-default override-global-mode t)))
+;; (add-hook 'helm-cleanup-hook
+;;           (lambda ()
+;;             (setq-default override-global-mode t)))
 
 ;; (setq helm-ff-skip-boring-files t)
 ;; ;; TODO: these don't work. Looks like having the '.' and '..' on top

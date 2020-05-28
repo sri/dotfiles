@@ -162,10 +162,7 @@ decoded URL in the minibuffer."
 (require 'ffap)
 
 (defun my/open-project-file-or-find-files ()
-  (call-interactively
-   (if (helm-ls-git-root-dir)
-       'helm-ls-git-ls
-     'helm-find-files)))
+  (call-interactively 'counsel-git))
 
 (defun my/ffap-or-find-file (arg)
   "Find the file at point or ask the user for file's path.

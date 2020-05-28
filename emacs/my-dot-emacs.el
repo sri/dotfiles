@@ -9,22 +9,25 @@
 (package-initialize)
 
 (defvar my/colors
-  '("#f42b3d"
-    "#cc1228"
-    "#fa8e4c"
-    "#e96921"
-    "#fed98a"
-    "#fbc050"
-    "#2483b2"
+  '(
     "#185e7f"
-    "#6e52b9"
-    "#422f73"
-    "#41e636"
+    "#2483b2"
     "#2eb624"
-    "#b653af"
-    "#9c3991"
+    "#2ecfdc"
+    "#3dabc4"
+    "#41e636"
+    "#422f73"
     "#66cce2"
-    "#3dabc4"))
+    "#6e52b9"
+    "#9c3991"
+    "#b653af"
+    "#cc1228"
+    "#e96921"
+    "#f42b3d"
+    "#fa8e4c"
+    "#fbc050"
+    "#fed98a"
+    ))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

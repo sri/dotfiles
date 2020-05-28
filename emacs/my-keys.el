@@ -6,6 +6,20 @@
 (require 'subword)
 (require 'bind-key)
 
+;; (global-set-key (kbd "C-s") 'swiper-isearch)
+;; (global-set-key (kbd "M-x") 'counsel-M-x)
+;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+;; (global-set-key (kbd "M-y") 'counsel-yank-pop)
+;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
+;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+;; (global-set-key (kbd "<f2> j") 'counsel-set-variable)
+;; (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+;; (global-set-key (kbd "C-c v") 'ivy-push-view)
+;; (global-set-key (kbd "C-c V") 'ivy-pop-view)
+
 (bind-keys
  ;; Key which don't want to override in all modes.
  ;; For example, Magit does useful things with C-i
@@ -31,7 +45,6 @@
 ;; )))
 
 (bind-keys*
- ("S-s-g" . helm-grep-do-git-grep)
  ("s-0" . delete-window)
  ("s-1" . delete-other-windows)
  ("s-2" . split-window-vertically)
@@ -58,17 +71,16 @@
  ("C-j" . other-window)
  ("C-k" . my/kill-line-or-region)
  ("S-C-k" . my/copy-line-or-region)
- ("C-n" . helm-M-x)
+ ("C-n" . counsel-M-x)
  ("C-o" . my/ffap-or-find-file)
  ("C-p" . my/shell)
  ("C-r" . vr/query-replace)
  ("C-s" . save-buffer)
  ;; ("C-t" . )
- ("C-v" . helm-buffers-list)
+ ("C-v" . ivy-switch-buffer)
  ("C-w" . my/kill-current-buffer)
  ("C-y" . my/yank)
  ("C-z" . undo)
-
  ("C-c C" . org-capture)
  ("C-c TAB" . yas/expand)
  ("C-c \\" . align-regexp)
@@ -85,7 +97,7 @@
  ("C-c n" . my/neotree)
  ("C-c o" . my/occur)
  ("C-c p" . my/copy-full-path)
- ("C-c r" . helm-recentf)
+ ("C-c r" . counsel-recentf)
  ("C-c s" . sort-lines)
  ("C-c O" . open-line)
  ("C-c C-l" . my/toggle-auto-hscroll-mode)
@@ -108,12 +120,15 @@
  ("M-k" . my/kill-whole-line)
  ("M-o" . helm-projectile)
 
+ ("C-h v" . counsel-describe-variable)
+ ("C-h f" . counsel-describe-function)
 
- ("M-x" . helm-M-x)
+ ("M-x" . counsel-M-x)
  ("M-y" . helm-show-kill-ring)
 
  ("<home>" . beginning-of-buffer)
  ("<end>" . end-of-buffer)
+
 
  ("C-x b" . helm-buffers-list)
  ("C-x g" . magit-status)
@@ -142,3 +157,13 @@
   (bind-key* "<s-return>" 'toggle-frame-fullscreen))
 
 (define-key emacs-lisp-mode-map (kbd "C-x x") 'eval-defun)
+
+'(when window-system
+  (define-key input-decode-map [?\C-\[] [C-\[])
+  (global-set-key (kbd "<C-[>") 'shell)
+  (define-key input-decode-map [?\C-\[] [C-\[])
+  (global-set-key ()))
+
+(defhydra my/win-hydra (override-global-map "C-c <left>")
+  ("<left>" winner-undo)
+  ("<right>" winner-redo))

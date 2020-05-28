@@ -99,11 +99,12 @@ function cd_ls () {
 }
 
 function e() {
-    if [ "$TMUX" = "" ]; then
-        emacs -nw "$@"
-    else
-        TERM=xterm-256color emacs -nw "$@"
-    fi
+    emacs &
+#    if [ "$TMUX" = "" ]; then
+#        emacs -nw "$@"
+#    else
+#        TERM=xterm-256color emacs -nw "$@"
+#    fi#
 }
 
 # Prints value of env var passed in.
