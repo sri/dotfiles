@@ -71,7 +71,7 @@
  ("C-j" . other-window)
  ("C-k" . my/kill-line-or-region)
  ("S-C-k" . my/copy-line-or-region)
- ("C-n" . counsel-M-x)
+ ("C-n" . helm-M-x)
  ("C-o" . my/ffap-or-find-file)
  ("C-p" . my/shell)
  ("C-r" . vr/query-replace)
