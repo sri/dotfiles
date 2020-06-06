@@ -29,12 +29,27 @@
     "#fed98a"
     ))
 
+(defun my/font (&optional font)
+  (interactive "sFont name: ")
+  (if font
+      (helm-select-xfont)
+    (let ((fonts '("JetBrains Mono"
+                   "Inconsolata")))
+      (seq-find (lambda (f)
+                  (if (find-font (font-spec :name f))
+                      f
+                    (message "my/font: cannot find %s" f)
+                    nil))
+                fonts))))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 130 :family "Inconsolata" :foreground "#999999"))))
+ ;;
+ ;; Inconsolata
+ `(default ((t (:height 130 :family ,(my/font)  :foreground "#999999"))))
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line-no-match ((t (:foreground "#3B84CC"))))
