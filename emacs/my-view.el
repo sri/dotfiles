@@ -27,5 +27,6 @@
            ("k" . View-scroll-page-backward)
            ("a" . beginning-of-buffer)
            ("z" . end-of-buffer)
+           ("l" . recenter-top-bottom)
            ("f" . my/isearch-forward)
            ("q" . View-exit-and-edit))

@@ -1,9 +1,9 @@
 (let ((theme (car '(
-                    kaolin-dark
                     solarized-dark
-                    leuven
-                    spacemacs-dark
                     solarized-light
+                    spacemacs-dark
+                    leuven
+                    kaolin-dark
                     ))))
   (when theme
     (load-theme theme t)

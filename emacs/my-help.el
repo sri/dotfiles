@@ -13,7 +13,7 @@
                (save-excursion
                  (forward-sexp)
                  (point))))
-         (default-input (format "(setq %s )" sym)))
+         (default-input `(setq ,(intern sym))))
     (eval-expr (eval-expr-read-lisp-object-minibuffer "Eval: " default-input))))
 
 

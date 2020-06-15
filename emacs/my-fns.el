@@ -399,9 +399,7 @@ how does scrolling affect the window:
                   (forward-char -1)
                   (looking-at ends)))
            (backward-sexp))
-          ((re-search-forward begins nil t)
-           (backward-char 1)
-           (my/jump-to-matching-char)))))
+          (t (ignore-errors (backward-up-list))))))
 
 (defun my/git-repo-root ()
   (let ((cmd "git rev-parse --show-toplevel 2> /dev/null"))
