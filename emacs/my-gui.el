@@ -1,8 +1,10 @@
 (let ((theme (car '(
                     solarized-dark
+                    jetbrains-darcula
+                    zenburn
+                    leuven
                     solarized-light
                     spacemacs-dark
-                    leuven
                     kaolin-dark
                     ))))
   (when theme

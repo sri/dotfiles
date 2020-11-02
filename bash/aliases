@@ -9,7 +9,7 @@ __git_complete gd _git_diff
 alias s='git status --short --branch'
 alias gs='git status'
 
-function gg() {
+function g() {
     local search=$1
     local downcased=${search,,}
 
