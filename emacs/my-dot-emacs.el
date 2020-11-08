@@ -1,4 +1,7 @@
 ;; -*- mode: emacs-lisp -*-
+(defvar my-emacs-start-time (current-time))
+(defvar my-emacs-elapsed-time)
+
 (require 'cl)
 (require 'subr-x)
 
@@ -221,6 +224,9 @@
     (my/load "my-diminish")
     (my/load "~/.emacs.private.el" 'ignore-if-missing))
 
-  (unless window-system (recentf-open-files)))
+  (setq my-emacs-elapsed-time
+        (float-time (time-subtract (current-time) my-emacs-start-time)))
+
+  (recentf-open-files))
 
 (my/load-all)
