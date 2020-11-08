@@ -194,34 +194,40 @@
       (mapc 'package-install missing)))
 
   ;; Load my files
-  (let ((default-directory "~/my/dotfiles/emacs"))
-    (my/load (if window-system "my-gui" "my-terminal"))
+  (let* ((default-directory "~/my/dotfiles/emacs")
+         (gui "my-gui")
+         (non-gui "my-terminal")
+         (this "my-dot-emacs")
+         (diminish "my-diminish")
+         (base '("my-fns"
+                 "my-register"
+                 "my-env"
+                 "my-keys"
+                 "my-view"
+                 "my-sublime"
+                 "my-vscode"
+                 "my-shell"
+                 "my-occur"
+                 "my-isearch"
+                 "my-help"
+                 "my-dired"
+                 "my-update-dot-emacs"
+                 "my-modeline"))
+         (all (list* gui non-gui this diminish base))
+         (pkg-customizations
+          (remove-if (lambda (el-file)
+                       ;; remove autosaves
+                       (or (string-prefix-p ".#" el-file)
+                           (some (lambda (my) (string-prefix-p my el-file))
+                                 all)))
+                     (directory-files "." nil "\\.el$" t))))
+
+    (my/load (if window-system gui non-gui))
     ;; Files that aren't on MELPA or any other package archive.
-    (mapc 'my/load
-          (directory-files "third-party" 'full "\\.el$" t))
-
-    (mapc 'my/load
-          '(
-            "my-fns"
-            "my-register"
-            "my-env"
-            "my-keys"
-            "my-view"
-            "my-sublime"
-            "my-vscode"
-            "my-shell"
-            "my-occur"
-            "my-isearch"
-            "my-help"
-            "my-dired"
-            "my-update-dot-emacs"
-            "my-modeline"))
-
-    (mapc (lambda (pkg)
-            (my/load (format "my-%s" pkg) 'ignore-if-missing))
-          (remove 'diminish package-selected-packages))
-
-    (my/load "my-diminish")
+    (mapc 'my/load (directory-files "third-party" 'full "\\.el$" t))
+    (mapc 'my/load base)
+    (mapc 'my/load pkg-customizations)
+    (my/load diminish)
     (my/load "~/.emacs.private.el" 'ignore-if-missing))
 
   (setq my-emacs-elapsed-time
