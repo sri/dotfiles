@@ -170,4 +170,5 @@ Inspired by Sublime Text."
           (buffer-substring-no-properties start end))
     ;; Body of `ns-copy-including-secondary'.
     (kill-ring-save start end)
-    (gui-set-selection 'SECONDARY text)))
+    (gui-set-selection 'SECONDARY text)
+    (message "Copied %d characters" (length text))))
