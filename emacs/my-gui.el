@@ -1,9 +1,10 @@
 (let ((theme (car '(
+                    zenburn
+                    solarized-light
+                    nil
                     solarized-dark
                     jetbrains-darcula
-                    zenburn
                     leuven
-                    solarized-light
                     spacemacs-dark
                     kaolin-dark
                     ))))
