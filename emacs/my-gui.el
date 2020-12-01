@@ -1,8 +1,8 @@
 (let ((theme (car '(
+                    solarized-dark
                     zenburn
                     solarized-light
                     nil
-                    solarized-dark
                     jetbrains-darcula
                     leuven
                     spacemacs-dark
