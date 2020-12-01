@@ -422,3 +422,11 @@ See my-region-bindings-mode.el on how this is activated."
     (ignore-errors (backward-sexp))
     (exchange-point-and-mark)
     (forward-sexp)))
+
+(defun my/meta-x (arg)
+  (interactive "P")
+  (call-interactively
+   (if (or arg
+           (not (fboundp 'counsel-M-x)))
+       'execute-extended-command
+     'counsel-M-x)))
