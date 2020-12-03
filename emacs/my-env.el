@@ -74,6 +74,14 @@ Fundamental mode."
 (global-eldoc-mode -1)
 (global-hl-line-mode 1)
 
+
+(with-demoted-errors "error loading tab-bar"
+  (require 'tab-bar)
+  (tab-bar-mode 1)
+  (setq tab-bar-show 1)
+  (setq tab-bar-tab-name-truncated-max 12)
+  (setq tab-bar-tab-name-function 'tab-bar-tab-name-truncated))
+
 ;; Ignore accidentally hitting the trackpad while typing and having it
 ;; pop up a menu.
 (let ((mouse-keys-to-ignore

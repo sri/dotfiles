@@ -50,9 +50,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 110))))
- '(magit-diff-added ((t (:background nil :foreground "#5F7F5F"))))
- '(magit-diff-removed ((t (:background nil :foreground "#8C5353")))))
+ '(default ((t (:height 110)))))
+
+ ;; '(magit-diff-added ((t (:foreground "#465d46" :background nil))))
+ ;; '(magit-diff-removed ((t (:foreground "#BF616A" :background nil))))
+
 
 '(zzzzcustom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -164,8 +166,7 @@
    (quote
     (org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-w3m org-velocity)))
  '(package-selected-packages
-   (quote
-    (ivy-rich helm-posframe ivy-posframe which-key rg expand-region xterm-color go-eldoc git-link company-go company flycheck-golangci-lint gotest exec-path-from-shell treemacs helm-projectile markdown-mode csv-mode swiper counsel ivy poet-theme gruvbox-theme dracula-theme kaolin-themes centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode)))
+   '(modus-vivendi-theme ivy-rich helm-posframe ivy-posframe which-key rg expand-region xterm-color go-eldoc git-link company-go company flycheck-golangci-lint gotest exec-path-from-shell treemacs helm-projectile markdown-mode csv-mode swiper counsel ivy poet-theme gruvbox-theme dracula-theme kaolin-themes centaur-tabs typescript-mode protobuf-mode s rjsx-mode ample-theme leuven-theme neotree use-package yaml-mode diminish anzu region-bindings-mode hydra multiple-cursors undo-tree powerline spacemacs-theme zenburn-theme org yasnippet web-mode visual-regexp solarized-theme smart-mode-line ruby-end rainbow-mode projectile org-bullets magit macrostep helm helm-ls-git go-mode flycheck elisp-slime-nav bm ace-jump-mode))
  '(typescript-indent-level 2))
 
 ;; Load the byte-compiled version of file.

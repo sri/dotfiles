@@ -1,4 +1,7 @@
 (let ((theme (car '(
+                    modus-vivendi
+                    kaolin-dark
+                    modus-operandi
                     solarized-dark
                     zenburn
                     solarized-light
@@ -6,11 +9,17 @@
                     jetbrains-darcula
                     leuven
                     spacemacs-dark
-                    kaolin-dark
                     ))))
   (when theme
+
+    (when (eq theme 'modus-vivendi)
+      (require 'modus-vivendi-theme)
+      (setq modus-vivendi-theme-override-colors-alist
+            '(("fg-main" . "#dddddd")
+              ("bg-main" . "#111111"))))
+
     (load-theme theme t)
-    (custom-theme-set-faces
+    '(custom-theme-set-faces
      theme
      '(dired-header ((t (:foreground "#268bd2"
                                      :underline t
