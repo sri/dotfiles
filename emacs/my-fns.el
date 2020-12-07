@@ -390,16 +390,18 @@ how does scrolling affect the window:
 
 (defun my/jump-to-matching-char ()
   (interactive)
-  (let ((begins (rx (or "[" "(" "{" "'" "\"")))
-        (ends (rx (or "]" ")" "}" "'" "\""))))
-    (cond ((looking-at begins)
+  (let ((openings (rx (or "[" "(" "{" "'" "\"")))
+        (closings (rx (or "]" ")" "}" "'" "\""))))
+    (cond ((looking-at openings)
            (forward-sexp))
-          ((and (not (bobp))
-                (save-excursion
-                  (forward-char -1)
-                  (looking-at ends)))
+          ((save-excursion
+             (forward-char -1)
+             (looking-at closings))
            (backward-sexp))
-          (t (ignore-errors (backward-up-list))))))
+          ((or (re-search-forward openings nil t)
+               (re-search-forward closings nil t))
+           (forward-char -1)))))
+
 
 (defun my/git-repo-root ()
   (let ((cmd "git rev-parse --show-toplevel 2> /dev/null"))
@@ -430,3 +432,19 @@ See my-region-bindings-mode.el on how this is activated."
            (not (fboundp 'counsel-M-x)))
        'execute-extended-command
      'counsel-M-x)))
+
+(defun my/find-matching-next-indentation-level (&optional backward)
+  (interactive)
+  (let ((done nil)
+        (col (current-column))
+        (fn (if backward 'previous-line 'next-line)))
+    (while (not done)
+      (funcall fn 1)
+      (move-to-column col)
+      (when (and (= (current-column) col)
+                 (not (looking-at (rx (or space ?\t ?\n)))))
+        (setq done t)))))
+
+(defun my/find-matching-prev-indentation-level ()
+  (interactive)
+  (my/find-matching-next-indentation-level t))

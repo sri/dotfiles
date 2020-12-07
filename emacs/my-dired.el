@@ -77,5 +77,6 @@
                        ("J"   . my/open-in-finder)
                        ("G"   . magit-status)
                        ("S-SPC" . scroll-down)
+                       ("N" . dired-create-empty-file)
                        ([left] . dired-up-directory)
                        ([right] . my/dired-right-arrow-key))))
