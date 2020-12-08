@@ -433,7 +433,18 @@ See my-region-bindings-mode.el on how this is activated."
        'execute-extended-command
      'counsel-M-x)))
 
-(defun my/find-matching-next-indentation-level (&optional backward)
+(defvar my/find-matching-indentation-level-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map [down] 'my/find-next-matching-indentation-level)
+    (define-key map [up] 'my/find-prev-matching-indentation-level)
+    map))
+
+(defun my/find-matching-indentation-level ()
+  (interactive)
+  (message "Hit [up] or [down] to move to previous or next indentation level")
+  (set-transient-map my/find-matching-indentation-level-keymap t))
+
+(defun my/find-next-matching-indentation-level (&optional backward)
   (interactive)
   (let ((done nil)
         (col (current-column))
@@ -445,6 +456,6 @@ See my-region-bindings-mode.el on how this is activated."
                  (not (looking-at (rx (or space ?\t ?\n)))))
         (setq done t)))))
 
-(defun my/find-matching-prev-indentation-level ()
+(defun my/find-prev-matching-indentation-level ()
   (interactive)
   (my/find-matching-next-indentation-level t))
