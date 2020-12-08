@@ -40,7 +40,7 @@
 
 (defvar my/mode-line-buffer-name-menu-map
   (easy-menu-create-menu
-   "Path actions"
+   ""
    '(["Copy filename" my/mode-line-copy-file-name t]
      ["Copy absolute path" my/mode-line-copy-full-path t]
      ["Copy path relative to repo" my/mode-line-copy-file-name-relative-to-repo t]
@@ -73,7 +73,8 @@
     )
 
 (defun my/mode-line-buffer-identification-help-echo (window object point)
-  "Click to open Path actions menu")
+  ;; Leave as blank so that tooltip doesn't hover over menu name
+  "")
 
 (def-with-selected-window my/mode-line-copy-full-path ()
   (let ((path buffer-file-name))
