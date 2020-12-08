@@ -427,11 +427,12 @@ See my-region-bindings-mode.el on how this is activated."
 
 (defun my/meta-x (arg)
   (interactive "P")
-  (call-interactively
-   (if (or arg
-           (not (fboundp 'counsel-M-x)))
-       'execute-extended-command
-     'counsel-M-x)))
+  (let ((narrowing-fn 'counsel-M-x))
+    (call-interactively
+     (if (or arg
+             (not (fboundp narrowing-fn)))
+         'execute-extended-command
+       narrowing-fn))))
 
 (defvar my/find-matching-indentation-level-keymap
   (let ((map (make-sparse-keymap)))

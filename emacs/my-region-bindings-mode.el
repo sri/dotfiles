@@ -20,7 +20,7 @@
            ("C" . my/kill-line-or-region)
 
            ("D" . er/mark-defun)
-           ("'" . er/mark-inside-quotes)
+           ("q" . er/mark-inside-quotes)
 
            ("A" . beginning-of-buffer)
            ("E" . end-of-buffer)
