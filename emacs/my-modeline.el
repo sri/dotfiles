@@ -73,8 +73,8 @@
     )
 
 (defun my/mode-line-buffer-identification-help-echo (window object point)
-  ;; Leave as blank so that tooltip doesn't hover over menu name
-  "")
+  ;; Don't put a docstring as it'll display and hover over a menu item
+  )
 
 (def-with-selected-window my/mode-line-copy-full-path ()
   (let ((path buffer-file-name))
