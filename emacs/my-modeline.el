@@ -42,6 +42,7 @@
   (easy-menu-create-menu
    ""
    '(["Copy filename" my/mode-line-copy-file-name t]
+     ["Copy directory" my/mode-line-copy-directory t]
      ["Copy absolute path" my/mode-line-copy-full-path t]
      ["Copy path relative to repo" my/mode-line-copy-file-name-relative-to-repo t]
      ["Copy path with repo name & line num" my/mode-line-copy-file-name-in-repo t]
@@ -75,6 +76,13 @@
 (defun my/mode-line-buffer-identification-help-echo (window object point)
   ;; Don't put a docstring as it'll display and hover over a menu item
   )
+
+(def-with-selected-window my/mode-line-copy-directory ()
+  (let ((path (and buffer-file-name
+                   (file-name-directory buffer-file-name))))
+    (when path
+      (kill-new path)
+      (message "Copied: `%s'" path))))
 
 (def-with-selected-window my/mode-line-copy-full-path ()
   (let ((path buffer-file-name))
