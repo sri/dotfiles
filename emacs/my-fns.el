@@ -459,4 +459,4 @@ See my-region-bindings-mode.el on how this is activated."
 
 (defun my/find-prev-matching-indentation-level ()
   (interactive)
-  (my/find-matching-next-indentation-level t))
+  (my/find-next-matching-indentation-level t))
