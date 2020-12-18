@@ -99,9 +99,9 @@ function cd_ls () {
 }
 
 function e() {
-    emacs &
+    ~/src/emacs/src/emacs  &
 #    if [ "$TMUX" = "" ]; then
-#        emacs -nw "$@"
+#        ~/src/emacs/src/emacs -nw "$@"
 #    else
 #        TERM=xterm-256color emacs -nw "$@"
 #    fi#

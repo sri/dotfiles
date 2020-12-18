@@ -30,3 +30,5 @@
            ("l" . recenter-top-bottom)
            ("f" . my/isearch-forward)
            ("q" . View-exit-and-edit))
+
+(add-hook 'view-mode-hook 'goto-address-mode)

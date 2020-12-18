@@ -449,7 +449,7 @@ See my-region-bindings-mode.el on how this is activated."
   (interactive)
   (let ((done nil)
         (col (current-column))
-        (fn (if backward 'previous-line 'next-line)))
+        (fn (if backward 'previous-logical-line 'next-logical-line)))
     (while (not done)
       (funcall fn 1)
       (move-to-column col)

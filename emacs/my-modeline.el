@@ -28,8 +28,14 @@
     (define-key map [mode-line S-mouse-1] 'my/unsaved-changes)
     map))
 
+(defun my/buffer-modified-p ()
+  (let ((ignore-in-modes '(shell-mode dired-mode)))
+    (cond ((memq major-mode ignore-in-modes) " ")
+          ((buffer-modified-p) "*")
+          (t " "))))
+
 (def-modeline-var my/mode-line-modified
-  `(:propertize (:eval (if (buffer-modified-p) "*" " "))
+  `(:propertize (:eval (my/buffer-modified-p))
                 help-echo "mouse-1: Save buffer\nS-mouse-1: show unsaved changes"
                 mouse-face mode-line-highlight
                 local-map ,my/mode-line-buffer-modified-p-keymap))
