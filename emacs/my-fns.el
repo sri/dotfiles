@@ -461,7 +461,9 @@ See my-region-bindings-mode.el on how this is activated."
   (interactive)
   (my/find-next-matching-indentation-level t))
 
-(defun my/new-buffer ()
-  (interactive)
-  (let ((buf (generate-new-buffer "*scratch*")))
+(defun my/new-buffer (&optional arg)
+  (interactive "P")
+  (let ((buf (if arg
+                 (read-string "Buffer name: ")
+                 (generate-new-buffer "*scratch*"))))
     (switch-to-buffer buf)))
