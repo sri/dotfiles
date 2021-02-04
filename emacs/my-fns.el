@@ -460,3 +460,8 @@ See my-region-bindings-mode.el on how this is activated."
 (defun my/find-prev-matching-indentation-level ()
   (interactive)
   (my/find-next-matching-indentation-level t))
+
+(defun my/new-buffer ()
+  (interactive)
+  (let ((buf (generate-new-buffer "*scratch*")))
+    (switch-to-buffer buf)))
