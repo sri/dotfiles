@@ -1,7 +1,5 @@
 (require 'magit)
 
-(setf (nth 0 magit-status-margin) t)
-(setf (nth 3 magit-status-margin) t)
 (require 'git-link)
 
 (setq git-link-open-in-browser t)
