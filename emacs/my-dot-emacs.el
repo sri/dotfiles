@@ -50,20 +50,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- `(default ((t (:height 100 :family ,(my/font))))))
-
- ;; '(magit-diff-added ((t (:foreground "#465d46" :background nil))))
- ;; '(magit-diff-removed ((t (:foreground "#BF616A" :background nil))))
-
-
-'(zzzzcustom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  ;;
  ;; Inconsolata
- `(default ((t (:height 130 :family ,(my/font)  :foreground "#999999"))))
+ `(default ((t (:height 100 :family ,(my/font)  :foreground "#999999")))))
+'(
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line-no-match ((t (:foreground "#3B84CC"))))
