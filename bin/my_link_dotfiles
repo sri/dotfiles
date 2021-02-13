@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+
+import sys
+import datetime
+from pathlib import Path
+
+def main(actual_run):
+    files_to_link = [
+        ["~/.emacs.el", "emacs/my-dot-emacs.el"],
+        ["~/.bashrc", "bash/bashrc"],
+        ["~/.gitconfig", "git/gitconfig"],
+        ["~/.ripgreprc", "ripgreprc"],
+    ]
+
+    timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
+    my_dot_dir = Path(__file__).resolve().parents[1]
+
+    for (dot_name, my_dot_name) in files_to_link:
+        dot = Path(dot_name).expanduser()
+        my_dot = my_dot_dir.joinpath(my_dot_name)
+
+        if dot.exists():
+            dot_backup_path = dot.with_name(f"{dot.name}.{timestamp}.bkp")
+            if actual_run:
+                dot.rename(dot_backup_path)
+            print(f"MOVE {dot_name:<30} => {dot_backup_path.name}")
+
+        if actual_run:
+            my_dot.symlink_to(dot)
+        print(f"LINK {my_dot_name:<30} => {dot_name}")
+        print()
+
+if __name__ == "__main__":
+    args = sys.argv[1:]
+    actual_run = "-f" in args
+    main(actual_run)
