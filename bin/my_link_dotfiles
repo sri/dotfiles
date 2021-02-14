@@ -3,6 +3,18 @@
 import sys
 import datetime
 from pathlib import Path
+import platform
+
+def sublime_config():
+    system = platform.system()
+    prefs = "Preferences.sublime-settings"
+    if system == "Linux":
+        return f"~/.config/sublime-text-3/Packages/User/{prefs}"
+    elif system == "Darwin":
+        return f"~/Library/Application Support/Sublime Text 3/Packages/User/{prefs}"
+    else:
+        print(f"Unknown platform for Sublime Text: {system}; skipping")
+        return None
 
 def main(actual_run):
     files_to_link = [
@@ -10,12 +22,16 @@ def main(actual_run):
         ["~/.bashrc", "bash/bashrc"],
         ["~/.gitconfig", "git/gitconfig"],
         ["~/.ripgreprc", "ripgreprc"],
+        [sublime_config(), "sublime/prefs.json"],
     ]
 
-    timestamp = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     my_dot_dir = Path(__file__).resolve().parents[1]
 
     for (dot_name, my_dot_name) in files_to_link:
+        if dot_name is None:
+            continue
+
         dot = Path(dot_name).expanduser()
         my_dot = my_dot_dir.joinpath(my_dot_name)
 
