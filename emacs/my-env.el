@@ -137,6 +137,15 @@ Fundamental mode."
 
 (global-font-lock-mode -1)
 
+;; Calendar
+(add-hook 'calendar-mode-hook
+          (lambda ()
+            (define-key calendar-mode-map (kbd "[") 'calendar-backward-year)
+            (define-key calendar-mode-map (kbd "]") 'calendar-forward-year)
+            (define-key calendar-mode-map (kbd "n") 'calendar-scroll-left-three-months)
+            (define-key calendar-mode-map (kbd "p") 'calendar-scroll-right-three-months)))
+
+
 (require 'hippie-exp)
 (setq hippie-expand-try-functions-list
       '(
