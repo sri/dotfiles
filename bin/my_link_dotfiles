@@ -6,12 +6,16 @@ from pathlib import Path
 import platform
 
 def sublime_config():
-    system = platform.system()
     prefs = "Preferences.sublime-settings"
-    if system == "Linux":
-        return f"~/.config/sublime-text-3/Packages/User/{prefs}"
-    elif system == "Darwin":
-        return f"~/Library/Application Support/Sublime Text 3/Packages/User/{prefs}"
+
+    paths = {
+        "Linux": f"~/.config/sublime-text-3/Packages/User/{prefs}",
+        "Darwin": f"~/Library/Application Support/Sublime Text 3/Packages/User/{prefs}"
+    }
+
+    path = paths.get(platform.system())
+    if path:
+        return path
     else:
         print(f"Unknown platform for Sublime Text: {system}; skipping")
         return None
