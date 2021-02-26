@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+
+def main():
+    dirs = os.getenv("PATH").split(os.pathsep)
+
+    seen = set()
+    for dir in dirs:
+        msgs = []
+        if dir in seen: msgs.append("dup")
+        if not os.path.isdir(dir): msgs.append("!dir")
+        if msgs:
+            msgs = ", ".join(msgs)
+            print(f"--> ({msgs}) {dir}")
+        else:
+            print(dir)
+
+        seen.add(dir)
+
+if __name__ == "__main__":
+    main()
