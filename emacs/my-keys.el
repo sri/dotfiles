@@ -105,7 +105,7 @@
  ("C-c O" . open-line)
  ("C-c C-l" . my/toggle-auto-hscroll-mode)
  ("<C-backspace>" . subword-backward-kill)
- ("C-h SPC" . helm-all-mark-rings)
+ ("S-C-SPC" . helm-all-mark-rings)
 
  ("M-0" . delete-window)
  ("M-1" . delete-other-windows)
