@@ -46,7 +46,7 @@ def main(actual_run):
             print(f"MOVE {dot_name:<30} => {dot_backup_path.name}")
 
         if actual_run:
-            dot.symlink_to(my_do)
+            dot.symlink_to(my_dot)
         print(f"LINK {my_dot_name:<30} => {dot_name}")
         print()
 
