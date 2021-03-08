@@ -99,6 +99,7 @@
  ("C-c n" . my/find-matching-indentation-level)
  ("C-c o" . my/occur)
  ("C-c p" . my/copy-full-path)
+ ("C-c q" . quoted-insert)
  ("C-c r" . counsel-recentf)
  ("C-c s" . sort-lines)
  ("C-c v" . my/new-buffer)
