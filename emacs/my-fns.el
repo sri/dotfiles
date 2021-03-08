@@ -275,13 +275,20 @@ will bring it back."
        'org-sparse-tree
      'occur)))
 
-(defun my/pp-json ()
-  (interactive)
-  (shell-command-on-region (point-min)
-                           (point-max)
-                           "python -mjson.tool"
-                           (current-buffer)
-                           t))
+(defun my/pp-json (start end)
+  (interactive "r")
+  (let ((python (-first #'executable-find '("python3" "python"))))
+    (unless python
+      (error "unable to find python interpreter"))
+    (unless (use-region-p)
+      (setq start (point-min)
+            end (point-max)))
+    (shell-command-on-region start
+                             end
+                             (format "%s -mjson.tool" python)
+                             (current-buffer)
+                             t)))
+
 
 (defun my/toggle-camel-case-and-underscore ()
   (interactive)
