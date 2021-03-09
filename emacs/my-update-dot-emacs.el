@@ -3,7 +3,7 @@
 (require 'cl)
 (require 'button)
 
-(defun my/update-dot-emacs ()
+'(defun my/update-dot-emacs ()
   (lexical-let ((update-buffer-name
                  (generate-new-buffer "*Update-Dot-Emacs*")))
     (cl-labels
