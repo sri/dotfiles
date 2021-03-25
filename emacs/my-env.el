@@ -91,6 +91,10 @@ Fundamental mode."
 
 (setq Man-width 80)
 
+(require 'undo-tree)
+(setq undo-tree-visualizer-diff t)
+(setq undo-tree-visualizer-timestamps t)
+
 (defun my/delete-trailing-whitespace ()
   (unless (memq major-mode '(org-mode))
     (delete-trailing-whitespace)))
