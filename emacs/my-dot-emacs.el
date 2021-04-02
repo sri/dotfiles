@@ -208,7 +208,7 @@
           (remove-if (lambda (el-file)
                        ;; remove autosaves
                        (or (string-prefix-p ".#" el-file)
-                           (some (lambda (my) (string-prefix-p my el-file))
+                           (some (lambda (my) (string= (concat my ".el") el-file))
                                  all)))
                      (directory-files "." nil "\\.el$" t))))
 
