@@ -63,6 +63,7 @@
             (font-lock-mode 1)
 
             (bind-keys :map dired-mode-map
+                       ("b" . dired-sidebar-toggle-with-current-directory)
                        ("C-c C-d" . dired-hide-details-mode)
                        ("," . dired-prev-dirline)
                        ("." . dired-next-dirline)
