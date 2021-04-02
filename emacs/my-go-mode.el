@@ -14,10 +14,10 @@
             (setq tab-width 2)
             (setq indent-tabs-mode 1)
             (local-set-key (kbd "M-.") #'godef-jump)
-            (company-mode)
-            (set (make-local-variable 'company-backends) '(company-go))
-            (go-eldoc-setup)
-            (flycheck-mode 1)))
+            ;(company-mode)
+            '(set (make-local-variable 'company-backends) '(company-go))
+            '(go-eldoc-setup)
+            '(flycheck-mode 1)))
 
 
 (let ((cmd "goimports"))
