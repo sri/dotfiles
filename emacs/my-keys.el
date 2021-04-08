@@ -133,7 +133,8 @@
  ("<home>" . beginning-of-buffer)
  ("<end>" . end-of-buffer)
 
- ("C-x b" . dired-sidebar-toggle-with-current-directory)
+ ("C-x b" . list-buffers)
+ ("C-x C-b" . dired-sidebar-toggle-with-current-directory)
  ("M-g" . goto-line)
  ("C-x l" . my/count-lines-buffer)
  ("C-x r K" . my/copy-from-starting-col-till-eol)
