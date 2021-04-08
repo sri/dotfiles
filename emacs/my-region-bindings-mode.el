@@ -50,6 +50,9 @@
 
            ("d" . my/duplicate-line-or-region)
 
+           ;; By default, TAB does indent-region
+           ("i" . indent-rigidly)
+
            ("j" . next-line)
            ("k" . my/region-bindings-k)
            ("l" . my/select-line)
