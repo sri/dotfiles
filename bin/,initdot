@@ -5,52 +5,51 @@ import datetime
 from pathlib import Path
 import platform
 
-def sublime_config():
+def get_sublime_config_path():
     prefs = "Preferences.sublime-settings"
-
     paths = {
         "Linux": f"~/.config/sublime-text-3/Packages/User/{prefs}",
         "Darwin": f"~/Library/Application Support/Sublime Text 3/Packages/User/{prefs}"
     }
-
-    path = paths.get(platform.system())
-    if path:
+    if path := paths.get(platform.system()):
         return path
     else:
         print(f"Unknown platform for Sublime Text: {system}; skipping")
         return None
 
-def main(actual_run):
+def main(do_actual_run):
     files_to_link = [
-        ["~/.emacs.el", "emacs/my-dot-emacs.el"],
-        ["~/.bashrc", "bash/bashrc"],
-        ["~/.gitconfig", "git/gitconfig"],
-        ["~/.ripgreprc", "ripgreprc"],
-        [sublime_config(), "sublime/prefs.json"],
+        ("~/.emacs.el", "emacs/my-dot-emacs.el"),
+        ("~/.bashrc", "bash/bashrc"),
+        ("~/.gitconfig", "git/gitconfig"),
+        ("~/.ripgreprc", "ripgreprc"),
     ]
+
+    if spath := get_sublime_config_path():
+        files_to_link.append((spath, "sublime/prefs.json"))
 
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     my_dot_dir = Path(__file__).resolve().parents[1]
 
     for (dot_name, my_dot_name) in files_to_link:
-        if dot_name is None:
-            continue
-
         dot = Path(dot_name).expanduser()
         my_dot = my_dot_dir.joinpath(my_dot_name)
+        needs_backup = dot.exists()
 
-        if dot.exists():
+        if needs_backup:
             dot_backup_path = dot.with_name(f"{dot.name}.{timestamp}.bkp")
-            if actual_run:
+            if do_actual_run:
                 dot.rename(dot_backup_path)
-            print(f"MOVE {dot_name:<30} => {dot_backup_path.name}")
 
-        if actual_run:
+        if do_actual_run:
             dot.symlink_to(my_dot)
-        print(f"LINK {my_dot_name:<30} => {dot_name}")
-        print()
+
+        msg = [my_dot_name, dot_name]
+        if needs_backup:
+            msg.append(dot_backup_path.name)
+        msg = ' => '.join(msg)
+        print(msg)
 
 if __name__ == "__main__":
-    args = sys.argv[1:]
-    actual_run = "-f" in args
-    main(actual_run)
+    do_actual_run = ("-f" in sys.argv[1:])
+    main(do_actual_run)
