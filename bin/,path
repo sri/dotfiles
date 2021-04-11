@@ -3,21 +3,29 @@
 import sys
 import os
 
+"""This script prints out all the directories in the PATH environment
+variable and marks duplicates and non-existent directories. """
+
 def main():
+    full_homedir = os.path.expanduser("~")
     dirs = os.getenv("PATH").split(os.pathsep)
 
     seen = set()
-    for dir in dirs:
+    for i, dir in enumerate(dirs, start=1):
         msgs = []
-        if dir in seen: msgs.append("dup")
-        if not os.path.isdir(dir): msgs.append("!dir")
-        if msgs:
-            msgs = ", ".join(msgs)
-            print(f"--> ({msgs}) {dir}")
-        else:
-            print(dir)
+        if dir in seen: msgs.append("duplicate")
+        if not os.path.isdir(dir): msgs.append("not a directory")
 
         seen.add(dir)
+
+        if dir.startswith(full_homedir):
+            dir = dir.replace(full_homedir, "~")
+
+        if msgs:
+            msgs = ", ".join(msgs)
+            print(f"{i} ***** ({msgs}) {dir}")
+        else:
+            print(f"{i} {dir}")
 
 if __name__ == "__main__":
     main()
