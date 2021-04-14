@@ -14,21 +14,14 @@
 (bind-keys :map region-bindings-mode-map
            ("?" . my/which-key-region-bindings)
 
-           (";" . my/comment-line-or-region)
-
-           ("c" . my/copy-line-or-region)
-           ("C" . my/kill-line-or-region)
-
            ("D" . er/mark-defun)
            ("q" . er/mark-inside-quotes)
-
-           ("A" . beginning-of-buffer)
-           ("E" . end-of-buffer)
+           ("r" . er/expand-region)
+           ("u" . er/mark-url)
 
            ("b" . backward-word)
            ("f" . forward-word)
            ("w" . my/select-word)
-
            ("B" . backward-sexp)
            ("F" . forward-sexp)
 
@@ -47,8 +40,13 @@
 
            ("a" . beginning-of-line)
            ("e" . end-of-line)
+           ("A" . beginning-of-buffer)
+           ("E" . end-of-buffer)
 
            ("d" . my/duplicate-line-or-region)
+           (";" . my/comment-line-or-region)
+           ("c" . my/copy-line-or-region)
+           ("C" . my/kill-line-or-region)
 
            ;; By default, TAB does indent-region
            ("i" . indent-rigidly)
@@ -59,8 +57,6 @@
 
            ("m" . vr/mc-mark)
 
-           ("r" . er/expand-region)
-           ("u" . er/mark-url)
            )
 
 (defun my/region-bindings-k ()
