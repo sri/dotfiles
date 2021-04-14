@@ -6,6 +6,10 @@ import os
 """This script prints out all the directories in the PATH environment
 variable and marks duplicates and non-existent directories. """
 
+def highlight(string):
+    # red color
+    return f"\033[31m{string}\033[0m"
+
 def main():
     full_homedir = os.path.expanduser("~")
     dirs = os.getenv("PATH").split(os.pathsep)
@@ -21,11 +25,10 @@ def main():
         if dir.startswith(full_homedir):
             dir = dir.replace(full_homedir, "~")
 
+        out = f"{i} {dir}"
         if msgs:
-            msgs = ", ".join(msgs)
-            print(f"{i} ***** ({msgs}) {dir}")
-        else:
-            print(f"{i} {dir}")
+            out = highlight(f"{out} | {', '.join(msgs)}")
+        print(out)
 
 if __name__ == "__main__":
     main()
