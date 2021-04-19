@@ -99,7 +99,7 @@ function cd_ls () {
 }
 
 function e() {
-    ~/src/emacs/src/emacs  &
+    ~/progs/emacs/bin/emacs &
 #    if [ "$TMUX" = "" ]; then
 #        ~/src/emacs/src/emacs -nw "$@"
 #    else
