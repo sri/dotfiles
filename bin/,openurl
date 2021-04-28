@@ -14,7 +14,7 @@ def main(args):
         if os.path.exists(arg):
             print(f"opening file {arg}...")
         else:
-            arg = fix_arg(arg)
+            arg = fix_url(arg)
             print(f"opening {arg}...")
         webbrowser.open(arg)
 
