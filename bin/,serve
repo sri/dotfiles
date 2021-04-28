@@ -21,7 +21,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
 
 def main():
     parser = argparse.ArgumentParser(description="A Simple HTTP server")
-    parser.add_argument("--cors", action='store_true')
+    parser.add_argument("--cors", action="store_true")
     parser.add_argument("--port", type=int, help="specify the port", default=8000)
     parser.add_argument("dir", type=str, nargs="?", help="specify the directory to serve", default=".")
 
@@ -37,6 +37,9 @@ def main():
         print("adding headers:")
         print(headers)
 
+    RequestHandler.custom_headers = headers
+    RequestHandler.custom_directory = directory_to_serve
+
     while True:
         try:
             httpd = HTTPServer(("", port), RequestHandler)
@@ -45,9 +48,6 @@ def main():
             port += 1
         else:
             break
-
-    RequestHandler.custom_headers = headers
-    RequestHandler.custom_directory = directory_to_serve
 
     print("[changing cwd to /]")
     os.chdir("/")
