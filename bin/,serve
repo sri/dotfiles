@@ -25,17 +25,20 @@ def main():
     parser = argparse.ArgumentParser(description="A Simple HTTP server")
     parser.add_argument("--cors", action='store_true')
     parser.add_argument("--port", type=int, help="specify the port", default=8000)
-    parser.add_argument("--dir", type=str, help="specify the directory to serve", default=".")
+    parser.add_argument("dir", type=str, nargs="?", help="specify the directory to serve", default=".")
 
     args = parser.parse_args()
 
+    directory_to_serve = os.path.abspath(args.dir)
+    port = args.port
+    send_cors_header = args.cors
+
     headers = []
-    if args.cors:
+    if send_cors_header:
         headers.append(("Access-Control-Allow-Origin", "*"))
         print("adding headers:")
         print(headers)
 
-    port = args.port
     while True:
         try:
             httpd = HTTPServer(("", port), RequestHandler)
@@ -45,14 +48,13 @@ def main():
         else:
             break
 
-    directory = os.path.abspath(args.dir)
     RequestHandler.custom_headers = headers
-    RequestHandler.custom_directory = directory
+    RequestHandler.custom_directory = directory_to_serve
 
     print("[changing cwd to /]")
     os.chdir("/")
 
-    print(f"[serving HTTP on http://localhost:{port}]")
+    print(f"[serving {directory_to_serve} on http://localhost:{port}]")
     webbrowser.open(f"http://localhost:{port}")
 
     try:
