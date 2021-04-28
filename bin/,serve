@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import argparse
+import webbrowser
+
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+class RequestHandler(SimpleHTTPRequestHandler):
+    custom_headers = []
+    custom_directory = ""
+
+    def translate_path(self, path):
+        path = super().translate_path(path)
+        path = self.custom_directory + path
+        return path
+
+    def end_headers(self):
+        for (key, val) in self.custom_headers:
+            self.send_header(key, val)
+        super().end_headers()
+
+def main():
+    parser = argparse.ArgumentParser(description="A Simple HTTP server")
+    parser.add_argument("--cors", action='store_true')
+    parser.add_argument("--port", type=int, help="specify the port", default=8000)
+    parser.add_argument("--dir", type=str, help="specify the directory to serve", default=".")
+
+    args = parser.parse_args()
+
+    headers = []
+    if args.cors:
+        headers.append(("Access-Control-Allow-Origin", "*"))
+        print("adding headers:")
+        print(headers)
+
+    port = args.port
+    while True:
+        try:
+            httpd = HTTPServer(("", port), RequestHandler)
+        except OSError:
+            # If port is already in use, try again with a new port.
+            port += 1
+        else:
+            break
+
+    directory = os.path.abspath(args.dir)
+    RequestHandler.custom_headers = headers
+    RequestHandler.custom_directory = directory
+
+    print("[changing cwd to /]")
+    os.chdir("/")
+
+    print(f"[serving HTTP on localhost:{port}]")
+    webbrowser.open(f"http://localhost:{port}")
+
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
+
+if __name__ == "__main__":
+    main()
