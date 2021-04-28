@@ -52,7 +52,7 @@ def main():
     print("[changing cwd to /]")
     os.chdir("/")
 
-    print(f"[serving HTTP on localhost:{port}]")
+    print(f"[serving HTTP on http://localhost:{port}]")
     webbrowser.open(f"http://localhost:{port}")
 
     try:
