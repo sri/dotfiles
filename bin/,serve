@@ -4,6 +4,7 @@ import os
 import sys
 import argparse
 import webbrowser
+import random
 
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
@@ -19,10 +20,13 @@ class RequestHandler(SimpleHTTPRequestHandler):
             self.send_header(key, val)
         super().end_headers()
 
+def randport():
+    return random.randint(8000, 9999)
+
 def main():
     parser = argparse.ArgumentParser(description="A Simple HTTP server")
     parser.add_argument("--cors", action="store_true")
-    parser.add_argument("--port", type=int, help="specify the port", default=8000)
+    parser.add_argument("--port", type=int, help="specify the port", default=-1)
     parser.add_argument("dir", type=str, nargs="?", help="specify the directory to serve", default=".")
 
     args = parser.parse_args()
@@ -34,18 +38,25 @@ def main():
     headers = []
     if send_cors_header:
         headers.append(("Access-Control-Allow-Origin", "*"))
-        print("adding headers:")
-        print(headers)
+        print(f"[adding headers: {headers}]")
 
     RequestHandler.custom_headers = headers
     RequestHandler.custom_directory = directory_to_serve
 
+    if port == -1:
+        port = randport()
     while True:
         try:
             httpd = HTTPServer(("", port), RequestHandler)
-        except OSError:
+        except OSError as err:
+            if args.port != -1:
+                # If user supplied a port and we are not able
+                # to access it, error out.
+                raise err
+
             # If port is already in use, try again with a new port.
-            port += 1
+            port = randport()
+            print(f"[trying port {port}]")
         else:
             break
 
