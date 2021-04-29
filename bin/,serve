@@ -26,7 +26,7 @@ def randport():
 def init_httpd(user_requested_port, request_handler):
     port = user_requested_port or randport()
 
-    while True:
+    for _ in range(20):
         try:
             httpd = HTTPServer(("", port), request_handler)
         except OSError as err:
@@ -40,6 +40,8 @@ def init_httpd(user_requested_port, request_handler):
             print(f"[trying port {port}]")
         else:
             break
+    else:
+        sys.exit("Unable to find a valid port")
 
     return (port, httpd)
 
