@@ -23,10 +23,30 @@ class RequestHandler(SimpleHTTPRequestHandler):
 def randport():
     return random.randint(8000, 9999)
 
+def init_httpd(user_requested_port, request_handler):
+    port = user_requested_port or randport()
+
+    while True:
+        try:
+            httpd = HTTPServer(("", port), request_handler)
+        except OSError as err:
+            if user_requested_port:
+                # If user supplied a port and we are not able
+                # to access it, error out.
+                raise err
+
+            # If port is already in use, try again with a new port.
+            port = randport()
+            print(f"[trying port {port}]")
+        else:
+            break
+
+    return (port, httpd)
+
 def main():
     parser = argparse.ArgumentParser(description="A Simple HTTP server")
     parser.add_argument("--cors", action="store_true")
-    parser.add_argument("--port", type=int, help="specify the port", default=-1)
+    parser.add_argument("--port", type=int, help="specify the port", default=None)
     parser.add_argument("dir", type=str, nargs="?", help="specify the directory to serve", default=".")
 
     args = parser.parse_args()
@@ -43,22 +63,7 @@ def main():
     RequestHandler.custom_headers = headers
     RequestHandler.custom_directory = directory_to_serve
 
-    if port == -1:
-        port = randport()
-    while True:
-        try:
-            httpd = HTTPServer(("", port), RequestHandler)
-        except OSError as err:
-            if args.port != -1:
-                # If user supplied a port and we are not able
-                # to access it, error out.
-                raise err
-
-            # If port is already in use, try again with a new port.
-            port = randport()
-            print(f"[trying port {port}]")
-        else:
-            break
+    port, httpd = init_httpd(port, RequestHandler)
 
     print("[changing cwd to /]")
     os.chdir("/")
