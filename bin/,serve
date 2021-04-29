@@ -29,6 +29,7 @@ def init_httpd(user_requested_port, request_handler):
     for _ in range(20):
         try:
             httpd = HTTPServer(("", port), request_handler)
+            return (port, httpd)
         except OSError as err:
             if user_requested_port:
                 # If user supplied a port and we are not able
@@ -38,24 +39,23 @@ def init_httpd(user_requested_port, request_handler):
             # If port is already in use, try again with a new port.
             port = randport()
             print(f"[trying port {port}]")
-        else:
-            break
-    else:
-        sys.exit("Unable to find a valid port")
 
-    return (port, httpd)
+    sys.exit("Unable to find a valid port")
 
 def main():
-    parser = argparse.ArgumentParser(description="A Simple HTTP server")
-    parser.add_argument("--cors", action="store_true")
-    parser.add_argument("--port", type=int, help="specify the port", default=None)
-    parser.add_argument("dir", type=str, nargs="?", help="specify the directory to serve", default=".")
-
+    parser = argparse.ArgumentParser(description="A Simple HTTP server that serves the specified directory")
+    parser.add_argument("-c", "--cors", action="store_true")
+    parser.add_argument("-p", "--port", type=int, help="specify the port", default=None)
+    parser.add_argument("dir", type=str, nargs="?", default=".",
+                        help="specify the directory to serve, defaults to current directory")
     args = parser.parse_args()
 
     directory_to_serve = os.path.abspath(args.dir)
     port = args.port
     send_cors_header = args.cors
+
+    if not os.path.exists(directory_to_serve):
+        sys.exit(f"{directory_to_serve} does not exist")
 
     headers = []
     if send_cors_header:
