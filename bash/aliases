@@ -121,3 +121,7 @@ function evall() {
     local envvar="${arg^^}"
     eval env | grep $envvar | sort
 }
+
+function find_broken_symlinks() {
+    find . -type l ! -exec test -e {} \; -print
+}

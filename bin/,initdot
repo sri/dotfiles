@@ -5,43 +5,36 @@ import datetime
 from pathlib import Path
 import platform
 
-def get_sublime_config_path():
-    prefs = "Preferences.sublime-settings"
-    paths = {
-        "Linux": f"~/.config/sublime-text-3/Packages/User/{prefs}",
-        "Darwin": f"~/Library/Application Support/Sublime Text 3/Packages/User/{prefs}"
-    }
-    if path := paths.get(platform.system()):
-        return path
-    else:
-        print(f"Unknown platform for Sublime Text: {system}; skipping")
-        return None
+def main(actual_run):
+    files_to_link = {
+        "~/.emacs.el"  : "emacs/my-dot-emacs.el",
+        "~/.bashrc"    : "bash/bashrc",
+        "~/.gitconfig" : "git/gitconfig",
+        "~/.ripgreprc" : "ripgreprc",
+   }
 
-def main(do_actual_run):
-    files_to_link = [
-        ("~/.emacs.el", "emacs/my-dot-emacs.el"),
-        ("~/.bashrc", "bash/bashrc"),
-        ("~/.gitconfig", "git/gitconfig"),
-        ("~/.ripgreprc", "ripgreprc"),
-    ]
+    sublime_config_path = {
+        "Linux": "~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+        "Darwin": "~/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings"
+    }.get(platform.system())
 
-    if spath := get_sublime_config_path():
-        files_to_link.append((spath, "sublime/prefs.json"))
+    if sublime_config_path:
+        files_to_link[sublime_config_path] = "sublime/prefs.json"
 
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     my_dot_dir = Path(__file__).resolve().parents[1]
 
-    for (dot_name, my_dot_name) in files_to_link:
-        dot = Path(dot_name).expanduser()
-        my_dot = my_dot_dir.joinpath(my_dot_name)
-        needs_backup = dot.exists()
+    for (global_dot_raw, my_dot_raw) in files_to_link.items():
+        global_dot = Path(global_dot_raw).expanduser()
+        my_dot = my_dot_dir.joinpath(my_dot_raw)
+        needs_backup = global_dot.exists()
 
         if needs_backup:
             dot_backup_path = dot.with_name(f"{dot.name}.{timestamp}.bkp")
-            if do_actual_run:
+            if actual_run:
                 dot.rename(dot_backup_path)
 
-        if do_actual_run:
+        if actual_run:
             dot.symlink_to(my_dot)
 
         msg = [my_dot_name, dot_name]
@@ -51,5 +44,4 @@ def main(do_actual_run):
         print(msg)
 
 if __name__ == "__main__":
-    do_actual_run = ("-f" in sys.argv[1:])
-    main(do_actual_run)
+    main("-f" in sys.argv[1:])
