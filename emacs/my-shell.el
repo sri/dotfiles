@@ -63,32 +63,22 @@ And then run the command."
              (rename-buffer bufname)
              (comint-send-input))))))
 
-(defun my/shell (&optional arg)
+(cl-defun my/shell (&optional arg)
   "Switch to the most recently active shell buffer.
 With a prefix arg, create a new shell.
 Also, creates a shell when there are no other shells."
   (interactive "P")
-  (cond (arg
-         (shell (generate-new-buffer-name "*shell*")))
-        (t (let (shells)
-
-             (dolist (buf (buffer-list))
-               (when (eq 'shell-mode (buffer-local-value 'major-mode buf))
-                 (push buf shells)))
-
-             (setq shells
-                   (sort shells
-                         (lambda (x y)
-                           (> (buffer-local-value 'my/shell-last-active-time x)
-                              (buffer-local-value 'my/shell-last-active-time y)))))
-
-             (cond ((null shells)
-                    (shell))
-                   ((eq major-mode 'shell-mode)
-                    (switch-to-buffer (or (cadr (memq (current-buffer) shells))
-                                          (car shells))))
-                   (t
-                    (switch-to-buffer (car shells))))))))
+  (when arg
+    (shell (generate-new-buffer-name "*shell*"))
+    (return-from my/shell))
+  (let* ((shells (--filter (eq 'shell-mode (buffer-local-value 'major-mode it)) (buffer-list)))
+         (shells (--sort (> (buffer-local-value 'my/shell-last-active-time it)
+                            (buffer-local-value 'my/shell-last-active-time other))
+                         shells)))
+    (cond ((null shells) (shell))
+          ((eq major-mode 'shell-mode)
+           (switch-to-buffer (or (cadr (memq (current-buffer) shells)) (car shells))))
+          (t (switch-to-buffer (car shells))))))
 
 (defvar-local my/shell-last-active-time nil)
 
