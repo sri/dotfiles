@@ -6,12 +6,9 @@ import subprocess
 from datetime import datetime
 from collections import Counter, defaultdict
 
-try:
-    import rich
-    from rich.console import Console
-    from rich.table import Table
-except ImportError:
-    rich = False
+import rich
+from rich.console import Console
+from rich.table import Table
 
 
 class GitCommit:
@@ -103,17 +100,6 @@ class GitStats:
                 self.co_author_counts[co_author] += 1
 
     def display(self):
-        if rich:
-            self.rich_display()
-        else:
-            self.text_display()
-
-    def text_display(self):
-        print(self.co_author_counts)
-        print(self.days_of_week_worked)
-        print(self.hours_of_day_worked)
-
-    def rich_display(self):
         console = Console()
 
         days = [
