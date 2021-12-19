@@ -97,7 +97,7 @@ class GitStats:
             commit_date = commit.commit_date
             self.days_of_week_worked[commit_date.weekday()] += 1
             self.hours_of_day_worked[commit_date.weekday()][
-                commit_date.strftime("%H")
+                int(commit_date.strftime("%H"))
             ] += 1
             for co_author in commit.co_authors:
                 self.co_author_counts[co_author] += 1
@@ -137,32 +137,26 @@ class GitStats:
         table.add_row("Total:", str(total))
         console.print(table)
 
-        console.print("Number of commits per day of week", style=header_style)
-        table = Table(show_header=True)
-        for day in days:
-            table.add_column(day)
-        dow = [None] * 7
-        for i in range(7):
-            dow[i] = self.days_of_week_worked[i]
-        table.add_row(*[str(x) for x in dow])
-        console.print(table)
-
         console.print("Number of commits per hour of the day", style=header_style)
         table = Table(show_header=True)
-        table.add_column("")
+        table.add_column("", justify="right")
         for day in days:
-            table.add_column(day)
+            table.add_column(day, justify="right")
         for hour in range(24):
             ampm = "AM" if hour < 12 else "PM"
             h = hour if (hour < 12) else (hour % 12)
             if h == 0:
                 h = 12
             hs = "%2d" % h
-            args = [f"{hs} {ampm}"]
+            args = [f"{h} {ampm}"]
             for weekday, _ in enumerate(days):
-                n = self.hours_of_day_worked[weekday][str(hour)]
+                n = self.hours_of_day_worked[weekday][hour]
                 args.append("" if n == 0 else str(n))
             table.add_row(*args)
+        totals = ["[bold green]Totals"]
+        for i in range(7):
+            totals.append(str(self.days_of_week_worked[i]))
+        table.add_row(*totals)
         console.print(table)
 
 
