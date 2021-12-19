@@ -38,7 +38,7 @@ class GitCommit:
                 # Check for co-authors in the commit message:
                 # https://stackoverflow.com/questions/7442112/how-to-attribute-a-single-commit-to-multiple-developers
                 if m := re.match(GitCommit.CO_AUTHORED_BY_RE, line):
-                    self.extract_co_authors(m.groups(1))
+                    self.extract_co_authors(m.group(1))
 
     def __repr__(self):
         return f"<git-commit {self.sha} co_authors={repr(self.co_authors)}, commit_date={repr(self.commit_date)}>"
