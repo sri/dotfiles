@@ -13,6 +13,7 @@ try:
 except ImportError:
     rich = False
 
+
 class GitCommit:
     EMAIL_RE = re.compile("<.*?>")
     JUNK_RE = re.compile("[,]| and ")
@@ -44,7 +45,6 @@ class GitCommit:
 
     def __repr__(self):
         return f"<git-commit {self.sha} co_authors={repr(self.co_authors)}, commit_date={repr(self.commit_date)}>"
-
 
     def extract_co_authors(self, authors_string):
         # strip email addresses
@@ -84,6 +84,7 @@ class GitLog:
     def repr(self):
         return f"<git-log author={repr(self.author)}>"
 
+
 class GitStats:
     def __init__(self, git_log):
         self.git_log = git_log
@@ -95,7 +96,9 @@ class GitStats:
         for commit in self.git_log.commits:
             commit_date = commit.commit_date
             self.days_of_week_worked[commit_date.weekday()] += 1
-            self.hours_of_day_worked[commit_date.weekday()][commit_date.strftime("%H")] += 1
+            self.hours_of_day_worked[commit_date.weekday()][
+                commit_date.strftime("%H")
+            ] += 1
             for co_author in commit.co_authors:
                 self.co_author_counts[co_author] += 1
 
@@ -113,7 +116,15 @@ class GitStats:
     def rich_display(self):
         console = Console()
 
-        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        days = [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+        ]
         header_style = "bold green"
 
         console.print("Co-Authors", style=header_style)
@@ -144,7 +155,8 @@ class GitStats:
         for hour in range(24):
             ampm = "AM" if hour < 12 else "PM"
             h = hour if (hour < 12) else (hour % 12)
-            if h == 0: h = 12
+            if h == 0:
+                h = 12
             hs = "%2d" % h
             args = [f"{hs} {ampm}"]
             for weekday, _ in enumerate(days):
@@ -152,6 +164,7 @@ class GitStats:
                 args.append("" if n == 0 else str(n))
             table.add_row(*args)
         console.print(table)
+
 
 def main():
     if len(sys.argv) != 2:
@@ -161,6 +174,7 @@ def main():
     gl.parse()
     stats = GitStats(gl)
     stats.display()
+
 
 if __name__ == "__main__":
     main()
