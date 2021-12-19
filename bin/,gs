@@ -1,0 +1,166 @@
+#! /usr/bin/env python3
+
+import sys
+import re
+import subprocess
+from datetime import datetime
+from collections import Counter, defaultdict
+
+try:
+    import rich
+    from rich.console import Console
+    from rich.table import Table
+except ImportError:
+    rich = False
+
+class GitCommit:
+    EMAIL_RE = re.compile("<.*?>")
+    JUNK_RE = re.compile("[,]| and ")
+    COMMIT_RE = re.compile("^commit (.*)")
+    CO_AUTHORED_BY_RE = re.compile("^[ ]*co-authored-by: (.*)", re.I)
+
+    def __init__(self, commit_lines):
+        self.sha = None
+        self.co_authors = []
+        self.commit_date = None
+
+        self.parse(commit_lines)
+
+    def parse(self, commit_lines):
+        for line in commit_lines:
+            if line.startswith("commit "):
+                self.sha = line.split(" ", 1)[1]
+            elif line.startswith("author "):
+                # format: "author AUTHOR-NAME(S) TIMESTAMP TIMEZONE"
+                self.extract_commit_date(line.split()[-2:])
+                authors_string = line.split(" ", 1)[1]
+                authors_string = authors_string.rsplit(" ", 2)[0]
+                self.extract_co_authors(authors_string)
+            elif line.startswith(" "):
+                # Check for co-authors in the commit message:
+                # https://stackoverflow.com/questions/7442112/how-to-attribute-a-single-commit-to-multiple-developers
+                if m := re.match(GitCommit.CO_AUTHORED_BY_RE, line):
+                    self.extract_co_authors(m.groups(1))
+
+    def __repr__(self):
+        return f"<git-commit {self.sha} co_authors={repr(self.co_authors)}, commit_date={repr(self.commit_date)}>"
+
+
+    def extract_co_authors(self, authors_string):
+        # strip email addresses
+        all_authors = re.sub(GitCommit.EMAIL_RE, "", authors_string)
+        for author in re.split(GitCommit.JUNK_RE, all_authors):
+            if author := author.strip():
+                self.co_authors.append(author)
+
+    def extract_commit_date(self, commit_date_with_tz):
+        timestamp, _tz = commit_date_with_tz
+        self.commit_date = datetime.fromtimestamp(int(timestamp))
+
+
+class GitLog:
+    CMD = "git log --all --author='%s' --pretty=raw"
+
+    def __init__(self, author):
+        self.author = author
+        self.commits = []
+
+    def parse(self):
+        cmd = GitLog.CMD % self.author
+        log_output = subprocess.getoutput(cmd)
+
+        commit_lines = []
+        for line in log_output.splitlines():
+            if line.startswith("commit "):
+                if commit_lines:
+                    self.commits.append(GitCommit(commit_lines))
+                    commit_lines = []
+
+            commit_lines.append(line)
+
+        if commit_lines:
+            self.commits.append(GitCommit(commit_lines))
+
+    def repr(self):
+        return f"<git-log author={repr(self.author)}>"
+
+class GitStats:
+    def __init__(self, git_log):
+        self.git_log = git_log
+
+        self.co_author_counts = Counter()
+        self.days_of_week_worked = defaultdict(int)
+        self.hours_of_day_worked = defaultdict(Counter)
+
+        for commit in self.git_log.commits:
+            commit_date = commit.commit_date
+            self.days_of_week_worked[commit_date.weekday()] += 1
+            self.hours_of_day_worked[commit_date.weekday()][commit_date.strftime("%H")] += 1
+            for co_author in commit.co_authors:
+                self.co_author_counts[co_author] += 1
+
+    def display(self):
+        if rich:
+            self.rich_display()
+        else:
+            self.text_display()
+
+    def text_display(self):
+        print(self.co_author_counts)
+        print(self.days_of_week_worked)
+        print(self.hours_of_day_worked)
+
+    def rich_display(self):
+        console = Console()
+
+        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        header_style = "bold green"
+
+        console.print("Co-Authors", style=header_style)
+        table = Table(show_header=True)
+        table.add_column("Co-Authors")
+        table.add_column("Num commits")
+        for co_author, counts in self.co_author_counts.most_common():
+            table.add_row(co_author, str(counts))
+        total = sum(amt for (_, amt) in self.co_author_counts.most_common())
+        table.add_row("Total:", str(total))
+        console.print(table)
+
+        console.print("Number of commits per day of week", style=header_style)
+        table = Table(show_header=True)
+        for day in days:
+            table.add_column(day)
+        dow = [None] * 7
+        for i in range(7):
+            dow[i] = self.days_of_week_worked[i]
+        table.add_row(*[str(x) for x in dow])
+        console.print(table)
+
+        console.print("Number of commits per hour of the day", style=header_style)
+        table = Table(show_header=True)
+        table.add_column("")
+        for day in days:
+            table.add_column(day)
+        for hour in range(24):
+            ampm = "AM" if hour < 12 else "PM"
+            h = hour if (hour < 12) else (hour % 12)
+            if h == 0: h = 12
+            hs = "%2d" % h
+            args = [f"{hs} {ampm}"]
+            for weekday, _ in enumerate(days):
+                n = self.hours_of_day_worked[weekday][str(hour)]
+                args.append("" if n == 0 else str(n))
+            table.add_row(*args)
+        console.print(table)
+
+def main():
+    if len(sys.argv) != 2:
+        sys.exit(f"usage: {sys.argv[0]} <author>")
+    author = sys.argv[1]
+    gl = GitLog(author)
+    gl.parse()
+    stats = GitStats(gl)
+    stats.display()
+
+if __name__ == "__main__":
+    main()
