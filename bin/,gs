@@ -123,8 +123,8 @@ class GitStats:
         table.add_row("Total:", str(total))
         console.print(table)
 
-        console.print("Number of commits per hour of the day", style=header_style)
         table = Table(show_header=True)
+        table.title = "Number of commits per hour of the day"
         table.add_column("", justify="right")
         for day in days:
             table.add_column(day, justify="right")
@@ -139,10 +139,10 @@ class GitStats:
                 n = self.hours_of_day_worked[weekday][hour]
                 args.append("" if n == 0 else str(n))
             table.add_row(*args)
-        totals = ["[bold green]Totals"]
+        totals = ["Totals"]
         for i in range(7):
             totals.append(str(self.days_of_week_worked[i]))
-        table.add_row(*totals)
+        table.add_row(*[f"[bold green]{x}" for x in totals])
         console.print(table)
 
 
