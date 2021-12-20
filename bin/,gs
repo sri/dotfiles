@@ -40,9 +40,6 @@ class GitCommit:
                 if m := re.match(GitCommit.CO_AUTHORED_BY_RE, line):
                     self.extract_co_authors(m.group(1))
 
-    def __repr__(self):
-        return f"<git-commit {self.sha} co_authors={repr(self.co_authors)}, commit_date={repr(self.commit_date)}>"
-
     def extract_co_authors(self, authors_string):
         # strip email addresses
         all_authors = re.sub(GitCommit.EMAIL_RE, "", authors_string)
@@ -53,6 +50,9 @@ class GitCommit:
     def extract_commit_date(self, commit_date_with_tz):
         timestamp, _tz = commit_date_with_tz
         self.commit_date = datetime.fromtimestamp(int(timestamp))
+
+    def __repr__(self):
+        return f"<git-commit {self.sha} co_authors={repr(self.co_authors)}, commit_date={repr(self.commit_date)}>"
 
 
 class GitLog:
