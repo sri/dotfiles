@@ -78,7 +78,7 @@ class GitLog:
         if commit_lines:
             self.commits.append(GitCommit(commit_lines))
 
-    def repr(self):
+    def __repr__(self):
         return f"<git-log author={repr(self.author)}>"
 
 
@@ -133,7 +133,6 @@ class GitStats:
             h = hour if (hour < 12) else (hour % 12)
             if h == 0:
                 h = 12
-            hs = "%2d" % h
             args = [f"{h} {ampm}"]
             for weekday, _ in enumerate(days):
                 n = self.hours_of_day_worked[weekday][hour]
