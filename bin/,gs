@@ -151,6 +151,8 @@ def main():
     author = sys.argv[1]
     gl = GitLog(author)
     gl.parse()
+    if not gl.commits:
+        sys.exit(f"No commits found for: {author}")
     stats = GitStats(gl)
     stats.display()
 
