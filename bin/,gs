@@ -130,8 +130,7 @@ class GitStats:
             table.add_column(day, justify="right")
         for hour in range(24):
             ampm = "AM" if hour < 12 else "PM"
-            h = hour if (hour < 12) else (hour % 12)
-            if h == 0:
+            if (h := hour % 12) == 0:
                 h = 12
             args = [f"{h} {ampm}"]
             for weekday, _ in enumerate(days):
