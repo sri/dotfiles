@@ -6,11 +6,18 @@ from pathlib import Path
 import platform
 
 def main(actual_run):
+    if actual_run:
+        print("actual run, continue?")
+        if (inp := input()).lower().startswith("n"):
+            sys.exit("aborting")
+    else:
+        print("fake run")
+
     files_to_link = {
-        "~/.emacs.el"  : "emacs/my-dot-emacs.el",
-        "~/.bashrc"    : "bash/bashrc",
-        "~/.gitconfig" : "git/gitconfig",
-        "~/.ripgreprc" : "ripgreprc",
+        "emacs/my-dot-emacs.el" : "~/.emacs.el",
+        "bash/bashrc"           : "~/.bashrc",
+        "git/gitconfig"         : "~/.gitconfig",
+        "ripgreprc"             : "~/.ripgreprc",
    }
 
     sublime_config_path = {
@@ -19,29 +26,27 @@ def main(actual_run):
     }.get(platform.system())
 
     if sublime_config_path:
-        files_to_link[sublime_config_path] = "sublime/prefs.json"
+        files_to_link["sublime/prefs.json"] = sublime_config_path
 
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    my_dot_dir = Path(__file__).resolve().parents[1]
+    dotfiles_dir = Path(__file__).resolve().parents[1]
 
-    for (global_dot_raw, my_dot_raw) in files_to_link.items():
-        global_dot = Path(global_dot_raw).expanduser()
-        my_dot = my_dot_dir.joinpath(my_dot_raw)
-        needs_backup = global_dot.exists()
+    for (src_raw, dest_raw) in files_to_link.items():
+        src = dotfiles_dir.joinpath(src_raw)
+        dest = Path(dest_raw).expanduser()
+        needs_backup = dest.exists()
 
         if needs_backup:
-            dot_backup_path = dot.with_name(f"{dot.name}.{timestamp}.bkp")
+            backup = dest.with_name(f"{dest.name}.{timestamp}.bkp")
+            print(f"backed up {dest_raw} => {backup.name}")
             if actual_run:
-                dot.rename(dot_backup_path)
+                dest.rename(backup)
 
         if actual_run:
-            dot.symlink_to(my_dot)
+            dest.symlink_to(src)
 
-        msg = [my_dot_name, dot_name]
-        if needs_backup:
-            msg.append(dot_backup_path.name)
-        msg = ' => '.join(msg)
-        print(msg)
+        print(" => ".join([src_raw, dest_raw]))
+        print("--")
 
 if __name__ == "__main__":
     main("-f" in sys.argv[1:])
