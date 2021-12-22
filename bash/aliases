@@ -69,7 +69,9 @@ alias curl_info='curl -so /dev/null -w "dnslookup: %{time_namelookup} | connect:
 
 alias p='my_python'
 function my_python() {
-    if [ -x "$(command -v python3)" ]; then
+    if [ -x "$(command -v ipython)" ]; then
+        ipython "$@"
+    elif [ -x "$(command -v python3)" ]; then
         python3 "$@"
     else
         python "$@"
