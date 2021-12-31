@@ -141,6 +141,11 @@ class GitStats:
         for i in range(7):
             totals.append(str(self.days_of_week_worked[i]))
         table.add_row(*[f"[bold green]{x}" for x in totals])
+        pct = ["Pct"]
+        total_commits = len(self.git_log.commits)
+        for i in range(7):
+            pct.append("{:.1%}".format(self.days_of_week_worked[i] / total_commits))
+        table.add_row(*[f"[bold green]{x}" for x in pct])
         console.print(table)
 
 
