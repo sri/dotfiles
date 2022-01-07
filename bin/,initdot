@@ -8,7 +8,7 @@ import platform
 def main(actual_run):
     if actual_run:
         print("actual run, continue?")
-        if (inp := input()).lower().startswith("n"):
+        if not input().lower().startswith("y"):
             sys.exit("aborting")
     else:
         print("fake run")
