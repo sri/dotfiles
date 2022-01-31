@@ -46,8 +46,6 @@ alias ..='c ..'
 alias dt='c ~/Desktop'
 alias cddotfiles='c ~/my/dotfiles'
 
-alias r=irb
-
 alias x='chmod +x'
 
 alias rr='. ~/.bashrc'
@@ -66,6 +64,24 @@ alias lsz='ls -lSrh --color=auto'
 # From https://blog.cloudflare.com/a-question-of-timing/
 alias curl_info='curl -so /dev/null -w "dnslookup: %{time_namelookup} | connect: %{time_connect} | appconnect: %{time_appconnect} | pretransfer: %{time_pretransfer} | starttransfer: %{time_starttransfer} | total: %{time_total} | size: %{size_download}\n"'
 
+
+alias r='my_ruby'
+function my_ruby() {
+    local cmd="irb"
+    local arg=""
+    if [ -n "$INSIDE_EMACS" ]; then
+        # Without this, irb hangs when launched inside an Emacs shell.
+        arg="--nomultiline"
+    fi
+    if [ -f ./Gemfile ]; then
+        cmd="rails console"
+        if [ -n "$arg" ]; then
+            arg="-- $arg"
+        fi
+    fi
+    echo "running $cmd $arg..."
+    $cmd $arg
+}
 
 alias p='my_python'
 function my_python() {
