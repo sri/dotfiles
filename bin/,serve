@@ -20,6 +20,13 @@ class RequestHandler(SimpleHTTPRequestHandler):
             self.send_header(key, val)
         super().end_headers()
 
+    def do_OPTIONS(self):
+        self.send_response(200, "ok")
+        self.send_header('Access-Control-Allow-Credentials', 'true')
+        self.send_header('Access-Control-Allow-Origin', 'http://localhost:3333')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header("Access-Control-Allow-Headers", "X-Requested-With, Content-type")
+
 def randport():
     return random.randint(8000, 9999)
 
@@ -48,6 +55,7 @@ def main():
     parser.add_argument("-p", "--port", type=int, help="specify the port", default=None)
     parser.add_argument("dir", type=str, nargs="?", default=".",
                         help="specify the directory to serve, defaults to current directory")
+    parser.add_argument("-o", "--allow-origin", type=str)
     args = parser.parse_args()
 
     directory_to_serve = os.path.abspath(args.dir)
