@@ -57,8 +57,7 @@ alias du1='du --max-depth=1'
 
 alias topcmds='cat ~/.bash_history | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
 
-alias ll='ls -la --color=auto'
-alias ldt='ls -ltr --color=auto'
+alias ll='ls -ltr --color=auto'
 alias lsz='ls -lSrh --color=auto'
 
 # From https://blog.cloudflare.com/a-question-of-timing/
