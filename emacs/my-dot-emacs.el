@@ -53,6 +53,7 @@
  ;;
  ;; Inconsolata
  `(default ((t (:height 100 :family ,(my/font)  :foreground "#999999")))))
+ '(helm-separator ((t (:foreground "saddle brown")))))
 '(
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line ((t (:foreground "#3B84CC"))))
