@@ -73,6 +73,11 @@ Fundamental mode."
 (setq js-indent-level 2)
 (global-eldoc-mode -1)
 (global-hl-line-mode 1)
+(setq mode-line-compact t)
+
+;; when running make, set NATIVE_FULL_AOT=1 to
+;; native compile all libs
+;(setq package-native-compile t)
 
 (with-demoted-errors "error loading tab-bar"
   (require 'tab-bar)

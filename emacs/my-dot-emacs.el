@@ -50,10 +50,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- ;;
- ;; Inconsolata
- `(default ((t (:height 100 :family ,(my/font)  :foreground "#999999")))))
- '(helm-separator ((t (:foreground "saddle brown")))))
+ '(default ((t (:height 100 :family "JetBrains Mono" :foreground "#999999"))))
+ '(helm-separator ((t (:foreground "saddle brown"))))
+ '(tab-bar-tab ((t (:background "#504945" :foreground "green")))))
 '(
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line ((t (:foreground "#3B84CC"))))
@@ -151,7 +150,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("c9ddf33b383e74dac7690255dd2c3dfa1961a8e8a1d20e401c6572febef61045" "f8067b7d0dbffb29a79e0843797efabdf5e1cf326639874d8b407e9b034136a4" "97965ccdac20cae22c5658c282544892959dc541af3e9ef8857dbf22eb70e82b" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "0e219d63550634bc5b0c214aced55eb9528640377daf486e13fb18a32bf39856" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default))
+   '("7533e1fc8345739ea0ace60330ebffdf9da46398490b4c36c7e48775e5621052" "bf798e9e8ff00d4bf2512597f36e5a135ce48e477ce88a0764cfb5d8104e8163" "c9ddf33b383e74dac7690255dd2c3dfa1961a8e8a1d20e401c6572febef61045" "f8067b7d0dbffb29a79e0843797efabdf5e1cf326639874d8b407e9b034136a4" "97965ccdac20cae22c5658c282544892959dc541af3e9ef8857dbf22eb70e82b" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "0e219d63550634bc5b0c214aced55eb9528640377daf486e13fb18a32bf39856" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default))
  '(org-modules
    '(org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-w3m org-velocity))
  '(package-selected-packages
@@ -165,9 +164,8 @@
          (compiled (concat source "c")))
     (cond ((file-exists-p source)
            (if (file-newer-than-file-p source compiled)
-               (let ((byte-compile-verbose nil))
-                 (if (null (byte-compile-file source))
-                     (error "my/load: ERROR byte compiling file %s" source))))
+               (if (null (byte-compile-file source))
+                   (error "my/load: ERROR byte compiling file %s" source)))
            (load compiled nil t t))
           (t
            (if (file-exists-p compiled)
