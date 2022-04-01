@@ -6,7 +6,6 @@
 (setq git-link-use-commit t)
 
 (setq magit-section-visibility-indicator nil)
-(setq magit-section-highlight-hook nil)
 (setq magit-save-repository-buffers 'dontask)
 (setq magit-commit-show-diff t)
 (setq magit-display-buffer-function
@@ -35,7 +34,6 @@
         magit-insert-unpulled-from-upstream
         magit-insert-untracked-files))
 
-(setq magit-diff-highlight-hunk-region-functions nil)
 ;; Don't show "Recent commits" section.
 (setq magit-log-section-commit-count 10)
 
@@ -43,6 +41,7 @@
 
 (add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
 
+(setq magit-diff-refine-hunk t)
 (defun my/magit-diff-toggle-refine-hunk ()
   (interactive)
   (let* ((vals '((t . "current hunk")
