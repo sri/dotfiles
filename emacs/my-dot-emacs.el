@@ -52,6 +52,8 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:height 100 :family "JetBrains Mono" :foreground "#999999"))))
  '(helm-separator ((t (:foreground "saddle brown"))))
+ '(diff-refine-added ((t (:background "#156a15" :foreground "black"))))
+ '(diff-refine-removed ((t (:background "#6a1515" :foreground "black"))))
  '(tab-bar-tab ((t (:background "#504945" :foreground "green")))))
 '(
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
