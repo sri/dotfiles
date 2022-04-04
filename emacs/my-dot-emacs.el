@@ -45,15 +45,19 @@
                     nil))
                 fonts))))
 
+(defun my/font-size ()
+  (cond ((eq system-type 'darwin) 140)
+        (t 100)))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 100 :family "JetBrains Mono" :foreground "#999999"))))
+ `(default ((t (:height ,(my/font-size) :family "JetBrains Mono" :foreground "#999999"))))
  '(helm-separator ((t (:foreground "saddle brown"))))
- '(diff-refine-added ((t (:background "#156a15" :foreground "black"))))
- '(diff-refine-removed ((t (:background "#6a1515" :foreground "black"))))
+ '(diff-refine-added ((t (:background "#156a15" :foreground "#aaaaaa"))))
+ '(diff-refine-removed ((t (:background "#6a1515" :foreground "#aaaaaa"))))
  '(tab-bar-tab ((t (:background "#504945" :foreground "green")))))
 '(
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
