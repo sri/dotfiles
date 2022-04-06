@@ -154,7 +154,12 @@ decoded URL in the minibuffer."
          (org-beginning-of-line))
         (t
          (let ((indentation-start (save-excursion
-                                    (back-to-indentation)
+                                    (cond ((derived-mode-p 'magit-mode)
+                                           (beginning-of-line)
+                                           (if (looking-at "[+-]") (forward-char 1))
+                                           (skip-chars-forward " \t"))
+                                          (t
+                                           (back-to-indentation)))
                                     (point))))
            (if (or (= (current-column) 0)
                    (> (point) indentation-start))
