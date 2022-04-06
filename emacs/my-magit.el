@@ -53,7 +53,7 @@
     (setq magit-diff-refine-hunk (car next))
     (message "Word-diff: %s" (cdr next))))
 
-(defun my/open-repo-in-brower ()
+(defun my/open-repo-in-browser ()
   (interactive)
   (let ((url (magit-get "remote" "origin" "url")))
     (unless (string-match "^http" url)
@@ -71,6 +71,6 @@
           (lambda ()
             (font-lock-mode 1)
             (bind-keys :map magit-mode-map
-                       ("~" . my/open-repo-in-brower)
+                       ("~" . my/open-repo-in-browser)
                        ("C-c C-s" . magit-stash-list)
                        ("C-c C-w" . my/magit-diff-toggle-refine-hunk))))
