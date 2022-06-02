@@ -481,3 +481,9 @@ See my-region-bindings-mode.el on how this is activated."
                  (read-string "Buffer name: ")
                  (generate-new-buffer "*scratch*"))))
     (switch-to-buffer buf)))
+
+(defun my/uptime ()
+  (interactive)
+  (let ((system-uptime (s-trim (shell-command-to-string "uptime")))
+        (emacs-uptime (emacs-uptime)))
+    (message "System: %s\nEmacs:  %s" system-uptime emacs-uptime)))
