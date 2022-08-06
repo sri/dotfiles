@@ -284,17 +284,15 @@ will bring it back."
 
 (defun my/pp-json (start end)
   (interactive "r")
-  (let ((python (-first #'executable-find '("python3" "python"))))
-    (unless python
-      (error "unable to find python interpreter"))
+  (let ((py (or (executable-find "python3")
+                (error "unable to find python interpreter"))))
     (unless (use-region-p)
-      (setq start (point-min)
-            end (point-max)))
+      (setq start (point-min) end (point-max)))
     (shell-command-on-region start
                              end
-                             (format "%s -mjson.tool" python)
+                             (format "%s -mjson.tool --sort-keys" py)
                              (current-buffer)
-                             t)))
+                             'replace)))
 
 
 (defun my/toggle-camel-case-and-underscore ()

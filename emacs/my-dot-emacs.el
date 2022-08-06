@@ -58,7 +58,8 @@
  '(helm-separator ((t (:foreground "saddle brown"))))
  '(diff-refine-added ((t (:background "#156a15" :foreground "#aaaaaa"))))
  '(diff-refine-removed ((t (:background "#6a1515" :foreground "#aaaaaa"))))
- '(tab-bar-tab ((t (:background "#504945" :foreground "green")))))
+ '(tab-bar-tab-inactive ((t (:background "#686868" :foreground "#fdf4c1 "))))
+ '(tab-bar-tab ((t (:background "#282828" :foreground "#fdf4c1")))))
 '(
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line ((t (:foreground "#3B84CC"))))

@@ -1,5 +1,5 @@
 (let ((theme (car '(
-                    gruvbox-dark-medium
+                    ;gruvbox-dark-medium
                     modus-vivendi
                     kaolin-dark
                     modus-operandi
