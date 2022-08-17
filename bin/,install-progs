@@ -14,3 +14,4 @@ pip3 install glances
 # https://github.com/sharkdp/hyperfine
 # https://github.com/dandavison/delta
 # https://httpie.io/
+# fzf
