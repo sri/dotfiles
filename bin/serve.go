@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func listDir(w http.ResponseWriter, req *http.Request) {
@@ -51,8 +52,7 @@ func serveFile(filename string, w http.ResponseWriter, req *http.Request) {
 }
 
 func serve(w http.ResponseWriter, req *http.Request) {
-	// FIXME, eg: 127.0.0.1 - - [18/Aug/2022 21:23:06] "GET / HTTP/1.1" 200 -
-	fmt.Printf("[serving request %s %s]\n", req.Method, req.URL.Path)
+	fmt.Printf("[%s - - [%s] \"%s %s %s\"]\n", req.RemoteAddr, time.Now().String(), req.Method, req.URL.Path, req.Proto)
 
 	if req.URL.Path == "/" {
 		listDir(w, req)
