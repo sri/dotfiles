@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -33,10 +34,20 @@ func serveFile(filename string, w http.ResponseWriter, req *http.Request) {
 				fmt.Fprintf(w, "*** error reading file")
 				return
 			}
+
+			if *sendCorsHeaders {
+				w.Header().Set("Access-Control-Allow-Credentials", "true")
+				w.Header().Set("Access-Control-Allow-Origin", "*")
+				w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+				w.Header().Set("Access-Control-Allow-Headers", "X-Requested-With, Content-type")
+			}
+
 			w.Header().Set("Content-Type", http.DetectContentType(bytes))
 			w.Write(bytes)
+			return
 		}
 	}
+	fmt.Fprintf(w, "file not found: %s", filename)
 }
 
 func serve(w http.ResponseWriter, req *http.Request) {
@@ -56,9 +67,17 @@ func serve(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+var sendCorsHeaders = flag.Bool("cors", false, "send cors headers")
+
 func main() {
-	port := ":8090"
-	fmt.Printf("[serving on port %s]\n", port)
+	port := flag.String("port", "8090", "set the port")
+	flag.Parse()
+
+	fmt.Printf("[serving on port %s]\n", *port)
+	if *sendCorsHeaders {
+		fmt.Printf("[sending cors headers]\n")
+	}
+
 	http.HandleFunc("/", serve)
-	http.ListenAndServe(port, nil)
+	http.ListenAndServe(":"+*port, nil)
 }
