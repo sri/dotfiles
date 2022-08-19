@@ -12,11 +12,11 @@ def fix_url(url):
 def main(args):
     for arg in args:
         if os.path.exists(arg):
-            print(f"opening file {arg}...")
+            print(f"opening file: {arg}")
         else:
             arg = fix_url(arg)
-            print(f"opening {arg}...")
+            print(f"opening url: {arg}")
         webbrowser.open(arg)
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    main(sys.argv[1:] or ["."])
