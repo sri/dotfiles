@@ -1,3 +1,8 @@
+(defun my-try-theme ()
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme name :no-confirm))
+
+
 (let ((theme (car '(
                     gruvbox-dark-medium
                     modus-vivendi
