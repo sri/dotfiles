@@ -59,7 +59,9 @@
  ("s-p" . my/shell))
 
 (bind-keys*
- ("<C-tab>" . my/switch-to-buffer)
+ ("<C-tab>" . tab-next)
+ ("<S-C-tab>" . tab-previous)
+ ("M-t" . tab-new)
  ("C-`" . my/shell-for-buffer)
  ("C-'" . my/jump-to-matching-char)
  ("C-\\" . other-frame)
