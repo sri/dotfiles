@@ -58,6 +58,14 @@
  ("s-j" . other-window)
  ("s-p" . my/shell))
 
+;; https://emacs.stackexchange.com/questions/32183/how-to-make-exceptions-to-bind-key-overriding-behavior
+
+(define-key ido-common-completion-map
+            (kbd "<C-return>")
+            'ido-enter-dired)
+
+(bind-key* "C-d" 'kill-word (not (minibufferp)))
+
 (bind-keys*
  ("<C-tab>" . tab-next)
  ("<S-C-tab>" . tab-previous)
