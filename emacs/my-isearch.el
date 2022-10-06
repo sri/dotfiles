@@ -66,7 +66,7 @@
       (deactivate-mark)
       (isearch-resume search-for nil nil t search-for nil))))
 
-(setq isearch-allow-scroll t)
+(setq isearch-allow-scroll 'unlimited)
 (setq isearch-lazy-highlight-initial-delay 0)
 
 (bind-keys :map isearch-mode-map
