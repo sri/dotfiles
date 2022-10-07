@@ -1,21 +1,28 @@
+(defvar my-themes
+  '(
+    gruvbox-dark-medium
+    modus-vivendi
+    kaolin-dark
+    modus-operandi
+    solarized-dark
+    zenburn
+    solarized-light
+    jetbrains-darcula
+    leuven
+    spacemacs-dark
+    ))
+
+(defvar --my-themes-to-try nil)
 (defun my-try-theme ()
+  (when (null --my-themes-to-try) (setq --my-themes-to-try my-themes))
   (mapc #'disable-theme custom-enabled-themes)
-  (load-theme name :no-confirm))
+  (let ((name (pop --my-themes-to-try)))
+    (load-theme name :no-confirm)
+    (message "trying theme: %s" name)))
 
+;; (my-try-theme)
 
-(let ((theme (car '(
-                    gruvbox-dark-medium
-                    modus-vivendi
-                    kaolin-dark
-                    modus-operandi
-                    solarized-dark
-                    zenburn
-                    solarized-light
-                    nil
-                    jetbrains-darcula
-                    leuven
-                    spacemacs-dark
-                    ))))
+(let ((theme (car my-themes)))
   (when theme
 
     (when (eq theme 'modus-vivendi)
