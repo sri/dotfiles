@@ -67,6 +67,7 @@ __my_prompt_command() {
   local exitcode="$?"
   local gitbranch=$(__git_ps1 "%s")
   local cwd="\w"
+  local cwd_expanded=${cwd@P}
   local date="[\D{%Y-%m-%d %I:%M:%S%p}]"
 
   if [ "$gitbranch" != "" ]
