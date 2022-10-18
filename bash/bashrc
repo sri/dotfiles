@@ -67,7 +67,6 @@ __my_prompt_command() {
   local exitcode="$?"
   local gitbranch=$(__git_ps1 "%s")
   local cwd="\w"
-  local cwd_expanded=${a@P}
   local date="[\D{%Y-%m-%d %I:%M:%S%p}]"
 
   if [ "$gitbranch" != "" ]
@@ -76,32 +75,18 @@ __my_prompt_command() {
   fi
 
   local lhs="$date $cwd_expanded $gitbranch"
-  local rhs="[$exitcode]"
-  # 23 is the length of the date string above when it is expanded out -
-  # which happens when it is printed
-  local nspaces=$(( COLUMNS - ${#cwd_expanded} - ${#gitbranch} - 23 - ${#rhs} - 2 ))
-  # echo "$lhs"
-  # echo "lhs=${#lhs}, rhs=${#rhs}, nspaces=$nspaces"
+  local rhs="$date [$exitcode]"
+
+  local lhs_expanded=${lhs@P}
+  local rhs_expanded=${rhs@P}
+
+  local nspaces=$(( COLUMNS - ${#lhs_expanded} - ${#rhs_expanded} ))
   local spaces=$(printf '%*s' $nspaces)
-
-  # if [ "$INSIDE_EMACS" != "" ]
-  # then
-  #     gitbranch="$COLOR_LIGHT_GRAY$gitbranch$COLOR_NC"
-  # fi
-
-  # if [ "$exitcode" != "0" ]
-  # then
-  #     exitcode=" [$exitcode] "
-  # else
-  #     exitcode=""
-  # fi
 
   # Write to ~/.bash_history immediately after each command is typed in.
   history -a
 
-  PS1="$lhs$spaces$COLOR_RED$rhs$COLOR_NC\n> "
-
-  # PS1="$date $cwd $gitbranch$COLOR_RED$exitcode$COLOR_NC\n\$ "
+  PS1="$lhs$spaces$rhs\n> "
 }
 
 export PROMPT_COMMAND="__my_prompt_command"
