@@ -485,3 +485,17 @@ See my-region-bindings-mode.el on how this is activated."
   (let ((system-uptime (s-trim (shell-command-to-string "uptime")))
         (emacs-uptime (emacs-uptime)))
     (message "System: %s\nEmacs:  %s" system-uptime emacs-uptime)))
+
+
+;; https://stackoverflow.com/questions/6172054/how-can-i-random-sort-lines-in-a-buffer
+(defun my/shuffle-lines (beg end)
+  "Sort lines in region randomly."
+  (interactive "r")
+  (save-excursion
+    (save-restriction
+      (narrow-to-region beg end)
+      (goto-char (point-min))
+      (let ;; To make `end-of-line' and etc. to ignore fields.
+          ((inhibit-field-text-motion t))
+        (sort-subr nil 'forward-line 'end-of-line nil nil
+                   (lambda (s1 s2) (= (random 2) 0)))))))
