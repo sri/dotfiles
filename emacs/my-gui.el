@@ -38,10 +38,10 @@
                                      :underline t
                                      :background nil)))))))
 
-(add-hook 'focus-out-hook
-          (lambda ()
-            (when (and buffer-file-name (buffer-modified-p))
-              (save-buffer))))
+;; (add-hook 'focus-out-hook
+;;           (lambda ()
+;;             (when (and buffer-file-name (buffer-modified-p))
+;;               (save-buffer))))
 
 ;; (let ((shell-path (shell-command-to-string "$SHELL -l -c 'echo -n $PATH'")))
   ;; (when (> (count "\n" shell-path) 0)
