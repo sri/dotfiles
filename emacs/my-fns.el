@@ -489,7 +489,7 @@ See my-region-bindings-mode.el on how this is activated."
 
 ;; https://stackoverflow.com/questions/6172054/how-can-i-random-sort-lines-in-a-buffer
 (defun my/shuffle-lines (beg end)
-  "Sort lines in region randomly."
+  "Shuffle lines in region."
   (interactive "r")
   (save-excursion
     (save-restriction
