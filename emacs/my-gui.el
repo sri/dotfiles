@@ -12,15 +12,12 @@
     spacemacs-dark
     ))
 
-(defvar --my-themes-to-try nil)
-(defun my-try-theme ()
-  (when (null --my-themes-to-try) (setq --my-themes-to-try my-themes))
+(defun my-try-theme (theme)
   (mapc #'disable-theme custom-enabled-themes)
-  (let ((name (pop --my-themes-to-try)))
-    (load-theme name :no-confirm)
-    (message "trying theme: %s" name)))
+  (load-theme theme :no-confirm)
+  (message "trying theme: %s" theme))
 
-;; (my-try-theme)
+;; (my-try-theme 'solarized-dark)
 
 (let ((theme (car my-themes)))
   (when theme
