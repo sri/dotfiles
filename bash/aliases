@@ -85,7 +85,11 @@ function my_ruby() {
 alias p='my_python'
 function my_python() {
     if [ -x "$(command -v ipython)" ]; then
-        ipython "$@"
+        if [ -n "$INSIDE_EMACS" ]; then
+            ipython --simple-prompt "$@"
+        else
+            ipython "$@"
+        fi
     elif [ -x "$(command -v python3)" ]; then
         python3 "$@"
     else
