@@ -16,11 +16,7 @@ print("imported sys & os")
 
 # sys.displayhook = __displayhook
 
-try:
-    __IPYTHON__
-    running_under_ipython = True
-except NameError:
-    running_under_ipython = False
+running_under_ipython = hasattr(__builtins__, '__IPYTHON__')
 
 if running_under_ipython:
     from IPython.core.magic import register_line_magic
@@ -29,3 +25,27 @@ if running_under_ipython:
     def lmagic(line):
         "Rev line"
         return line[::-1]
+
+    from IPython.terminal.prompts import Prompts, Token
+    import subprocess
+    import pathlib
+
+    user_home = str(pathlib.Path.home())
+
+    class MyPrompt(Prompts):
+        def in_prompt_tokens(self, cli=None):
+            cwd = os.getcwd()
+            if cwd.startswith(user_home):
+                cwd = '~' + cwd.removeprefix(user_home)
+
+            (in_git_repo, current_git_branch) = subprocess.getstatusoutput(
+                "git rev-parse --abbrev-ref HEAD")
+
+            result = [(Token, cwd)]
+            if in_git_repo == 0:
+                result.append((Token, f"({current_git_branch})"))
+            result.append((Token.Prompt, '>>> '))
+            return result
+
+    ip = get_ipython()
+    ip.prompts = MyPrompt(ip)
