@@ -1,2 +1,2 @@
-(require 'ivy-rich)
-(ivy-rich-mode 1)
+;(require 'ivy-rich)
+;(ivy-rich-mode 1)
