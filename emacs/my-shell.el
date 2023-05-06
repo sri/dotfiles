@@ -6,12 +6,16 @@
 
 ;; This an be set using the SHELL env var, but on Mac bashrc doesn't
 ;; seem to get read when launched from Dock.
-(let ((bash "/usr/local/bin/bash"))
-  (when (file-exists-p bash)
-    ;; M-x shell
-    (setq explicit-shell-file-name bash)
-    ;; shell-command & friends
-    (setq shell-file-name bash)))
+(let ((possibles '("/bin/zsh" "/bin/bash"))
+      (done nil))
+  (while (and possibles (not done))
+    (let ((shell (pop possibles)))
+      (when (file-exists-p shell)
+        ;; M-x shell
+        (setq explicit-shell-file-name shell)
+        ;; shell-command & friends
+        (setq shell-file-name shell)
+        (setq done t)))))
 
 (add-to-list 'display-buffer-alist
              '("^\\*shell\\*" . (display-buffer-same-window)))
@@ -99,6 +103,8 @@ Also, creates a shell when there are no other shells."
 (add-hook 'shell-mode-hook
           (lambda ()
             (font-lock-mode -1)
+
+            (setq comint-process-echoes t)
 
             (my/shell-update-last-active-time)
             (add-hook 'comint-input-filter-functions
