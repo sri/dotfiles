@@ -1,39 +1,36 @@
 #!/usr/bin/env python3
 
-import sys
-import datetime
-from pathlib import Path
-import platform
+import sys, datetime, platform, pathlib
 
 def main(actual_run):
-    if actual_run:
-        print("actual run, continue?")
-        if not input().lower().startswith("y"):
-            sys.exit("aborting")
-    else:
-        print("fake run")
+    system = platform.system()
+    sublime_config = {
+        "Linux" : "~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+        "Darwin": "~/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings"
+    }
+    assert system in sublime_config
 
     files_to_link = {
         "emacs/my-dot-emacs.el" : "~/.emacs.el",
         "bash/bashrc"           : "~/.bashrc",
         "git/gitconfig"         : "~/.gitconfig",
         "ripgreprc"             : "~/.ripgreprc",
+        "sublime/prefs.json"    : sublime_config[system]
    }
 
-    sublime_config_path = {
-        "Linux": "~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
-        "Darwin": "~/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings"
-    }.get(platform.system())
-
-    if sublime_config_path:
-        files_to_link["sublime/prefs.json"] = sublime_config_path
+    if actual_run:
+        print("[actual run, continue?]")
+        if not input().lower().startswith("y"):
+            sys.exit("aborting")
+    else:
+        print("[fake run]")
 
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    dotfiles_dir = Path(__file__).resolve().parents[1]
+    dotfiles_dir = pathlib.Path(__file__).resolve().parents[1]
 
     for (src_raw, dest_raw) in files_to_link.items():
         src = dotfiles_dir.joinpath(src_raw)
-        dest = Path(dest_raw).expanduser()
+        dest = pathlib.Path(dest_raw).expanduser()
         needs_backup = dest.exists()
 
         if needs_backup:

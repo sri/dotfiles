@@ -1,7 +1,11 @@
 # -*- mode: sh -*-
 
-alias sub="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+typeset -U path PATH
 
+path=(~/my/dotfiles/bin "$path[@]")
+
+
+alias sub="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 
 # asdf
 # https://asdf-vm.com/guide/getting-started.html
