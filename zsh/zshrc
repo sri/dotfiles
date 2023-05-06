@@ -1,0 +1,82 @@
+# -*- mode: sh -*-
+
+alias sub="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+
+
+# asdf
+# https://asdf-vm.com/guide/getting-started.html
+. "$HOME/.asdf/asdf.sh"
+# append completions to fpath
+fpath=(${ASDF_DIR}/completions $fpath)
+
+# initialise completions with ZSH's compinit
+autoload -Uz compinit && compinit
+eval "$(~/.rbenv/bin/rbenv init - zsh)"
+
+# https://unix.stackexchange.com/questions/273861/unlimited-history-in-zsh
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=10000
+SAVEHIST=10000
+setopt BANG_HIST                 # Treat the '!' character specially during expansion.
+setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
+setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
+setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
+setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
+setopt HIST_BEEP                 # Beep when accessing nonexistent history.
+
+export PYTHONSTARTUP=~/.pythonrc.py
+
+if [[ -e ~/.bashrc_private ]]; then
+  . ~/.zshrc_private
+fi
+
+
+# Load Git prompt functions
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*' formats '(%b)'
+
+function preexec() {
+  # Record the start time of the command
+  cmd_start_time=$SECONDS
+}
+
+preexec_functions+=(preexec)
+
+
+# Function to customize the prompt
+function custom_prompt() {
+  local cmd_duration=$((SECONDS - cmd_start_time))
+
+  # Get the exit status of the last command
+  local last_exit_status=$?
+
+  # Get the current Git branch, if any
+  vcs_info
+
+  # Display a green checkmark for successful commands, red 'x' for failed ones
+  local prompt_status
+  if [ $last_exit_status -eq 0 ]; then
+    prompt_status="%F{green}✔%f"
+  else
+    prompt_status="%F{red}✘%f"
+  fi
+
+  # Set the prompt (PS1)
+  #PROMPT="%F{cyan}%D{%H:%M:%S}%f %F{blue}%~%f ${vcs_info_msg_0_} $prompt_status %# "
+  PROMPT="%F{cyan}%D{%H:%M:%S}%f %F{magenta}[%d $cmd_duration sec]%f %F{blue}%~%f ${vcs_info_msg_0_} $prompt_status %# "
+
+}
+
+# Set the precmd function to be called before each command execution
+precmd_functions+=(custom_prompt)
+
+
+. ~/my/dotfiles/zsh/aliases
