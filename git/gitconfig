@@ -13,6 +13,7 @@
 # 	path = /Users/sri/Desktop/emerge-test/emerge-for-git
 [push]
 	default = simple
+	autoSetupRemote = true
 [alias]
         contains = branch -a --contains
         which = !git branch -a | grep

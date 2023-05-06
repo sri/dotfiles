@@ -80,3 +80,4 @@ precmd_functions+=(custom_prompt)
 
 
 . ~/my/dotfiles/zsh/aliases
+echo done loading my zshrc
