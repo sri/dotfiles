@@ -37,7 +37,7 @@ setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
 export PYTHONSTARTUP=~/.pythonrc.py
 
-if [[ -e ~/.bashrc_private ]]; then
+if [[ -e ~/.zshrc_private ]]; then
   . ~/.zshrc_private
 fi
 
