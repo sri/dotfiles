@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-import sys, os, webbrowser
+import sys, os
 
-if len(sys.argv) != 2:
-    sys.exit(f"usage: {sys.argv[0]} arg")
-arg = sys.argv[1]
-if os.path.exists(arg) or arg.startswith("http"):
-    url = arg
-else:
-    url = f"https://{arg}"
-webbrowser.open(url)
+def main():
+    if len(sys.argv) != 2:
+        sys.exit(f"usage: {sys.argv[0]} url_or_local_file_or_dir")
+
+    url = sys.argv[1]
+    if not os.path.exists(arg) and not arg.startswith("http"):
+        url = f"https://{arg}"
+
+    os.system(f"open -a 'Google Chrome' '{url}'")
+
+
+if __name__ == "__main__":
+    main()
