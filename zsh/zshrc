@@ -74,8 +74,7 @@ function custom_prompt() {
   fi
 
   # Set the prompt (PS1)
-  #PROMPT="%F{cyan}%D{%H:%M:%S}%f %F{blue}%~%f ${vcs_info_msg_0_} $prompt_status %# "
-  PROMPT="%F{cyan}%D{%H:%M:%S}%f %F{magenta}[%d $cmd_duration sec]%f %F{blue}%~%f ${vcs_info_msg_0_} $prompt_status"$'\n'"→ "
+  PROMPT="%F{cyan}%D{%H:%M:%S}%f %F{magenta}[%~]%f ${vcs_info_msg_0_} {$cmd_duration s:$prompt_status}"$'\n'"→ "
 
 }
 

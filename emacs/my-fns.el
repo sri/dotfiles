@@ -360,6 +360,12 @@ copied."
   (interactive)
   (helm-grep-do-git-grep 1))
 
+(defun my/git-insert-current-branch ()
+  (interactive)
+  (let ((current-branch (magit-get-current-branch)))
+    (when current-branch
+      (insert current-branch " "))))
+
 (defun my/google-search ()
   "Google the currently selected region or the previous word.
 Shows the term before doing so."

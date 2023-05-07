@@ -1,34 +1,23 @@
 #!/usr/bin/env python3
+# This script prints out all the directories in the PATH environment
+# variable and marks duplicates and non-existent directories.
+import sys, os
 
-import sys
-import os
+seen = set()
+paths = os.getenv("PATH", "").split(os.pathsep)
 
-"""This script prints out all the directories in the PATH environment
-variable and marks duplicates and non-existent directories. """
+print("[marking duplicates and missing directories]")
+for i, d in enumerate(paths, start=1):
+    warnings = []
+    if d in seen:
+        warnings.append("duplicate")
+    if not os.path.isdir(d):
+        warnings.append("not a directory")
 
-def highlight(string):
-    # red color
-    return f"\033[31m{string}\033[0m"
+    seen.add(d)
+    highlight: str = (
+        f"\033[31m{', '.join(warnings)}\033[0m"
+        if len(warnings) > 0
+        else "")
 
-def main():
-    full_homedir = os.path.expanduser("~")
-    dirs = os.getenv("PATH").split(os.pathsep)
-
-    seen = set()
-    for i, dir in enumerate(dirs, start=1):
-        msgs = []
-        if dir in seen: msgs.append("duplicate")
-        if not os.path.isdir(dir): msgs.append("not a directory")
-
-        seen.add(dir)
-
-        if dir.startswith(full_homedir):
-            dir = dir.replace(full_homedir, "~")
-
-        out = f"{i} {dir}"
-        if msgs:
-            out = highlight(f"{out} | {', '.join(msgs)}")
-        print(out)
-
-if __name__ == "__main__":
-    main()
+    print(f"{i:2} {d}{highlight}")

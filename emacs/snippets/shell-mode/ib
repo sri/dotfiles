@@ -1,0 +1,4 @@
+# name: ib
+# key: ib
+# --
+`(magit-get-current-branch)` $0

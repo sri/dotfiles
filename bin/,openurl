@@ -1,22 +1,11 @@
 #!/usr/bin/env python3
+import sys, os, webbrowser
 
-import os
-import sys
-import webbrowser
-
-def fix_url(url):
-    if not url.startswith('http'):
-        url = f"https://{url}"
-    return url
-
-def main(args):
-    for arg in args:
-        if os.path.exists(arg):
-            print(f"opening file: {arg}")
-        else:
-            arg = fix_url(arg)
-            print(f"opening url: {arg}")
-        webbrowser.open(arg)
-
-if __name__ == '__main__':
-    main(sys.argv[1:] or ["."])
+if len(sys.argv) != 2:
+    sys.exit(f"usage: {sys.argv[0]} arg")
+arg = sys.argv[1]
+if os.path.exists(arg) or arg.startswith("http"):
+    url = arg
+else:
+    url = f"https://{arg}"
+webbrowser.open(url)
