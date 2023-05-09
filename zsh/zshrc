@@ -57,10 +57,11 @@ preexec_functions+=(preexec)
 
 # Function to customize the prompt
 function custom_prompt() {
-  local cmd_duration=$((SECONDS - cmd_start_time))
-
   # Get the exit status of the last command
+  # NOTE: this needs to be the first statement in this function.
   local last_exit_status=$?
+
+  local cmd_duration=$((SECONDS - cmd_start_time))
 
   # Get the current Git branch, if any
   vcs_info
