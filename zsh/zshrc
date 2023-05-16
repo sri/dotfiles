@@ -37,10 +37,6 @@ setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
 export PYTHONSTARTUP=~/.pythonrc.py
 
-if [[ -e ~/.zshrc_private ]]; then
-  . ~/.zshrc_private
-fi
-
 
 # Load Git prompt functions
 autoload -Uz vcs_info
@@ -85,3 +81,7 @@ precmd_functions+=(custom_prompt)
 
 . ~/my/dotfiles/zsh/aliases
 echo done loading my zshrc
+
+if [[ -e ~/.zshrc_private ]]; then
+  . ~/.zshrc_private
+fi
