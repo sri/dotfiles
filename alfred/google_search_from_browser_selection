@@ -1,0 +1,5 @@
+tell application "Google Chrome"
+  tell front window's active tab to set mySelection to execute javascript "document.getSelection().toString();"
+  set newTab to make new tab at end of tabs of front window
+  set URL of newTab to "https://www.google.com/search?q=" & mySelection
+end tell
