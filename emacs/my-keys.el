@@ -106,8 +106,8 @@
  ("C-c l" . toggle-truncate-lines)
  ("C-c m" . imenu)
 
- ("C-<up>" . my/find-prev-matching-indentation-level)
- ("C-<down>" . my/find-next-matching-indentation-level)
+ ("C-S-<up>" . my/find-prev-matching-indentation-level)
+ ("C-S-<down>" . my/find-next-matching-indentation-level)
  ("C-S-<up>" . backward-paragraph)
  ("C-S-<down>" . forward-paragraph)
 

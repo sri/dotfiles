@@ -63,23 +63,21 @@
 (setq org-confirm-babel-evaluate nil)
 
 (setq org-todo-keyword-faces
-      '(("TODO" :foreground "#4b4f89")
-        ("INPROGRESS" :foreground "#4b4f89" :box t)
-        ("APPT" :foreground "medium blue" :weight bold)
-        ("NOTE" :foreground "brown" :weight bold)
-        ("STARTED" :foreground "dark orange" :weight bold)
-        ("WAITING" :foreground "red" :weight bold)
-        ("DELEGATED" :foreground "dark violet" :weight bold)
-        ("DEFERRED" :foreground "dark blue" :weight bold)
-        ("SOMEDAY" :foreground "#088e8e" :weight bold)
-        ("PROJECT" :foreground "#088e8e" :weight bold)))
+      '(("NOTE" :foreground "#4b4f89")
+        ("IDEA" :foreground "#4b4f89" :box t)
+        ("TODO" :foreground "medium blue" :weight bold)
+        ("SOON" :foreground "brown" :weight bold)
+        ("WAIT" :foreground "dark orange" :weight bold)
+        ("HOLD" :foreground "red" :weight bold)
+        ("HACK" :foreground "dark violet" :weight bold)
+        ("NEXT" :foreground "dark blue" :weight bold)
+        ("DONE" :foreground "#088e8e" :weight bold)
+        ("STOP" :foreground "#088e8e" :weight bold)))
 
 (setq org-todo-keywords
-      '((sequence "TODO" "APPT" "NOTE" "IN-PROGRESS" "WAITING"
-                  "DELEGATED" "DEFERRED"
-                  "SOMEDAY" "PROJECT"
+      '((sequence "NOTE" "IDEA" "TODO" "SOON" "WAIT" "HOLD" "HACK" "NEXT"
                   "|"
-                  "DONE" "CANCELED")))
+                  "DONE" "STOP")))
 
 (defun my/org-insert-chrome-link ()
   (interactive)
