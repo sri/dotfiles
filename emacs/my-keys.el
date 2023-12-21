@@ -117,6 +117,7 @@
  ("C-c r" . counsel-recentf)
  ("C-c s" . sort-lines)
  ("C-c v" . my/new-buffer)
+ ("C-c V" . my/new-buffer-ask)
  ("C-c O" . open-line)
  ("C-c C-l" . my/toggle-auto-hscroll-mode)
  ("<C-backspace>" . subword-backward-kill)

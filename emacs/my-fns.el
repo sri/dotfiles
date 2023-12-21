@@ -479,6 +479,10 @@ See my-region-bindings-mode.el on how this is activated."
   (interactive)
   (my/find-next-matching-indentation-level t))
 
+(defun my/new-buffer-ask (&optional arg)
+  (interactive)
+  (my/new-buffer t))
+
 (defun my/new-buffer (&optional arg)
   (interactive "P")
   (let ((buf (if arg
