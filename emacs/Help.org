@@ -1,0 +1,54 @@
+
+* Completions
+|-------+---------------------------+--------------------------|
+| Key   | Function                  | Description              |
+|-------+---------------------------+--------------------------|
+| C-o   | counsel-git               | find file in git project |
+| C-n   | counsel-M-x               |                          |
+| C-c r | counsel-recentf           |                          |
+| C-h v | counsel-describe-variable |                          |
+| C-h f | counsel-describe-function |                          |
+| C-v   | ivy-switch-buffer         |                          |
+|-------+---------------------------+--------------------------|
+
+** Ivy help
+ - with ivy open:
+|---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Subkey  | Description                                                                                                                                                                        |
+|---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| C-SPC   | mark/unmark a selection, RET will open all selections                                                                                                                              |
+|         | ivy toggle all marks                                                                                                                                                               |
+| M-C-n   | do the action and move to the next selection                                                                                                                                       |
+| M-j     | copy the word at point from the most recent window and use that as a selection and do the selection                                                                                |
+| C-c C-o | open a buffer of the matches in the mode to do something; for example, for counsel-git, open the files in dired-mode; for me, F will open all marked files in dired in new windows |
+| C-i     | use avy to quickly select by typing a letter                                                                                                                                       |
+|---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+** TODOs
+*** ivy-posframe
+*** ivy-rich
+** Resources
+https://www.youtube.com/watch?v=QcPenVmmQyM&t=272
+
+
+
+my-keys.el:12:;; (global-set-key (kbd "M-y") 'counsel-yank-pop)
+my-keys.el:13:;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+my-keys.el:14:;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+my-keys.el:15:;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
+my-keys.el:16:;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+my-keys.el:17:;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+my-keys.el:18:;; (global-set-key (kbd "<f2> j") 'counsel-set-variable)
+my-keys.el:19:;; (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+my-keys.el:20:;; (global-set-key (kbd "C-c v") 'ivy-push-view)
+my-keys.el:21:;; (global-set-key (kbd "C-c V") 'ivy-pop-view)
+my-keys.el:91: ("C-v" . ivy-switch-buffer)
+my-keys.el:117: ("C-c r" . counsel-recentf)
+my-keys.el:143: ("C-h v" . counsel-describe-variable)
+my-keys.el:144: ("C-h f" . counsel-describe-function)
+
+
+    443:: 1691152066:0;brew tap d12frosted/emacs-plus
+    444:: 1691152437:0;brew uninstall emacs-plus
+    445:: 1691152504:0;brew uninstall emacs-plus@30
+    446:: 1691152550:0;brew install emacs-plus@30
