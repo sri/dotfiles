@@ -70,7 +70,7 @@
  ("C-|" . tab-bar-switch-to-next-tab)
  ("C-a" . my/beginning-of-line)
  ("C-b" . backward-kill-word)
- ("C-f" . swiper)
+ ("C-f" . isearch-forward)
  ("S-C-f" . isearch-forward-regexp)
  ("C-j" . other-window)
  ("C-S-j" . ace-jump-word-mode)
