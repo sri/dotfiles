@@ -54,10 +54,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- `(default ((t (:height ,(my/font-size) :family "JetBrains Mono" :foreground "#999999"))))
- '(helm-separator ((t (:foreground "saddle brown"))))
+ '(default ((t (:height 170 :family "JetBrains Mono" :foreground "#999999"))))
  '(diff-refine-added ((t (:background "#156a15" :foreground "#aaaaaa"))))
  '(diff-refine-removed ((t (:background "#6a1515" :foreground "#aaaaaa"))))
+ '(helm-separator ((t (:foreground "saddle brown"))))
  '(tab-bar-tab ((t (:background "#282828" :foreground "#aaaaaa"))))
  '(tab-bar-tab-inactive ((t (:background "#777777" :foreground "#aaaaaa")))))
 '(

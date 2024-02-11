@@ -72,7 +72,7 @@ function my_ruby() {
     local arg=""
     if [ -n "$INSIDE_EMACS" ]; then
         # Without this, irb hangs when launched inside an Emacs shell.
-        arg="--nomultiline"
+        arg="--nomultiline --noautocomplete"
     fi
     if [ -f ./Gemfile ]; then
         cmd="rails console"
