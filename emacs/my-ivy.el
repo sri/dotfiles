@@ -1,10 +1,12 @@
 (require 'ivy)
+(require 'counsel)
 (require 'ivy-avy)
 
 (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
 (setq ivy-wrap t)
 (setq ivy-count-format "(%d/%d) ")
 (setq ivy-use-virtual-buffers t)
+(setq counsel-yank-pop-separator "\n----------------\n")
 
 (defun my/ivy-toggle-mark ()
   "Toggle mark for current candidate and move forwards."

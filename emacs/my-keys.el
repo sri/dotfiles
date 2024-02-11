@@ -70,7 +70,7 @@
  ("C-|" . tab-bar-switch-to-next-tab)
  ("C-a" . my/beginning-of-line)
  ("C-b" . backward-kill-word)
- ("C-f" . isearch-forward)
+ ("C-f" . swiper)
  ("S-C-f" . isearch-forward-regexp)
  ("C-j" . other-window)
  ("C-S-j" . ace-jump-word-mode)
@@ -168,7 +168,7 @@
            ("b" . magit-blame-addition)
            ("f" . magit-log-buffer-file)
            ("r" . my/git-grep-from-root)
-           ("g" . helm-grep-do-git-grep))
+           ("g" . counsel-git-grep))
 
 (when (eq system-type 'darwin)
   ;; Command-<enter>

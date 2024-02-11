@@ -172,8 +172,7 @@ decoded URL in the minibuffer."
   (call-interactively 'counsel-git))
 
 (defun my/ffap-or-find-file (arg)
-  "Find the file at point or ask the user for file's path.
-The latter method uses `helm-find-files'."
+  "Find the file at point or ask the user for file's path."
   (interactive "P")
   (if (or arg
           (memq major-mode '(dired-mode)))
@@ -358,7 +357,7 @@ copied."
 
 (defun my/git-grep-from-root ()
   (interactive)
-  (helm-grep-do-git-grep 1))
+  (call-interactively 'counsel-git-grep))
 
 (defun my/git-insert-current-branch ()
   (interactive)

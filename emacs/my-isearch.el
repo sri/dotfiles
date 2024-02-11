@@ -18,6 +18,7 @@
                     (goto-char (window-start))
                     (re-search-backward (regexp-quote isearch-string) nil t)))))))
     (if (null next-non-visible-match)
+        ;; TODO: maybe move to the last match
         (message "No matches found beyond this window")
       (goto-char next-non-visible-match)
       (cond (isearch-forward
