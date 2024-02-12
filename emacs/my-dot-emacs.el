@@ -183,10 +183,11 @@
                    flycheck flycheck-golangci-lint git-link go-eldoc
                    go-mode gotest gruvbox-theme helm helm-ls-git
                    helm-posframe helm-projectile hydra ivy ivy-avy
-                   ivy-hydra ivy-posframe ivy-rich kaolin-themes
-                   leuven-theme macrostep magit markdown-mode
-                   multiple-cursors neotree org org-bullets poet-theme
-                   powerline projectile protobuf-mode rainbow-mode
+                   ivy-hydra ivy-posframe ivy-rich
+                   jetbrains-darcula-theme kaolin-themes leuven-theme
+                   macrostep magit markdown-mode multiple-cursors
+                   neotree org org-bullets poet-theme powerline
+                   projectile protobuf-mode rainbow-mode
                    region-bindings-mode rg rjsx-mode ruby-end s
                    smart-mode-line solarized-theme spacemacs-theme
                    swiper treemacs typescript-mode undo-tree

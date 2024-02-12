@@ -1,13 +1,13 @@
 (defvar my-themes
   '(
-    gruvbox-dark-medium
+    jetbrains-darcula
     modus-vivendi
+    solarized-dark
+    gruvbox-dark-medium
     kaolin-dark
     modus-operandi
-    solarized-dark
     zenburn
     solarized-light
-    jetbrains-darcula
     leuven
     spacemacs-dark
     ))
@@ -17,7 +17,7 @@
   (load-theme theme :no-confirm)
   (message "trying theme: %s" theme))
 
-;; (my-try-theme 'solarized-dark)
+;; (my-try-theme 'jetbrains-darcula)
 
 (let ((theme (car my-themes)))
   (when theme
