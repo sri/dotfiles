@@ -1,3 +1,6 @@
+https://www.youtube.com/watch?v=43Dg5zYPHTU
+
+
 * Completions features
 ** mark, unmark, toggle marks, aka multi-select
 ** do action for all selected
@@ -54,3 +57,8 @@ brew tap d12frosted/emacs-plus
 brew uninstall emacs-plus
 brew uninstall emacs-plus@30
 brew install emacs-plus@30
+* Org setup
+** Resources
+https://amitp.blogspot.com/2023/12/status-codes.html
+*** https://www.youtube.com/watch?v=31gwvApo8zg&t=1194s
+
