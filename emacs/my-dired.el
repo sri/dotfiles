@@ -1,5 +1,12 @@
 (require 'dired-x)
 
+(defun my/dired-sort-by-size ()
+  (interactive)
+  (dired-hide-details-mode -1)
+  (let ((old dired-actual-switches))
+    (dired-sort-other "-alhS")
+    (setq dired-actual-switches old)))
+
 (defun my/dired ()
   (interactive)
   (let ((file-name buffer-file-name))
@@ -64,6 +71,7 @@
 
             (bind-keys :map dired-mode-map
                        ("b" . dired-sidebar-toggle-with-current-directory)
+                       ("S" . my/dired-sort-by-size)
                        ("C-c C-d" . dired-hide-details-mode)
                        ("," . dired-prev-dirline)
                        ("." . dired-next-dirline)

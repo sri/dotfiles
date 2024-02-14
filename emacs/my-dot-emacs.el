@@ -54,10 +54,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 170 :family "JetBrains Mono"))))
- ;'(diff-refine-added ((t (:background "#156a15" :foreground "#aaaaaa"))))
- ;'(diff-refine-removed ((t (:background "#6a1515" :foreground "#aaaaaa"))))
- )
+ '(default ((t (:height 170 :family "JetBrains Mono")))))
 '(
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line ((t (:foreground "#3B84CC"))))
@@ -177,15 +174,15 @@
    '(ace-jump-mode ample-theme anzu bm centaur-tabs chatgpt-shell company
                    company-go consult counsel csv-mode diff-hl
                    diminish dired-sidebar dracula-theme
-                   elisp-slime-nav exec-path-from-shell expand-region
-                   flycheck flycheck-golangci-lint git-link go-eldoc
-                   go-mode gotest gruvbox-theme helm helm-ls-git
-                   helm-posframe helm-projectile hydra ivy ivy-avy
-                   ivy-hydra ivy-posframe ivy-rich
+                   elisp-slime-nav embark exec-path-from-shell
+                   expand-region flycheck flycheck-golangci-lint
+                   git-link go-eldoc go-mode gotest gruvbox-theme helm
+                   helm-ls-git helm-posframe helm-projectile hydra ivy
+                   ivy-avy ivy-hydra ivy-posframe ivy-rich
                    jetbrains-darcula-theme kaolin-themes leuven-theme
-                   macrostep magit markdown-mode multiple-cursors
-                   neotree org org-bullets poet-theme powerline
-                   projectile protobuf-mode rainbow-mode
+                   macrostep magit marginalia markdown-mode
+                   multiple-cursors neotree org org-bullets poet-theme
+                   powerline projectile protobuf-mode rainbow-mode
                    region-bindings-mode rg rjsx-mode ruby-end s
                    smart-mode-line solarized-theme spacemacs-theme
                    swiper treemacs typescript-mode undo-tree
