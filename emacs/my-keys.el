@@ -148,7 +148,7 @@
  ("C-x b" . list-buffers)
  ("C-x C-b" . dired-sidebar-toggle-with-current-directory)
  ("C-x c" . compile)
- ("M-g" . goto-line)
+ ("M-g" . consult-goto-line)
  ("C-x l" . my/count-lines-buffer)
  ("C-x r K" . my/copy-from-starting-col-till-eol)
  ("C-x s" . my/start-line-or-region-swap)
