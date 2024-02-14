@@ -76,7 +76,6 @@ Fundamental mode."
 (setq mode-line-compact t)
 
 (setq fill-column 80)
-(add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
 
 ;; when running make, set NATIVE_FULL_AOT=1 to
 ;; native compile all libs
