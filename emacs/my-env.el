@@ -147,6 +147,7 @@ Fundamental mode."
 (make-variable-buffer-local 'column-number-mode)
 
 (global-font-lock-mode -1)
+(which-function-mode 1)
 
 ;; Calendar
 (add-hook 'calendar-mode-hook

@@ -92,6 +92,7 @@
  ("C-c a" . org-agenda)
  ("C-c b" . rename-buffer)
  ("C-c c" . calendar)
+ ("C-c e" . embark-act)
  ("C-c f" . my/rg-from-repo-root)
  ("C-c F" . my/rg)
  ("C-c i" . my/change-inside-pair)
