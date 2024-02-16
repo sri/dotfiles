@@ -484,10 +484,10 @@ See my-region-bindings-mode.el on how this is activated."
 
 (defun my/new-buffer (&optional arg paste-from-kill-ring)
   (interactive "P")
-  (let ((buf (get-buffer-create (if arg
-                                    (read-string "Buffer name: ")
-                                  "*scratch*"))))
+  (let* ((name (if arg (read-string "Buffer name: ") "*scratch*"))
+         (buf (generate-new-buffer name)))
     (switch-to-buffer buf)
+    (my/set-major-mode name)
     (when paste-from-kill-ring
       (yank))))
 

@@ -1,11 +1,16 @@
-(defun my/set-major-mode ()
+(defun my/set-major-mode (&optional name)
   "For temporary buffers, set the mode based on the name.
 Defaults to text mode. Yasnippets won't be turned on for
 Fundamental mode."
   (when (and (eq major-mode 'fundamental-mode)
              (null (buffer-file-name)))
-    (set-auto-mode)
-    t))
+    (let ((mode (assoc-default (or name (buffer-name))
+                               auto-mode-alist 'string-match)))
+      (if (and mode
+               (not (consp mode)))
+          (funcall mode)
+        (text-mode))
+    t)))
 
 (setq-default major-mode 'my/set-major-mode)
 
