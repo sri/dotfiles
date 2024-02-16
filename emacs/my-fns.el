@@ -484,8 +484,8 @@ See my-region-bindings-mode.el on how this is activated."
 
 (defun my/new-buffer (&optional arg paste-from-kill-ring)
   (interactive "P")
-  (let ((buf (generate-new-buffer (if arg
-                                      (read-string "Buffer name: ")
+  (let ((buf (get-buffer-create (if arg
+                                    (read-string "Buffer name: ")
                                   "*scratch*"))))
     (switch-to-buffer buf)
     (when paste-from-kill-ring
@@ -496,7 +496,6 @@ See my-region-bindings-mode.el on how this is activated."
   (let ((system-uptime (s-trim (shell-command-to-string "uptime")))
         (emacs-uptime (emacs-uptime)))
     (message "System: %s\nEmacs:  %s" system-uptime emacs-uptime)))
-
 
 ;; https://stackoverflow.com/questions/6172054/how-can-i-random-sort-lines-in-a-buffer
 (defun my/shuffle-lines (beg end)

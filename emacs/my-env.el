@@ -4,13 +4,8 @@ Defaults to text mode. Yasnippets won't be turned on for
 Fundamental mode."
   (when (and (eq major-mode 'fundamental-mode)
              (null (buffer-file-name)))
-    (let ((mode (assoc-default (buffer-name)
-                               auto-mode-alist 'string-match)))
-      (if (and mode
-               (not (consp mode)))
-          (funcall mode)
-        (text-mode))
-      t)))
+    (set-auto-mode)
+    t))
 
 (setq-default major-mode 'my/set-major-mode)
 
@@ -40,12 +35,12 @@ Fundamental mode."
 
 (setq-default bidi-display-reordering nil)
 (setq auto-hscroll-mode t)
-(setq text-quoting-style 'grave)
+(setq text-quoting-style 'straight) ; text quoting in help & messages
 (put 'narrow-to-region 'disabled nil)
 (setq mouse-drag-and-drop-region 'shift)
-(setq large-file-warning-threshold nil)
+(setq large-file-warning-threshold 1000000000) ; 1GB
 (set-language-environment "UTF-8")
-(setq message-log 16384)
+(setq messages-buffer-max-lines t)
 (visual-line-mode 1)
 (setq save-interprogram-paste-before-kill t)
 (setq highlight-nonselected-windows t)
@@ -56,12 +51,11 @@ Fundamental mode."
 (setq make-backup-files nil)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
-(setq inhibit-startup-echo-area-message "sri")
 (setq initial-scratch-message nil)
 (setq visible-bell nil)
 (setq ring-bell-function (lambda ()))
 (setq disabled-command-hook nil)
-(setq kill-ring-max 300)
+(setq kill-ring-max 1000)
 (setq kill-whole-line t)
 (setq kill-read-only-ok t)
 (setq mouse-yank-at-point t)
