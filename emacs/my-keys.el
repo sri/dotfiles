@@ -108,7 +108,6 @@
  ("C-c O" . open-line)
  ("C-c C-l" . my/toggle-auto-hscroll-mode)
  ("<C-backspace>" . subword-backward-kill)
- ("S-C-SPC" . helm-all-mark-rings)
 
  ("M-`" . my/shell-for-buffer) ; works under both guis and terminals
  ("M-0" . delete-window)
@@ -125,7 +124,7 @@
  ("M-d" . my/dired)
  ("C-x g" . magit-status)
  ("M-k" . my/kill-whole-line)
- ("M-o" . helm-projectile)
+ ("M-o" . consult-projectile)
 
  ("M-y" . consult-yank-pop)
 

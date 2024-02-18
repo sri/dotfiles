@@ -53,6 +53,7 @@ my-keys.el:20:;; (global-set-key (kbd "C-c v") 'ivy-push-view)
 my-keys.el:21:;; (global-set-key (kbd "C-c V") 'ivy-pop-view)
 
 * Cousult Completions
+https://www.youtube.com/watch?v=d3aaxOqwHhI
 Narrowing
 
 - why doesn't M-x ins pack match 'package-install'?

@@ -11,7 +11,6 @@
           anzu-mode
           ruby-end-mode
           auto-fill-function
-          helm-mode
           elisp-slime-nav-mode
           org-indent-mode
           whitespace-mode
