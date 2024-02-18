@@ -172,17 +172,17 @@
               org-rmail org-w3m org-velocity))
  '(package-selected-packages
    '(ace-jump-mode ample-theme anzu bm centaur-tabs chatgpt-shell company
-                   company-go consult counsel csv-mode diff-hl
+                   company-go consult csv-mode diff-hl
                    diminish dired-sidebar dracula-theme
-                   elisp-slime-nav embark exec-path-from-shell
-                   expand-region flycheck flycheck-golangci-lint
-                   git-link go-eldoc go-mode gotest gruvbox-theme helm
-                   helm-ls-git helm-posframe helm-projectile hydra ivy
-                   ivy-avy ivy-hydra ivy-posframe ivy-rich
-                   jetbrains-darcula-theme kaolin-themes leuven-theme
-                   macrostep magit marginalia markdown-mode
-                   multiple-cursors neotree org org-bullets poet-theme
-                   powerline projectile protobuf-mode rainbow-mode
+                   elisp-slime-nav embark embark-consult
+                   exec-path-from-shell expand-region flycheck
+                   flycheck-golangci-lint git-link go-eldoc go-mode
+                   gotest gruvbox-theme
+                   hydra jetbrains-darcula-theme
+                   kaolin-themes leuven-theme macrostep magit
+                   marginalia markdown-mode multiple-cursors neotree
+                   orderless org org-bullets poet-theme powerline
+                   projectile protobuf-mode rainbow-mode
                    region-bindings-mode rg rjsx-mode ruby-end s
                    smart-mode-line solarized-theme spacemacs-theme
                    swiper treemacs typescript-mode undo-tree

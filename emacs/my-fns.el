@@ -169,7 +169,7 @@ decoded URL in the minibuffer."
 (require 'ffap)
 
 (defun my/open-project-file-or-find-files ()
-  (call-interactively 'counsel-git))
+  (call-interactively 'projectile-find-file))
 
 (defun my/ffap-or-find-file (arg)
   "Find the file at point or ask the user for file's path."
@@ -357,7 +357,7 @@ copied."
 
 (defun my/git-grep-from-root ()
   (interactive)
-  (call-interactively 'counsel-git-grep))
+  (consult-git-grep (my/git-repo-root)))
 
 (defun my/git-insert-current-branch ()
   (interactive)
@@ -441,15 +441,6 @@ See my-region-bindings-mode.el on how this is activated."
     (ignore-errors (backward-sexp))
     (exchange-point-and-mark)
     (forward-sexp)))
-
-(defun my/meta-x (arg)
-  (interactive "P")
-  (let ((narrowing-fn 'counsel-M-x))
-    (call-interactively
-     (if (or arg
-             (not (fboundp narrowing-fn)))
-         'execute-extended-command
-       narrowing-fn))))
 
 (defvar my/find-matching-indentation-level-keymap
   (let ((map (make-sparse-keymap)))

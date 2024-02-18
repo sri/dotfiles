@@ -134,12 +134,6 @@ Fundamental mode."
 (server-start)
 (electric-pair-mode)
 
-(ido-mode 1)
-(setq ido-enable-flex-matching t)
-(setq ido-default-file-method 'selected-window)
-(setq ido-default-buffer-method 'selected-window)
-(setq ido-create-new-buffer 'always)
-
 (setq diff-switches '("-u"))
 
 (make-variable-buffer-local 'line-number-mode)
@@ -156,6 +150,26 @@ Fundamental mode."
             (define-key calendar-mode-map (kbd "n") 'calendar-scroll-left-three-months)
             (define-key calendar-mode-map (kbd "p") 'calendar-scroll-right-three-months)))
 
+;; Better completions
+;; consult - previews, grouping, narrowing,
+;; vertico,
+;;  marginalia
+(require 'orderless)
+(setq completion-styles '(orderless basic substring initials flex))
+(setq completion-category-defaults nil)
+
+(require 'vertico)
+(vertico-mode 1)
+(setq vertico-cycle t)
+
+(require 'marginalia)
+(marginalia-mode 1)
+
+(require 'consult)
+
+(setq minibuffer-prompt-properties
+      '(read-only t cursor-intangible t face minibuffer-prompt))
+(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
 (require 'hippie-exp)
 (setq hippie-expand-try-functions-list

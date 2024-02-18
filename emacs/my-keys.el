@@ -6,14 +6,6 @@
 (require 'subword)
 (require 'bind-key)
 
-;; (global-set-key (kbd "C-s") 'swiper-isearch)
-;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
-;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-;; (global-set-key (kbd "<f2> j") 'counsel-set-variable)
-;; (global-set-key (kbd "C-c v") 'ivy-push-view)
-;; (global-set-key (kbd "C-c V") 'ivy-pop-view)
-
 (bind-keys
  ;; Key which don't want to override in all modes.
  ;; For example, Magit does useful things with C-i
@@ -54,11 +46,11 @@
 
 ;; https://emacs.stackexchange.com/questions/32183/how-to-make-exceptions-to-bind-key-overriding-behavior
 
-(define-key ido-common-completion-map
-            (kbd "<C-return>")
-            'ido-enter-dired)
-
 (bind-key* "C-d" 'kill-word (not (minibufferp)))
+
+(bind-keys :map minibuffer-mode-map
+           ;("C-d" . kill-word)
+           ("C-b" . backward-kill-word))
 
 (bind-keys*
  ("<C-tab>" . tab-next)
@@ -77,13 +69,13 @@
  ("C-S-j" . ace-jump-word-mode)
  ("C-k" . my/kill-line-or-region)
  ("S-C-k" . my/copy-line-or-region)
- ("C-n" . my/meta-x)
+ ("C-n" . execute-extended-command)
  ("C-o" . my/ffap-or-find-file)
  ("C-p" . my/shell)
  ("C-r" . vr/query-replace)
  ("C-s" . save-buffer)
  ;; ("C-t" . )
- ("C-v" . ivy-switch-buffer)
+ ("C-v" . consult-buffer)
  ("C-w" . my/kill-current-buffer)
  ("C-y" . my/yank)
  ("C-z" . undo)
@@ -109,7 +101,7 @@
  ("C-c o" . my/occur)
  ("C-c p" . my/copy-full-path)
  ("C-c q" . quoted-insert)
- ("C-c r" . counsel-recentf)
+ ("C-c r" . consult-recent-file)
  ("C-c s" . sort-lines)
  ("C-c v" . my/new-buffer)
  ("C-c V" . my/new-buffer-from-clip)
@@ -135,18 +127,14 @@
  ("M-k" . my/kill-whole-line)
  ("M-o" . helm-projectile)
 
- ("C-h v" . counsel-describe-variable)
- ("C-h f" . counsel-describe-function)
-
- ("M-x" . my/meta-x)
- ("M-y" . counsel-yank-pop)
+ ("M-y" . consult-yank-pop)
 
  ("<home>" . beginning-of-buffer)
  ("<end>" . end-of-buffer)
 
- ("C-x C-f" . counsel-find-file)
+ ;("C-x C-f" . consult-find-)
 
- ("C-x b" . list-buffers)
+ ("C-x b" . consult-buffer)
  ("C-x C-b" . dired-sidebar-toggle-with-current-directory)
  ("C-x c" . compile)
  ("M-g" . consult-goto-line)
@@ -169,7 +157,7 @@
            ("b" . magit-blame-addition)
            ("f" . magit-log-buffer-file)
            ("r" . my/git-grep-from-root)
-           ("g" . counsel-git-grep))
+           ("g" . consult-git-grep))
 
 (when (eq system-type 'darwin)
   ;; Command-<enter>

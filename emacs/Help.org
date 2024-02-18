@@ -9,7 +9,7 @@ https://www.youtube.com/watch?v=43Dg5zYPHTU
 ** arrow keys wrap around top/bottom
 ** paging up/down thru the selections
 ** completions for: open file in project (git), M-x, git-grep, recentf, switch-buffer, emacs lisp describe: var, fn 
-* Completions
+* Counsel & Ivy Completions
 |-------+---------------------------+--------------------------|
 | Key   | Function                  | Description              |
 |-------+---------------------------+--------------------------|
@@ -51,6 +51,18 @@ my-keys.el:18:;; (global-set-key (kbd "<f2> j") 'counsel-set-variable)
 my-keys.el:19:;; (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
 my-keys.el:20:;; (global-set-key (kbd "C-c v") 'ivy-push-view)
 my-keys.el:21:;; (global-set-key (kbd "C-c V") 'ivy-pop-view)
+
+* Cousult Completions
+Narrowing
+
+- why doesn't M-x ins pack match 'package-install'?
+
+|-----+----------+-------------|
+| Key | Function | Description |
+|-----+----------+-------------|
+| C-v |          |             |
+|-----+----------+-------------|
+
 
 * Installing Emacs from source on Mac using brew
 brew tap d12frosted/emacs-plus
