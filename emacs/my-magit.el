@@ -63,13 +63,8 @@
     (message "Opening %s" url)
     (browse-url url)))
 
-(add-hook 'magit-blame-mode-hook
-          (lambda ()
-            (font-lock-mode 1)))
-
 (add-hook 'magit-mode-hook
           (lambda ()
-            (font-lock-mode 1)
             (bind-keys :map magit-mode-map
                        ("~" . my/open-repo-in-browser)
                        ("C-c C-s" . magit-stash-list)

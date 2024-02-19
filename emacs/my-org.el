@@ -15,7 +15,6 @@
 (add-hook 'org-mode-hook
           (lambda ()
             (turn-on-auto-fill)
-            (font-lock-mode 1)
             (org-bullets-mode 1)
             (diminish 'org-indent-mode)
             (setq cursor-type 'bar)))

@@ -32,5 +32,3 @@
   (rg-rerun))
 
 (define-key rg-mode-map (kbd "R") 'my/redo-search-from-git-repo-root)
-
-(add-hook 'rg-mode-hook 'font-lock-mode)

@@ -61,13 +61,11 @@
 (add-hook 'dired-mode-hook
           (lambda ()
             (dired-omit-mode 1)
-            (font-lock-mode 1)
             (diminish 'dired-omit-mode)
             (dired-hide-details-mode 1)
             (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)
             (my/recentf-add-dired-directory)
-            (font-lock-mode 1)
 
             (bind-keys :map dired-mode-map
                        ("b" . dired-sidebar-toggle-with-current-directory)
