@@ -156,8 +156,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 (def-with-selected-window my/mode-line-goto-line
-  (let ((n (read-number "Goto line: ")))
-    (goto-line n)))
+  (call-interactively 'consult-goto-line))
 
 (defvar my/mode-line-column-line-number-mode-map
   (let ((map (make-sparse-keymap)))

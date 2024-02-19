@@ -55,8 +55,8 @@
 And then run the command."
   (interactive)
   (when (comint-after-pmark-p) ; rename only when at command prompt
-    (let* ((cmd (buffer-substring-no-properties (point-at-bol)
-                                                (point-at-eol)))
+    (let* ((cmd (buffer-substring-no-properties (pos-bol)
+                                                (pos-eol)))
            (bufname (format "*%s*" cmd)))
       (cond ((zerop (length cmd))
              ;; do nothing
@@ -67,6 +67,8 @@ And then run the command."
              (rename-buffer bufname)
              (comint-send-input))))))
 
+(require 'dash)
+
 (cl-defun my/shell (&optional arg)
   "Switch to the most recently active shell buffer.
 With a prefix arg, create a new shell.
@@ -74,7 +76,7 @@ Also, creates a shell when there are no other shells."
   (interactive "P")
   (when arg
     (shell (generate-new-buffer-name "*shell*"))
-    (return-from my/shell))
+    (cl-return-from my/shell))
   (let* ((shells (--filter (eq 'shell-mode (buffer-local-value 'major-mode it)) (buffer-list)))
          (shells (--sort (> (buffer-local-value 'my/shell-last-active-time it)
                             (buffer-local-value 'my/shell-last-active-time other))

@@ -162,6 +162,10 @@ Fundamental mode."
 (vertico-mode 1)
 (setq vertico-cycle t)
 
+(require 'vertico-directory)
+
+(require 'vertico-quick)
+
 (require 'marginalia)
 (marginalia-mode 1)
 
