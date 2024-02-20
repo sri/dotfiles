@@ -6,6 +6,10 @@
 (require 'subword)
 (require 'bind-key)
 
+(bind-keys :map vertico-map
+           ("C-." . embark-act)
+           ("C-'" . vertico-quick-insert))
+
 (bind-keys
  ;; Key which don't want to override in all modes.
  ;; For example, Magit does useful things with C-i

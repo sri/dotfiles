@@ -172,9 +172,6 @@ Fundamental mode."
 
 (require 'consult)
 
-(bind-keys :map vertico-map
-           ("C-." . embark-act)
-           ("C-'" . vertico-quick-insert))
 
 (setq minibuffer-prompt-properties
       '(read-only t cursor-intangible t face minibuffer-prompt))
