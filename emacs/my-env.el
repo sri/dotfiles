@@ -165,6 +165,8 @@ Fundamental mode."
 (require 'vertico-directory)
 
 (require 'vertico-quick)
+(define-key vertico-map (kbd "C-'") 'vertico-quick-insert)
+
 
 (require 'marginalia)
 (marginalia-mode 1)
