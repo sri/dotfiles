@@ -480,7 +480,9 @@ See my-region-bindings-mode.el on how this is activated."
     (switch-to-buffer buf)
     (my/set-major-mode name)
     (when paste-from-kill-ring
-      (yank))))
+      (save-excursion (yank))
+      (message "Pasted from kill-ring"))))
+
 
 (defun my/uptime ()
   (interactive)

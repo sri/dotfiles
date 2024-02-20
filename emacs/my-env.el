@@ -156,6 +156,8 @@ Fundamental mode."
 ;;  marginalia
 (require 'orderless)
 (setq completion-styles '(orderless basic substring initials flex))
+(setq completion-category-overrides
+      '((file (styles basic partial-completion))))
 (setq completion-category-defaults nil)
 
 (require 'vertico)
@@ -176,6 +178,9 @@ Fundamental mode."
 (setq minibuffer-prompt-properties
       '(read-only t cursor-intangible t face minibuffer-prompt))
 (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+(require 'project)
+(setq project-vc-merge-submodules nil)
 
 (require 'hippie-exp)
 (setq hippie-expand-try-functions-list
