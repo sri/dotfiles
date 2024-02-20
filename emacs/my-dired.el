@@ -49,7 +49,8 @@
 
 ;; From jwiegley's dotfiles:
 (defun my/recentf-add-dired-directory ()
-  (when (and dired-directory
+  (when (and (stringp dired-directory)
+             dired-directory
              (file-directory-p dired-directory)
              (not (string= dired-directory "/")))
     (recentf-add-file dired-directory)))

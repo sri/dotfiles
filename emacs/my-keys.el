@@ -57,7 +57,6 @@
  ("<C-tab>" . tab-next)
  ("<S-C-tab>" . tab-previous)
  ("M-t" . tab-new)
- ("C-." . embark-act)
  ("C-`" . my/shell-for-buffer)
  ("C-'" . my/jump-to-matching-char)
  ("C-\\" . other-frame)

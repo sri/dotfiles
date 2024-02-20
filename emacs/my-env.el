@@ -165,14 +165,16 @@ Fundamental mode."
 (setq vertico-cycle t)
 
 (require 'vertico-directory)
-
 (require 'vertico-quick)
-(define-key vertico-map (kbd "C-'") 'vertico-quick-insert)
 
 (require 'marginalia)
 (marginalia-mode 1)
 
 (require 'consult)
+
+(bind-keys :map vertico-map
+           ("C-." . embark-act)
+           ("C-'" . vertico-quick-insert))
 
 (setq minibuffer-prompt-properties
       '(read-only t cursor-intangible t face minibuffer-prompt))
