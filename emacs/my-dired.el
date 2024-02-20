@@ -74,7 +74,7 @@
                        ("C-c C-d" . dired-hide-details-mode)
                        ("," . dired-prev-dirline)
                        ("." . dired-next-dirline)
-                       ([mouse-2] . dired-find-file)
+                       ;([mouse-2] . dired-find-file)
                        ("a" . my/dired-first-file)
                        ("z" . my/dired-last-file)
                        ("f" . find-name-dired)
