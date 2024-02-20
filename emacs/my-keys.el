@@ -125,7 +125,7 @@
  ("M-d" . my/dired)
  ("C-x g" . magit-status)
  ("M-k" . my/kill-whole-line)
- ("M-o" . consult-projectile)
+ ("M-o" . project-find-file)
 
  ("M-y" . consult-yank-pop)
 

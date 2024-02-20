@@ -169,7 +169,6 @@ Fundamental mode."
 (require 'vertico-quick)
 (define-key vertico-map (kbd "C-'") 'vertico-quick-insert)
 
-
 (require 'marginalia)
 (marginalia-mode 1)
 
@@ -178,6 +177,12 @@ Fundamental mode."
 (setq minibuffer-prompt-properties
       '(read-only t cursor-intangible t face minibuffer-prompt))
 (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+(defun my/enable-override-global-mode () (override-global-mode 1))
+(defun my/disable-override-global-mode () (override-global-mode -11))
+
+(add-hook 'minibuffer-setup-hook 'my/disable-override-global-mode)
+(add-hook 'minibuffer-exit-hook 'my/enable-override-global-mode)
 
 (require 'project)
 (setq project-vc-merge-submodules nil)
