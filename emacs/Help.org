@@ -34,6 +34,17 @@ https://www.youtube.com/watch?v=43Dg5zYPHTU
 | C-c C-o | open a buffer of the matches in the mode to do something; for example, for counsel-git, open the files in dired-mode; for me, F will open all marked files in dired in new windows |
 | C-i     | use avy to quickly select by typing a letter                                                                                                                                       |
 |---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+* Consult
+|-------+---------------------------+-------------|
+| Key   | Function                  | Description |
+|-------+---------------------------+-------------|
+| C-SPC | embark-mark               |             |
+| C-n   | counsel-M-x               |             |
+| C-c r | counsel-recentf           |             |
+| C-h v | counsel-describe-variable |             |
+| C-h f | counsel-describe-function |             |
+| C-v   | ivy-switch-buffer         |             |
+|-------+---------------------------+-------------|
 
 ** TODOs
 *** ivy-posframe - 

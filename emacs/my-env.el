@@ -166,12 +166,21 @@ Fundamental mode."
 
 (require 'vertico-directory)
 (require 'vertico-quick)
+(require 'vertico-posframe)
+(vertico-posframe-mode 1)
+
 
 (require 'marginalia)
 (marginalia-mode 1)
 
 (require 'consult)
 
+(require 'savehist)
+(savehist-mode 1)
+(setq savehist-autosave-interval 60)
+
+(require 'saveplace)
+(save-place-mode 1)
 
 (setq minibuffer-prompt-properties
       '(read-only t cursor-intangible t face minibuffer-prompt))
