@@ -10,6 +10,7 @@
            ("C-." . embark-act)
            ("C-SPC" . embark-select)
            ("C-x" . embark-export)
+           ("C-h" . consult-history)
            ("C-'" . vertico-quick-insert))
 
 (bind-keys
@@ -44,6 +45,7 @@
  ("s-c" . my/copy-line-or-region)
  ("s-x" . my/kill-line-or-region)
  ("s-g" . consult-git-grep)
+ ("M-s-g" . consult-ripgrep)
  ("s-m" . magit-status)
  ("s-," . beginning-of-buffer)
  ("s-o" . my/ffap-or-find-file)
