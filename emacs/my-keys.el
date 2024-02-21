@@ -8,6 +8,8 @@
 
 (bind-keys :map vertico-map
            ("C-." . embark-act)
+           ("C-SPC" . embark-select)
+           ("C-x" . embark-export)
            ("C-'" . vertico-quick-insert))
 
 (bind-keys
