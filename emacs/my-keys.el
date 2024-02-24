@@ -13,6 +13,10 @@
            ("C-h" . consult-history)
            ("C-'" . vertico-quick-insert))
 
+(require 'embark)
+(bind-keys :map embark-region-map
+           ("g" . my/google-search))
+
 (bind-keys
  ;; Key which don't want to override in all modes.
  ;; For example, Magit does useful things with C-i
@@ -142,8 +146,8 @@
 
  ;("C-x C-f" . consult-find-)
 
- ("C-x b" . consult-buffer)
- ("C-x C-b" . dired-sidebar-toggle-with-current-directory)
+ ("C-x b" . ibuffer)
+ ("C-x C-b" . ibuffer)
  ("C-x c" . compile)
  ("M-g" . consult-goto-line)
  ("C-x l" . my/count-lines-buffer)

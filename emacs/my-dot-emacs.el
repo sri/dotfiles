@@ -152,20 +152,21 @@
  '(package-selected-packages
    '(ace-jump-mode ample-theme anzu bm centaur-tabs chatgpt-shell company
                    company-go consult csv-mode diff-hl diminish
-                   dired-sidebar dracula-theme elisp-slime-nav embark
-                   embark-consult exec-path-from-shell expand-region
-                   flycheck flycheck-golangci-lint git-link go-eldoc
-                   go-mode gotest gruvbox-theme hydra
-                   jetbrains-darcula-theme kaolin-themes leuven-theme
-                   macrostep magit marginalia markdown-mode
-                   multiple-cursors neotree orderless org org-bullets
-                   poet-theme powerline projectile protobuf-mode
-                   rainbow-mode region-bindings-mode rg rjsx-mode
-                   ruby-end s smart-mode-line solarized-theme
-                   spacemacs-theme swiper treemacs typescript-mode
-                   undo-tree use-package vertico vertico-posframe
-                   visual-regexp vterm web-mode which-key xterm-color
-                   yaml-mode yasnippet zenburn-theme zig-mode))
+                   dired-sidebar doom-themes dracula-theme
+                   elisp-slime-nav embark embark-consult
+                   exec-path-from-shell expand-region flycheck
+                   flycheck-golangci-lint git-link go-eldoc go-mode
+                   gotest gruvbox-theme hydra jetbrains-darcula-theme
+                   kaolin-themes leuven-theme macrostep magit
+                   marginalia markdown-mode multiple-cursors neotree
+                   orderless org org-bullets poet-theme powerline
+                   projectile protobuf-mode rainbow-mode
+                   region-bindings-mode rg rjsx-mode ruby-end s
+                   smart-mode-line solarized-theme spacemacs-theme
+                   swiper treemacs typescript-mode undo-tree
+                   use-package vertico vertico-posframe visual-regexp
+                   vterm web-mode which-key xterm-color yaml-mode
+                   yasnippet zenburn-theme zig-mode))
  '(typescript-indent-level 2))
 
 ;; Load the byte-compiled version of file.

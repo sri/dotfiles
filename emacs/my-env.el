@@ -14,7 +14,6 @@ Fundamental mode."
 
 (setq-default major-mode 'my/set-major-mode)
 
-
 (require 'whitespace)
 ;; For some reason tabs don't work, but tab-mark does...
 (setq whitespace-style
@@ -166,8 +165,8 @@ Fundamental mode."
 
 (require 'vertico-directory)
 (require 'vertico-quick)
-(require 'vertico-posframe)
-(vertico-posframe-mode 1)
+;; (require 'vertico-posframe)
+;; (vertico-posframe-mode -11)
 
 
 (require 'marginalia)
@@ -232,3 +231,44 @@ Fundamental mode."
 (recentf-mode 1)
 (setq recentf-max-menu-items 100)
 (setq recentf-max-saved-items 100)
+
+
+;; IBuffer
+(require 'ibuffer)
+
+(setq ibuffer-saved-filter-groups
+   '(("default"
+      ("Magit"
+       (or
+        (mode . magit-status-mode)
+        (mode . magit-log-mode)
+        (name . "\\*magit")
+        (name . "magit-")
+        (name . "git-monitor")))
+      ("Dired"
+       (mode . dired-mode))
+      ("Shells"
+       (or
+        (mode . shell-mode)
+        (mode . eshell-mode)
+        (mode . term-mode)
+        (mode . compilation-mode)))
+      ("Org"
+       (or
+        (name . "^\\*Calendar\\*$")
+        (name . "^\\*Org Agenda")
+        (name . "^ \\*Agenda")
+        (name . "^diary$")
+        (mode . org-mode)))
+      ("Lisp"
+       (mode . emacs-lisp-mode))
+      ("Emacs"
+       (or
+        (name . "^\\*scratch\\*$")
+        (name . "^\\*Messages\\*$")
+        (name . "^\\*\\(Customize\\|Help\\)")
+        (name . "\\*\\(Echo\\|Minibuf\\)"))))))
+
+(add-hook 'ibuffer-mode-hook
+	  (lambda ()
+	    (ibuffer-switch-to-saved-filter-groups "default")))

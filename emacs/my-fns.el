@@ -379,15 +379,15 @@ Shows the term before doing so."
              (let ((start (point)))
                (skip-chars-forward "a-zA-Z0-9_-")
                (buffer-substring-no-properties start (point)))))))
+    (setq term (s-trim (read-string "Google search: " term)))
     (if (string= term "")
         (message "nothing to google for")
-      (if (y-or-n-p (format "Google for `%s'?" term))
-          (with-current-buffer (get-buffer-create "*my/google-search*")
-            (start-process (buffer-name (current-buffer))
-                           (current-buffer)
-                           "open" "-a" "Google Chrome"
-                           (format "https://www.google.com/search?q=%s"
-                                   (url-encode-url term))))))))
+      (with-current-buffer (get-buffer-create "*my/google-search*")
+        (start-process (buffer-name (current-buffer))
+                       (current-buffer)
+                       "open" "-a" "Google Chrome"
+                       (format "https://www.google.com/search?q=%s"
+                               (url-encode-url term)))))))
 
 (defun my/toggle-auto-hscroll-mode ()
   "This comes into play when toggle-truncate-lines is enabled.

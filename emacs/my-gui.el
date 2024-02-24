@@ -1,10 +1,10 @@
 (defvar my-themes
   '(
     leuven
+    gruvbox-dark-medium
+    solarized-dark
     jetbrains-darcula
     modus-vivendi
-    solarized-dark
-    gruvbox-dark-medium
     kaolin-dark
     modus-operandi
     zenburn
@@ -17,7 +17,7 @@
   (load-theme theme :no-confirm)
   (message "trying theme: %s" theme))
 
-;; (my-try-theme 'leuven)
+;; (my-try-theme 'zenburn)
 
 (let ((theme (car my-themes)))
   (when theme
