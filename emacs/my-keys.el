@@ -10,7 +10,7 @@
            ("C-." . embark-act)
            ("C-SPC" . embark-select)
            ("C-x" . embark-export)
-           ("C-h" . consult-history)
+           ("ESC p" . consult-history)
            ("C-'" . vertico-quick-insert))
 
 (require 'embark)
