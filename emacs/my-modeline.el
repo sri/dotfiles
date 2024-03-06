@@ -195,7 +195,7 @@
 (def-with-selected-window my/magit-blame ()
   (if magit-blame-mode
       (magit-blame-quit)
-    (magit-blame-addition)))
+    (magit-blame-addition '("-w"))))
 
 (def-with-selected-window my/magit-log-buffer ()
   (magit-log-buffer-file))
