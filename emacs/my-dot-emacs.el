@@ -212,7 +212,6 @@
                  "my-isearch"
                  "my-help"
                  "my-dired"
-                 "my-update-dot-emacs"
                  "my-modeline"))
          (all (list* gui non-gui this diminish base))
          (pkg-customizations
