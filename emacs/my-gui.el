@@ -21,7 +21,7 @@
 
 (let ((theme (car my-themes)))
   (when theme
-
+    (message "using theme %s" theme)
     (when (eq theme 'modus-vivendi)
       (require 'modus-vivendi-theme)
       (setq modus-vivendi-theme-override-colors-alist

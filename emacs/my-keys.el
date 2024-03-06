@@ -138,6 +138,7 @@
  ("C-x g" . magit-status)
  ("M-k" . my/kill-whole-line)
  ("M-o" . project-find-file)
+ ("M-r" . vr/mc-mark)
 
  ("M-y" . consult-yank-pop)
 

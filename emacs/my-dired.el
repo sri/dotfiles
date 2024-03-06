@@ -59,6 +59,14 @@
   (interactive)
   (call-process "open" nil nil nil (expand-file-name default-directory)))
 
+(defun my/dired-goto-git-root ()
+  (interactive)
+  (let ((root (my/git-repo-root)))
+    (if (s-blank? root)
+        (message "not in git repo")
+      (dired root)
+      (message "in git repo root"))))
+
 (add-hook 'dired-mode-hook
           (lambda ()
             (dired-omit-mode 1)
@@ -72,6 +80,7 @@
                        ("b" . dired-sidebar-toggle-with-current-directory)
                        ("S" . my/dired-sort-by-size)
                        ("C-c C-d" . dired-hide-details-mode)
+                       ("`" . my/dired-goto-git-root)
                        ("," . dired-prev-dirline)
                        ("." . dired-next-dirline)
                        ;([mouse-2] . dired-find-file)

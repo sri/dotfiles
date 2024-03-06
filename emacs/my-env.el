@@ -34,6 +34,8 @@ Fundamental mode."
   (setq display-line-numbers t))
 (add-hook 'prog-mode-hook 'my/turn-on-linenumbers)
 
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
