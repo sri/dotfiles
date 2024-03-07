@@ -87,3 +87,33 @@
                               URL of active tab of front window
                               end tell")))
     (insert (org-make-link-string url subject))))
+
+
+(require 'button-lock)
+(require 'thingatpt)
+
+(add-hook 'org-mode-hook (lambda () (button-lock-mode 1)))
+
+(defface my/org-ticket-face
+  '((t :foreground "#268bd2" :underline t :inherit unspecified))
+  "Face for Org dynamic links.")
+
+(defun my-org-create-dynamic-link (regex url-template)
+  (lexical-let ((url-template url-template))
+    (button-lock-set-button
+     regex
+     (lambda ()
+       (interactive)
+       (let* ((matched-string (thing-at-point 'symbol))
+              (url (if (save-match-data (string-match "%s" url-template))
+                       (format url-template matched-string)
+                     url-template)))
+         (browse-url url)))
+     :face 'my/org-ticket-face)))
+
+;; Example usage in your personal ~/.emacs.private.el file.
+;; (add-hook 'org-mode-hook
+;;           (lambda ()
+;;             (my-org-create-dynamic-link
+;;              "\\([[:alpha:]]\\{2,5\\}-[[:digit:]]+\\)"
+;;              "https://www.example.com/%s")))
