@@ -1,5 +1,6 @@
 (defvar my-themes
   '(
+    doom-tokyo-night
     leuven
     gruvbox-dark-medium
     solarized-dark

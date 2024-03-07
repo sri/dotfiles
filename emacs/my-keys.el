@@ -24,12 +24,7 @@
  ("C-i" . my/hippie-tab)
  ("<M-return>" . my/dired)
  ("C-m" . newline-and-indent)
- ("M-n" . my/bm-next-this-file)
- ("M-N" . bm-next)
- ("M-p" . bm-previous)
- ("M-N" . bm-show-all)
- ("M-v" . bm-toggle)
- ("ESC M-v" . bm-show))
+ )
 
 ;; Mac trackpad
 ;; Problem with wheel (2-finger swipe on os x)

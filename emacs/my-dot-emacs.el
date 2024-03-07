@@ -151,10 +151,10 @@
    '(org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe
               org-rmail org-w3m org-velocity))
  '(package-selected-packages
-   '(ace-jump-mode ample-theme anzu bm centaur-tabs chatgpt-shell company
-                   company-go consult csv-mode diff-hl diminish
-                   dired-sidebar doom-themes dracula-theme
-                   elisp-slime-nav embark embark-consult
+   '(ace-jump-mode ample-theme anzu bm button-lock centaur-tabs
+                   chatgpt-shell company company-go consult csv-mode
+                   diff-hl diminish dired-sidebar doom-themes
+                   dracula-theme elisp-slime-nav embark embark-consult
                    exec-path-from-shell expand-region flycheck
                    flycheck-golangci-lint git-link go-eldoc go-mode
                    gotest gruvbox-theme hydra jetbrains-darcula-theme
