@@ -89,6 +89,7 @@
     (insert (org-make-link-string url subject))))
 
 
+;; From https://list.orgmode.org/orgmode/CAOBv0PdCgqP1oZrhTmxyt1paKAotfH3LDPv5vYeXzekgZ1U0Ow@mail.gmail.com/
 (require 'button-lock)
 (require 'thingatpt)
 
@@ -98,7 +99,7 @@
   '((t :foreground "#268bd2" :underline t :inherit unspecified))
   "Face for Org dynamic links.")
 
-(defun my-org-create-dynamic-link (regex url-template)
+(defun my/org-create-dynamic-link (regex url-template)
   (lexical-let ((url-template url-template))
     (button-lock-set-button
      regex
@@ -114,6 +115,6 @@
 ;; Example usage in your personal ~/.emacs.private.el file.
 ;; (add-hook 'org-mode-hook
 ;;           (lambda ()
-;;             (my-org-create-dynamic-link
+;;             (my/org-create-dynamic-link
 ;;              "\\([[:alpha:]]\\{2,5\\}-[[:digit:]]+\\)"
 ;;              "https://www.example.com/%s")))
