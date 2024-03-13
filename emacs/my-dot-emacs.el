@@ -55,12 +55,16 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:height 170 :family "JetBrains Mono"))))
- '(tab-bar-tab ((t (:background "#fffff" :foreground "#777777")))))
+ '(bm-face ((t (:background "#422f73"))))
+ '(bm-persistent-face ((t (:background "#422f73"))))
+
+ )
+ ;; '(tab-bar-tab ((t (:background "#fffff" :foreground "#777777")))))
 '(
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line ((t (:foreground "#3B84CC"))))
  '(anzu-mode-line-no-match ((t (:foreground "#3B84CC"))))
- '(bm-face ((t (:background "#422f73" :foreground "#111111"))))
+
  '(button ((t (:foreground "#777777" :underline nil))))
  '(comint-highlight-prompt ((t nil)))
  '(cursor ((t (:background "#5e4900"))))

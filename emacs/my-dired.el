@@ -74,6 +74,7 @@
             (dired-hide-details-mode 1)
             (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)
+            (setq wdired-allow-to-change-permissions t)
             (my/recentf-add-dired-directory)
 
             (bind-keys :map dired-mode-map

@@ -1,6 +1,21 @@
 https://www.youtube.com/watch?v=43Dg5zYPHTU
 
+* Vim's NERDTree & Fern
+https://www.youtube.com/watch?v=oFc2kr734rs
+** Fern
+*** toggle hiding dotfiles
+h key
+*** rename
+in minibuffer "Move: OLD-NAME -> NEW-NAME(editable)"
+names are full names
+adding directories just creates them
 
+in Emacs, wdired can do this; go to file,
+and hit directory "a.txt" -> "a/b/c/d/a.txt"
+ also works with "..": "a.txt" -> "../../a.txt" move to parent
+directory
+but these are not full paths
+*** d to delete
 * Completions features
 ** mark, unmark, toggle marks, aka multi-select
 ** do action for all selected
