@@ -130,9 +130,10 @@
     (message "Copied: `%s'" path)))
 
 (def-with-selected-window my/mode-line-open-folder ()
-  (let* ((name (buffer-file-name))
-         (dir (if name (file-name-directory name) default-directory)))
-    (call-process "open" nil nil nil dir)))
+  (apply 'call-process "open" nil nil nil
+         (if-let (name (buffer-file-name))
+           (list "-R" name)
+           (list default-directory))))
 
 (def-with-selected-window my/mode-line-open-in-sublime ()
   (let ((path (or buffer-file-name
