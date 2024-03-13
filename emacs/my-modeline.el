@@ -58,17 +58,17 @@
      ["Copy region for JIRA" my/mode-line-copy-for-jira])))
 
 (def-with-selected-window my/mode-line-copy-for-jira ()
-  (let ((path (my/mode-line-get-file-name-in-repo))
-        (region (and (use-region-p)
-                     (format "{noformat}\n%s\n{noformat}\n"
-                             (buffer-substring-no-properties
-                              (region-beginning)
-                              (region-end))))))
-    (kill-new (if region
-                  (format "*%s*:\n%s" path region)
-                path))
-    (message "Copied `%s' with the region for JIRA" path)))
-
+  (if (use-region-p)
+    (let ((path (save-excursion
+                  (goto-char (region-beginning))
+                  (my/mode-line-get-file-name-in-repo)))
+          (region (format "{noformat}\n%s\n{noformat}\n"
+                          (buffer-substring-no-properties
+                           (region-beginning)
+                           (region-end)))))
+      (kill-new (format "*%s*:\n%s" path region))
+      (message "Copied `%s' with the region for JIRA" path))
+    (message "No region selected")))
 
 ;; Buffer name: click to copy
 (make-face 'my/mode-line-buffer-name-face)
