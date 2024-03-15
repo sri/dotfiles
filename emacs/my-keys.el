@@ -44,7 +44,7 @@
  ("s-c" . my/copy-line-or-region)
  ("s-x" . my/kill-line-or-region)
  ("s-g" . consult-git-grep)
- ("M-s-g" . consult-ripgrep)
+ ("s-G" . consult-ripgrep)
  ("s-m" . magit-status)
  ("s-," . beginning-of-buffer)
  ("s-o" . my/ffap-or-find-file)
@@ -156,6 +156,7 @@
  ("C-x <left>" . windmove-left)
  ("C-x <right>" . windmove-right)
  )
+
 
 ;; Git related under: C-c g <letter>
 (bind-keys :prefix-map my/ctl-c-g-map

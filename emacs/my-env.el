@@ -132,8 +132,9 @@ Fundamental mode."
 (auto-compression-mode t)
 (transient-mark-mode 1)
 (show-paren-mode t)
-(server-start)
 (electric-pair-mode)
+
+(server-start)
 
 (setq diff-switches '("-u"))
 
@@ -188,13 +189,16 @@ Fundamental mode."
 (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
 (defun my/enable-override-global-mode () (override-global-mode 1))
-(defun my/disable-override-global-mode () (override-global-mode -11))
+(defun my/disable-override-global-mode () (override-global-mode -1))
 
 (add-hook 'minibuffer-setup-hook 'my/disable-override-global-mode)
 (add-hook 'minibuffer-exit-hook 'my/enable-override-global-mode)
 
 (require 'project)
 (setq project-vc-merge-submodules nil)
+
+(require 'wgrep)
+(setq wgrep-enable-key "r")
 
 (require 'hippie-exp)
 (setq hippie-expand-try-functions-list
