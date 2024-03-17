@@ -56,9 +56,7 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:height 170 :family "JetBrains Mono"))))
  '(bm-face ((t (:background "#422f73"))))
- '(bm-persistent-face ((t (:background "#422f73"))))
-
- )
+ '(bm-persistent-face ((t (:background "#422f73")))))
  ;; '(tab-bar-tab ((t (:background "#fffff" :foreground "#777777")))))
 '(
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))

@@ -1,5 +1,17 @@
 https://www.youtube.com/watch?v=43Dg5zYPHTU
 
+* Org mode: tables
+** Alt-<left>, Alt-<right>: move column left, right
+** S-Alt-<right>: insert column left
+** S-Alt-<left>: delete current column
+** 
+** 
+** 
+** 
+** 
+** 
+**
+
 * Vim's NERDTree & Fern
 https://www.youtube.com/watch?v=oFc2kr734rs
 ** Fern
@@ -35,7 +47,6 @@ but these are not full paths
 | C-h f | counsel-describe-function |                          |
 | C-v   | ivy-switch-buffer         |                          |
 |-------+---------------------------+--------------------------|
-
 ** Ivy help
  - with ivy open:
 |---------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -101,3 +112,17 @@ brew install emacs-plus@30
 https://amitp.blogspot.com/2023/12/status-codes.html
 *** https://www.youtube.com/watch?v=31gwvApo8zg&t=1194s
 
+* Showoff
+https://www.reddit.com/r/emacs/comments/1benj4g/things_you_do_in_emacs_that_will_make_nonemacs/
+** undo in region
+** git grep, export, wgrep, query-replace, save; completions framework
+** extensions: defadvice, replace fn, hooks
+** defmacro
+** keyboard macros
+** org mode: outline mode show/hide globally, todo states, C-c o = see todos only
+** magit
+** yas snippet
+** multi-cursor
+** browse kill ring
+** follow-mode
+** 

@@ -365,6 +365,12 @@ copied."
     (when current-branch
       (insert current-branch " "))))
 
+(defvar-local my/google-search-term-prefix nil)
+(put 'my/google-search-term-prefix 'safe-local-variable #'always)
+
+(defvar-local my/google-search-term-suffix nil)
+(put 'my/google-search-term-suffix 'safe-local-variable #'always)
+
 (defun my/google-search ()
   "Google the currently selected region or the previous word.
 Shows the term before doing so."
@@ -379,7 +385,11 @@ Shows the term before doing so."
              (let ((start (point)))
                (skip-chars-forward "a-zA-Z0-9_-")
                (buffer-substring-no-properties start (point)))))))
-    (setq term (s-trim (read-string "Google search: " term)))
+    (setq term
+          (s-trim (read-string "Google search: "
+                               (concat my/google-search-term-prefix " "
+                                       term
+                                       " " my/google-search-term-suffix))))
     (if (string= term "")
         (message "nothing to google for")
       (with-current-buffer (get-buffer-create "*my/google-search*")

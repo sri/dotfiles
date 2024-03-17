@@ -1,9 +1,9 @@
 (defvar my-themes
   '(
+    gruvbox-dark-medium
     doom-zenburn
     doom-tokyo-night
     leuven
-    gruvbox-dark-medium
     solarized-dark
     jetbrains-darcula
     modus-vivendi
