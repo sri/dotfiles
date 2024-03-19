@@ -371,33 +371,28 @@ copied."
 (defvar-local my/google-search-term-suffix nil)
 (put 'my/google-search-term-suffix 'safe-local-variable #'always)
 
-(defun my/google-search ()
+(defun my/google-search (&optional incognito)
   "Google the currently selected region or the previous word.
 Shows the term before doing so."
-  (interactive)
-  (let ((term
-         (if (use-region-p)
-             (buffer-substring-no-properties (region-beginning) (region-end))
-           (save-excursion
-             (if (not (looking-at "[a-zA-Z0-9_-]"))
-                 (skip-chars-backward "^a-zA-Z0-9_-"))
-             (skip-chars-backward "a-zA-Z0-9_-")
-             (let ((start (point)))
-               (skip-chars-forward "a-zA-Z0-9_-")
-               (buffer-substring-no-properties start (point)))))))
-    (setq term
-          (s-trim (read-string "Google search: "
-                               (concat my/google-search-term-prefix " "
-                                       term
-                                       " " my/google-search-term-suffix))))
-    (if (string= term "")
-        (message "nothing to google for")
-      (with-current-buffer (get-buffer-create "*my/google-search*")
-        (start-process (buffer-name (current-buffer))
-                       (current-buffer)
-                       "open" "-a" "Google Chrome"
-                       (format "https://www.google.com/search?q=%s"
-                               (url-encode-url term)))))))
+  (interactive "P")
+  (let* ((selection (if (use-region-p)
+                        (buffer-substring-no-properties (region-beginning)
+                                                        (region-end))
+                      ""))
+         (prompt (format "Google%s search: " (if incognito " incognito" "")))
+         (initial-input (format "%s %s %s"
+                                (or my/google-search-term-prefix "")
+                                selection
+                                (or my/google-search-term-suffix "")))
+         (term (s-trim (read-string prompt (s-trim initial-input))))
+         (chrome-args (append '("open" "-na" "Google Chrome" "--args")
+                              (if incognito '("--incognito") '())
+                              (list (format "https://www.google.com/search?q=%s"
+                                            (url-encode-url term))))))
+    (apply #'start-process
+           "Google search"
+           nil
+           chrome-args)))
 
 (defun my/toggle-auto-hscroll-mode ()
   "This comes into play when toggle-truncate-lines is enabled.
