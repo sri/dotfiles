@@ -68,20 +68,19 @@ alias curl_info='curl -so /dev/null -w "dnslookup: %{time_namelookup} | connect:
 
 alias r='my_ruby'
 function my_ruby() {
-    local cmd="irb"
-    local arg=""
-    if [ -n "$INSIDE_EMACS" ]; then
-        # Without this, irb hangs when launched inside an Emacs shell.
-        arg="--nomultiline --noautocomplete"
-    fi
     if [ -f ./Gemfile ]; then
-        cmd="rails console"
-        if [ -n "$arg" ]; then
-            arg="-- $arg"
+        if [ -n "$INSIDE_EMACS" ]; then
+            rails console -- --inf-ruby-mode
+        else
+            rails console
+        fi
+    else
+        if [ -n "$INSIDE_EMACS" ]; then
+            irb --inf-ruby-mode
+        else
+            irb
         fi
     fi
-    echo "running $cmd $arg..."
-    $cmd $arg
 }
 
 alias p='my_python'

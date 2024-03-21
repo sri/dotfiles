@@ -12,37 +12,48 @@
    region-bindings-mode-map))
 
 (bind-keys :map region-bindings-mode-map
-           (";" . my/comment-line-or-region)
            ("?" . my/which-key-region-bindings)
+
            ("A" . beginning-of-buffer)
-           ("B" . backward-sexp)
-           ("C" . my/kill-line-or-region)
-           ("D" . er/mark-defun)
            ("E" . end-of-buffer)
-           ("F" . forward-sexp)
-           ("G" . my/google-search)
-           ("J" . ace-jump-word-mode)
-           ("L" . mc/edit-lines)
-           ("N" . mc/skip-to-next-like-this)
-           ("S" . sort-lines)
-           ("SPC" . exchange-point-and-mark)
+
            ("a" . beginning-of-line)
-           ("b" . backward-word)
-           ("c" . my/copy-line-or-region)
-           ("d" . my/duplicate-line-or-region)
            ("e" . end-of-line)
+
+           ("B" . backward-sexp)
+           ("F" . forward-sexp)
+
+           ("b" . backward-word)
            ("f" . forward-word)
-           ("i" . indent-rigidly)
+
+           ("w" . my/select-word)
+
            ("j" . next-line)
            ("k" . my/region-bindings-k)
            ("l" . my/select-line)
-           ("m" . vr/mc-mark)
+           ("c" . my/copy-line-or-region)
+           ("d" . my/duplicate-line-or-region)
+           ("C" . my/kill-line-or-region)
+
+           (";" . my/comment-line-or-region)
+           ("G" . my/google-search)
+           ("J" . ace-jump-word-mode)
+           ("m" . vr/mc-mark) ;; ?
+
            ("n" . mc/mark-next-like-this)
+           ("N" . mc/skip-to-next-like-this)
+           ("L" . mc/edit-lines)
+
+           ("D" . er/mark-defun)
+           ("u" . er/mark-url)
            ("q" . er/mark-inside-quotes)
            ("r" . er/expand-region)
+
+           ("S" . sort-lines)
+           ("SPC" . exchange-point-and-mark)
+
+           ("i" . indent-rigidly)
            ("s" . my/isearch-region)
-           ("u" . er/mark-url)
-           ("w" . my/select-word)
            ;; ("L" . ace-jump-line-mode)
            ;; By default, TAB does indent-region
            )
@@ -55,5 +66,3 @@
 
 (add-to-list 'region-bindings-mode-disable-predicates
              'minibufferp)
-;; (global-set-key (kbd "C-i") 'calendar)
-;; (global-set-key (kbd "<tab>") 'beginning-of-line)

@@ -385,10 +385,11 @@ Shows the term before doing so."
                                 selection
                                 (or my/google-search-term-suffix "")))
          (term (s-trim (read-string prompt (s-trim initial-input))))
+         (url (format "https://www.google.com/search?q=%s"
+                      (url-encode-url term)))
          (chrome-args (append '("open" "-na" "Google Chrome" "--args")
                               (if incognito '("--incognito") '())
-                              (list (format "https://www.google.com/search?q=%s"
-                                            (url-encode-url term))))))
+                              (list url))))
     (apply #'start-process
            "Google search"
            nil
