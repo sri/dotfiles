@@ -22,7 +22,7 @@
  ;; For example, Magit does useful things with C-i
  ;; (TAB) -- show/hide file diffs.
  ("C-i" . my/hippie-tab)
- ("<M-return>" . my/dired)
+;; ("<M-return>" . my/dired)
  ("C-m" . newline-and-indent)
  )
 
@@ -129,7 +129,7 @@
  ("M-D" . my/duplicate-line-or-region)
  ("M-E" . mc/edit-lines)
  ("M-\\" . my/delete-horizontal-space)
- ("M-d" . my/dired)
+ ;; ("M-d" . my/dired)
  ("C-x g" . magit-status)
  ("M-k" . my/kill-whole-line)
  ("M-o" . project-find-file)

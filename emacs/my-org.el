@@ -112,6 +112,25 @@
          (browse-url url)))
      :face 'my/org-ticket-face)))
 
+(defun my/org-mode-get-subtree-count (&optional debug)
+  (interactive "P")
+  (let ((sub-heading-level (1+ (org-current-level)))
+        (count 0))
+    (save-excursion
+      (org-map-entries
+       (lambda ()
+         (when debug
+           (message "%s: current=%d, sub-heading-level=%d"
+                    (buffer-substring-no-properties (point-at-bol)
+                                                    (point-at-eol))
+                    (org-current-level)
+                    sub-heading-level))
+         (when (= (org-current-level) sub-heading-level)
+           (incf count)))
+       nil
+       'tree))
+    (message "Number of subheadings below this: %d" count)))
+
 ;; Example usage in your personal ~/.emacs.private.el file.
 ;; (add-hook 'org-mode-hook
 ;;           (lambda ()
