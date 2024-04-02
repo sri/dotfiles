@@ -136,6 +136,12 @@ Fundamental mode."
 
 (server-start)
 
+(add-to-list 'display-buffer-alist
+             '("^\\*shell\\*" . (display-buffer-same-window)))
+(add-to-list 'display-buffer-alist
+             '("^\\*Embark Export:.*" display-buffer-at-bottom))
+
+
 (setq diff-switches '("-u"))
 
 (make-variable-buffer-local 'line-number-mode)
@@ -197,6 +203,8 @@ Fundamental mode."
 (require 'project)
 (setq project-vc-merge-submodules nil)
 
+(require 'grep)
+(add-hook 'grep-mode-hook (lambda () (toggle-truncate-lines 1)))
 (require 'wgrep)
 (setq wgrep-enable-key "r")
 
