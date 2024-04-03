@@ -4,14 +4,6 @@ https://www.youtube.com/watch?v=43Dg5zYPHTU
 ** Alt-<left>, Alt-<right>: move column left, right
 ** S-Alt-<right>: insert column left
 ** S-Alt-<left>: delete current column
-** 
-** 
-** 
-** 
-** 
-** 
-**
-
 * Vim's NERDTree & Fern
 https://www.youtube.com/watch?v=oFc2kr734rs
 ** Fern
@@ -101,6 +93,20 @@ Narrowing
 | C-v |          |             |
 |-----+----------+-------------|
 
+* Magit
+https://www.youtube.com/watch?v=j-k-lkilbEs
+D - adjust the diff settings globally
+d - adjust the diff settings locally
++, - adjust sections on diff
+1,2,3,4 - adjust visibiliy of section
+M-1,M-2,M-3,M-4 - globally adjust visibiliy of all sections
+C-x C-j - jump to dired of file's dir
+C-c C-e - with cursor on diff, edit that things even if it doesn't
+existing in files system
+C-c C-t - list history of function's changes
+E - ediff, where you can stage & unstage; useful for when file needs
+merge resolution; also works on stashes
+magit blame, c - cycle; doesn't seem to work per my expectation
 
 * Installing Emacs from source on Mac using brew
 brew tap d12frosted/emacs-plus
