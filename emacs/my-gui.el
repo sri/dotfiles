@@ -1,10 +1,11 @@
 (defvar my-themes
   '(
-    gruvbox-dark-medium
-    doom-zenburn
-    doom-tokyo-night
     leuven
+    doom-zenburn
+    gruvbox-dark-medium
+
     solarized-dark
+    doom-tokyo-night
     jetbrains-darcula
     modus-vivendi
     kaolin-dark
@@ -24,18 +25,7 @@
 (let ((theme (car my-themes)))
   (when theme
     (message "using theme %s" theme)
-    (when (eq theme 'modus-vivendi)
-      (require 'modus-vivendi-theme)
-      (setq modus-vivendi-theme-override-colors-alist
-            '(("fg-main" . "#dddddd")
-              ("bg-main" . "#111111"))))
-
-    (load-theme theme t)
-    '(custom-theme-set-faces
-     theme
-     '(dired-header ((t (:foreground "#268bd2"
-                                     :underline t
-                                     :background nil)))))))
+    (load-theme theme t)))
 
 ;; (add-hook 'focus-out-hook
 ;;           (lambda ()

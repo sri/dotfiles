@@ -34,7 +34,7 @@
         magit-insert-unpulled-from-upstream
         magit-insert-untracked-files))
 
-;; Don't show "Recent commits" section.
+;; Show these many commits in the "Recent commits" section.
 (setq magit-log-section-commit-count 10)
 
 ;(set-face-attribute 'magit-diff-added-highlight nil :foreground "#22aa22")

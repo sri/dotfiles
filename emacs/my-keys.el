@@ -118,10 +118,10 @@
  ("<C-backspace>" . subword-backward-kill)
 
  ("M-`" . my/shell-for-buffer) ; works under both guis and terminals
- ("M-0" . delete-window)
- ("M-1" . delete-other-windows)
- ("M-2" . split-window-vertically)
- ("M-3" . split-window-horizontally)
+ ;; ("M-0" . delete-window)
+ ;; ("M-1" . delete-other-windows)
+ ;; ("M-2" . split-window-vertically)
+ ;; ("M-3" . split-window-horizontally)
  ("<M-SPC>" . my/just-one-space)
  ("M-;" . my/comment-line-or-region)
  ("M-<up>" . scroll-down)
