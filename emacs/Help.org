@@ -94,7 +94,8 @@ Narrowing
 |-----+----------+-------------|
 
 * Magit
-https://www.youtube.com/watch?v=j-k-lkilbEs
+https://www.youtube.com/watch?v=j-k-lkilbEs - 44mins
+https://stackoverflow.com/questions/462974/what-are-the-differences-between-double-dot-and-triple-dot-in-git-com
 D - adjust the diff settings globally
 d - adjust the diff settings locally
 +, - adjust sections on diff
@@ -107,7 +108,11 @@ C-c C-t - list history of function's changes
 E - ediff, where you can stage & unstage; useful for when file needs
 merge resolution; also works on stashes
 magit blame, c - cycle; doesn't seem to work per my expectation
-
+R - git rename file 
+K - git untrack file, on file
+% - worktrees; they share the repo; stashes are seen by all worktrees
+$ - see git process output; 'k' in that buffer to kill the git process
+y - refs browser
 * Installing Emacs from source on Mac using brew
 brew tap d12frosted/emacs-plus
 brew uninstall emacs-plus

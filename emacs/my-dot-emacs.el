@@ -262,3 +262,4 @@
   (recentf-open-files))
 
 (my/load-all)
+(put 'magit-diff-edit-hunk-commit 'disabled nil)
