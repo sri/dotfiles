@@ -42,6 +42,7 @@
  ("s-2" . split-window-vertically)
  ("s-3" . split-window-horizontally)
  ("s-c" . my/copy-line-or-region)
+ ("s-d" . my/dired)
  ("s-x" . my/kill-line-or-region)
  ("s-g" . consult-git-grep)
  ("s-G" . consult-ripgrep)
