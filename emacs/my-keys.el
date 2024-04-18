@@ -51,7 +51,9 @@
  ("s-o" . my/ffap-or-find-file)
  ("s-." . end-of-buffer)
  ("s-j" . other-window)
- ("s-p" . my/shell))
+ ("s-p" . my/shell)
+ ("s-t" . tab-new)
+ ("s-w" . tab-close))
 
 ;; https://emacs.stackexchange.com/questions/32183/how-to-make-exceptions-to-bind-key-overriding-behavior
 
