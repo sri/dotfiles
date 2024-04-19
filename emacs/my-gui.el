@@ -1,5 +1,6 @@
 (defvar my-themes
   '(
+    zenburn
     leuven
     doom-zenburn
     gruvbox-dark-medium
