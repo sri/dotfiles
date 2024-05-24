@@ -46,6 +46,8 @@ Fundamental mode."
 
 ;; On Mac, when in fullscreen, I keep accidently running into this;
 ;; when you drag the region, it switches the Desktop.
+;; When this is set to 'shift (or maybe t), then handle-switch-frame
+;; gets invoked
 (setq mouse-drag-and-drop-region nil)
 
 (setq large-file-warning-threshold 1000000000) ; 1GB
