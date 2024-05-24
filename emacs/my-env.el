@@ -43,7 +43,11 @@ Fundamental mode."
 (setq auto-hscroll-mode t)
 (setq text-quoting-style 'straight) ; text quoting in help & messages
 (put 'narrow-to-region 'disabled nil)
-(setq mouse-drag-and-drop-region 'shift)
+
+;; On Mac, when in fullscreen, I keep accidently running into this;
+;; when you drag the region, it switches the Desktop.
+(setq mouse-drag-and-drop-region nil)
+
 (setq large-file-warning-threshold 1000000000) ; 1GB
 (set-language-environment "UTF-8")
 (setq messages-buffer-max-lines t)
