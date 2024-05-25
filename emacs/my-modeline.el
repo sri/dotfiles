@@ -52,6 +52,7 @@
      ["Copy absolute path" my/mode-line-copy-full-path t]
      ["Copy path relative to repo" my/mode-line-copy-file-name-relative-to-repo t]
      ["Copy path with repo name & line num" my/mode-line-copy-file-name-in-repo t]
+     ["Copy path in remote web (current branch)" my/mode-line-copy-file-name-in-remote t]
      "---"
      ["Open in Finder" my/mode-line-open-folder]
      ["Open in Sublime" my/mode-line-open-in-sublime]
@@ -123,6 +124,22 @@
   (let ((path (my/mode-line-get-file-name-in-repo)))
     (kill-new path)
     (message "Copied: `%s'" path)))
+
+(def-with-selected-window my/mode-line-copy-file-name-in-remote ()
+  (let* ((filename (my/mode-line-get-file-name-in-repo t t))
+         (url (magit-get "remote" "origin" "url")))
+    (unless (string-match "^http" url)
+      (setq url
+            (replace-regexp-in-string "\\(.*\\)@\\(.*\\):\\(.*\\)\\(\\.git?\\)"
+                                      "https://\\2/\\3"
+                                      url)))
+    (cond ((or (string-match "github" url)
+               (string-match "gitlab" url))
+           (setq url (format "%s/blob/%s/%s" url
+                             (magit-get-current-branch)
+                             filename))))
+    (message "Opening %s" url)
+    (browse-url url)))
 
 (def-with-selected-window my/mode-line-copy-file-name-relative-to-repo ()
   (let ((path (my/mode-line-get-file-name-in-repo t t)))
