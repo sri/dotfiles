@@ -74,6 +74,7 @@
             (dired-hide-details-mode 1)
             (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)
+            (setq dired-vc-rename-file t)
             (setq wdired-allow-to-change-permissions t)
             (my/recentf-add-dired-directory)
 
