@@ -508,3 +508,7 @@ See my-region-bindings-mode.el on how this is activated."
           ((inhibit-field-text-motion t))
         (sort-subr nil 'forward-line 'end-of-line nil nil
                    (lambda (s1 s2) (= (random 2) 0)))))))
+
+(defun my/reset-text-size ()
+  (interactive)
+  (text-scale-adjust 0))

@@ -83,6 +83,10 @@ Fundamental mode."
 
 (setq fill-column 80)
 
+(global-set-key (kbd "<pinch>") 'ignore)
+(global-set-key (kbd "<C-wheel-up>") 'ignore)
+(global-set-key (kbd "<C-wheel-down>") 'ignore)
+
 ;; when running make, set NATIVE_FULL_AOT=1 to
 ;; native compile all libs
 ;(setq package-native-compile t)
