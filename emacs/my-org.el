@@ -58,10 +58,10 @@
 (setq org-use-speed-commands t)
 (setq org-fontify-done-headline t)
 (setq org-closed-keep-when-no-todo t)
-(setq org-log-done nil)
+(setq org-log-done t)
 (setq org-confirm-babel-evaluate nil)
 
-(setq org-todo-keyword-faces
+'(setq org-todo-keyword-faces
       '(("NOTE" :foreground "#4b4f89")
         ("IDEA" :foreground "#4b4f89" :box t)
         ("TODO" :foreground "medium blue" :weight bold)

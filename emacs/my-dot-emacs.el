@@ -163,8 +163,8 @@
                    flycheck-golangci-lint git-link go-eldoc go-mode
                    gotest gruvbox-theme hydra jetbrains-darcula-theme
                    kaolin-themes leuven-theme macrostep magit
-                   marginalia markdown-mode multiple-cursors neotree
-                   orderless org org-bullets poet-theme powerline
+                   marginalia markdown-mode multiple-cursors
+                   orderless org org-bullets poet-theme
                    projectile protobuf-mode rainbow-mode
                    region-bindings-mode rg rjsx-mode ruby-end s
                    smart-mode-line solarized-theme spacemacs-theme
@@ -265,3 +265,4 @@
 
 (my/load-all)
 (put 'magit-diff-edit-hunk-commit 'disabled nil)
+(put 'upcase-region 'disabled nil)

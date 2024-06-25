@@ -1,15 +1,15 @@
 (defvar my-themes
   '(
+    gruvbox-dark-medium
+    kaolin-dark
     zenburn
     leuven
     doom-zenburn
-    gruvbox-dark-medium
 
-    solarized-dark
     doom-tokyo-night
+    solarized-dark
     jetbrains-darcula
     modus-vivendi
-    kaolin-dark
     modus-operandi
     zenburn
     solarized-light
