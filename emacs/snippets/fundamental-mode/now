@@ -1,0 +1,4 @@
+# name: now
+# key: now
+# --
+`(format-time-string "%Y-%m-%d")` $0

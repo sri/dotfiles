@@ -1,0 +1,4 @@
+# name: iso
+# key: iso
+# --
+`(format-time-string "%Y-%m-%d")` $0

@@ -1,0 +1,4 @@
+# name: 3339
+# key: 3339
+# --
+`(format-time-string "%Y-%02m-%02dT%02H:%02M:%02SZ" (current-time) t)` $0

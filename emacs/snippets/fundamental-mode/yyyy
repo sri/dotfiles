@@ -1,0 +1,4 @@
+# name: yyyy
+# key: yyyy
+# --
+`(format-time-string "%Y")` $0
