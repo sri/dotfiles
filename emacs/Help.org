@@ -64,6 +64,16 @@ but these are not full paths
 | C-v   | ivy-switch-buffer         |             |
 |-------+---------------------------+-------------|
 
+** M-RET - accept input and exit minibuffer
+In dired, N is bound to create-empty-file. If there is a file
+"my-org.el", but I want to create "my-org", typing "my-org" will match
+"my-org.el". If I hit enter, it'll select that match and say "file
+already exists".
+  Fix:
+    - up to move away cursor out of match to input and hit enter --
+      see vertico-previous
+    - or, hit M-RET (Option-Return in Mac) -- see vertico-exit-input
+
 ** TODOs
 *** ivy-posframe - 
 *** ivy-rich
