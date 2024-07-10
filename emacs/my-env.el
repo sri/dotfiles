@@ -12,6 +12,8 @@ Fundamental mode."
         (text-mode))
     t)))
 
+(add-to-list 'auto-mode-alist '("\\.gem\\'" . tar-mode))
+
 (setq-default major-mode 'my/set-major-mode)
 
 (require 'whitespace)
