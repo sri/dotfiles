@@ -2,7 +2,7 @@
 	name = Sriram Thaiyar
 	email = sriram.thaiyar@gmail.com
 [core]
-#	editor = /Applications/Emacs.app/Contents/MacOS/bin/emacsclient
+	editor = emacsclient -t
 [color]
 	ui = true
 [merge]
