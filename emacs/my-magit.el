@@ -56,8 +56,14 @@
 (defun my/open-repo-in-browser ()
   (interactive)
   (let ((url (magit-get "remote" "origin" "url")))
+    (when (string-match "^ssh" url)
+      (setq url (s-replace-all ":22" "" (s-chop-prefix "ssh" url)))
+      (setq url (concat "https://" url)))
     (unless (string-match "^http" url)
-      (setq url (replace-regexp-in-string "\\(.*\\)@\\(.*\\):\\(.*\\)\\(\\.git?\\)"
+      (setq url (replace-regexp-in-string (rx (group (zero-or-more any)) "@"
+                                              (group (zero-or-more any)) ":"
+                                              (group (zero-or-more any))
+                                              (group ".git"))
                                           "https://\\2/\\3"
                                           url)))
     (message "Opening %s" url)

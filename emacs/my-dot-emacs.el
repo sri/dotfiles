@@ -58,7 +58,8 @@
  '(default ((t (:height 170 :family "JetBrains Mono"))))
  '(isearch ((t (:background "#ffffff" :foreground "#6e52b9"))))
  '(lazy-highlight ((t (:background "#6e52b9" :foreground "#ffffff"))))
- )
+ '(bm-persistent-face ((t (:background "#6e52b9" :foreground "#ffffff"))))
+  )
  ;; '(tab-bar-tab ((t (:background "#fffff" :foreground "#777777")))))
 '(
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
