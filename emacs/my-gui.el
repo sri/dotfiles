@@ -1,5 +1,6 @@
 (defvar my-themes
   '(
+    ef-cyprus
     gruvbox-dark-medium
     kaolin-dark
     zenburn

@@ -56,10 +56,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:height 170 :family "JetBrains Mono"))))
- '(isearch ((t (:background "#ffffff" :foreground "#6e52b9"))))
- '(lazy-highlight ((t (:background "#6e52b9" :foreground "#ffffff"))))
  '(bm-persistent-face ((t (:background "#6e52b9" :foreground "#ffffff"))))
-  )
+ '(isearch ((t (:background "#ffffff" :foreground "#6e52b9"))))
+ '(lazy-highlight ((t (:background "#6e52b9" :foreground "#ffffff")))))
  ;; '(tab-bar-tab ((t (:background "#fffff" :foreground "#777777")))))
 '(
  '(anzu-match-3 ((t (:foreground "#3B84CC"))))
@@ -159,14 +158,14 @@
    '(ace-jump-mode ample-theme anzu bm button-lock centaur-tabs
                    chatgpt-shell company company-go consult csv-mode
                    diff-hl diminish dired-sidebar doom-themes
-                   dracula-theme elisp-slime-nav embark embark-consult
-                   exec-path-from-shell expand-region flycheck
-                   flycheck-golangci-lint git-link go-eldoc go-mode
-                   gotest gruvbox-theme hydra jetbrains-darcula-theme
-                   kaolin-themes leuven-theme macrostep magit
-                   marginalia markdown-mode multiple-cursors
-                   orderless org org-bullets poet-theme
-                   projectile protobuf-mode rainbow-mode
+                   dracula-theme ef-themes elisp-slime-nav embark
+                   embark-consult exec-path-from-shell expand-region
+                   flycheck flycheck-golangci-lint git-link go-eldoc
+                   go-mode gotest gruvbox-theme hydra
+                   jetbrains-darcula-theme kaolin-themes leuven-theme
+                   macrostep magit marginalia markdown-mode
+                   multiple-cursors orderless org org-bullets
+                   poet-theme projectile protobuf-mode rainbow-mode
                    region-bindings-mode rg rjsx-mode ruby-end s
                    smart-mode-line solarized-theme spacemacs-theme
                    string-inflection swiper treemacs typescript-mode
