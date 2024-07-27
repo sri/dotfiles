@@ -512,3 +512,26 @@ See my-region-bindings-mode.el on how this is activated."
 (defun my/reset-text-size ()
   (interactive)
   (text-scale-adjust 0))
+
+
+(defun my/explore-new-packages ()
+  "Extract packages using use-package in current buffer and
+formats them into a list of clickable links."
+  (interactive)
+  (let ((new-packages '())
+        (original (current-buffer))
+        (new (get-buffer-create (generate-new-buffer-name "*explore new packages*"))))
+    (goto-char (point-min))
+    (while (re-search-forward "^(use-package " nil t)
+      (push (thing-at-point 'symbol) new-packages))
+    (with-current-buffer new
+      (insert "* new packages\n")
+      (dolist (pkg (nreverse new-packages))
+        (insert (format "** [[https://www.google.com/search?q=emacs+%s][%s]]\n" pkg pkg)))
+      (goto-char (point-min))
+      (org-mode))
+    (delete-other-windows)
+    (goto-char (point-min))
+    (split-window-right)
+    (other-window 1)
+    (switch-to-buffer new)))
