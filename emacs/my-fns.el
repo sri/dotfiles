@@ -513,6 +513,16 @@ See my-region-bindings-mode.el on how this is activated."
   (interactive)
   (text-scale-adjust 0))
 
+(require 'org)
+(org-link-set-parameters "my-pkg-explore" :follow 'my/explore-new-packages-open)
+
+(defun my/explore-new-packages-open (pkg)
+  (let ((url (format "https://www.google.com/search?q=emacs+%s" pkg)))
+    (other-window 1)
+    (goto-char (point-min))
+    (re-search-forward (concat "^(use-package " pkg) nil)
+    (sit-for 1.0)
+    (browse-url url)))
 
 (defun my/explore-new-packages ()
   "Extract packages using use-package in current buffer and
@@ -527,7 +537,7 @@ formats them into a list of clickable links."
     (with-current-buffer new
       (insert "* new packages\n")
       (dolist (pkg (nreverse new-packages))
-        (insert (format "** [[https://www.google.com/search?q=emacs+%s][%s]]\n" pkg pkg)))
+        (insert (format "** [[my-pkg-explore:%s]]\n" pkg pkg)))
       (goto-char (point-min))
       (org-mode))
     (delete-other-windows)
