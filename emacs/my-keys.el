@@ -36,6 +36,16 @@
 ;; (message "mouse wheel left")
 ;; )))
 
+(bind-keys :map tab-bar-map
+           ("<wheel-up>"      #'ignore)
+           ("<wheel-down>"    #'ignore)
+           ("<wheel-left>"    #'ignore)
+           ("<wheel-right>"   #'ignore)
+           ("S-<wheel-up>"    #'ignore)
+           ("S-<wheel-down>"  #'ignore)
+           ("S-<wheel-left>"  #'ignore)
+           ("S-<wheel-right>" #'ignore))
+
 (bind-keys*
  ("s-0" . delete-window)
  ("s-1" . delete-other-windows)
