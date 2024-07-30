@@ -1,5 +1,6 @@
 (defvar my-themes
   '(
+    ef-melissa-dark
     ef-cyprus
     gruvbox-dark-medium
     kaolin-dark
