@@ -37,14 +37,14 @@
 ;; )))
 
 (bind-keys :map tab-bar-map
-           ("<wheel-up>"      #'ignore)
-           ("<wheel-down>"    #'ignore)
-           ("<wheel-left>"    #'ignore)
-           ("<wheel-right>"   #'ignore)
-           ("S-<wheel-up>"    #'ignore)
-           ("S-<wheel-down>"  #'ignore)
-           ("S-<wheel-left>"  #'ignore)
-           ("S-<wheel-right>" #'ignore))
+           ("<wheel-up>"      . ignore)
+           ("<wheel-down>"    . ignore)
+           ("<wheel-left>"    . ignore)
+           ("<wheel-right>"   . ignore)
+           ("S-<wheel-up>"    . ignore)
+           ("S-<wheel-down>"  . ignore)
+           ("S-<wheel-left>"  . ignore)
+           ("S-<wheel-right>" . ignore))
 
 (bind-keys*
  ("s-0" . delete-window)
