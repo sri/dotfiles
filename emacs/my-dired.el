@@ -67,11 +67,13 @@
       (dired root)
       (message "in git repo root"))))
 
+(require 'casual-dired)
+
 (add-hook 'dired-mode-hook
           (lambda ()
             (dired-omit-mode 1)
             (diminish 'dired-omit-mode)
-            (dired-hide-details-mode 1)
+            ;(dired-hide-details-mode 0)
             (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)
             (setq dired-vc-rename-file t)
@@ -98,4 +100,11 @@
                        ("S-SPC" . scroll-down)
                        ("N" . dired-create-empty-file)
                        ([left] . dired-up-directory)
-                       ([right] . my/dired-right-arrow-key))))
+                       ([right] . my/dired-right-arrow-key)
+
+                       ;; casual-dired
+                       ("o" . casual-dired-tmenu)
+                       ("s" . casual-dired-sort-by-tmenu)
+                       ("/" . casual-dired-search-replace-tmenu)
+
+                       )))
