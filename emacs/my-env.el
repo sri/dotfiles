@@ -108,6 +108,8 @@ Fundamental mode."
   (dolist (key mouse-keys-to-ignore)
     (global-set-key (kbd key) (lambda () (interactive)))))
 
+(context-menu-mode 1)
+
 (setq Man-width 80)
 
 (require 'undo-tree)
