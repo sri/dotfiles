@@ -251,13 +251,13 @@
                                  all)))
                      (directory-files "." nil "\\.el$" t))))
 
-    (my/load (if window-system gui non-gui))
     ;; Files that aren't on MELPA or any other package archive.
     (mapc 'my/load (directory-files "third-party" 'full "\\.el$" t))
     (mapc 'my/load base)
     (mapc 'my/load pkg-customizations)
     (my/load diminish)
-    (my/load "~/.emacs.private.el" 'ignore-if-missing))
+    (my/load "~/.emacs.private.el" 'ignore-if-missing)
+    (my/load (if window-system gui non-gui)))
 
   (setq my-emacs-elapsed-time
         (float-time (time-subtract (current-time) my-emacs-start-time)))

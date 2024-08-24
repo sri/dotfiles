@@ -1,3 +1,6 @@
+(defvar my-theme nil
+  "Can be defined in ~/.emacs.private.el.")
+
 (defvar my-themes
   '(
     leuven
@@ -24,9 +27,8 @@
   (load-theme theme :no-confirm)
   (message "trying theme: %s" theme))
 
-;; (my-try-theme 'zenburn)
-
-(let ((theme (car my-themes)))
+(let ((theme
+       (or my-theme (car my-themes))))
   (when theme
     (message "using theme %s" theme)
     (load-theme theme t)))
