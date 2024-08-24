@@ -85,3 +85,7 @@ echo done loading my zshrc
 if [[ -e ~/.zshrc_private ]]; then
   . ~/.zshrc_private
 fi
+
+if [[ -e $HOME/.cargo/env ]]; then
+  . $HOME/.cargo/env
+fi

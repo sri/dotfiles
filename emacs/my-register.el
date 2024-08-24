@@ -12,6 +12,7 @@
 (let ((registers '((?d . "~/Desktop")
                    (?e . "~/my/dotfiles/emacs")
                    (?s . "~/dev")
+                   (?n . "~/my/notes")
                    (?y . "~/my/dotfiles/emacs/snippets/fundamental-mode")
                    (?~ . "~"))))
   (dolist (reg registers)

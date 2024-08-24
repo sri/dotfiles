@@ -82,6 +82,7 @@ Fundamental mode."
 (global-eldoc-mode -1)
 (global-hl-line-mode 1)
 (setq mode-line-compact t)
+(setq confirm-kill-emacs 'yes-or-no-p)
 
 (setq fill-column 80)
 
