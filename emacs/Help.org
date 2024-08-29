@@ -1,5 +1,10 @@
 https://www.youtube.com/watch?v=43Dg5zYPHTU
 
+* Installing Emacs from source on Mac using brew
+brew tap d12frosted/emacs-plus
+brew uninstall emacs-plus
+brew uninstall emacs-plus@30
+brew install emacs-plus@30
 * Org mode: tables
 ** Alt-<left>, Alt-<right>: move column left, right
 ** S-Alt-<right>: insert column left
@@ -123,11 +128,6 @@ K - git untrack file, on file
 % - worktrees; they share the repo; stashes are seen by all worktrees
 $ - see git process output; 'k' in that buffer to kill the git process
 y - refs browser
-* Installing Emacs from source on Mac using brew
-brew tap d12frosted/emacs-plus
-brew uninstall emacs-plus
-brew uninstall emacs-plus@30
-brew install emacs-plus@30
 * Org setup
 ** Resources
 https://amitp.blogspot.com/2023/12/status-codes.html

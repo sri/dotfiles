@@ -3,7 +3,6 @@
 
 (defvar my-themes
   '(
-    leuven
     ef-melissa-dark
     ef-cyprus
     gruvbox-dark-medium
