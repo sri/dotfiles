@@ -161,7 +161,7 @@
                    doom-themes dracula-theme ef-themes elisp-slime-nav
                    embark embark-consult exec-path-from-shell
                    expand-region flycheck flycheck-golangci-lint
-                   git-link go-eldoc go-mode gotest gruvbox-theme
+                   git-link go-eldoc go-mode gotest gruvbox-theme howm
                    hydra jetbrains-darcula-theme kaolin-themes
                    leuven-theme macrostep magit marginalia
                    markdown-mode multiple-cursors orderless org

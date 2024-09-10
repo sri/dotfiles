@@ -202,7 +202,7 @@ decoded URL in the minibuffer."
                  (win (and buf (get-buffer-window buf 'visible))))
             (if win
                 (select-window win)
-              (find-file-other-window file)))
+              (find-file file)))
           (when line
             (goto-line line)
             (recenter))
