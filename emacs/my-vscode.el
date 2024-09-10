@@ -1,61 +1,44 @@
-(require 'subr-x) ;if-let
 (require 'cl)
 (require 'windmove)
 
-(cl-defun my/shell-for-buffer (&optional create-new)
-  "Opens a shell for the current buffer in a window below it.
-If a shell that belongs to the buffer already exists in a window
-below, it switches to it. A shell is considered to belong to a
-buffer if its in the same directory or in the same git repo as
-the buffer.
+(defun my/git-root (buffer)
+  (with-current-buffer buffer
+    (let ((command "git rev-parse --show-toplevel 2> /dev/null"))
+      (string-trim (shell-command-to-string command)))))
 
-Invoking this command from the shell will close the shell buffer.
+(defun my/shell-new (&optional name)
+  (save-window-excursion
+    (shell (or name
+               (let ((new-name (abbreviate-file-name default-directory)))
+                 (format "*shell %s*" (generate-new-buffer new-name)))))
+    (buffer-name)))
 
-With a prefix argument, it always generates a new shell for the
-current buffer."
+(defun my/shell-in-same-repo-or-dir-p (buffer)
+  (and (eq 'shell-mode (buffer-local-value 'major-mode buffer))
+       (let ((current (expand-file-name default-directory))
+             (other (expand-file-name
+                     (buffer-local-value 'default-directory buffer))))
+         (or (string= current other)
+             (and (or (string-prefix-p current other)
+                      (string-prefix-p other current))
+                  (string= (my/git-root (current-buffer)) (my/git-root buffer)))))))
+
+(defun my/shell-for-buffer (&optional create-new)
+  "Open a shell for the current buffer."
   (interactive "P")
-  (cl-flet* ((git-root (buffer)
-               (with-current-buffer buffer
-                 (my/git-repo-root)))
-             (shell-in-same-repo-or-dir? (buffer)
-               (and (eq 'shell-mode (buffer-local-value 'major-mode buffer))
-                    (let ((current (expand-file-name default-directory))
-                          (other (expand-file-name
-                                  (buffer-local-value 'default-directory
-                                                      buffer))))
-                      (or (string= current other)
-                          (and (or (string-prefix-p current other)
-                                   (string-prefix-p other current))
-                               (string= (git-root (current-buffer))
-                                        (git-root buffer)))))))
-             (new-shell (&optional name)
-               (unless name
-                 (let ((shortened (abbreviate-file-name default-directory)))
-                   (setq name (format "*shell %s*"
-                                      (generate-new-buffer shortened)))))
-               (save-window-excursion
-                 (shell name))
-               name))
-
-    (when (eq major-mode 'shell-mode)
-      (when (window-in-direction 'above)
-        ;; we are in shell and there is a buffer above us
-        (if create-new
-            (switch-to-buffer (new-shell))
-          (delete-window)))
-      (return-from my/shell-for-buffer))
-
+  (if (and (eq major-mode 'shell-mode) (window-in-direction 'above))
+      (if create-new
+          (switch-to-buffer (my/shell-new))
+        (delete-window))
     (let ((win (window-in-direction 'below)))
-      (if (and win (shell-in-same-repo-or-dir? (window-buffer win)))
+      (if (and win (my/shell-in-same-repo-or-dir-p (window-buffer win)))
           (windmove-down)
         (split-window-below)
         (windmove-down)
-        (let ((new (if create-new
-                       (new-shell)
-                     (if-let (buffer (cl-find-if #'shell-in-same-repo-or-dir?
-                                                 (buffer-list)))
-                         (if (get-buffer-process buffer)
-                             buffer
-                           (new-shell (buffer-name buffer)))
-                       (new-shell)))))
-          (switch-to-buffer new))))))
+        (switch-to-buffer (if create-new
+                              (my/shell-new)
+                            (let ((existing
+                                   (cl-find-if #'my/shell-in-same-repo-or-dir-p (buffer-list))))
+                              (if existing
+                                  (if (get-buffer-process existing) existing (my/shell-new (buffer-name existing)))
+                                (my/shell-new)))))))))
