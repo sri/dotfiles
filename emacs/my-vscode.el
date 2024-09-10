@@ -34,10 +34,11 @@
           (windmove-down)
         (split-window-below)
         (windmove-down)
-        (switch-to-buffer (if create-new
-                              (my/shell-new)
-                            (let ((existing
-                                   (cl-find-if #'my/shell-in-same-repo-or-dir-p (buffer-list))))
-                              (if existing
-                                  (if (get-buffer-process existing) existing (my/shell-new (buffer-name existing)))
-                                (my/shell-new)))))))))
+        (switch-to-buffer
+         (if create-new
+             (my/shell-new)
+           (let ((existing
+                  (cl-find-if #'my/shell-in-same-repo-or-dir-p (buffer-list))))
+             (if existing
+                 (if (get-buffer-process existing) existing (my/shell-new (buffer-name existing)))
+               (my/shell-new)))))))))
