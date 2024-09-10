@@ -11,6 +11,21 @@ alias gs='git status'
 alias gg='git grep'
 alias ggi='git grep -i'
 
+
+function gc() {
+  if [ $# -eq 0 ]; then
+    url="$(pbpaste)"
+    if [[ "$url" == http* ]]; then
+      git clone "$url"
+    else
+      echo "Error: Clipboard content does not start with 'http'."
+    fi
+  else
+    git clone "$1"
+  fi
+}
+
+
 function g() {
     local search=$1
     local downcased=${search,,}
