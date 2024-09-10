@@ -26,10 +26,9 @@
 (defun my/shell-for-buffer (&optional create-new)
   "Open a shell for the current buffer."
   (interactive "P")
-  (if (and (eq major-mode 'shell-mode) (window-in-direction 'above))
-      (if create-new
-          (switch-to-buffer (my/shell-new))
-        (delete-window))
+  (if (eq major-mode 'shell-mode)
+      (cond ((window-in-direction 'above) (delete-window))
+            (create-new (switch-to-buffer (my/shell-new))))
     (let ((win (window-in-direction 'below)))
       (if (and win (my/shell-in-same-repo-or-dir-p (window-buffer win)))
           (windmove-down)
