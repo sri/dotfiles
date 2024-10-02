@@ -189,8 +189,8 @@ Fundamental mode."
 
 (require 'vertico-directory)
 (require 'vertico-quick)
-;; (require 'vertico-posframe)
-;; (vertico-posframe-mode -11)
+(require 'vertico-posframe)
+(vertico-posframe-mode 1)
 
 
 (require 'marginalia)
