@@ -3,11 +3,12 @@
 
 (defvar my-themes
   '(
+    zenburn
     ef-melissa-dark
     ef-cyprus
     gruvbox-dark-medium
     kaolin-dark
-    zenburn
+
     leuven
     doom-zenburn
 
@@ -27,7 +28,8 @@
   (message "trying theme: %s" theme))
 
 (let ((theme
-       (or my-theme (car my-themes))))
+       (or my-theme
+           (nth (random (length my-themes)) my-themes))))
   (when theme
     (message "using theme %s" theme)
     (load-theme theme t)))
