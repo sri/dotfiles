@@ -53,16 +53,26 @@
            ("SPC" . exchange-point-and-mark)
 
            ("i" . indent-rigidly)
-           ("s" . my/isearch-region)
+           ("s" . my/region-bindings-s)
            ;; ("L" . ace-jump-line-mode)
            ;; By default, TAB does indent-region
            )
 
+
+(defun my/magit-mode-p ()
+  (memq major-mode '(magit-status-mode magit-diff-mode)))
+
 (defun my/region-bindings-k ()
   (interactive)
-  (if (eq major-mode 'magit-status-mode)
+  (if (my/magit-mode-p)
       (magit-discard)
     (previous-line)))
+
+(defun my/region-bindings-s ()
+  (interactive)
+  (if (my/magit-mode-p)
+      (magit-stage)
+    (my/isearch-region)))
 
 (add-to-list 'region-bindings-mode-disable-predicates
              'minibufferp)
