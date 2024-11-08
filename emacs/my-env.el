@@ -14,6 +14,14 @@ Fundamental mode."
 
 (add-to-list 'auto-mode-alist '("\\.gem\\'" . tar-mode))
 
+(defun my/view-sqlite-file ()
+  (require 'sqlite-mode)
+  (sqlite-mode-open-file
+   (prog1 buffer-file-name
+     (kill-current-buffer))))
+
+(add-to-list 'magic-mode-alist '("SQLite format 3\x00" . my/view-sqlite-file))
+
 (setq-default major-mode 'my/set-major-mode)
 
 (require 'whitespace)
