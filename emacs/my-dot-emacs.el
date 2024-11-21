@@ -152,8 +152,8 @@
      "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f"
      default))
  '(org-modules
-   '(org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe
-              org-rmail org-w3m org-velocity))
+   '(ol-bbdb ol-bibtex ol-docview ol-gnus ol-info ol-irc ol-mhe
+              ol-rmail ol-w3m org-velocity))
  '(package-selected-packages
    '(ace-jump-mode ample-theme anzu bm button-lock casual-dired
                    centaur-tabs chatgpt-shell company company-go
