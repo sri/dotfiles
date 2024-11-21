@@ -136,7 +136,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("7533e1fc8345739ea0ace60330ebffdf9da46398490b4c36c7e48775e5621052"
+   '("18cf5d20a45ea1dff2e2ffd6fbcd15082f9aa9705011a3929e77129a971d1cb3"
+     "7533e1fc8345739ea0ace60330ebffdf9da46398490b4c36c7e48775e5621052"
      "bf798e9e8ff00d4bf2512597f36e5a135ce48e477ce88a0764cfb5d8104e8163"
      "c9ddf33b383e74dac7690255dd2c3dfa1961a8e8a1d20e401c6572febef61045"
      "f8067b7d0dbffb29a79e0843797efabdf5e1cf326639874d8b407e9b034136a4"
@@ -265,5 +266,3 @@
   (recentf-open-files))
 
 (my/load-all)
-(put 'magit-diff-edit-hunk-commit 'disabled nil)
-(put 'upcase-region 'disabled nil)

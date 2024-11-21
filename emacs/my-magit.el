@@ -2,6 +2,8 @@
 
 (require 'git-link)
 
+(put 'magit-diff-edit-hunk-commit 'disabled nil)
+
 (setq git-link-open-in-browser t)
 (setq git-link-use-commit t)
 

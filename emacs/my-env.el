@@ -24,6 +24,8 @@ Fundamental mode."
 
 (setq-default major-mode 'my/set-major-mode)
 
+(put 'upcase-region 'disabled nil)
+
 (require 'whitespace)
 ;; For some reason tabs don't work, but tab-mark does...
 (setq whitespace-style
@@ -171,7 +173,11 @@ Fundamental mode."
 (make-variable-buffer-local 'column-number-mode)
 
 (global-font-lock-mode 1)
-(which-function-mode 1)
+
+
+(setq-default which-function-mode nil)
+(add-hook 'prog-mode-hook (lambda ()
+                            (setq which-function-mode t)))
 
 ;; Calendar
 (add-hook 'calendar-mode-hook
