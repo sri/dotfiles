@@ -45,7 +45,7 @@
         '(("\\.pdf\\'" "open -a Preview")
           ("\\.html?\\'" "open -a 'Google Chrome'"))))
 
-(setq-default dired-listing-switches "-alh")
+(setq-default dired-listing-switches "-alhF")
 
 ;; From jwiegley's dotfiles:
 (defun my/recentf-add-dired-directory ()
