@@ -293,6 +293,15 @@ will bring it back."
                              (current-buffer)
                              'replace)))
 
+(defun my/pp-xml (start end)
+  (interactive "r")
+  (unless (use-region-p)
+    (setq start (point-min) end (point-max)))
+  (shell-command-on-region start
+                           end
+                           "xmllint --format -"
+                           (current-buffer)))
+
 
 (defun my/toggle-camel-case-and-underscore ()
   (interactive)
