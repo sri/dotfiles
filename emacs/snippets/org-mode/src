@@ -1,0 +1,6 @@
+# name: src
+# key: src
+# --
+#+begin_src ${1:$$(yas-choose-value (mapcar (lambda (x) (symbol-name (car x))) org-babel-load-languages))}
+$0
+#+end_src

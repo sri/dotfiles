@@ -36,7 +36,7 @@
    ;; (org . t)
    (python . t)
    (ruby . t)
-   ;; (sh . t)
+   (shell . t)
    ;; (sql . t)
    ;; (sqlite . t)
    ))
