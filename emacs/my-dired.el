@@ -67,7 +67,7 @@
       (dired root)
       (message "in git repo root"))))
 
-(require 'casual-dired)
+;(require 'casual-dired)
 
 (add-hook 'dired-mode-hook
           (lambda ()
@@ -103,8 +103,8 @@
                        ([right] . my/dired-right-arrow-key)
 
                        ;; casual-dired
-                       ("o" . casual-dired-tmenu)
-                       ("s" . casual-dired-sort-by-tmenu)
-                       ("/" . casual-dired-search-replace-tmenu)
+                       ;; ("o" . casual-dired-tmenu)
+                       ;; ("s" . casual-dired-sort-by-tmenu)
+                       ;; ("/" . casual-dired-search-replace-tmenu)
 
                        )))

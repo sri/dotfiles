@@ -1,5 +1,9 @@
+(with-eval-after-load 'org
+  (global-org-modern-mode))
+
 (require 'org)
 (require 'org-bullets)
+
 
 (setq org-bullets-bullet-list '("○"))
 
@@ -37,7 +41,7 @@
    (python . t)
    (ruby . t)
    (shell . t)
-   ;; (sql . t)
+   (sql . t)
    ;; (sqlite . t)
    ))
 

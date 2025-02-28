@@ -1,4 +1,9 @@
 ;; -*- mode: emacs-lisp -*-
+
+;; In case of errors, I don't have to restart emacs
+;; from the command-line with --debug-init passed in.
+(setq debug-on-error t)
+
 (defvar my-emacs-start-time (current-time))
 (defvar my-emacs-elapsed-time)
 
@@ -136,7 +141,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("18cf5d20a45ea1dff2e2ffd6fbcd15082f9aa9705011a3929e77129a971d1cb3"
+   '("88f7ee5594021c60a4a6a1c275614103de8c1435d6d08cc58882f920e0cec65e"
+     "18cf5d20a45ea1dff2e2ffd6fbcd15082f9aa9705011a3929e77129a971d1cb3"
      "7533e1fc8345739ea0ace60330ebffdf9da46398490b4c36c7e48775e5621052"
      "bf798e9e8ff00d4bf2512597f36e5a135ce48e477ce88a0764cfb5d8104e8163"
      "c9ddf33b383e74dac7690255dd2c3dfa1961a8e8a1d20e401c6572febef61045"
@@ -153,20 +159,20 @@
      "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f"
      default))
  '(org-modules
-   '(ol-bbdb ol-bibtex ol-docview ol-gnus ol-info ol-irc ol-mhe
-              ol-rmail ol-w3m org-velocity))
+   '(ol-bbdb ol-bibtex ol-docview ol-gnus ol-info ol-irc ol-mhe ol-rmail
+             ol-w3m))
  '(package-selected-packages
-   '(ace-jump-mode ample-theme anzu bm button-lock casual-dired
-                   centaur-tabs chatgpt-shell company company-go
-                   consult csv-mode diff-hl diminish dired-sidebar
-                   doom-themes dracula-theme ef-themes elisp-slime-nav
-                   embark embark-consult exec-path-from-shell
-                   expand-region flycheck flycheck-golangci-lint
-                   git-link go-eldoc go-mode gotest gruvbox-theme howm
-                   hydra jetbrains-darcula-theme kaolin-themes
-                   leuven-theme macrostep magit marginalia
-                   markdown-mode multiple-cursors orderless org
-                   org-bullets poet-theme projectile protobuf-mode
+   '(ace-jump-mode ample-theme anzu bm button-lock centaur-tabs
+                   chatgpt-shell company company-go consult csv-mode
+                   diff-hl diminish dired-sidebar doom-themes
+                   dracula-theme ef-themes elisp-slime-nav embark
+                   embark-consult exec-path-from-shell expand-region
+                   flycheck flycheck-golangci-lint git-link go-eldoc
+                   go-mode gotest gruvbox-theme howm hydra
+                   jetbrains-darcula-theme kaolin-themes leuven-theme
+                   macrostep magit marginalia markdown-mode
+                   multiple-cursors orderless org org-bullets
+                   org-modern poet-theme projectile protobuf-mode
                    rainbow-mode region-bindings-mode rg rjsx-mode
                    ruby-end s smart-mode-line solarized-theme
                    spacemacs-theme string-inflection swiper treemacs
@@ -248,6 +254,7 @@
           (remove-if (lambda (el-file)
                        ;; remove autosaves
                        (or (string-prefix-p ".#" el-file)
+                           (string-prefix-p "my-dot-emacs" el-file)
                            (some (lambda (my) (string= (concat my ".el") el-file))
                                  all)))
                      (directory-files "." nil "\\.el$" t))))
