@@ -213,7 +213,17 @@
                ;; broken state -- without my keybindings, etc.
                (push source my/loading-errors))
            (if (file-exists-p compiled)
-               (load compiled nil t t)))
+               (condition-case err
+                   (load compiled nil t t)
+                 (error
+                  (message "Error while loading file %s\nFix the error and hit %s"
+                           source
+                           (key-description (car (where-is-internal 'exit-recursive-edit))))
+                  (sit-for 1.0)
+                  (switch-to-buffer (find-file source))
+                  (debug err)
+                  (recursive-edit)
+                  (my/load path ignore-if-missing)))))
           (t
            (if (file-exists-p compiled)
                (delete-file compiled))
