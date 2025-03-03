@@ -48,7 +48,6 @@
 
 
 (require 'exec-path-from-shell)
-(add-to-list 'exec-path-from-shell-variables "NPM_TOKEN")
 (exec-path-from-shell-initialize)
 
 ;; Center Emacs's position on screen
