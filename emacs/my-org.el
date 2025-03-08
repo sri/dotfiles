@@ -65,7 +65,18 @@
 (setq org-log-done t)
 (setq org-confirm-babel-evaluate nil)
 
-'(setq org-todo-keyword-faces
+;; From https://amitp.blogspot.com/2023/12/status-codes.html
+;; IDEA: maybe someday
+;; TODO: doing later
+;; SOON: doing soon
+;; NEXT: doing now
+;; DONE: done
+;; HACK: done in a cheesy way, blend of todo and done
+;; WAIT: waiting for some external change (event)
+;; HOLD: waiting for some internal change (of mind)
+;; STOP: stopped waiting, decided not to work on it
+;; NOTE: end state, just keep track of it
+(setq org-todo-keyword-faces
       '(("NOTE" :foreground "#4b4f89")
         ("IDEA" :foreground "#4b4f89" :box t)
         ("TODO" :foreground "medium blue" :weight bold)

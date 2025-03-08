@@ -1,16 +1,16 @@
-(defvar my-theme nil
+(defvar my-theme 'zenburn ;leuven
   "Can be defined in ~/.emacs.private.el.")
 
 (defvar my-themes
   '(
-    zenburn
+    doom-zenburn
+
     ef-melissa-dark
     ef-cyprus
     gruvbox-dark-medium
     kaolin-dark
 
     leuven
-    doom-zenburn
 
     doom-tokyo-night
     solarized-dark
@@ -57,6 +57,7 @@
        (left (/ (- (display-pixel-width)
                    (frame-pixel-width))
                 2)))
+
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (add-to-list 'default-frame-alist (cons 'height height))
