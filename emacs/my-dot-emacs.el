@@ -1,11 +1,3 @@
-(let ((skip-customizations
-       (equal ?y
-              (ignore-errors
-                ;; Mouse clicks throws an error.
-                (read-char "Skip my customizations?" nil 2.0)))))
-  (if skip-customizations
-      (dired "~/my/dotfiles/emacs")
-    (load "~/my/dotfiles/emacs/my-dot-emacs-2")))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -62,3 +54,12 @@
  ;; '(isearch ((t (:background "#ffffff" :foreground "#6e52b9"))))
  ;; '(lazy-highlight ((t (:background "#6e52b9" :foreground "#ffffff"))))
  )
+
+(let ((skip-customizations
+       (equal ?y
+              (ignore-errors
+                ;; Mouse clicks throws an error.
+                (read-char "Skip my customizations?" nil 2.0)))))
+  (if skip-customizations
+      (dired "~/my/dotfiles/emacs")
+    (load "~/my/dotfiles/emacs/my-dot-emacs-2")))
