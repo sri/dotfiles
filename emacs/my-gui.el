@@ -46,10 +46,6 @@
   ;; (setq exec-path (split-string shell-path path-separator)))
 
 
-
-(require 'exec-path-from-shell)
-(exec-path-from-shell-initialize)
-
 ;; Center Emacs's position on screen
 (let* ((height 40)
        (width 82)

@@ -269,6 +269,10 @@
                                  all)))
                      (directory-files "." nil "\\.el$" t))))
 
+    (when window-system
+      (require 'exec-path-from-shell)
+      (exec-path-from-shell-initialize))
+
     ;; Files that aren't on MELPA or any other package archive.
     (mapc 'my/load (directory-files "third-party" 'full "\\.el$" t))
     (mapc 'my/load base)

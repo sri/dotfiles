@@ -1,5 +1,9 @@
 (require 'dired-x)
 
+(when (executable-find "gls")
+  (setq insert-directory-program (executable-find "gls")))
+(setq dired-listing-switches "-alh --group-directories-first")
+
 (defun my/dired-sort-by-size ()
   (interactive)
   (dired-hide-details-mode -1)
@@ -67,7 +71,8 @@
       (dired root)
       (message "in git repo root"))))
 
-;(require 'casual-dired)
+
+(require 'casual-dired-sort-by)
 
 (add-hook 'dired-mode-hook
           (lambda ()
@@ -101,6 +106,7 @@
                        ("N" . dired-create-empty-file)
                        ([left] . dired-up-directory)
                        ([right] . my/dired-right-arrow-key)
+                       ("s" . casual-dired-sort-by-tmenu)
 
                        ;; casual-dired
                        ;; ("o" . casual-dired-tmenu)
