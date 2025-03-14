@@ -2,7 +2,7 @@
 
 (when (executable-find "gls")
   (setq insert-directory-program (executable-find "gls")))
-(setq dired-listing-switches "-alh --group-directories-first")
+(setq dired-listing-switches "-alh")
 
 (defun my/dired-sort-by-size ()
   (interactive)
