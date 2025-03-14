@@ -17,7 +17,7 @@ def error(message):
 def last_modified_time(file):
     return file.stat().st_mtime
 
-def mvldown(path, new_name):
+def mvldown(path):
     if not path.exists():
         error(f"{path} not found")
 
@@ -25,20 +25,23 @@ def mvldown(path, new_name):
     if not files:
         error(f"nothing in {path}")
 
-    latest = files[-1]
-    rename_as = Path(new_name or latest.name)
-    if rename_as.exists():
-        error(f"{rename_as} already exists")
+    for latest in reversed(files):
+        response = input(f"{latest}? ").lower()
+        if response == "y":
+            rename_as = Path(latest.name)
+            if rename_as.exists():
+                error(f"{rename_as} already exists")
 
-    latest.rename(rename_as)
-    print(f"moved {latest} to {rename_as}")
+            latest.rename(rename_as)
+            print(f"moved {latest} to {rename_as}")
 
 def main():
-    new_name = (sys.argv[1] if len(sys.argv) == 2 else None)
     downloads_dir = Path.home().joinpath("Downloads")
 
     try:
-        mvldown(downloads_dir, new_name)
+        mvldown(downloads_dir)
+    except (KeyboardInterrupt, EOFError):
+        pass
     except MvldownError as err:
         print(err, file=sys.stderr)
         sys.exit(1)
