@@ -7,7 +7,7 @@
 (defvar my-emacs-start-time (current-time))
 (defvar my-emacs-elapsed-time)
 
-(require 'cl)
+(require 'cl-lib)
 (require 'subr-x)
 
 (require 'package)
