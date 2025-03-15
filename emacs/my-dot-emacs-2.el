@@ -107,7 +107,7 @@
 
   ;; Load packages and install them if necessary.
   (let* ((package--builtins '())
-         (missing (remove-if 'package-installed-p package-selected-packages)))
+         (missing (cl-remove-if 'package-installed-p package-selected-packages)))
     (when missing
       (package-refresh-contents)
       (mapc 'package-install missing)))
@@ -131,13 +131,13 @@
                  "my-help"
                  "my-dired"
                  "my-modeline"))
-         (all (list* gui non-gui this diminish base))
+         (all (cl-list* gui non-gui this diminish base))
          (pkg-customizations
-          (remove-if (lambda (el-file)
+          (cl-remove-if (lambda (el-file)
                        ;; remove autosaves
                        (or (string-prefix-p ".#" el-file)
                            (string-prefix-p "my-dot-emacs" el-file)
-                           (some (lambda (my) (string= (concat my ".el") el-file))
+                           (cl-some (lambda (my) (string= (concat my ".el") el-file))
                                  all)))
                      (directory-files "." nil "\\.el$" t))))
 
