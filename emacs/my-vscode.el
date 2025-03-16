@@ -1,4 +1,4 @@
-(require 'cl)
+(require 'cl-lib)
 (require 'windmove)
 
 (defun my/git-root (buffer)

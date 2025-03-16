@@ -1,8 +1,5 @@
 ;; M-C-s was isearch-forward-regexp; its now S-C-f
 
-(eval-when-compile
-  (require 'cl))
-
 (require 'subword)
 (require 'bind-key)
 
