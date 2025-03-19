@@ -39,20 +39,6 @@
      (skip-chars-forward "a-zA-Z0-9_-")
      (point))))
 
-(defun my/isearch-goto-first-match ()
-  (interactive)
-  (widen)
-  (goto-char (point-min))
-  (isearch-repeat-forward)
-  (isearch-update))
-
-(defun my/isearch-goto-last-match ()
-  (interactive)
-  (widen)
-  (goto-char (point-max))
-  (isearch-repeat-backward)
-  (isearch-update))
-
 (defun my/isearch-repeat ()
   (interactive)
   (if isearch-forward
@@ -70,9 +56,15 @@
 (setq isearch-allow-scroll 'unlimited)
 (setq isearch-lazy-highlight-initial-delay 0)
 
+(defun my/isearch ()
+  (interactive)
+  (if (use-region-p)
+      (isearch-forward-thing-at-point)
+    (call-interactively 'isearch-forward)))
+
 (bind-keys :map isearch-mode-map
-           ("M-a" . my/isearch-goto-first-match)
-           ("M-e" . my/isearch-goto-last-match)
+           ("M-a" . isearch-beginning-of-buffer)
+           ("M-e" . isearch-end-of-buffer)
            ("C-e" . isearch-exit)
            ("<return>" . my/isearch-repeat)
            ("RET" . my/isearch-repeat)

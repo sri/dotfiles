@@ -81,7 +81,7 @@
  ("C-|" . tab-bar-switch-to-next-tab)
  ("C-a" . my/beginning-of-line)
  ("C-b" . backward-kill-word)
- ("C-f" . isearch-forward)
+ ("C-f" . my/isearch)
  ("S-C-f" . isearch-forward-regexp)
  ("C-j" . other-window)
  ("C-S-j" . ace-jump-word-mode)
