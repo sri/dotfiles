@@ -216,8 +216,12 @@ decoded URL in the minibuffer."
 (defun my/open-latest-downloaded-file (arg)
   "View ~/Downloads directory with most recently downloaded file first."
   (interactive "P")
-  (let* ((downloads (-sort #'file-newer-than-file-p (f-files "~/Downloads")))
-         (annotations (mapcar (lambda (f) (cons f (marginalia-annotate-file (concat "~/Downloads/" f)))) downloads)))
+  (let* ((downloads (-sort #'file-newer-than-file-p
+                           (directory-files "~/Downloads" 'full
+                                            "^\\([^.]\\|\\.\\([^.]\\|\\..+\\)\\)"
+                                            'nosort)))
+         (annotations (mapcar (lambda (f) (cons f (marginalia-annotate-file (concat "~/Downloads/" f))))
+                              downloads)))
     (find-file (consult--read downloads
                               :prompt "Open downloaded file: "
                               :require-match t
