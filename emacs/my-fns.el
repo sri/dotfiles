@@ -1,3 +1,7 @@
+(require 'f)
+(require 'dash)
+(require 's)
+
 (defvar my/change-inside-pair-overlay nil)
 (make-variable-buffer-local 'my/change-inside-pair-overlay)
 
@@ -216,20 +220,14 @@ decoded URL in the minibuffer."
 (defun my/open-latest-downloaded-file (arg)
   "View ~/Downloads directory with most recently downloaded file first."
   (interactive "P")
-  (let* ((downloads (-sort #'file-newer-than-file-p
-                           (directory-files "~/Downloads" 'full
-                                            "^\\([^.]\\|\\.\\([^.]\\|\\..+\\)\\)"
-                                            'nosort)))
-         (annotations (mapcar (lambda (f) (cons f (marginalia-annotate-file (concat "~/Downloads/" f))))
-                              downloads)))
-    (find-file (consult--read downloads
+  (let* ((files (-sort #'file-newer-than-file-p (f-files "~/Downloads")))
+         (ann (--map (cons it (marginalia-annotate-file it)) files)))
+    (find-file (consult--read files
                               :prompt "Open downloaded file: "
                               :require-match t
                               :sort nil
                               :annotate (lambda (f)
-                                         (consult--annotate-align
-                                          f
-                                          (cdr (assoc f annotations))))))))
+                                          (consult--annotate-align f (cdr (assoc f ann))))))))
 
 (require 'rect) ; for killed-rectangle
 (defun my/copy-from-starting-col-till-eol (start end &optional evenly-sized-strings)
