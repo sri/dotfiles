@@ -214,14 +214,18 @@ decoded URL in the minibuffer."
   (query-replace-regexp "[^[:ascii:]]" ""))
 
 (defun my/open-latest-downloaded-file (arg)
+  "View ~/Downloads directory with most recently downloaded file first."
   (interactive "P")
   (let* ((downloads (-sort #'file-newer-than-file-p (f-files "~/Downloads")))
-         (annotations (mapcar (lambda (f) (cons f (marginalia-annotate-file f)))
-                              downloads)))
+         (annotations (mapcar (lambda (f) (cons f (marginalia-annotate-file (concat "~/Downloads/" f)))) downloads)))
     (find-file (consult--read downloads
                               :prompt "Open downloaded file: "
+                              :require-match t
                               :sort nil
-                              :annotate (lambda (f) (cdr (assoc f annotations)))))))
+                              :annotate (lambda (f)
+                                         (consult--annotate-align
+                                          f
+                                          (cdr (assoc f annotations))))))))
 
 (require 'rect) ; for killed-rectangle
 (defun my/copy-from-starting-col-till-eol (start end &optional evenly-sized-strings)

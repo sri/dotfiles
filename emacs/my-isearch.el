@@ -69,6 +69,7 @@
            ("M-a" . isearch-beginning-of-buffer)
            ("M-e" . isearch-end-of-buffer)
            ("C-e" . isearch-exit)
+           ("M-h" . consult-isearch-history)
            ("<return>" . my/isearch-repeat)
            ("RET" . my/isearch-repeat)
            ("<C-return>" . isearch-exit)
