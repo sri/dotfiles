@@ -1,5 +1,4 @@
-(with-eval-after-load 'org
-  (global-org-modern-mode))
+;;; -*- lexical-binding: t -*-
 
 (require 'org)
 (require 'org-bullets)
@@ -115,7 +114,7 @@
   "Face for Org dynamic links.")
 
 (defun my/org-create-dynamic-link (regex url-template)
-  (lexical-let ((url-template url-template))
+  (let ((url-template url-template))
     (button-lock-set-button
      regex
      (lambda ()
