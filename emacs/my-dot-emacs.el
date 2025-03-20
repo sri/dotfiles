@@ -25,7 +25,7 @@
    '(ol-bbdb ol-bibtex ol-docview ol-gnus ol-info ol-irc ol-mhe ol-rmail
              ol-w3m))
  '(package-selected-packages
-   '(ace-jump-mode ample-theme anzu bm button-lock casual centaur-tabs
+   '(ace-jump-mode ample-theme bm button-lock casual centaur-tabs
                    chatgpt-shell company company-go consult csv-mode
                    diff-hl diminish dired-sidebar doom-themes
                    dracula-theme ef-themes elisp-slime-nav embark

@@ -8,7 +8,6 @@
 (defun my/diminish-all ()
   (mapc 'diminish
         '(yas-minor-mode
-          anzu-mode
           ruby-end-mode
           auto-fill-function
           elisp-slime-nav-mode

@@ -80,6 +80,6 @@
            ("C-o" . isearch-occur)
            ("C-v" . my/isearch-goto-next-non-visible-match)
            ("\r" . isearch-repeat-forward)
-           ([remap isearch-query-replace] . anzu-isearch-query-replace)
-           ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp)
+           ([remap isearch-query-replace] . vr/query-replace)
+           ([remap isearch-query-replace-regexp] . vr/query-replace)
            ("C-/" . casual-isearch-tmenu))

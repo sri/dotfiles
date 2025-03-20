@@ -119,7 +119,6 @@ Also, creates a shell when there are no other shells."
             (setq comint-scroll-show-maximum-output nil)
             (toggle-truncate-lines 1)
             (local-unset-key (kbd "C-d"))
-            (anzu-mode -1)
 
             (bind-keys :map comint-mode-map
                        ("C-c C-g" . my/shell-rename-and-run-command)
