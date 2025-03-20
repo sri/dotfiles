@@ -213,16 +213,15 @@ decoded URL in the minibuffer."
   (interactive)
   (query-replace-regexp "[^[:ascii:]]" ""))
 
-(defun my/open-latest-downloaded-file ()
-  (interactive)
-  (let (downloads)
-    (dolist (f (directory-files "~/Downloads" 'full nil 'nosort))
-      (unless (member (file-name-nondirectory f) '("." ".."))
-        (push (cons f (nth 5 (file-attributes f))) downloads)))
-    (setq downloads
-          (sort downloads (lambda (x y) (time-less-p (cdr y) (cdr x)))))
-    (when downloads
-      (find-file (caar downloads)))))
+(defun my/open-latest-downloaded-file (arg)
+  (interactive "P")
+  (let* ((downloads (-sort #'file-newer-than-file-p (f-files "~/Downloads")))
+         (annotations (mapcar (lambda (f) (cons f (marginalia-annotate-file f)))
+                              downloads)))
+    (find-file (consult--read downloads
+                              :prompt "Open downloaded file: "
+                              :sort nil
+                              :annotate (lambda (f) (cdr (assoc f annotations)))))))
 
 (require 'rect) ; for killed-rectangle
 (defun my/copy-from-starting-col-till-eol (start end &optional evenly-sized-strings)

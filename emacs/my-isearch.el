@@ -1,3 +1,5 @@
+(require 'casual-isearch)
+
 (defun my/isearch-delete-region ()
   (interactive)
   (when isearch-other-end
@@ -54,6 +56,7 @@
       (isearch-resume search-for nil nil t search-for nil))))
 
 (setq isearch-allow-scroll 'unlimited)
+(setq isearch-lazy-count t)
 (setq isearch-lazy-highlight-initial-delay 0)
 
 (defun my/isearch ()
@@ -75,4 +78,7 @@
            ("C-k" . isearch-query-replace)
            ("C-o" . isearch-occur)
            ("C-v" . my/isearch-goto-next-non-visible-match)
-           ("\r" . isearch-repeat-forward))
+           ("\r" . isearch-repeat-forward)
+           ([remap isearch-query-replace] . anzu-isearch-query-replace)
+           ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp)
+           ("C-/" . casual-isearch-tmenu))
