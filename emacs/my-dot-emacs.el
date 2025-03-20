@@ -25,22 +25,22 @@
    '(ol-bbdb ol-bibtex ol-docview ol-gnus ol-info ol-irc ol-mhe ol-rmail
              ol-w3m))
  '(package-selected-packages
-   '(ace-jump-mode ample-theme bm button-lock casual centaur-tabs
-                   chatgpt-shell company company-go consult csv-mode
-                   diff-hl diminish dired-sidebar doom-themes
-                   dracula-theme ef-themes elisp-slime-nav embark
+   '(ace-jump-mode bm button-lock casual
+                   company company-go consult csv-mode
+                   diff-hl diminish doom-themes
+                   ef-themes elisp-slime-nav embark
                    embark-consult exec-path-from-shell expand-region
                    flycheck flycheck-golangci-lint git-link go-eldoc
                    go-mode gotest gruvbox-theme howm hydra
-                   jetbrains-darcula-theme kaolin-themes leuven-theme
+                   jetbrains-darcula-theme leuven-theme
                    macrostep magit marginalia markdown-mode
                    multiple-cursors orderless org org-bullets
-                   org-modern poet-theme projectile protobuf-mode
+                   projectile protobuf-mode
                    rainbow-mode region-bindings-mode rg rjsx-mode
                    ruby-end s smart-mode-line solarized-theme
-                   spacemacs-theme string-inflection swiper treemacs
+                   spacemacs-theme string-inflection
                    typescript-mode undo-tree use-package vertico
-                   vertico-posframe visual-regexp vterm web-mode
+                   vertico-posframe visual-regexp web-mode
                    which-key xterm-color yaml-mode yasnippet
                    zenburn-theme zig-mode))
  '(typescript-indent-level 2))
