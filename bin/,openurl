@@ -6,8 +6,8 @@ def main():
         sys.exit(f"usage: {sys.argv[0]} url_or_local_file_or_dir")
 
     url = sys.argv[1]
-    if not os.path.exists(arg) and not arg.startswith("http"):
-        url = f"https://{arg}"
+    if not os.path.exists(url) and not url.startswith("http"):
+        url = f"https://{url}"
 
     os.system(f"open -a 'Google Chrome' '{url}'")
 
