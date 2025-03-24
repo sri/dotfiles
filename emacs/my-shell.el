@@ -64,33 +64,14 @@ And then run the command."
 
 (require 'dash)
 
-(defun my/shell (&optional arg)
+(defun my/shell (&optional arg name)
   "Switch to the most recently active shell buffer.
 With a prefix arg, create a new shell.
 Also, creates a shell when there are no other shells."
   (interactive "P")
-  (if arg
-      (shell (generate-new-buffer-name "*shell*"))
-    (let* ((shell-modes '(shell-mode vterm-mode))
-           (shells (->> (buffer-list)
-                        (-filter (lambda (b)
-                                   (memq (buffer-local-value 'major-mode b) shell-modes)))
-                        (-sort (lambda (x y)
-                                 (let ((my (buffer-local-value 'my/shell-last-active-time x))
-                                       (other (buffer-local-value 'my/shell-last-active-time y)))
-                                   (cond ((null my) nil)
-                                         ((null other) t)
-                                         (t (> my other)))))))))
-      (cond ((null shells)
-             (shell))
-            ((memq major-mode shell-modes)
-             (switch-to-buffer (or (cadr (memq (current-buffer) shells)) (car shells))))
-            (t (switch-to-buffer (car shells)))))))
-
-(defvar-local my/shell-last-active-time nil)
-
-(defun my/shell-update-last-active-time (&optional string)
-  (setq my/shell-last-active-time (float-time)))
+  (if (project-current nil)
+      (call-interactively 'project-shell)
+    (shell (generate-new-buffer-name (or name "*shell*")))))
 
 (defun my/shell-dont-scroll ()
   (interactive)
@@ -99,9 +80,27 @@ Also, creates a shell when there are no other shells."
     (goto-char point)
     (recenter 0)))
 
-
 (setq comint-output-filter-functions
       (remove 'ansi-color-process-output comint-output-filter-functions))
+
+(defun my/tab-line-tabs-project-shell-buffers ()
+  (let ((project-dir (project-current nil))
+        (mode-buffers (tab-line-tabs-mode-buffers)))
+    (if project-dir
+        (-filter (lambda (b)
+                   (let ((buf-proj-root
+                          (with-current-buffer b
+                            (when-let* ((proj (project-current nil)))
+                              (and proj (project-root proj))))))
+
+                     (string= (project-root project-dir)
+                              buf-proj-root)))
+                 mode-buffers)
+      (-filter (lambda (b)
+                 (string= default-directory
+                          (with-current-buffer b
+                            default-directory)))
+               mode-buffers))))
 
 (add-hook 'shell-mode-hook
           (lambda ()
@@ -109,9 +108,6 @@ Also, creates a shell when there are no other shells."
 
             (setq comint-process-echoes t)
 
-            (my/shell-update-last-active-time)
-            (add-hook 'comint-input-filter-functions
-                      'my/shell-update-last-active-time)
             (setq line-number-mode nil
                   column-number-mode nil)
             (setq comint-input-ignoredups t)
@@ -135,4 +131,8 @@ Also, creates a shell when there are no other shells."
                        ("M-." . comint-insert-previous-argument))
 
             (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t)
-            ))
+
+            (tab-line-mode 1)
+            (setq tab-line-new-tab-choice
+                  (lambda () (let ((current-prefix-arg 4)) (my/shell))))
+            (setq tab-line-tabs-function 'my/tab-line-tabs-project-shell-buffers)))
