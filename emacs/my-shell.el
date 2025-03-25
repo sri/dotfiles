@@ -85,22 +85,24 @@ Also, creates a shell when there are no other shells."
 
 (defun my/tab-line-tabs-project-shell-buffers ()
   (let ((project-dir (project-current nil))
-        (mode-buffers (tab-line-tabs-mode-buffers)))
-    (if project-dir
-        (-filter (lambda (b)
-                   (let ((buf-proj-root
-                          (with-current-buffer b
-                            (when-let* ((proj (project-current nil)))
-                              (and proj (project-root proj))))))
-
-                     (string= (project-root project-dir)
-                              buf-proj-root)))
-                 mode-buffers)
-      (-filter (lambda (b)
-                 (string= default-directory
-                          (with-current-buffer b
-                            default-directory)))
-               mode-buffers))))
+        (mode-buffers (tab-line-tabs-mode-buffers))
+        (result
+         (if project-dir
+             (-filter (lambda (b)
+                        (let ((buf-proj-root
+                               (with-current-buffer b
+                                 (when-let* ((proj (project-current nil)))
+                                   (and proj (project-root proj))))))
+                          (string= (project-root project-dir)
+                                   buf-proj-root)))
+                      mode-buffers)
+           (-filter (lambda (b)
+                      (string= default-directory
+                               (with-current-buffer b
+                                 default-directory)))
+                    mode-buffers))))
+    (set-window-parameter (selected-window) 'tab-line-buffers result)
+    result))
 
 (add-hook 'shell-mode-hook
           (lambda ()
@@ -121,8 +123,8 @@ Also, creates a shell when there are no other shells."
                        ("C-c d" . dirs)
                        ("C-c <return>" . my/shell-dont-scroll)
                        ("C-c RET" . my/shell-dont-scroll)
-                       ("C-<up>" . comint-previous-prompt)
-                       ("C-<down>" . comint-next-prompt)
+                       ("C-c <up>" . comint-previous-prompt)
+                       ("C-c <down>" . comint-next-prompt)
                        ("C-c e" . my/shell-erase-buffer)
                        ("C-c n" . my/shell-rename-buffer)
                        ("C-l" . my/shell-bash-clear-screen)
