@@ -230,6 +230,7 @@ Fundamental mode."
 (add-hook 'minibuffer-exit-hook 'my/enable-override-global-mode)
 
 (require 'project)
+(setq-default project-mode-line t)
 (setq project-vc-merge-submodules nil)
 
 (require 'grep)

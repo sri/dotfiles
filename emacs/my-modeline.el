@@ -264,6 +264,7 @@
                 my/mode-line-position " "
                 mode-line-buffer-identification " "
                 (vc-mode vc-mode) " "
-                (which-func-mode which-func-format)
+                (project-mode-line project-mode-line-format)
+                ;; (which-func-mode which-func-format)
                 mode-line-modes))
                 ;; my/buffer-mods
