@@ -84,24 +84,24 @@ Also, creates a shell when there are no other shells."
       (remove 'ansi-color-process-output comint-output-filter-functions))
 
 (defun my/tab-line-tabs-project-shell-buffers ()
-  (let ((project-dir (project-current nil))
-        (mode-buffers (tab-line-tabs-mode-buffers))
-        (result
-         (if project-dir
-             (-filter (lambda (b)
-                        (let ((buf-proj-root
-                               (with-current-buffer b
-                                 (when-let* ((proj (project-current nil)))
-                                   (and proj (project-root proj))))))
-                          (string= (project-root project-dir)
-                                   buf-proj-root)))
-                      mode-buffers)
-           (-filter (lambda (b)
-                      (string= default-directory
-                               (with-current-buffer b
-                                 default-directory)))
-                    mode-buffers))))
-    (set-window-parameter (selected-window) 'tab-line-buffers result)
+  (let* ((project-dir (project-current nil))
+         (mode-buffers (tab-line-tabs-mode-buffers))
+         (result
+          (if project-dir
+              (-filter (lambda (b)
+                         (let ((buf-proj-root
+                                (with-current-buffer b
+                                  (when-let* ((proj (project-current nil)))
+                                    (and proj (project-root proj))))))
+                           (string= (project-root project-dir)
+                                    buf-proj-root)))
+                       mode-buffers)
+            (-filter (lambda (b)
+                       (string= default-directory
+                                (with-current-buffer b
+                                  default-directory)))
+                     mode-buffers))))
+    (set-window-parameter nil 'tab-line-buffers result)
     result))
 
 (add-hook 'shell-mode-hook
@@ -137,4 +137,5 @@ Also, creates a shell when there are no other shells."
             (tab-line-mode 1)
             (setq tab-line-new-tab-choice
                   (lambda () (let ((current-prefix-arg 4)) (my/shell))))
+
             (setq tab-line-tabs-function 'my/tab-line-tabs-project-shell-buffers)))
