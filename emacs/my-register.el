@@ -1,22 +1,12 @@
-;; Add a new type of register: `command'.
-(defun my/jump-to-register (register &optional delete)
-  (let ((val (get-register register)))
-    (cond ((and (consp val) (eq (car val) 'command))
-           (funcall (cdr val))
-           ;; Don't proceed with the old function
-           t))))
-
-;; Before-until -- if the function returns `t', don't call the old function.
-(add-function :before-until (symbol-function 'jump-to-register) #'my/jump-to-register)
-
 (let ((registers '((?d . "~/Desktop")
+                   (?D . "~/Downloads")
                    (?e . "~/my/dotfiles/emacs")
-                   (?s . "~/dev")
+                   (?s . "~/dev/src")
                    (?n . "~/my/notes")
                    (?y . "~/my/dotfiles/emacs/snippets/fundamental-mode")
                    (?~ . "~"))))
-  (dolist (reg registers)
-    (set-register (car reg) (cons 'file (cdr reg)))))
+  (--each registers
+    (set-register (car it) (cons 'file (cdr it)))))
 
 ;; Location of my work notes & work log files.
 (defvar my/work-notes-file nil)
@@ -34,4 +24,3 @@
          (find-file (or my/work-notes-file my/work-log-file)))))
 
 (add-hook 'emacs-startup-hook 'my/open-work-notes)
-(set-register ?t '(command . my/open-work-notes))
