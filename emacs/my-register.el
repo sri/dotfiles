@@ -4,6 +4,7 @@
                    (?s . "~/dev/src")
                    (?n . "~/my/notes")
                    (?y . "~/my/dotfiles/emacs/snippets/fundamental-mode")
+                   (?p . "~/.emacs.private.el")
                    (?~ . "~"))))
   (--each registers
     (set-register (car it) (cons 'file (cdr it)))))

@@ -1,19 +1,65 @@
 ;;; -*- lexical-binding: t -*-
 
-(require 'org)
+(use-package org
+  :ensure nil
+  :config
+  (setq org-cycle-include-plain-lists 'integrate)
+  (setq org-blank-before-new-entry nil)
+  (setq org-M-RET-may-split-line '((default . nil)))
+  (setq org-insert-heading-respect-content t)
+  (setq org-startup-indented t)
+  (setq org-hide-leading-stars t)
+  (setq org-special-ctrl-a/e t)
+  (setq org-special-ctrl-k nil)
+  (setq org-return-follows-link nil)
+  (setq org-use-speed-commands t)
+  (setq org-fontify-done-headline t)
+  (setq org-closed-keep-when-no-todo t)
+
+  (setq org-log-done nil)
+  ;; This only works if org-todo-keywords are annotated with `!'
+  ;; (for timestamp) and `@' (for note), like:
+  ;; (setq org-todo-keywords
+  ;;       '((sequence "TODO(t)" "WAIT(w!)" "|" "DONE(d!)" "CANCELED(c!)")))
+  (setq org-log-into-drawer t)
+
+  (setq org-confirm-babel-evaluate nil)
+  (setq org-agenda-files '("~/my/dotfiles/emacs"))
+  (setq org-babel-python-command "python3")
+
+  ;; From https://amitp.blogspot.com/2023/12/status-codes.html
+  ;; IDEA: maybe someday
+  ;; TODO: doing later
+  ;; SOON: doing soon
+  ;; NEXT: doing now
+  ;; DONE: done
+  ;; HACK: done in a cheesy way, blend of todo and done
+  ;; WAIT: waiting for some external change (event)
+  ;; HOLD: waiting for some internal change (of mind)
+  ;; STOP: stopped waiting, decided not to work on it
+  ;; NOTE: end state, just keep track of it
+  (setq org-todo-keyword-faces
+      '(("NOTE" :foreground "#4b4f89")
+        ("IDEA" :foreground "#4b4f89" :box t)
+        ("TODO" :foreground "medium blue" :weight bold)
+        ("SOON" :foreground "brown" :weight bold)
+        ("WAIT" :foreground "dark orange" :weight bold)
+        ("HOLD" :foreground "red" :weight bold)
+        ("HACK" :foreground "dark violet" :weight bold)
+        ("NEXT" :foreground "dark blue" :weight bold)
+        ("DONE" :foreground "#088e8e" :weight bold)
+        ("STOP" :foreground "#088e8e" :weight bold)))
+  (setq org-todo-keywords
+        '((sequence "NOTE" "IDEA" "TODO" "SOON" "WAIT" "HOLD" "HACK" "NEXT"
+                    "|"
+                    "DONE" "STOP")))
+  )
+
+
+
 (require 'org-bullets)
-
-
 (setq org-bullets-bullet-list '("○"))
 
-;; Fix inserting a new plain list item:
-;; don't insert a newline before the new plain list item. This only
-;; occurs when I'm on the last plain list item and hit
-;; Alt-Shift-Enter.
-(setq org-blank-before-new-entry
-      (assq-delete-all 'plain-list-item org-blank-before-new-entry))
-
-(setq org-agenda-files '("~/Dropbox/Notes"))
 
 (add-hook 'org-mode-hook
           (lambda ()
@@ -24,7 +70,6 @@
 
 (add-to-list 'org-modules 'habits)
 
-(setq org-babel-python-command "python3")
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -45,52 +90,9 @@
    ))
 
 ;; Show lists as collapsed
-(setq org-cycle-include-plain-lists 'integrate)
 
-;; M-RET while in the middle of a header will now create a new header
-;; (at the same level) below the current one. Old behavior: split the
-;; line and start the next header with the fragment after point of
-;; this line.
-(push '(headline) org-M-RET-may-split-line)
 
-(setq org-startup-indented t)
-(setq org-hide-leading-stars t)
-(setq org-special-ctrl-a/e t)
-(setq org-special-ctrl-k nil)
-(setq org-return-follows-link t)
-(setq org-use-speed-commands t)
-(setq org-fontify-done-headline t)
-(setq org-closed-keep-when-no-todo t)
-(setq org-log-done t)
-(setq org-confirm-babel-evaluate nil)
 
-;; From https://amitp.blogspot.com/2023/12/status-codes.html
-;; IDEA: maybe someday
-;; TODO: doing later
-;; SOON: doing soon
-;; NEXT: doing now
-;; DONE: done
-;; HACK: done in a cheesy way, blend of todo and done
-;; WAIT: waiting for some external change (event)
-;; HOLD: waiting for some internal change (of mind)
-;; STOP: stopped waiting, decided not to work on it
-;; NOTE: end state, just keep track of it
-(setq org-todo-keyword-faces
-      '(("NOTE" :foreground "#4b4f89")
-        ("IDEA" :foreground "#4b4f89" :box t)
-        ("TODO" :foreground "medium blue" :weight bold)
-        ("SOON" :foreground "brown" :weight bold)
-        ("WAIT" :foreground "dark orange" :weight bold)
-        ("HOLD" :foreground "red" :weight bold)
-        ("HACK" :foreground "dark violet" :weight bold)
-        ("NEXT" :foreground "dark blue" :weight bold)
-        ("DONE" :foreground "#088e8e" :weight bold)
-        ("STOP" :foreground "#088e8e" :weight bold)))
-
-(setq org-todo-keywords
-      '((sequence "NOTE" "IDEA" "TODO" "SOON" "WAIT" "HOLD" "HACK" "NEXT"
-                  "|"
-                  "DONE" "STOP")))
 
 (defun my/org-insert-chrome-link ()
   (interactive)
@@ -144,7 +146,6 @@
        nil
        'tree))
     (message "Number of subheadings below this: %d" count)))
-
 ;; Example usage in your personal ~/.emacs.private.el file.
 ;; (add-hook 'org-mode-hook
 ;;           (lambda ()

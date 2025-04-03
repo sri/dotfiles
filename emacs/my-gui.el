@@ -1,4 +1,4 @@
-(defvar my-theme 'zenburn ;leuven
+(defvar my-theme 'catppuccin
   "Can be defined in ~/.emacs.private.el.")
 
 (defvar my-themes
@@ -31,6 +31,7 @@
        (or my-theme
            (nth (random (length my-themes)) my-themes))))
   (when theme
+    (if (eq theme 'catppuccin) (setq catppuccin-flavor 'frappe))
     (message "using theme %s" theme)
     (load-theme theme t)))
 

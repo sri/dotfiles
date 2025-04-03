@@ -54,57 +54,41 @@
   (cond ((eq system-type 'darwin) 140)
         (t 100)))
 
-(defvar my/loading-errors '())
-
-(add-hook 'after-init-hook
-          #'(lambda ()
-              (when my/loading-errors
-                (with-current-buffer (get-buffer-create "*loading-errors*")
-                  (insert "Loading errors:\n")
-                  (save-excursion
-                    (dolist (path my/loading-errors)
-                      (insert path "\n")))
-                  (pop-to-buffer (current-buffer)))))
-          t)
-
-;; Load the byte-compiled version of file.
 (defun my/load (path &optional ignore-if-missing)
-  ;; get full path without extension
-  (setq path (file-name-sans-extension (expand-file-name path)))
-
-  (let ((source (concat path ".el"))
-        (compiled (concat path ".elc")))
+  "Load the file specified by PATH.
+Byte-compile the file, if necessary, before loading it.
+On any errors, enter recursive edit, to fix errors, after which,
+try to load the source again."
+  (let* ((full-path-no-ext (file-name-sans-extension (expand-file-name path)))
+         (source (concat full-path-no-ext ".el"))
+         (compiled (concat full-path-no-ext ".elc")))
     (cond ((file-exists-p source)
-           (if (and (file-newer-than-file-p source compiled)
-                    (null (byte-compile-file source)))
-               ;; If we fail byte compiling the source, don't error
-               ;; out. Just record an error message and try to load
-               ;; the compiled file. This would be the case where I
-               ;; recently edited a file and accidently left a syntax
-               ;; error. Erroring out here would leave Emacs in a
-               ;; broken state -- without my keybindings, etc.
-               (push source my/loading-errors))
-           (if (file-exists-p compiled)
-               (condition-case err
-                   (load compiled nil t t)
-                 (error
-                  (message "Error while loading file %s\nFix the error and hit %s"
-                           source
-                           (key-description (car (where-is-internal 'exit-recursive-edit))))
-                  (sit-for 1.0)
-                  (switch-to-buffer (find-file source))
-                  (debug err)
-                  (recursive-edit)
-                  (my/load path ignore-if-missing)))))
+           (let ((source-newer (file-newer-than-file-p source compiled))
+                 (compile-errors)
+                 (file-to-load))
+             (when source-newer
+               (message "Source(%s) is newer, byte-compiling it..." source)
+               (setq compile-errors (eq (byte-compile-file source) 'nil))
+               (if compile-errors (message "...error byte-compiling it")))
+             (setq file-to-load (if compile-errors source compiled))
+             (message "Loading %s" file-to-load)
+             (condition-case err
+                 (load file-to-load nil t t)
+               (error
+                (message "Error while loading file %s\nFix the error and hit %s"
+                         source
+                         (key-description (car (where-is-internal 'exit-recursive-edit))))
+                (sit-for 1.0)
+                (switch-to-buffer (find-file source))
+                (debug err)
+                (recursive-edit)
+                (my/load source ignore-if-missing)))))
           (t
-           (if (file-exists-p compiled)
-               (delete-file compiled))
-           (if (null ignore-if-missing)
-               (error "my/load: missing %s" source))))))
+           (message "%s does not exist" source)
+           (if (file-exists-p compiled) (delete-file compiled))
+           (if (null ignore-if-missing) (error "my/load: missing %s" source))))))
 
 (defun my/load-all ()
-  (setq my/loading-errors '())
-
   ;; Load packages and install them if necessary.
   (let* ((package--builtins '())
          (missing (cl-remove-if 'package-installed-p package-selected-packages)))
