@@ -1,4 +1,4 @@
-(defvar my-theme 'catppuccin
+(defvar my-theme 'zenburn
   "Can be defined in ~/.emacs.private.el.")
 
 (defvar my-themes

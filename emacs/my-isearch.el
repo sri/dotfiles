@@ -58,6 +58,7 @@
 (setq isearch-allow-scroll 'unlimited)
 (setq isearch-lazy-count t)
 (setq isearch-lazy-highlight-initial-delay 0)
+(setq search-whitespace-regexp "[ \t\r\n]+")
 
 (defun my/isearch ()
   (interactive)
