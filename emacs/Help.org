@@ -147,3 +147,6 @@ https://www.reddit.com/r/emacs/comments/1benj4g/things_you_do_in_emacs_that_will
 ** browse kill ring
 ** follow-mode
 ** 
+* Shell debug
+ansi-color-for-comint-mode-off
+comint-output-filter
