@@ -1,4 +1,4 @@
-(defvar my-theme 'zenburn
+(defvar my-theme 'modus-operandi-tinted ;;zenburn
   "Can be defined in ~/.emacs.private.el.")
 
 (defvar my-themes

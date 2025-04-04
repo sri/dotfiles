@@ -48,11 +48,17 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:height 170 :family "JetBrains Mono")))))
 
-(let ((skip-customizations
-       (equal ?y
-              (ignore-errors
-                ;; Mouse clicks throws an error.
-                (read-char "Skip my customizations?" nil 2.0)))))
+(defun my/load-full ()
+  (interactive)
+  (when (called-interactively-p 'any)
+    (setq my/load-print-messages t))
+  (load "~/my/dotfiles/emacs/my-dot-emacs-2"))
+
+(let* ((key (ignore-errors
+              ;; Mouse clicks throws an error.
+              (read-char "Skip my customizations?" nil 2.0)))
+       (skip-customizations (equal key ?y))
+       (my/load-print-messages (equal key ?p)))
   (if skip-customizations
       (dired "~/my/dotfiles/emacs")
-    (load "~/my/dotfiles/emacs/my-dot-emacs-2")))
+    (my/load-full)))

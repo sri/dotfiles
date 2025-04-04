@@ -54,6 +54,8 @@
   (cond ((eq system-type 'darwin) 140)
         (t 100)))
 
+(defvar my/load-print-messages nil)
+
 (defun my/load (path &optional ignore-if-missing)
   "Load the file specified by PATH.
 Byte-compile the file, if necessary, before loading it.
@@ -67,11 +69,13 @@ try to load the source again."
                  (compile-errors)
                  (file-to-load))
              (when source-newer
-               (message "Source(%s) is newer, byte-compiling it..." source)
+               (if my/load-print-messages
+                   (message "Source(%s) is newer, byte-compiling it..." source))
                (setq compile-errors (eq (byte-compile-file source) 'nil))
-               (if compile-errors (message "...error byte-compiling it")))
+               (if (and compile-errors my/load-print-messages)
+                   (message "...error byte-compiling it")))
              (setq file-to-load (if compile-errors source compiled))
-             (message "Loading %s" file-to-load)
+             (if my/load-print-messages (message "Loading %s" file-to-load))
              (condition-case err
                  (load file-to-load nil t t)
                (error
