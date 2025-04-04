@@ -107,6 +107,7 @@ try to load the source again."
          (this "my-dot-emacs")
          (diminish "my-diminish")
          (base '("my-fns"
+                 "my-scratch"
                  "my-register"
                  "my-env"
                  "my-keys"
