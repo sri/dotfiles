@@ -58,9 +58,10 @@ Finally, the dired buffer of the file is updated."
     (f-mkdir-full-path dir)
     (write-region "" nil path nil nil nil t) ; The `t' forces file to be new.
     (find-file path)
+    ;; TODO: maybe save periodically?
     (setq buffer-save-without-query t)
     (when paste-from-kill-ring
-      (save-excursion (yank))
+      (save-excursion (yanked))
       (save-buffer)
       (message "Pasted from kill-ring"))))
 
@@ -70,7 +71,53 @@ yanked from the kill-ring."
   (interactive)
   (my/scratch-new t))
 
-(defun my/scratch-browse ()
-  ;; TODO
+(defvar my/scratch-browse-previous-window-configuration nil)
+
+(defun my/scratch-browse-view-file (file)
+  (other-window 1)
+  (find-file (expand-file-name file my/scratch-directory))
+  (other-window 1))
+
+(defun my/scratch-browse-next ()
   (interactive)
-  (dired my/scratch-directory))
+  (forward-line 1)
+  (my/scratch-browse-view-file
+`   (buffer-substring-no-properties (point)
+                                   (point-at-eol))))
+
+(defun my/scratch-browse-quit ()
+  (interactive)
+  (when my/scratch-browse-previous-window-configuration
+    (set-window-configuration my/scratch-browse-previous-window-configuration)
+    (setq my/scratch-browse-previous-window-configuration nil)))
+
+(defun my/scratch-browse ()
+  (interactive)
+  (let* ((default-directory my/scratch-directory)
+         (du (->> "du -hs"
+                  shell-command-to-string
+                  split-string
+                  car))
+         (files (->> "find . -type f"
+                     shell-command-to-string
+                     split-string))
+         (current-file (car files))
+         (files-buffer (get-buffer-create "*scratch files*")))
+    (setq my/scratch-browse-previous-window-configuration
+          (current-window-configuration))
+    (delete-other-windows)
+    (split-window-vertically)
+    (with-current-buffer files-buffer
+      (setq default-directory my/scratch-directory)
+      (erase-buffer)
+      (insert "Size: " du
+              "; total files: " (number-to-string (length files))
+              "\n")
+      (dolist (f files)
+        (insert f "\n"))
+      (goto-char (point-min))
+      (forward-line 1)
+      (local-set-key (kbd "q") 'my/scratch-browse-quit)
+      (local-set-key (kbd "n") 'my/scratch-browse-next))
+    (switch-to-buffer files-buffer)
+    (my/scratch-browse-view-file current-file)))
