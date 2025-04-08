@@ -32,13 +32,14 @@
                    flycheck flycheck-golangci-lint git-link go-eldoc
                    go-mode gotest gruvbox-theme howm hydra
                    jetbrains-darcula-theme leuven-theme macrostep
-                   magit marginalia markdown-mode multiple-cursors
-                   orderless org org-bullets projectile protobuf-mode
-                   rainbow-mode region-bindings-mode rg rjsx-mode
-                   ruby-end s smart-mode-line solarized-theme
-                   spacemacs-theme string-inflection typescript-mode
-                   undo-tree use-package vertico vertico-posframe
-                   visual-regexp vterm web-mode which-key xterm-color
+                   magit marginalia markdown-mode mistty
+                   multiple-cursors orderless org org-bullets
+                   projectile protobuf-mode rainbow-mode
+                   region-bindings-mode rg rjsx-mode ruby-end s
+                   smart-mode-line solarized-theme spacemacs-theme
+                   string-inflection typescript-mode undo-tree
+                   use-package vertico vertico-posframe visual-regexp
+                   vterm web-mode which-key xterm-color
                    yaml-mode yasnippet zenburn-theme zig-mode))
  '(typescript-indent-level 2))
 (custom-set-faces
