@@ -71,9 +71,7 @@ Othewise, invoke `hippie-expand'."
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting."
   (interactive)
-  (if (eq major-mode 'dired-sidebar-mode)
-      (dired-sidebar-toggle-with-current-directory)
-    (kill-buffer (current-buffer))))
+  (kill-buffer (current-buffer)))
 
 (defun my/switch-to-buffer ()
   (interactive)

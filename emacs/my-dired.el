@@ -87,7 +87,6 @@
             (my/recentf-add-dired-directory)
 
             (bind-keys :map dired-mode-map
-                       ("b" . dired-sidebar-toggle-with-current-directory)
                        ("S" . my/dired-sort-by-size)
                        ("C-c C-d" . dired-hide-details-mode)
                        ("`" . my/dired-goto-git-root)
