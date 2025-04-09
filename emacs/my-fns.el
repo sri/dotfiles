@@ -29,29 +29,16 @@
     (save-excursion
       (when (search-forward start-string nil t)
         (setq start (point))
-        (when (search-forward end-string nil t)
-          (setq end (1- (point))))))
-    (cond ((null start) (message "Couldn't find starting `%s'" start-string))
-          ((null end) (message "Couldn't find ending `%s'" end-string))
-          (arg (kill-ring-save start end)
-               ;; Briefly highlight the copied region if its visible
-               ;; to the user.
-               (when (and (pos-visible-in-window-p start (selected-window))
-                          (pos-visible-in-window-p end (selected-window)))
-                 (when (null my/change-inside-pair-overlay)
-                   (setq my/change-inside-pair-overlay (make-overlay 0 0))
-                   (overlay-put my/change-inside-pair-overlay
-                                'face 'isearch))
-                 (move-overlay my/change-inside-pair-overlay
-                               start
-                               end
-                               (current-buffer))
-                 (run-at-time 0.3 nil 'my/change-inside-pair-unhighlight))
-               (message "Copied `%s'"
-                        (buffer-substring-no-properties start end)))
-          (t
-           (goto-char end)
-           (delete-region start end)))))
+        (forward-char -1)
+        (condition-case err
+            (forward-sexp 1)
+          (error)
+          (:success
+           (forward-char -1)
+           (setq end (point))))))
+    (when (and start end)
+      (set-mark start)
+      (goto-char end))))
 
 (defun my/kill-line-or-region (&optional arg)
   (interactive "P")
@@ -288,15 +275,9 @@ will bring it back."
 
 (defun my/pp-json (start end)
   (interactive "r")
-  (let ((py (or (executable-find "python3")
-                (error "unable to find python interpreter"))))
-    (unless (use-region-p)
-      (setq start (point-min) end (point-max)))
-    (shell-command-on-region start
-                             end
-                             (format "%s -mjson.tool --sort-keys" py)
-                             (current-buffer)
-                             'replace)))
+  (if (use-region-p)
+      (json-pretty-print start end)
+    (json-pretty-print-buffer)))
 
 (defun my/pp-xml (start end)
   (interactive "r")
