@@ -104,6 +104,8 @@ Also, creates a shell when there are no other shells."
     (set-window-parameter nil 'tab-line-buffers result)
     result))
 
+(setq-default tab-line-close-button-show nil)
+
 (add-hook 'shell-mode-hook
           (lambda ()
             (font-lock-mode -1)

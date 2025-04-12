@@ -1,4 +1,8 @@
-(defvar my-theme 'modus-operandi-tinted ;;zenburn
+(defvar my-theme
+  (if (let ((hour (nth 2 (decode-time (current-time)))))
+        (>= hour 17))
+      'ef-owl
+    'modus-operandi-tinted)
   "Can be defined in ~/.emacs.private.el.")
 
 (defvar my-themes

@@ -36,8 +36,8 @@ Finally, the dired buffer of the file is updated."
       (when (not (eq major-mode selected-mode))
         (call-interactively selected-mode)
         (when buffer-file-name
-          (let ((new-name (f-swap-ext buffer-file-name selected-ext))
-                (dirname (f-dirname new-name)))
+          (let* ((new-name (f-swap-ext buffer-file-name selected-ext))
+                 (dirname (f-dirname new-name)))
             (when (not (string= (f-ext buffer-file-name) selected-ext))
               (save-buffer)
               (rename-file buffer-file-name new-name)
@@ -61,7 +61,7 @@ Finally, the dired buffer of the file is updated."
     ;; TODO: maybe save periodically?
     (setq buffer-save-without-query t)
     (when paste-from-kill-ring
-      (save-excursion (yanked))
+      (save-excursion (yank))
       (save-buffer)
       (message "Pasted from kill-ring"))))
 
