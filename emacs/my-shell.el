@@ -4,16 +4,13 @@
 (setq shell-font-lock-keywords nil)
 (add-to-list 'explicit-bash-args "--login")
 
-;; This an be set using the SHELL env var, but on Mac bashrc doesn't
-;; seem to get read when launched from Dock.
-(cl-some (lambda (shell)
-           (when (file-exists-p shell)
-             ;; M-x shell
-             (setq explicit-shell-file-name shell)
-             ;; shell-command & friends
-             (setq shell-file-name shell)
-             t))
-         '("/bin/zsh" "/bin/bash"))
+
+(let ((shells '("/bin/zsh" "/bin/bash")))
+  (when-let* ((sh (seq-find #'executable-find shells)))
+    ;; M-x shell
+    (setq explicit-shell-file-name sh)
+    ;; shell-command & friends
+    (setq shell-file-name sh)))
 
 ;; Disable "Pinging 4.to (Tonga)..." message
 ;; when you TAB complete
