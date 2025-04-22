@@ -3,6 +3,12 @@
 
 (require 'git-link)
 
+;; https://stackoverflow.com/questions/462974/what-are-the-differences-between-double-dot-and-triple-dot-in-git-com
+;; git log  A..B   # Show me commits only on B.
+;; git log  A...B  # Show me commits only on A or only on B.
+;; git diff A..B   # Show me changes only on A or only on B.
+;; git diff A...B  # Show me changes only on B.
+
 (put 'magit-diff-edit-hunk-commit 'disabled nil)
 
 (setq git-link-open-in-browser t)

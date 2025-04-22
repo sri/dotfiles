@@ -3,8 +3,12 @@ https://www.youtube.com/watch?v=43Dg5zYPHTU
 * Installing Emacs from source on Mac using brew
 brew tap d12frosted/emacs-plus
 brew uninstall emacs-plus
-brew uninstall emacs-plus@30
-brew install emacs-plus@30
+brew uninstall emacs-plus@31
+brew install emacs-plus@31
+
+As of <2025-04-21 Mon>, trying https://github.com/jimeh/emacs-builds/releases
+instead of the above, which gave me errors
+
 * Org mode: tables
 ** Alt-<left>, Alt-<right>: move column left, right
 ** S-Alt-<right>: insert column left

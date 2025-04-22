@@ -50,6 +50,8 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:height 170 :family "JetBrains Mono")))))
 
+(defvar my/load-print-messages nil)
+
 (defun my/load-full ()
   (interactive)
   (when (called-interactively-p 'any)
