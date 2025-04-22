@@ -105,7 +105,6 @@ try to load the source again."
          (gui "my-gui")
          (non-gui "my-terminal")
          (this "my-dot-emacs")
-         (diminish "my-diminish")
          (base '("my-fns"
                  "my-scratch"
                  "my-register"
@@ -120,7 +119,7 @@ try to load the source again."
                  "my-help"
                  "my-dired"
                  "my-modeline"))
-         (all (cl-list* gui non-gui this diminish base))
+         (all (append (list gui non-gui this) base))
          (pkg-customizations
           (cl-remove-if (lambda (el-file)
                        ;; remove autosaves
@@ -138,7 +137,6 @@ try to load the source again."
     (mapc 'my/load (directory-files "third-party" 'full "\\.el$" t))
     (mapc 'my/load base)
     (mapc 'my/load pkg-customizations)
-    (my/load diminish)
     (my/load "~/.emacs.private.el" 'ignore-if-missing)
     (my/load (if window-system gui non-gui)))
 

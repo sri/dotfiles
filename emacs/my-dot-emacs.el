@@ -27,7 +27,7 @@
              ol-w3m))
  '(package-selected-packages
    '(ace-jump-mode bm button-lock casual catppuccin-theme company
-                   company-go consult csv-mode diff-hl diminish
+                   company-go consult csv-mode diff-hl
                    doom-themes eat ef-themes elisp-slime-nav embark
                    embark-consult exec-path-from-shell expand-region
                    flycheck flycheck-golangci-lint git-link go-eldoc

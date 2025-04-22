@@ -65,7 +65,6 @@
           (lambda ()
             (turn-on-auto-fill)
             (org-bullets-mode 1)
-            (diminish 'org-indent-mode)
             (setq cursor-type 'bar)))
 
 (add-to-list 'org-modules 'habits)

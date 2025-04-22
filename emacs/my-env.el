@@ -162,6 +162,8 @@ Fundamental mode."
 
 (server-start)
 
+(setq mode-line-collapse-minor-modes t)
+
 (add-to-list 'display-buffer-alist
              '("^\\*shell\\*" . (display-buffer-same-window)))
 (add-to-list 'display-buffer-alist
