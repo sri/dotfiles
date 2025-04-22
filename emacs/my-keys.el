@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; M-C-s was isearch-forward-regexp; its now S-C-f
 
 (require 'subword)

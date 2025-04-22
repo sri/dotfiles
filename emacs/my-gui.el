@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defvar my-theme
   (if (let ((hour (nth 2 (decode-time (current-time)))))
         (>= hour 17))

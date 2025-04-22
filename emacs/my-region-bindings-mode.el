@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'region-bindings-mode)
 (require 'multiple-cursors)
 (require 'which-key)

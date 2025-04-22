@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (let ((registers `((?d . "~/Desktop")
                    (?D . "~/Downloads")
                    (?e . "~/my/dotfiles/emacs")

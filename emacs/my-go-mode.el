@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'go-mode)
 (require 'company)
 (require 'company-go)

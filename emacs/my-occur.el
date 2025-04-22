@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun my/occur-mode-display-occurrence ()
   (interactive)
   (occur-next)

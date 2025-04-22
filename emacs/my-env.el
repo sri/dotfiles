@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun my/set-major-mode (&optional name)
   "For temporary buffers, set the mode based on the name.
 Defaults to text mode. Yasnippets won't be turned on for

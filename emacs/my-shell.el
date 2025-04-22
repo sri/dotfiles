@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (setenv "PAGER" "cat")
 
 (require 'shell)

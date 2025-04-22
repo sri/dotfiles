@@ -1,4 +1,4 @@
-;; -*- mode: emacs-lisp -*-
+;; -*- mode: emacs-lisp; lexical-binding: t; -*-
 
 ;; In case of errors, I don't have to restart emacs
 ;; from the command-line with --debug-init passed in.

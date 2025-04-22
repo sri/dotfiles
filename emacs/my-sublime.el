@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun my/swap-line-or-region-down ()
   "Move the current line or region down one line."
   (interactive "*")

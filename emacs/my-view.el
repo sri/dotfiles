@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'view)
 
 (defun my/view-scroll-down-one-line ()

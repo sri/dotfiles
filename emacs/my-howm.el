@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; Notes:
 ;; https://leahneukirchen.org/blog/archive/2022/03/note-taking-in-emacs-with-howm.html
 ;; https://news.ycombinator.com/item?id=41438107

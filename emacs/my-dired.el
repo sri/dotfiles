@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'dired-x)
 
 (when (executable-find "gls")
@@ -77,7 +78,6 @@
 (add-hook 'dired-mode-hook
           (lambda ()
             (dired-omit-mode 1)
-            (diminish 'dired-omit-mode)
             ;(dired-hide-details-mode 0)
             (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)

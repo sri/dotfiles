@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; My persistent scratch mode.
 ;; Includes a quick mode switcher (also switches the file's extension).
 ;; Autosave

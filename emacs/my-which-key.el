@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'which-key)
 (which-key-mode)
 (setq which-key-idle-delay 2.0)

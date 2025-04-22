@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'casual-isearch)
 
 (defun my/isearch-delete-region ()

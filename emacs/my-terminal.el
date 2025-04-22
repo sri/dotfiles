@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (load-theme 'ample-flat)
 
 (face-spec-set 'isearch '((t (:background "#22aa22" :foreground "black"))))

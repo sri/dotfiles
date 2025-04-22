@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'help-mode)
 
 (defun my/help-push-next-button ()

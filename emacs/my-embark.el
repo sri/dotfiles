@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'ace-window)
 
 (defun my/ace-window-switch-to-selected-window ()

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (use-package bm
   :preface
   (defun my/bm-next-this-file ()
