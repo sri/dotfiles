@@ -67,9 +67,11 @@ And then run the command."
 With a prefix arg, create a new shell.
 Also, creates a shell when there are no other shells."
   (interactive "P")
-  (if (project-current nil)
-      (call-interactively 'project-shell)
-    (shell (generate-new-buffer-name (or name "*shell*")))))
+  (if (eq major-mode 'shell-mode)
+      (tab-line-switch-to-next-tab)
+    (if (project-current nil)
+        (call-interactively 'project-shell)
+      (shell (generate-new-buffer-name (or name "*shell*"))))))
 
 (defun my/shell-dont-scroll ()
   (interactive)

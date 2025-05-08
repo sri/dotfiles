@@ -64,7 +64,7 @@
 
 (add-hook 'org-mode-hook
           (lambda ()
-            (turn-on-auto-fill)
+            ;; (turn-on-auto-fill)
             (org-bullets-mode 1)
             (setq cursor-type 'bar)))
 
