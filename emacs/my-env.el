@@ -208,6 +208,15 @@ Fundamental mode."
 (require 'vertico-quick)
 (require 'vertico-posframe)
 (vertico-posframe-mode 1)
+;; (vertico-multiform-mode -1)
+
+;; (setq vertico-multiform-commands
+;;       '((consult-grep buffer indexed)
+;;         (consult-ripgrep buffer indexed)))
+
+;; (setq vertico-multiform-categories
+;;       '((consult-grep buffer)
+;;         (consult-ripgrep buffer)))
 
 
 (require 'marginalia)

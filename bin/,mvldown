@@ -1,12 +1,20 @@
-#! /usr/bin/env python3
+#! /usr/bin/env uv run --script --quiet
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "humanize",
+#     "termcolor",
+# ]
+# ///
 
-"""Moves the latest downloaded file in ~/Downloads to the current
-directory. An optional argument specifies the new name of that
-file. Otherwise, the basename is used.
-"""
+"""Moves the latest downloaded file in ~/Downloads to the current"""
 
-import sys
+from datetime import datetime
 from pathlib import Path
+import sys
+
+import humanize
+from termcolor import colored
 
 class MvldownError(Exception):
     pass
@@ -14,36 +22,46 @@ class MvldownError(Exception):
 def error(message):
     raise MvldownError(message)
 
-def last_modified_time(file):
-    return file.stat().st_mtime
+FILES_TO_IGNORE = set([".DS_Store"])
 
-def mvldown(path):
+def mvldown():
+    path = Path.home().joinpath("Downloads")
     if not path.exists():
         error(f"{path} not found")
-
-    files = sorted(path.iterdir(), key=last_modified_time)
+    files = []
+    for f in path.iterdir():
+        try:
+            files.append((f.stat().st_mtime, f))
+        except FileNotFoundError:
+            pass
     if not files:
         error(f"nothing in {path}")
-
-    for latest in reversed(files):
-        response = input(f"{latest}? ").lower()
+    files.sort(reverse=True)
+    now = datetime.now()
+    for mtime, latest in files:
+        if latest.name in FILES_TO_IGNORE:
+            print(colored(f"(ignoring {latest.name})", "white", force_color=True))
+            continue
+        prompt = colored(f"{latest}", "yellow", force_color=True)
+        when = humanize.naturaltime(now - datetime.fromtimestamp(mtime))
+        prompt2 = colored(f"(from {when})", "blue", force_color=True)
+        response = input(f"{prompt} {prompt2} (y/n)[n]? ").lower()
         if response == "y":
             rename_as = Path(latest.name)
             if rename_as.exists():
                 error(f"{rename_as} already exists")
-
             latest.rename(rename_as)
             print(f"moved {latest} to {rename_as}")
+        elif response == "q":
+            break
 
 def main():
-    downloads_dir = Path.home().joinpath("Downloads")
-
     try:
-        mvldown(downloads_dir)
+        mvldown()
     except (KeyboardInterrupt, EOFError):
         pass
     except MvldownError as err:
-        print(err, file=sys.stderr)
+        print(colored(str(err), "red", force_color=True), file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":
