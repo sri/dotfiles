@@ -83,7 +83,7 @@ yanked from the kill-ring."
   (interactive)
   (forward-line 1)
   (my/scratch-browse-view-file
-`   (buffer-substring-no-properties (point)
+   (buffer-substring-no-properties (point)
                                    (point-at-eol))))
 
 (defun my/scratch-browse-quit ()

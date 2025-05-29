@@ -2,6 +2,7 @@
 (let ((registers `((?d . "~/Desktop")
                    (?D . "~/Downloads")
                    (?e . "~/my/dotfiles/emacs")
+                   (?E . "~/.emacs.d")
                    (?s . "~/dev/src")
                    (?S . ,my/scratch-directory)
                    (?n . "~/my/notes")
@@ -10,6 +11,8 @@
                    (?~ . "~"))))
   (--each registers
     (set-register (car it) (cons 'file (cdr it)))))
+
+(setq register-preview-delay 0.1)
 
 ;; Location of my work notes & work log files.
 (defvar my/work-notes-file nil)
