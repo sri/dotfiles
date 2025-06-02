@@ -31,7 +31,7 @@
                    doom-themes eat ef-themes elisp-slime-nav embark
                    embark-consult exec-path-from-shell expand-region
                    flycheck flycheck-golangci-lint git-link go-eldoc
-                   go-mode gotest gruvbox-theme howm hydra
+                   go-mode gotest gptel gruvbox-theme howm hydra
                    jetbrains-darcula-theme leuven-theme macrostep
                    magit marginalia markdown-mode mistty
                    multiple-cursors orderless org org-bullets
