@@ -1,5 +1,5 @@
 ;; -*- lexical-binding: t; -*-
-(load-theme 'ample-flat)
+;(load-theme 'ample-flat)
 
 (face-spec-set 'isearch '((t (:background "#22aa22" :foreground "black"))))
 (face-spec-set 'lazy-highlight '((t (:foreground "black" :background "green"))))
