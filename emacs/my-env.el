@@ -68,7 +68,12 @@ Fundamental mode."
 (setq messages-buffer-max-lines t)
 (visual-line-mode 1)
 (setq save-interprogram-paste-before-kill t)
-(setq highlight-nonselected-windows t)
+
+;; Problem: when this is t, splitting a buffer into 2
+;; windows, and clicking into the windows causes
+;; weird region UI highlighting
+;; (setq highlight-nonselected-windows t)
+
 (setq echo-keystrokes 0.1)
 (setq vc-follow-symlinks t)
 (setq mouse-drag-copy-region t)
@@ -94,6 +99,7 @@ Fundamental mode."
 (global-hl-line-mode 1)
 (setq mode-line-compact t)
 (setq confirm-kill-emacs 'yes-or-no-p)
+(setq use-dialog-box nil)
 
 (setq fill-column 80)
 

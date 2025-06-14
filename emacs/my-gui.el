@@ -1,11 +1,13 @@
 ;; -*- lexical-binding: t; -*-
 (require 'bm)
+
 (defvar my-theme
   (let* ((hour (nth 2 (decode-time (current-time))))
          (period (cond ((>= hour 17) 'evening)
                        ((>= hour 12) 'afternoon)
                        (t            'morning))))
-    (cond ((eq period 'evening)
+    (cond (t 'solarized-zenburn)
+          ((eq period 'evening)
            (set-face-attribute 'bm-persistent-face nil :extend t :background "#6e52b9")
            'ef-owl)
           (t
@@ -15,6 +17,7 @@
 
 (defvar my-themes
   '(
+    solarized-zenburn
     doom-zenburn
 
     ef-melissa-dark
@@ -43,21 +46,18 @@
        (or my-theme
            (nth (random (length my-themes)) my-themes))))
   (when theme
-    (if (eq theme 'catppuccin) (setq catppuccin-flavor 'frappe))
     (message "using theme %s" theme)
     (load-theme theme t)))
+
+(custom-theme-set-faces
+ 'solarized-zenburn
+ '(region ((t (:background "#fbc050"))))
+ '(bm-persistent-face ((t (:extend t :background "#6e52b9" :overline nil)))))
 
 ;; (add-hook 'focus-out-hook
 ;;           (lambda ()
 ;;             (when (and buffer-file-name (buffer-modified-p))
 ;;               (save-buffer))))
-
-;; (let ((shell-path (shell-command-to-string "$SHELL -l -c 'echo -n $PATH'")))
-  ;; (when (> (count "\n" shell-path) 0)
-    ;; (warn "my-gui.el: shell path contains newlines:\n%s" shell-path))
-  ;; (setenv "PATH" shell-path)
-  ;; (setq exec-path (split-string shell-path path-separator)))
-
 
 ;; Center Emacs's position on screen
 (let* ((height 40)
