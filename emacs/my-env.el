@@ -69,10 +69,9 @@ Fundamental mode."
 (visual-line-mode 1)
 (setq save-interprogram-paste-before-kill t)
 
-;; Problem: when this is t, splitting a buffer into 2
-;; windows, and clicking into the windows causes
-;; weird region UI highlighting
-;; (setq highlight-nonselected-windows t)
+;; Problem: when this is t, splitting a buffer into 2 windows, and
+;; clicking into the windows causes weird region UI highlighting
+(setq highlight-nonselected-windows nil)
 
 (setq echo-keystrokes 0.1)
 (setq vc-follow-symlinks t)
