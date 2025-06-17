@@ -2,22 +2,14 @@
 # This script prints out all the directories in the PATH environment
 # variable and marks duplicates and non-existent directories.
 import sys, os
-
 seen = set()
 paths = os.getenv("PATH", "").split(os.pathsep)
-
 print("[marking duplicates and missing directories]")
 for i, d in enumerate(paths, start=1):
     warnings = []
-    if d in seen:
-        warnings.append("duplicate")
-    if not os.path.isdir(d):
-        warnings.append("not a directory")
-
+    if d in seen: warnings.append("duplicate")
+    if not os.path.isdir(d): warnings.append("not a directory")
     seen.add(d)
-    highlight: str = (
-        f"\033[31m{', '.join(warnings)}\033[0m"
-        if len(warnings) > 0
-        else "")
-
+    highlight = (f"\033[31m {', '.join(warnings)}\033[0m"
+                 if len(warnings) > 0 else "")
     print(f"{i:2} {d}{highlight}")

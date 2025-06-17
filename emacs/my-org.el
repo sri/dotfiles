@@ -50,8 +50,7 @@
         ("DONE" :foreground "#088e8e" :weight bold)
         ("STOP" :foreground "#088e8e" :weight bold)))
   (setq org-todo-keywords
-        '((sequence "NOTE" "IDEA" "TODO" "SOON" "WAIT" "HOLD" "HACK" "NEXT"
-                    "LIVE" ;; in-progress
+        '((sequence "NOTE" "IDEA" "TODO" "WAIT" "HOLD" "HACK" "IN-PROGRESS"
                     "|"
                     "DONE" "STOP")))
   )

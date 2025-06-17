@@ -49,10 +49,29 @@
     (message "using theme %s" theme)
     (load-theme theme t)))
 
-(custom-theme-set-faces
+;; Mac selector colors in hex.
+;; Purple          : #AF52DE
+;; Pink            : #FF2D55
+;; Red             : #FF3B30
+;; Orange          : #FF9500
+;; Yellow          : #FFCC00
+;; Green           : #34C759
+;; Graphite (Gray) : #8E8E93
+;; Blue            : #B0D0FF
+
+
+(defun my/customize-theme (theme &rest args)
+  (add-hook 'after-load-theme-hook
+            (lambda ()
+              (when (member theme custom-enabled-themes)
+                (apply #'custom-theme-set-faces theme args)))))
+
+(my/customize-theme
  'solarized-zenburn
- '(region ((t (:background "#fbc050"))))
+ '(region ((t (:background "#8E8E93" :foreground "black"))))
  '(bm-persistent-face ((t (:extend t :background "#6e52b9" :overline nil)))))
+
+
 
 ;; (add-hook 'focus-out-hook
 ;;           (lambda ()
