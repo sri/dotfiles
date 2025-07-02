@@ -11,12 +11,15 @@ links = {
     "bash/bashrc"           : "~/.bashrc",
     "git/gitconfig"         : "~/.gitconfig",
     "ripgreprc"             : "~/.ripgreprc",
+    "sqliterc"              : "~/.sqliterc",
+    "pythonrc.py"           : "~/.pythonrc",
     "sublime/prefs.json"    : {
         "Linux" : "~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
         "Darwin": "~/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings"
     }.get(platform.system())}
 
 def main(args):
+    onlynew = "-new" in args
     run = "-f" in args
     if not run:
         print("*** fake run; use `-f' for actual run")
@@ -27,7 +30,7 @@ def main(args):
             print(f"skipping {src}, has no dest")
             continue
         dest = pathlib.Path(dest).expanduser()
-        if dest.exists():
+        if dest.exists() and not onlynew:
             bkp = dest.with_name(f"{dest.name}.{timestamp}.bkp")
             print(f"  [renaming existing {dest} to {bkp}]")
             if run:
