@@ -55,7 +55,7 @@
                     "DONE" "STOP")))
   )
 
-
+(require 'org-mouse)
 
 (require 'org-bullets)
 (setq org-bullets-bullet-list '("○"))

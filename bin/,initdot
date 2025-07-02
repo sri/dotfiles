@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
-import sys, datetime, platform, pathlib
+
+import sys
+import datetime
+import platform
+import pathlib
+
 links = {
     "emacs/my-dot-emacs.el" : "~/.emacs.el",
+    "emacs/my-early-init.el": "~/.emacs.d/early-init.el",
     "bash/bashrc"           : "~/.bashrc",
     "git/gitconfig"         : "~/.gitconfig",
     "ripgreprc"             : "~/.ripgreprc",
@@ -9,17 +15,26 @@ links = {
         "Linux" : "~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
         "Darwin": "~/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings"
     }.get(platform.system())}
-run = "-f" in sys.argv[1:]
-if not run: print("*** fake run; use `-f' for actual run")
-ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-dotdir = pathlib.Path(__file__).resolve().parents[1]
-for (src, dest) in links.items():
-    if dest is None: print(f"skipping {src}, dest is None"); continue
-    dest = pathlib.Path(dest).expanduser()
-    if dest.exists():
-        bkp = dest.with_name(f"{dest.name}.{ts}.bkp")
-        print(f"  [renaming existing {dest} to {bkp}]")
+
+def main(args):
+    run = "-f" in args
+    if not run:
+        print("*** fake run; use `-f' for actual run")
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    dotdir = pathlib.Path(__file__).resolve().parents[1]
+    for (src, dest) in links.items():
+        if dest is None:
+            print(f"skipping {src}, has no dest")
+            continue
+        dest = pathlib.Path(dest).expanduser()
+        if dest.exists():
+            bkp = dest.with_name(f"{dest.name}.{timestamp}.bkp")
+            print(f"  [renaming existing {dest} to {bkp}]")
+            if run:
+                dest.rename(bkp)
+        print(f"\033[31msymlinking {src} as {dest}\033[0m")
         if run:
-            dest.rename(bkp)
-    print(f"\033[31msymlinking {src} as {dest}\033[0m")
-    if run: dest.symlink_to(dotdir.joinpath(src))
+            dest.symlink_to(dotdir.joinpath(src))
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

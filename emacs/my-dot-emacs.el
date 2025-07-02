@@ -58,11 +58,8 @@
     (setq my/load-print-messages t))
   (load "~/my/dotfiles/emacs/my-dot-emacs-2"))
 
-(let* ((key (ignore-errors
-              ;; Mouse clicks throws an error.
-              (read-char "Skip my customizations?" nil 2.0)))
-       (skip-customizations (equal key ?y))
-       (my/load-print-messages (equal key ?p)))
+(let ((skip-customizations
+       (file-exists-p (expand-file-name "~/.emacs.skip"))))
   (if skip-customizations
       (dired "~/my/dotfiles/emacs")
     (my/load-full)))
