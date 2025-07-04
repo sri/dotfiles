@@ -539,3 +539,8 @@ formats them into a list of clickable links."
     (split-window-right)
     (other-window 1)
     (switch-to-buffer new)))
+
+(defun my/open-ghostty ()
+  (interactive)
+  (start-process "Ghostty" nil "open" "-na" "Ghostty.app" "--args"
+                 (format "--working-directory=%s" (expand-file-name default-directory))))

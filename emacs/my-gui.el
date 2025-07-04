@@ -1,21 +1,20 @@
 ;; -*- lexical-binding: t; -*-
 (require 'bm)
 
-;; (defvar my-theme
-;;   (let* ((hour (nth 2 (decode-time (current-time))))
-;;          (period (cond ((>= hour 17) 'evening)
-;;                        ((>= hour 12) 'afternoon)
-;;                        (t            'morning))))
-;;           ((eq period 'evening)
-;;            (set-face-attribute 'bm-persistent-face nil :extend t :background "#6e52b9")
-;;            'ef-owl)
-;;           (t
-;;            (set-face-attribute 'bm-persistent-face nil :extend t :background "#60bd90")
-;;            'modus-operandi-tinted)))
-;;   "Can be defined in ~/.emacs.private.el.")
-
-
-(defvar my-theme 'leuven)
+(defvar my-theme
+  (let* ((hour (nth 2 (decode-time (current-time))))
+         (period (cond ((>= hour 17) 'evening)
+                       ((>= hour 12) 'afternoon)
+                       (t            'morning))))
+    (cond ((eq period 'evening)
+           ;; (set-face-attribute 'bm-persistent-face nil :extend t :background "#6e52b9")
+           'solarized-gruvbox-dark)
+          (t
+           ;; (set-face-attribute 'bm-persistent-face nil :extend t :background "#60bd90")
+           ;; modus-operandi-tinted
+           'leuven
+           'acme)))
+  "Can be defined in ~/.emacs.private.el.")
 
 (defvar my-themes
   '(

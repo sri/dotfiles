@@ -1,2 +1,4 @@
 .headers on
-.mode column
+.mode box
+.changes on
+.nullvalue NULL

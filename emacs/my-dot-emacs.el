@@ -26,8 +26,8 @@
    '(ol-bbdb ol-bibtex ol-docview ol-gnus ol-info ol-irc ol-mhe ol-rmail
              ol-w3m))
  '(package-selected-packages
-   '(ace-jump-mode bm button-lock casual catppuccin-theme company
-                   company-go consult csv-mode diff-hl
+   '(ace-jump-mode acme-theme bm button-lock casual catppuccin-theme
+                   company company-go consult csv-mode diff-hl
                    doom-themes eat ef-themes elisp-slime-nav embark
                    embark-consult exec-path-from-shell expand-region
                    flycheck flycheck-golangci-lint git-link go-eldoc
