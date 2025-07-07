@@ -144,3 +144,4 @@ try to load the source again."
   (recentf-open-files))
 
 (my/load-all)
+(setq debug-on-error nil)
