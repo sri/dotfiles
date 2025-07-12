@@ -55,7 +55,7 @@ continue with that. If a region is selected, indent that region.
 If at the beginning of the line, call `indent-for-tab-command'.
 Othewise, invoke `hippie-expand'."
   (interactive "*P")
-  (cond ((eq last-command 'hippie-expand)
+  (cond ((eq last-command 'my/hippie-tab)
          (hippie-expand arg))
         ((and transient-mark-mode
               (use-region-p))
