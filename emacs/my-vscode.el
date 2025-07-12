@@ -17,22 +17,21 @@
                       (string-prefix-p other current))
                   (string= (my/git-root (current-buffer)) (my/git-root buffer)))))))
 
-(defun my/shell-for-buffer (&optional create-new)
+(defun my/shell-for-buffer ()
   "Open a shell for the current buffer."
-  (interactive "P")
+  (interactive)
   (if (eq major-mode 'shell-mode)
-      (cond ((window-in-direction 'above) (delete-window))
-            (create-new (switch-to-buffer (my/shell))))
+      (if (window-in-direction 'above)
+          (delete-window))
     (let ((win (window-in-direction 'below)))
       (if (and win (my/shell-in-same-repo-or-dir-p (window-buffer win)))
           (windmove-down)
         (split-window-below)
         (windmove-down)
         (switch-to-buffer
-         (if create-new
-             (my/shell)
-           (let ((existing
-                  (cl-find-if #'my/shell-in-same-repo-or-dir-p (buffer-list))))
-             (if existing
-                 (if (get-buffer-process existing) existing (my/shell (buffer-name existing)))
-               (my/shell)))))))))
+         (let ((existing (cl-find-if #'my/shell-in-same-repo-or-dir-p (buffer-list))))
+           (if existing
+               (if (get-buffer-process existing)
+                   existing
+                 (my/shell (buffer-name existing)))
+             (my/shell))))))))

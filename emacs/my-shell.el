@@ -62,16 +62,12 @@ And then run the command."
 
 (require 'dash)
 
-(defun my/shell (&optional arg name)
-  "Switch to the most recently active shell buffer.
-With a prefix arg, create a new shell.
-Also, creates a shell when there are no other shells."
+(defun my/shell (&optional create-new)
+  "Switch to the most recently active shell buffer or create new."
   (interactive "P")
-  (if (eq major-mode 'shell-mode)
-      (tab-line-switch-to-next-tab)
-    (if (project-current nil)
-        (call-interactively 'project-shell)
-      (shell (generate-new-buffer-name (or name "*shell*"))))))
+  (if (project-current nil)
+      (call-interactively 'project-shell)
+    (shell (generate-new-buffer-name "*shell*"))))
 
 (defun my/shell-dont-scroll ()
   (interactive)
