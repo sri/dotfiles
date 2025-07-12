@@ -47,6 +47,8 @@
       (kill-region (point) (mark))
     (kill-line arg)))
 
+(defvar my/hippie-tab-debug nil)
+
 (defun my/hippie-tab (arg)
   "Hippie expand, do what I mean.
 If in the middle of `hippie-expand' running thru all the
@@ -55,18 +57,22 @@ continue with that. If a region is selected, indent that region.
 If at the beginning of the line, call `indent-for-tab-command'.
 Othewise, invoke `hippie-expand'."
   (interactive "*P")
+  (if my/hippie-tab-debug (message "%s" last-command))
   (cond ((eq last-command 'my/hippie-tab)
+         (if my/hippie-tab-debug (message "last-command is 'my/hippie-tab, continuing"))
          (hippie-expand arg))
-        ((and transient-mark-mode
-              (use-region-p))
+        ((and transient-mark-mode (use-region-p))
+         (if my/hippie-tab-debug (message "doing indent-region"))
          (indent-region (region-beginning)
                         (region-end)
                         nil))
         ((let ((cs (char-syntax (preceding-char))))
            ;; See https://www.gnu.org/software/emacs/manual/html_node/elisp/Syntax-Class-Table.html#Syntax-Class-Table
            (or (= cs ?w) (= cs ?\_)))
+         (if my/hippie-tab-debug (message "doing hippie-expand/2"))
          (hippie-expand arg))
         (t
+         (if my/hippie-tab-debug (message "doing indent-for-tab-command"))
          (indent-for-tab-command))))
 
 (defun my/kill-current-buffer ()
