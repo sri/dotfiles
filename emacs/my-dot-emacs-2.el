@@ -122,17 +122,19 @@ try to load the source again."
                  "my-modeline"))
          (all (append (list gui non-gui this) base))
          (pkg-customizations
-          (cl-remove-if (lambda (el-file)
-                       ;; remove autosaves
-                       (or (string-prefix-p ".#" el-file)
-                           (string-prefix-p "my-dot-emacs" el-file)
-                           (cl-some (lambda (my) (string= (concat my ".el") el-file))
-                                 all)))
+          (cl-remove-if (lambda (x)
+                          ;; remove autosaves
+                          (or (string-prefix-p ".#" x)
+                              (string-prefix-p "my-dot-emacs" x)
+                              (string-prefix-p "my-early-init" x)
+                              (cl-some (lambda (my)
+                                         (string= (concat my ".el") x))
+                                       all)))
                      (directory-files "." nil "\\.el$" t))))
 
     (when window-system
-      '(require 'exec-path-from-shell)
-      '(exec-path-from-shell-initialize))
+      (require 'exec-path-from-shell)
+      (exec-path-from-shell-initialize))
 
     ;; Files that aren't on MELPA or any other package archive.
     (mapc 'my/load (directory-files "third-party" 'full "\\.el$" t))
