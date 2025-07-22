@@ -16,7 +16,8 @@ links = {
     "sublime/prefs.json"    : {
         "Linux" : "~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
         "Darwin": "~/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings"
-    }.get(platform.system())}
+    }.get(platform.system())
+}
 
 def main(args):
     onlynew = "-new" in args

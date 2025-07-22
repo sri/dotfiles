@@ -550,3 +550,8 @@ formats them into a list of clickable links."
   (interactive)
   (start-process "Ghostty" nil "open" "-na" "Ghostty.app" "--args"
                  (format "--working-directory=%s" (expand-file-name default-directory))))
+
+(defun my/git-root (buffer)
+  (with-current-buffer buffer
+    (let ((command "git rev-parse --show-toplevel 2> /dev/null"))
+      (string-trim (shell-command-to-string command)))))

@@ -296,40 +296,67 @@ Fundamental mode."
 
 ;; IBuffer
 (require 'ibuffer)
+(require 'ibuf-ext)
 
-(setq ibuffer-saved-filter-groups
-   '(("default"
-      ("Magit"
-       (or
-        (mode . magit-status-mode)
-        (mode . magit-log-mode)
-        (name . "\\*magit")
-        (name . "magit-")
-        (name . "git-monitor")))
-      ("Dired"
-       (mode . dired-mode))
-      ("Shells"
-       (or
-        (mode . shell-mode)
-        (mode . eshell-mode)
-        (mode . term-mode)
-        (mode . compilation-mode)))
-      ("Org"
-       (or
-        (name . "^\\*Calendar\\*$")
-        (name . "^\\*Org Agenda")
-        (name . "^ \\*Agenda")
-        (name . "^diary$")
-        (mode . org-mode)))
-      ("Lisp"
-       (mode . emacs-lisp-mode))
-      ("Emacs"
-       (or
-        (name . "^\\*scratch\\*$")
-        (name . "^\\*Messages\\*$")
-        (name . "^\\*\\(Customize\\|Help\\)")
-        (name . "\\*\\(Echo\\|Minibuf\\)"))))))
+;; Try by buffer by "project"
+(define-ibuffer-filter buffer
+    "Limit to exact buffer."
+  (:description "buffer object"
+   :reader nil)
+  (eq buf qualifier))
+;;(defun override-global-mode (arg) nil)
+;; (setq ibuffer-saved-filter-groups
+;;    '(("default"
+;;       ("Magit"
+;;        (or
+;;         (mode . magit-status-mode)
+;;         (mode . magit-log-mode)
+;;         (name . "\\*magit")
+;;         (name . "magit-")
+;;         (name . "git-monitor")))
+;;       ("Dired"
+;;        (mode . dired-mode))
+;;       ("Shells"
+;;        (or
+;;         (mode . shell-mode)
+;;         (mode . eshell-mode)
+;;         (mode . term-mode)
+;;         (mode . compilation-mode)))
+;;       ("Org"
+;;        (or
+;;         (name . "^\\*Calendar\\*$")
+;;         (name . "^\\*Org Agenda")
+;;         (name . "^ \\*Agenda")
+;;         (name . "^diary$")
+;;         (mode . org-mode)))
+;;       ("Lisp"
+;;        (mode . emacs-lisp-mode))
+;;       ("Emacs"
+;;        (or
+;;         (name . "^\\*scratch\\*$")
+;;         (name . "^\\*Messages\\*$")
+;;         (name . "^\\*\\(Customize\\|Help\\)")
+;;         (name . "\\*\\(Echo\\|Minibuf\\)"))))))
+
+(defun my/ibuffer-by-projects ()
+  "Group by projects (using the git root directory)."
+  (let ((groups '())
+        (hash (make-hash-table :test #'equal)))
+    (dolist (buf (buffer-list))
+      (let ((dir (abbreviate-file-name (my/git-root buf))))
+        (puthash dir
+                 (cons buf (gethash dir hash))
+                 hash)))
+    (maphash (lambda (dir buffers)
+               (let ((value (mapcar (lambda (buf) (cons 'buffer buf))
+                                    buffers)))
+                 (push (list dir (cons 'or value)) groups)))
+             hash)
+    (setq groups (sort groups :key (lambda (x) (length (cdadr x)))))
+    `(("zdefault" ,@groups))))
 
 (add-hook 'ibuffer-mode-hook
 	  (lambda ()
-	    (ibuffer-switch-to-saved-filter-groups "default")))
+            (setq ibuffer-hidden-filter-groups '("Default"))
+            (setq ibuffer-saved-filter-groups (my/ibuffer-by-projects))
+	    (ibuffer-switch-to-saved-filter-groups "zdefault")))

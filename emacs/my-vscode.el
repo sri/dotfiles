@@ -2,11 +2,6 @@
 (require 'cl-lib)
 (require 'windmove)
 
-(defun my/git-root (buffer)
-  (with-current-buffer buffer
-    (let ((command "git rev-parse --show-toplevel 2> /dev/null"))
-      (string-trim (shell-command-to-string command)))))
-
 (defun my/shell-in-same-repo-or-dir-p (buffer)
   (and (eq 'shell-mode (buffer-local-value 'major-mode buffer))
        (let ((current (expand-file-name default-directory))
