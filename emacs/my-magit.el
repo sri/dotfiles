@@ -66,7 +66,7 @@
   (interactive)
   (let ((url (magit-get "remote" "origin" "url")))
     (when (string-match "^ssh" url)
-      (setq url (s-replace-all ":22" "" (s-chop-prefix "ssh" url)))
+      (setq url (s-replace-all '(("ssh://" . "") (":22" . "")) url))
       (setq url (concat "https://" url)))
     (unless (string-match "^http" url)
       (setq url (replace-regexp-in-string (rx (group (zero-or-more any)) "@"
