@@ -44,6 +44,7 @@
            ("S-<wheel-left>"  . ignore)
            ("S-<wheel-right>" . ignore))
 
+;; Apple CMD Key
 (bind-keys*
  ("s-0" . delete-window)
  ("s-1" . delete-other-windows)
@@ -59,7 +60,7 @@
  ("s-o" . my/ffap-or-find-file)
  ("s-." . end-of-buffer)
  ("s-j" . other-window)
- ("s-p" . my/shell)
+ ;("s-p" . my/switch-to-buffer)
  ("s-t" . tab-new)
  ("s-w" . tab-close))
 
@@ -76,7 +77,7 @@
  ("<S-C-tab>" . tab-previous)
  ("M-t" . tab-new)
  ("C-." . embark-act)
- ("C-`" . my/shell-for-buffer)
+ ("C-`" . my/open-shell-window-for-buffer)
  ("C-'" . my/jump-to-matching-char)
  ("C-\\" . other-frame)
  ("C-|" . tab-bar-switch-to-next-tab)
@@ -90,7 +91,7 @@
  ("S-C-k" . my/copy-line-or-region)
  ("C-n" . execute-extended-command)
  ("C-o" . my/ffap-or-find-file)
- ("C-p" . my/shell)
+ ("C-p" . my/shell-switch-to-next-most-recent)
  ("C-r" . vr/query-replace)
  ("C-s" . save-buffer)
  ;; ("C-t" . )
@@ -117,8 +118,9 @@
  ("C-S-<up>" . backward-paragraph)
  ("C-S-<down>" . forward-paragraph)
 
+ ("C-c n" . next-error)
  ("C-c o" . my/occur)
- ("C-c p" . my/copy-full-path)
+ ("C-c p" . previous-error)
  ("C-c q" . quoted-insert)
  ("C-c r" . consult-recent-file)
  ("C-c s" . sort-lines)
@@ -128,7 +130,7 @@
  ("C-c C-l" . my/toggle-auto-hscroll-mode)
  ("<C-backspace>" . subword-backward-kill)
 
- ("M-`" . my/shell-for-buffer) ; works under both guis and terminals
+ ;; ("M-`" . my/open-shell-window-for-buffer) ; works under both guis and terminals
  ;; ("M-0" . delete-window)
  ;; ("M-1" . delete-other-windows)
  ;; ("M-2" . split-window-vertically)

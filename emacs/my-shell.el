@@ -1,7 +1,11 @@
 ;; -*- lexical-binding: t; -*-
+(require 'dash)
+(require 'cl-lib)
+(require 'windmove)
+(require 'shell)
+
 (setenv "PAGER" "cat")
 
-(require 'shell)
 (setq shell-font-lock-keywords nil)
 (add-to-list 'explicit-bash-args "--login")
 
@@ -60,7 +64,104 @@ And then run the command."
              (rename-buffer bufname)
              (comint-send-input))))))
 
-(require 'dash)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; C-' - open shell (or switches to, if it exists) window below
+;; current buffer, in directory of current buffer. With prefix arg
+;; (C-u), open/switch to shell in git repo (if one exists). Shells
+;; that have the same root repo show up in the same tab-line-tabs.
+;;
+;; C-p - switches to other shells in order of most recently used
+
+(defvar my/shell-modes '(shell-mode vterm-mode))
+
+(defun my/shell-switch-to-next-most-recent (&optional buffer)
+  "Switch to the most recently active shell buffer."
+  (setq buffer (or buffer (current-buffer)))
+  (let ((shells (->> (buffer-list)
+                     (-filter (lambda (b)
+                                (memq (buffer-local-value 'major-mode b) my/shell-modes)))
+                     (-sort (lambda (x y)
+                              (let ((my (buffer-local-value 'my/shell-last-active-time x))
+                                    (other (buffer-local-value 'my/shell-last-active-time y)))
+                                (cond ((null my) nil)
+                                      ((null other) t)
+                                      (t (> my other)))))))))
+    (cond ((null shells)) ;; nothing to do
+          ((memq major-mode shell-modes)
+           (switch-to-buffer (or (cadr (memq buffer shells)) (car shells))))
+          (t
+           (switch-to-buffer (car shells))))))
+
+(defvar-local my/shell-last-active-time nil)
+
+(defun my/shell-update-last-active-time (&optional string)
+  (setq my/shell-last-active-time (float-time)))
+
+(defun my/shell-mode-p (buffer)
+  (memq (buffer-local-value 'major-mode buffer) my/shell-modes))
+
+(defun my/shell-in-same-repo-or-dir-p (buffer)
+  (and (my/shell-mode-p buffer)
+       (let ((current (expand-file-name default-directory))
+             (other (expand-file-name (buffer-local-value 'default-directory buffer))))
+         (or (string= current other)
+             (and (or (string-prefix-p current other)
+                      (string-prefix-p other current))
+                  (string= (my/git-root (current-buffer))
+                           (my/git-root buffer)))))))
+
+(defun my/open-shell-window-for-buffer (&optional open-repo-root-p)
+  "Open a shell for the current buffer."
+  (interactive "P")
+  (let ((current-dir (expand-file-name default-directory))
+        (current-repo))
+    (cond ((memq major-mode my/shell-modes)
+           ;; in a shell, close it if there is a win above
+           (cond ((window-in-direction 'above) (delete-window))))
+          ((let ((win (window-in-direction 'below)))
+             (and win
+                  (if open-repo-root-p
+                      (string= (setq current-repo (my/git-root (current-buffer)))
+                               (my/git-root (window-buffer win)))
+                    (string= current-dir
+                             (expand-file-name (buffer-local-value 'default-directory
+                                                                   (window-buffer win)))))))
+           (windmove-down))
+          (t
+           (split-window-below)
+           (windmove-down)
+           (cond (open-repo-root-p
+                  (unless current-repo (setq current-repo (my/git-root (current-buffer))))
+                  (let ((shell-in-current-repo (cl-find-if (lambda (buffer)
+                                                             (and (my/shell-mode-p buffer)
+                                                                  (string= (buffer-local-value 'default-directory buffer)
+                                                                           current-repo)))
+                                                           (buffer-list))))
+
+                    (cond (shell-in-current-repo
+                           (switch-to-buffer shell-in-current-repo))
+                          (t
+                           (let* ((default-directory current-repo)
+                                  (name (generate-new-buffer-name
+                                         (format "*%s shell*"
+                                                 (file-name-nondirectory current-repo)))))
+                             (message "opening in repo")
+                             (switch-to-buffer (shell name)))))))
+                 (t
+                  (let ((shell-in-buffer-dir
+                         (cl-find-if (lambda (buffer)
+                                       (and (my/shell-mode-p buffer)
+                                            (string= current-dir (expand-file-name (buffer-local-value 'default-directory buffer)))))
+                                     (buffer-list))))
+                    (cond (shell-in-buffer-dir
+                           (switch-to-buffer shell-in-buffer-dir))
+                          (t
+                           (let ((name (generate-new-buffer-name
+                                        (format "*%s shell*"
+                                                (file-name-nondirectory current-dir)))))
+                             (switch-to-buffer (shell name))))))))))))
+
 
 (defun my/shell (&optional create-new)
   "Switch to the most recently active shell buffer or create new."
@@ -107,6 +208,10 @@ And then run the command."
             (font-lock-mode -1)
 
             (setq comint-process-echoes t)
+
+            (my/shell-update-last-active-time)
+            (add-hook 'comint-input-filter-functions
+                      'my/shell-update-last-active-time)
 
             (setq line-number-mode nil
                   column-number-mode nil)
