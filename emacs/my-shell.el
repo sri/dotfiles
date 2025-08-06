@@ -116,15 +116,17 @@ And then run the command."
   (interactive "P")
   (if (memq major-mode my/shell-modes)
       (if (window-in-direction 'above) (delete-window))
-    (let ((current-dir (expand-file-name default-directory))
-          (current-repo)
-          (win (window-in-direction 'below)))
-      (if (and win
-               (if open-repo-root-p
-                   (string= (setq current-repo (my/git-root (current-buffer)))
-                            (my/git-root (window-buffer win)))
-                 (string= current-dir
-                          (expand-file-name (buffer-local-value 'default-directory (window-buffer win))))))
+    (let* ((current-dir (expand-file-name default-directory))
+           (current-repo)
+           (win (window-in-direction 'below))
+           (shell-buffer-below
+            (and win
+                 (or (string= (setq current-repo (my/git-root (current-buffer)))
+                              (my/git-root (window-buffer win)))
+                     (string= current-dir
+                              (expand-file-name (buffer-local-value 'default-directory
+                                                                    (window-buffer win))))))))
+      (if shell-buffer-below
           (windmove-down)
         (split-window-below)
         (windmove-down)
