@@ -101,51 +101,56 @@ And then run the command."
 (defun my/shell-mode-p (buffer)
   (memq (buffer-local-value 'major-mode buffer) my/shell-modes))
 
-(defun my/open-shell-window-for-buffer (&optional open-repo-root-p)
+(cl-defun my/open-shell-window-for-buffer (&optional open-repo-root-p)
   "Open a shell for the current buffer."
   (interactive "P")
-  (if (memq major-mode my/shell-modes)
-      (if (window-in-direction 'above)
-          (delete-window))
-    (let* ((current-dir (expand-file-name default-directory))
-           (current-repo nil)
-           (win (window-in-direction 'below))
-           (shell-buffer-below
-            (and win
-                 (or (string= (setq current-repo (my/git-root (current-buffer)))
-                              (my/git-root (window-buffer win)))
-                     (string= current-dir
-                              (expand-file-name (buffer-local-value 'default-directory
-                                                                    (window-buffer win))))))))
-      (if shell-buffer-below
-          (windmove-down)
-        (split-window-below)
-        (windmove-down)
-        (if open-repo-root-p
-            (let ((shell-in-current-repo
-                   (cl-find-if (lambda (buffer)
-                                 (and (my/shell-mode-p buffer)
-                                      (string= (buffer-local-value 'default-directory buffer)
-                                               (or current-repo
-                                                   (setq current-repo (my/git-root (current-buffer)))))))
-                               (buffer-list))))
-              (if shell-in-current-repo
-                  (switch-to-buffer shell-in-current-repo)
-                (let* ((default-directory current-repo)
-                       (name (generate-new-buffer-name
-                              (format "*%s shell*" (file-name-nondirectory current-repo)))))
-                  (switch-to-buffer (shell name)))))
-          (let ((shell-in-buffer-dir
+  (let ((current-dir (expand-file-name default-directory))
+        current-repo)
+    (cl-labels ((buffer-dir (buffer)
+                  (buffer-local-value 'default-directory buffer))
+                (git-root (&optional buffer)
+                  (if buffer
+                      (my/git-root buffer)
+                    (or current-repo
+                        (setq current-repo (my/git-root (current-buffer))))))
+                (shell-buffer-p (buffer)
+                  (memq (buffer-local-value 'major-mode buffer) my/shell-modes))
+                (shell-buffer-below ()
+                  (when-let* ((win (window-in-direction 'below))
+                              (buf (window-buffer win)))
+                    (or (string= (git-root)
+                                 (git-root (window-buffer buf)))
+                        (string= current-dir
+                                 (buffer-dir buf)))))
+                (shell-in-buffer-dir ()
                  (cl-find-if (lambda (buffer)
-                               (and (my/shell-mode-p buffer)
-                                    (string= current-dir (expand-file-name (buffer-local-value 'default-directory buffer)))))
-                             (buffer-list))))
-            (if shell-in-buffer-dir
-                (switch-to-buffer shell-in-buffer-dir)
-              (let ((name (generate-new-buffer-name
-                           (format "*%s shell*" (file-name-nondirectory current-dir)))))
-                (switch-to-buffer (shell name))))))))))
-
+                               (and (shell-buffer-p buffer)
+                                    (string= current-dir
+                                             (buffer-dir buffer))))
+                             (buffer-list)))
+                (shell-in-current-repo ()
+                  (cl-find-if (lambda (buffer)
+                                (and (shell-buffer-pp buffer)
+                                     (string= (buffer-dir buffer)
+                                              (git-root))))
+                               (buffer-list)))
+                (new-shell (dir)
+                  (let ((name (format "*%s shell*" (file-name-nondirectory dir))))
+                    (shell (generate-new-buffer-name name)))))
+      (if (shell-buffer-p (current-buffer))
+          (if (window-in-direction 'above)
+              (delete-window))
+        (if (shell-buffer-below)
+            (windmove-down)
+          (split-window-below)
+          (windmove-down)
+          (switch-to-buffer
+           (if open-repo-root-p
+               (or (shell-in-current-repo)
+                   (let ((default-directory current-repo))
+                     (new-shell current-repo)))
+             (or (shell-in-buffer-dir)
+                 (new-shell current-dir)))))))))
 
 (defun my/shell (&optional create-new)
   "Switch to the most recently active shell buffer or create new."
