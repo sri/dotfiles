@@ -1,5 +1,26 @@
 https://www.youtube.com/watch?v=43Dg5zYPHTU
 
+* Emacs Mac (aka Carbon)
+https://lists.gnu.org/archive/html/emacs-devel/2025-07/msg00510.html
+#+begin_src shell
+  git clone https://github.com/jdtsmith/emacs-mac.git
+  cd emacs-mac/
+  git co emacs-mac-gnu_master_exp
+  xcode-select --install # ensure it is installed
+  brew install tree-sitter libgccjit librsvg
+  ./autogen.sh
+  CFLAGS="-O3 -mcpu=native" ./configure --with-native-compilation --with-tree-sitter --enable-mac-app=yes --enable-mac-self-contained
+  make -j4
+  # renamed existing NS Emacs.app to Emacs-NS.app
+  make install
+#+end_src
+** differences
+Carbon - 2 finger left/right scroll works - prev/next buffer
+NS - title bar blends in with buffer background; doesn't have a ridge
+Carbon - needs this for CMD key to work; NS works fine without it
+  (setq mac-command-modifier 'super)
+Carbon - subprocess create is supposed to be faster
+
 * Installing Emacs from source on Mac using brew
 brew tap d12frosted/emacs-plus
 brew uninstall emacs-plus

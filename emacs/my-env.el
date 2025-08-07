@@ -99,6 +99,7 @@ Fundamental mode."
 (setq mode-line-compact t)
 (setq confirm-kill-emacs 'yes-or-no-p)
 (setq use-dialog-box nil)
+(setq mac-command-modifier 'super)
 
 (setq fill-column 80)
 

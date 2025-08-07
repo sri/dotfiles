@@ -147,6 +147,8 @@
  ("M-k" . my/kill-whole-line)
  ("M-o" . project-find-file)
  ("M-r" . vr/mc-mark)
+ ("<M-tab>" . tab-line-switch-to-next-tab)
+ ("<S-M-tab>" . tab-line-switch-to-prev-tab)
 
  ("M-y" . consult-yank-pop)
 
