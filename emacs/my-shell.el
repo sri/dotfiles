@@ -122,13 +122,13 @@ And then run the command."
                                  (git-root (window-buffer buf)))
                         (string= current-dir
                                  (buffer-dir buf)))))
-                (shell-in-buffer-dir ()
+                (existing-shell-in-buffer-dir ()
                  (cl-find-if (lambda (buffer)
                                (and (shell-buffer-p buffer)
                                     (string= current-dir
                                              (buffer-dir buffer))))
                              (buffer-list)))
-                (shell-in-current-repo ()
+                (existing-shell-in-current-repo ()
                   (cl-find-if (lambda (buffer)
                                 (and (shell-buffer-p buffer)
                                      (string= (buffer-dir buffer)
@@ -146,10 +146,10 @@ And then run the command."
              (split-window-below)
              (windmove-down)
              (let ((buffer (if open-repo-root-p
-                               (or (shell-in-current-repo)
+                               (or (existing-shell-in-current-repo)
                                    (let ((default-directory current-repo))
                                      (new-shell current-repo)))
-                             (or (shell-in-buffer-dir)
+                             (or (existing-shell-in-buffer-dir)
                                  (new-shell current-dir)))))
                (switch-to-buffer buffer)))))))
 
