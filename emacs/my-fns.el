@@ -413,9 +413,23 @@ how does scrolling affect the window:
 
 (defun my/jump-to-matching-char ()
   (interactive)
-  (let ((openings (rx (or "[" "(" "{" "'" "\"")))
-        (closings (rx (or "]" ")" "}" "'" "\""))))
-    (cond ((looking-at openings)
+  (let* ((openings (rx (or "[" "(" "{")))
+         (closings (rx (or "]" ")" "}")))
+         (strings (rx (or "'" "\"")))
+         (ppss (syntax-ppss))
+         (inside-string (nth 3 ppss)))
+    (cond ((looking-at strings)
+           (cond (inside-string
+                  (forward-char 1)
+                  (backward-sexp))
+                 (t
+                  (forward-sexp))))
+          (inside-string
+           ;; start with going to beginning of string
+           (goto-char (nth 8 ppss)))
+          ((memq (char-before) '(?' ?\"))
+           (backward-sexp))
+          ((looking-at openings)
            (forward-sexp))
           ((save-excursion
              (forward-char -1)
@@ -428,7 +442,7 @@ how does scrolling affect the window:
 
 (defun my/git-repo-root ()
   (let ((cmd "git rev-parse --show-toplevel 2> /dev/null"))
-    (s-trim (shell-command-to-string cmd))))
+    (s-trim-right (shell-command-to-string cmd))))
 
 (defun my/select-line ()
   "Select the current line when region is active.

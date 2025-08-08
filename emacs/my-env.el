@@ -100,6 +100,7 @@ Fundamental mode."
 (setq confirm-kill-emacs 'yes-or-no-p)
 (setq use-dialog-box nil)
 (setq mac-command-modifier 'super)
+(setq mac-option-modifier 'meta)
 
 (setq fill-column 80)
 
