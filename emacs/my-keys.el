@@ -79,7 +79,7 @@
  ("C-." . embark-act)
  ("C-`" . my/open-shell-window-for-buffer)
  ("C-'" . my/jump-to-matching-char)
- ("C-\\" . other-frame)
+ ("C-\\" . er/expand-region)
  ("C-|" . tab-bar-switch-to-next-tab)
  ("C-a" . my/beginning-of-line)
  ("C-b" . backward-kill-word)
