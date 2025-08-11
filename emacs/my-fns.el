@@ -417,13 +417,16 @@ how does scrolling affect the window:
          (closings (rx (or "]" ")" "}")))
          (strings (rx (or "'" "\"")))
          (ppss (syntax-ppss))
-         (inside-string (nth 3 ppss)))
+         (inside-string (nth 3 ppss))
+         (inside-comment (nth 4 ppss)))
     (cond ((looking-at strings)
            (cond (inside-string
                   (forward-char 1)
                   (backward-sexp))
                  (t
                   (forward-sexp))))
+          (inside-comment
+           (goto-char (nth 8 ppss)))
           (inside-string
            ;; start with going to beginning of string
            (goto-char (nth 8 ppss)))

@@ -118,10 +118,9 @@ And then run the command."
                 (shell-buffer-below ()
                   (when-let* ((win (window-in-direction 'below))
                               (buf (window-buffer win)))
-                    (or (string= (git-root)
-                                 (git-root (window-buffer buf)))
-                        (string= current-dir
-                                 (buffer-dir buf)))))
+                    (and (shell-buffer-p)
+                         (or (string= (git-root) (git-root buf))
+                             (string= current-dir (buffer-dir buf))))))
                 (existing-shell-in-buffer-dir ()
                  (cl-find-if (lambda (buffer)
                                (and (shell-buffer-p buffer)
