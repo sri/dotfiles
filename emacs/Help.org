@@ -1,6 +1,10 @@
 https://www.youtube.com/watch?v=43Dg5zYPHTU
 
+
+
 * Emacs Mac (aka Carbon)
+GNU Emacs 31.0.50 (build 1, aarch64-apple-darwin24.6.0, Carbon Version 170 AppKit 2575.7) of 2025-08-22
+
 https://lists.gnu.org/archive/html/emacs-devel/2025-07/msg00510.html
 https://www.reddit.com/r/emacs/comments/1jbxa4b/emacsmac_v30_experimental_build_seeking/
 https://ylluminarious.github.io/2019/05/23/emacs-mac-port-introduction/
@@ -15,6 +19,7 @@ https://ylluminarious.github.io/2019/05/23/emacs-mac-port-introduction/
   CFLAGS="-O3 -mcpu=native" ./configure --with-native-compilation --with-tree-sitter --enable-mac-app=yes --enable-mac-self-contained
   make -j4
   # renamed existing NS Emacs.app to Emacs-NS.app
+  make bootstrap
   make install
 #+end_src
 ** differences
