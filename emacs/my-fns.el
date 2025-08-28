@@ -47,8 +47,6 @@
       (kill-region (point) (mark))
     (kill-line arg)))
 
-(defvar my/hippie-tab-debug nil)
-
 (defun my/hippie-tab (arg)
   "Hippie expand, do what I mean.
 If in the middle of `hippie-expand' running thru all the
@@ -57,40 +55,14 @@ continue with that. If a region is selected, indent that region.
 If at the beginning of the line, call `indent-for-tab-command'.
 Othewise, invoke `hippie-expand'."
   (interactive "*P")
-  (if my/hippie-tab-debug (message "%s, arg: %S" last-command arg))
-  (cond ((eq last-command 'my/hippie-tab)
-         (if my/hippie-tab-debug (message "last-command is 'my/hippie-tab, continuing"))
-         (hippie-expand arg))
-        ((and transient-mark-mode (use-region-p))
-         (if my/hippie-tab-debug (message "doing indent-region"))
-         (indent-region (region-beginning)
-                        (region-end)
-                        nil))
-        ((let ((cs (char-syntax (preceding-char))))
-           (or (= cs ?w) (= cs ?\_)))
-         (if my/hippie-tab-debug (message "doing hippie-expand/2"))
-         (hippie-expand arg))
-        (t
-         (if my/hippie-tab-debug (message "doing indent-for-tab-command"))
-         (indent-for-tab-command))))
-
-(defun my/hippie-tab-debug ()
-  (inter)
-  (message
-   "**************************************************\ncurrent-point=%S\nhe-num=%S\nhe-string-beg=%S\nhe-string-end=%S\nhe-search-string=%S\nhe-expand-list=%S\nhe-tried-table=%S\nhe-search-loc=%S\nhe-search-loc2=%S\nhe-search-bw=%S\nhe-search-bufs=%S\nhe-searched-n-bufs=%S\nhe-search-window=%S\n**************************************************\n"
-   (point)
-   he-num
-   he-string-beg
-   he-string-end
-   he-search-string
-   he-expand-list
-   he-tried-table
-   he-search-loc
-   he-search-loc2
-   he-search-bw
-   he-search-bufs
-   he-searched-n-bufs
-   he-search-window))
+  ;; Fixed a nasty bug: if you do a completion, and then move to a
+  ;; non-word char and try to complete, it'll delete word that
+  ;; completed in the original location. That was because the when you
+  ;; try to complete, this function saw that the previous command was
+  ;; a my/hippie-tab and didn't do reset internally.
+  (if (and transient-mark-mode (use-region-p))
+      (indent-region (region-beginning) (region-end) nil)
+    (hippie-expand arg)))
 
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting."
