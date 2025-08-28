@@ -69,6 +69,8 @@ Fundamental mode."
 (visual-line-mode 1)
 (setq save-interprogram-paste-before-kill t)
 
+(add-to-list 'interpreter-mode-alist '("uv" . python-mode))
+
 ;; Problem: when this is t, splitting a buffer into 2 windows, and
 ;; clicking into the windows causes weird region UI highlighting
 (setq highlight-nonselected-windows nil)
