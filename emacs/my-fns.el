@@ -57,7 +57,7 @@ continue with that. If a region is selected, indent that region.
 If at the beginning of the line, call `indent-for-tab-command'.
 Othewise, invoke `hippie-expand'."
   (interactive "*P")
-  (if my/hippie-tab-debug (message "%s" last-command))
+  (if my/hippie-tab-debug (message "%s, arg: %S" last-command arg))
   (cond ((eq last-command 'my/hippie-tab)
          (if my/hippie-tab-debug (message "last-command is 'my/hippie-tab, continuing"))
          (hippie-expand arg))
@@ -67,13 +67,30 @@ Othewise, invoke `hippie-expand'."
                         (region-end)
                         nil))
         ((let ((cs (char-syntax (preceding-char))))
-           ;; See https://www.gnu.org/software/emacs/manual/html_node/elisp/Syntax-Class-Table.html#Syntax-Class-Table
            (or (= cs ?w) (= cs ?\_)))
          (if my/hippie-tab-debug (message "doing hippie-expand/2"))
          (hippie-expand arg))
         (t
          (if my/hippie-tab-debug (message "doing indent-for-tab-command"))
          (indent-for-tab-command))))
+
+(defun my/hippie-tab-debug ()
+  (inter)
+  (message
+   "**************************************************\ncurrent-point=%S\nhe-num=%S\nhe-string-beg=%S\nhe-string-end=%S\nhe-search-string=%S\nhe-expand-list=%S\nhe-tried-table=%S\nhe-search-loc=%S\nhe-search-loc2=%S\nhe-search-bw=%S\nhe-search-bufs=%S\nhe-searched-n-bufs=%S\nhe-search-window=%S\n**************************************************\n"
+   (point)
+   he-num
+   he-string-beg
+   he-string-end
+   he-search-string
+   he-expand-list
+   he-tried-table
+   he-search-loc
+   he-search-loc2
+   he-search-bw
+   he-search-bufs
+   he-searched-n-bufs
+   he-search-window))
 
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting."
