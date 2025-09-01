@@ -55,14 +55,12 @@ continue with that. If a region is selected, indent that region.
 If at the beginning of the line, call `indent-for-tab-command'.
 Othewise, invoke `hippie-expand'."
   (interactive "*P")
-  ;; Fixed a nasty bug: if you do a completion, and then move to a
-  ;; non-word char and try to complete, it'll delete word that
-  ;; completed in the original location. That was because the when you
-  ;; try to complete, this function saw that the previous command was
-  ;; a my/hippie-tab and didn't do reset internally.
-  (if (and transient-mark-mode (use-region-p))
-      (indent-region (region-beginning) (region-end) nil)
-    (hippie-expand arg)))
+  (cond ((and transient-mark-mode (use-region-p))
+         (indent-region (region-beginning) (region-end) nil))
+        ((or (bolp) (looking-back "^\s*" (point-at-bol)))
+         (indent-for-tab-command))
+        (t
+         (hippie-expand arg))))
 
 (defun my/kill-current-buffer ()
   "Kill the current buffer without prompting."
