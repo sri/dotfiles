@@ -73,7 +73,7 @@ And then run the command."
 ;;
 ;; C-p - switches to other shells in order of most recently used
 
-(defvar my/shell-modes '(shell-mode vterm-mode eshell-mode))
+(defvar my/shell-modes '(shell-mode vterm-mode eshell-mode term-mode))
 
 (defun my/shell-buffer-p (buffer)
   (and (memq (buffer-local-value 'major-mode buffer) my/shell-modes)

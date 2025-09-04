@@ -50,10 +50,6 @@
                     nil))
                 fonts))))
 
-(defun my/font-size ()
-  (cond ((eq system-type 'darwin) 140)
-        (t 100)))
-
 (defun my/load (path &optional ignore-if-missing)
   "Load the file specified by PATH.
 Byte-compile the file, if necessary, before loading it.
