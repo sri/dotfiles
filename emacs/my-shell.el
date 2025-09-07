@@ -126,7 +126,7 @@ And then run the command."
                          (or (string= (git-root) (git-root buf))
                              (string= current-dir (buffer-dir buf))))))
                 (existing-shell-in-buffer-dir ()
-                 (cl-find-if (lambda (buffer)
+                  (cl-find-if (lambda (buffer)
                                (and (my/shell-buffer-p buffer)
                                     (string= current-dir
                                              (buffer-dir buffer))))
@@ -149,7 +149,8 @@ And then run the command."
                    (t
                     (split-window-below)
                     (windmove-down)))
-             (let ((buffer (if (not open-cwd-p)
+             (let ((buffer (if (and (not open-cwd-p)
+                                    (not (string= "" (git-root))))
                                (or (existing-shell-in-current-repo)
                                    (let ((default-directory (git-root)))
                                      (new-shell current-repo)))
