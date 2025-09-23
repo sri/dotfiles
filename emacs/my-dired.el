@@ -107,6 +107,7 @@
                        ([left] . dired-up-directory)
                        ([right] . my/dired-right-arrow-key)
                        ("s" . casual-dired-sort-by-tmenu)
+                       ("<mouse-2>" . dired-find-file)
 
                        ;; casual-dired
                        ;; ("o" . casual-dired-tmenu)
