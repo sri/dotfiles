@@ -1,65 +1,84 @@
 ;;; -*- lexical-binding: t -*-
-
-(use-package org
-  :ensure nil
-  :config
-  (setq org-cycle-include-plain-lists 'integrate)
-  (setq org-blank-before-new-entry nil)
-  (setq org-M-RET-may-split-line '((default . nil)))
-  (setq org-insert-heading-respect-content t)
-  (setq org-startup-indented t)
-  (setq org-hide-leading-stars t)
-  (setq org-special-ctrl-a/e t)
-  (setq org-special-ctrl-k nil)
-  (setq org-return-follows-link nil)
-  (setq org-use-speed-commands t)
-  (setq org-fontify-done-headline t)
-  (setq org-closed-keep-when-no-todo t)
-
-  (setq org-log-done nil)
-  ;; This only works if org-todo-keywords are annotated with `!'
-  ;; (for timestamp) and `@' (for note), like:
-  ;; (setq org-todo-keywords
-  ;;       '((sequence "TODO(t)" "WAIT(w!)" "|" "DONE(d!)" "CANCELED(c!)")))
-  (setq org-log-into-drawer t)
-
-  (setq org-confirm-babel-evaluate nil)
-  (setq org-agenda-files '("~/my/dotfiles/emacs"))
-  (setq org-babel-python-command "python3")
-
-  ;; From https://amitp.blogspot.com/2023/12/status-codes.html
-  ;; IDEA: maybe someday
-  ;; TODO: doing later
-  ;; SOON: doing soon
-  ;; NEXT: doing now
-  ;; DONE: done
-  ;; HACK: done in a cheesy way, blend of todo and done
-  ;; WAIT: waiting for some external change (event)
-  ;; HOLD: waiting for some internal change (of mind)
-  ;; STOP: stopped waiting, decided not to work on it
-  ;; NOTE: end state, just keep track of it
-  (setq org-todo-keyword-faces
-      '(("NOTE" :foreground "#4b4f89")
-        ("IDEA" :foreground "#4b4f89" :box t)
-        ("TODO" :foreground "medium blue" :weight bold)
-        ("SOON" :foreground "brown" :weight bold)
-        ("WAIT" :foreground "dark orange" :weight bold)
-        ("HOLD" :foreground "red" :weight bold)
-        ("HACK" :foreground "dark violet" :weight bold)
-        ("NEXT" :foreground "dark blue" :weight bold)
-        ("DONE" :foreground "#088e8e" :weight bold)
-        ("STOP" :foreground "#088e8e" :weight bold)))
-  (setq org-todo-keywords
-        '((sequence "NOTE" "IDEA" "TODO" "WAIT" "HOLD" "HACK" "IN-PROGRESS"
-                    "|"
-                    "DONE" "STOP")))
-  )
-
+(require 'org)
 (require 'org-mouse)
 
 (require 'org-bullets)
 (setq org-bullets-bullet-list '("○"))
 
+(setq org-capture-templates
+      '(
+        ("a" "Todo" entry (file+headline "~/Desktop/agenda.org" "INBOX") "* DRAFT %T\n%?")
+        ("b" "Item" item (file+headline "~/Desktop/agenda.org" "INBOX"))
+        ("c" "CheckItem" checkitem (file+headline "~/Desktop/agenda.org" "INBOX"))
+
+))
+
+(setq org-cycle-include-plain-lists 'integrate)
+(setq org-blank-before-new-entry nil)
+(setq org-M-RET-may-split-line '((default . nil)))
+(setq org-insert-heading-respect-content t)
+(setq org-startup-indented t)
+(setq org-hide-leading-stars t)
+(setq org-special-ctrl-a/e t)
+(setq org-special-ctrl-k nil)
+(setq org-return-follows-link nil)
+(setq org-use-speed-commands t)
+(setq org-fontify-done-headline t)
+(setq org-closed-keep-when-no-todo t)
+
+(setq org-log-done nil)
+;; This only works if org-todo-keywords are annotated with `!'
+;; (for timestamp) and `@' (for note), like:
+;; (setq org-todo-keywords
+;;       '((sequence "TODO(t)" "WAIT(w!)" "|" "DONE(d!)" "CANCELED(c!)")))
+(setq org-log-into-drawer t)
+
+(setq org-confirm-babel-evaluate nil)
+(setq org-agenda-files '("~/my/dotfiles/emacs"))
+(setq org-babel-python-command "python3")
+
+;; From https://amitp.blogspot.com/2023/12/status-codes.html
+;; IDEA: maybe someday
+;; TODO: doing later
+;; SOON: doing soon
+;; NEXT: doing now
+;; DONE: done
+;; HACK: done in a cheesy way, blend of todo and done
+;; WAIT: waiting for some external change (event)
+;; HOLD: waiting for some internal change (of mind)
+;; STOP: stopped waiting, decided not to work on it
+;; NOTE: end state, just keep track of it
+(setq org-todo-keyword-faces
+    '(("NOTE" :foreground "#4b4f89")
+      ("IDEA" :foreground "#4b4f89" :box t)
+      ("TODO" :foreground "medium blue" :weight bold)
+      ("SOON" :foreground "brown" :weight bold)
+      ("WAIT" :foreground "dark orange" :weight bold)
+      ("HOLD" :foreground "red" :weight bold)
+      ("HACK" :foreground "dark violet" :weight bold)
+      ("NEXT" :foreground "dark blue" :weight bold)
+      ("DONE" :foreground "#088e8e" :weight bold)
+      ("STOP" :foreground "#088e8e" :weight bold)))
+
+(setq org-todo-keyword-faces
+      '(("TODO"       . (:foreground "tomato" :weight bold))
+        ("IN-PROGRESS". (:foreground "gold" :weight bold))
+        ("WAITING"    . (:foreground "orange" :weight bold))
+        ("BLOCKED"    . (:foreground "red" :weight bold))
+        ("REVIEW"     . (:foreground "deep sky blue" :weight bold))
+        ("FOLLOWUP"   . (:foreground "cyan" :weight bold))
+        ("DONE"       . (:foreground "spring green" :weight bold))
+        ("CANCELLED"  . (:foreground "gray" :weight bold))
+        ("DELEGATED"  . (:foreground "light salmon" :weight bold))
+        ("DUPLICATE"  . (:foreground "gray70" :weight bold))))
+
+
+(setq org-todo-keywords
+      '((sequence "NOTE" "IDEA" "TODO" "WAIT" "HOLD" "HACK" "IN-PROGRESS"
+                  "|"
+                  "DONE" "STOP")))
+
+(setq org-src-preserve-indentation t)
 
 (add-hook 'org-mode-hook
           (lambda ()
