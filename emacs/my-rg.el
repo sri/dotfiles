@@ -32,4 +32,11 @@
   (setf (rg-search-dir rg-cur-search) (my/git-repo-root))
   (rg-rerun))
 
+
+(defun my/rg-menu ()
+  (interactive)
+  (let ((transient-default-level 7))
+    (rg-menu)))
+
 (define-key rg-mode-map (kbd "R") 'my/redo-search-from-git-repo-root)
+(define-key rg-mode-map (kbd "m") 'my/rg-menu)
