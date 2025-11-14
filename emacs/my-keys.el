@@ -54,7 +54,7 @@
  ("s-d" . my/dired)
  ("s-x" . my/kill-line-or-region)
  ("s-g" . rg-dwim)
- ("s-G" . consult-ripgrep)
+ ("s-G" . rg)
  ("s-m" . magit-status)
  ("s-," . beginning-of-buffer)
  ("s-o" . my/ffap-or-find-file)

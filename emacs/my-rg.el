@@ -38,5 +38,17 @@
   (let ((transient-default-level 7))
     (rg-menu)))
 
+;; ChatGPT
+(defun my/rg-tag-default-around (orig-fun &rest args)
+  "Return nil in dired buffers, otherwise call ORIG-FUN."
+  (if (derived-mode-p 'dired-mode)
+      nil
+    (apply orig-fun args)))
+
+(advice-add 'rg-tag-default :around #'my/rg-tag-default-around)
+
+
 (define-key rg-mode-map (kbd "R") 'my/redo-search-from-git-repo-root)
 (define-key rg-mode-map (kbd "m") 'my/rg-menu)
+(define-key rg-mode-map (kbd "N") 'rg-next-file)
+(define-key rg-mode-map (kbd "P") 'rg-prev-file)
