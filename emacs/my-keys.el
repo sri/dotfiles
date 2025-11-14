@@ -53,7 +53,7 @@
  ("s-c" . my/copy-line-or-region)
  ("s-d" . my/dired)
  ("s-x" . my/kill-line-or-region)
- ("s-g" . consult-git-grep)
+ ("s-g" . rg-dwim)
  ("s-G" . consult-ripgrep)
  ("s-m" . magit-status)
  ("s-," . beginning-of-buffer)

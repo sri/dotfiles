@@ -256,8 +256,9 @@ Fundamental mode."
 
 (require 'grep)
 (add-hook 'grep-mode-hook (lambda () (toggle-truncate-lines 1)))
-(require 'wgrep)
-(setq wgrep-enable-key "r")
+;; Conflicts with rg.el's "r" key.
+;; (require 'wgrep)
+;; (setq wgrep-enable-key "r")
 
 (require 'hippie-exp)
 (setq hippie-expand-try-functions-list
