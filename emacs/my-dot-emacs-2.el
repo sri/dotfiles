@@ -111,7 +111,8 @@ try to load the source again."
                  "my-isearch"
                  "my-help"
                  "my-dired"
-                 "my-modeline"))
+                 "my-modeline"
+                 "my-face-helper"))
          (all (append (list gui non-gui this) base))
          (pkg-customizations
           (cl-remove-if (lambda (x)
