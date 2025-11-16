@@ -13,6 +13,8 @@
            'acme)))
   "Can be defined in ~/.emacs.private.el.")
 
+(setq my-theme 'solarized-gruvbox-dark)
+
 (defvar my-themes
   '(
     solarized-gruvbox
