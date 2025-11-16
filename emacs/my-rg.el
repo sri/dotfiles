@@ -2,8 +2,6 @@
 (require 'rg)
 (require 's)
 
-;; C-c r
-
 ;; Create a unique buffer -- from the rg.el docs
 (defadvice rg-run (before rg-run-before activate)
   ;; TODO: buffer name should be
