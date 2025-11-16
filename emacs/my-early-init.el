@@ -2,4 +2,12 @@
 (setq gc-cons-threshold most-positive-fixnum)
 (add-hook 'emacs-startup-hook
           (lambda () (setq gc-cons-threshold (* 50 1024 1024))))
+
+(defvar my/dotfiles-dir "~/my/dotfiles/emacs")
+(setq custom-file (expand-file-name "my-custom.el" my/dotfiles-dir))
+(load custom-file)
+
+(require 'package)
+(package-initialize)
+
 (message "early init done")

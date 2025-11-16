@@ -14,7 +14,6 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
-(package-initialize)
 
 (defvar my/colors
   '(
@@ -86,8 +85,6 @@ try to load the source again."
            (if (file-exists-p compiled) (delete-file compiled))
            (if (null ignore-if-missing) (error "my/load: missing %s" source))))))
 
-(defvar my/dotfiles-dir "~/my/dotfiles/emacs")
-(setq custom-file (expand-file-name "my-custom.el" my/dotfiles-dir))
 
 (defun my/load-all ()
   ;; Load packages and install them if necessary.
@@ -138,7 +135,6 @@ try to load the source again."
     (my/load "~/.emacs.private.el" 'ignore-if-missing)
     (my/load (if window-system gui non-gui)))
 
-  (load custom-file)
   (setq my-emacs-elapsed-time
         (float-time (time-subtract (current-time) my-emacs-start-time)))
 
