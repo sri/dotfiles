@@ -16,9 +16,7 @@
                     (rg-read-pattern nil)))
          ;; ChatGPT 5.1
          (looks-like-regexp (string-match-p "[.*+?[^]$(){}|\\]" pattern))
-         (dir (if use-git-repo-root
-                  (my/git-repo-root)
-                default-directory)))
+         (dir (my/git-repo-root)))
     (rg-run pattern "everything" dir
             (if looks-like-regexp nil t))))
 
