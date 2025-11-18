@@ -37,6 +37,7 @@
            ("C" . my/kill-line-or-region)
 
            (";" . my/comment-line-or-region)
+           ("g" . my/rg)
            ("G" . my/google-search)
            ("J" . ace-jump-word-mode)
            ("m" . vr/mc-mark) ;; ?

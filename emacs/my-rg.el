@@ -9,27 +9,23 @@
   (rg-save-search))
 
 (defun my/rg (&optional use-git-repo-root)
-  ;; Use case: I want to do a quick search, either in the curernt
-  ;; directory or at the repo's root. And be able to modify the
-  ;; parameters of that quickly.
-  ;;
   (interactive)
-  (get-buffer-create "*rg*")
-  (let ((pattern (rg-read-pattern nil))
-        (dir (if use-git-repo-root
-                 (my/git-repo-root)
-               default-directory)))
-    (rg pattern (car (rg-default-alias)) dir)))
-
-(defun my/rg-from-repo-root ()
-  (interactive)
-  (my/rg t))
+  (let* ((pattern (if (use-region-p)
+                      (buffer-substring-no-properties (region-beginning)
+                                                      (region-end))
+                    (rg-read-pattern nil)))
+         ;; ChatGPT 5.1
+         (looks-like-regexp (string-match-p "[.*+?[^]$(){}|\\]" pattern))
+         (dir (if use-git-repo-root
+                  (my/git-repo-root)
+                default-directory)))
+    (rg-run pattern "everything" dir
+            (if looks-like-regexp nil t))))
 
 (defun my/redo-search-from-git-repo-root ()
   (interactive)
   (setf (rg-search-dir rg-cur-search) (my/git-repo-root))
   (rg-rerun))
-
 
 (defun my/rg-menu ()
   (interactive)
@@ -44,7 +40,6 @@
     (apply orig-fun args)))
 
 (advice-add 'rg-tag-default :around #'my/rg-tag-default-around)
-
 
 (define-key rg-mode-map (kbd "R") 'my/redo-search-from-git-repo-root)
 (define-key rg-mode-map (kbd "m") 'my/rg-menu)

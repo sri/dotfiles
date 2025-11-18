@@ -53,7 +53,7 @@
  ("s-c" . my/copy-line-or-region)
  ("s-d" . my/dired)
  ("s-x" . my/kill-line-or-region)
- ("s-g" . rg-dwim)
+ ("s-g" . my/rg)
  ("s-G" . rg)
  ("s-m" . magit-status)
  ("s-," . beginning-of-buffer)
