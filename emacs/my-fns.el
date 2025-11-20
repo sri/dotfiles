@@ -559,3 +559,8 @@ formats them into a list of clickable links."
   (with-current-buffer buffer
     (let ((command "git rev-parse --show-toplevel 2> /dev/null"))
       (string-trim (shell-command-to-string command)))))
+
+(defun my/restart-emacs ()
+  (interactive)
+  (let ((confirm-kill-emacs nil))
+    (restart-emacs)))
