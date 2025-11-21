@@ -12,8 +12,7 @@
 (add-to-list 'display-buffer-alist
              '("^magit-revision:.*"
                (display-buffer-reuse-window
-                display-buffer-at-bottom)
-               (window-height . 0.8)))
+                display-buffer-at-bottom)))
 
 (put 'magit-diff-edit-hunk-commit 'disabled nil)
 
