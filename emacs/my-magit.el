@@ -9,10 +9,7 @@
 ;; git diff A..B   # Show me changes only on A or only on B.
 ;; git diff A...B  # Show me changes only on B.
 
-(add-to-list 'display-buffer-alist
-             '("^magit-revision:.*"
-               (display-buffer-reuse-window
-                display-buffer-at-bottom)))
+
 
 (put 'magit-diff-edit-hunk-commit 'disabled nil)
 

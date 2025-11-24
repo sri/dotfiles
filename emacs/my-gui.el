@@ -1,20 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 (require 'bm)
 
-(defvar my-theme
-  (let* ((hour (nth 2 (decode-time (current-time))))
-         (period (cond ((or (>= hour 17) (<= hour 4)) 'evening)
-                       ((>= hour 12) 'afternoon)
-                       (t            'morning))))
-    (cond ((eq period 'evening)
-           'solarized-gruvbox-dark)
-          (t
-           'leuven
-           'acme)))
-  "Can be defined in ~/.emacs.private.el.")
-
-(setq my-theme 'leuven)
-
 (defvar my-themes
   '(
     solarized-gruvbox
@@ -38,6 +24,21 @@
     spacemacs-dark
     ))
 
+
+(defvar my-theme
+  (let* ((hour (nth 2 (decode-time (current-time))))
+         (period (cond ((or (>= hour 17) (<= hour 4)) 'evening)
+                       ((>= hour 12) 'afternoon)
+                       (t            'morning))))
+    (cond ((eq period 'evening)
+           'solarized-gruvbox-dark)
+          (t
+           'leuven
+           'acme)))
+  "Can be defined in ~/.emacs.private.el.")
+
+(setq my-theme 'solarized-dark)
+
 (defun my-try-theme (theme)
   (mapc #'disable-theme custom-enabled-themes)
   (load-theme theme :no-confirm)
@@ -50,12 +51,14 @@
     (message "using theme %s" theme)
     (load-theme theme t))
 
-(when (eq theme 'solarized-zenburn)
- '(region ((t (:background "#8E8E93" :foreground "black"))))
- '(bm-persistent-face ((t (:extend t :background "#6e52b9" :overline nil)))))
-
-
-  )
+  (cond ((eq theme 'solarized-zenburn)
+         (custom-set-faces
+          '(region ((t (:background "#8E8E93" :foreground "black"))))
+          '(bm-persistent-face ((t (:extend t :background "#6e52b9" :overline nil))))))
+        ((eq theme 'solarized-dark)
+         (custom-set-faces
+          '(region ((t (:background "#735c00" :foreground "#002b36"))))
+          '(bm-persistent-face ((t (:extend t :background "#6e52b9" :overline nil))))))))
 
 (set-face-attribute 'bm-persistent-face nil :extend t
                     :background "#6e52b9")
@@ -100,6 +103,8 @@
   (add-to-list 'default-frame-alist (cons 'width width))
   (add-to-list 'default-frame-alist (cons 'top top))
   (add-to-list 'default-frame-alist (cons 'left left)))
+
+
 
 (set-frame-parameter nil 'alpha '(100 100))
 

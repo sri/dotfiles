@@ -112,7 +112,8 @@ try to load the source again."
                  "my-help"
                  "my-dired"
                  "my-modeline"
-                 "my-face-helper"))
+                 "my-face-helper"
+                 "my-display-buffers"))
          (all (append (list gui non-gui this) base))
          (pkg-customizations
           (cl-remove-if (lambda (x)

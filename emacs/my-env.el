@@ -173,12 +173,6 @@ Fundamental mode."
 
 (setq mode-line-collapse-minor-modes t)
 
-(add-to-list 'display-buffer-alist
-             '("^\\*shell\\*" . (display-buffer-same-window)))
-(add-to-list 'display-buffer-alist
-             '("^\\*Embark Export:.*" display-buffer-at-bottom))
-
-
 (setq diff-switches '("-u"))
 
 (make-variable-buffer-local 'line-number-mode)
