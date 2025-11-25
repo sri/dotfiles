@@ -57,7 +57,7 @@
           '(bm-persistent-face ((t (:extend t :background "#6e52b9" :overline nil))))))
         ((eq theme 'solarized-dark)
          (custom-set-faces
-          '(region ((t (:background "#735c00" :foreground "#002b36"))))
+          '(region ((t (:inherit magit-blame-highlight :extend t :stipple nil :background "#073642" :foreground "#839496"))))
           '(bm-persistent-face ((t (:extend t :background "#6e52b9" :overline nil))))))))
 
 (set-face-attribute 'bm-persistent-face nil :extend t
@@ -103,8 +103,6 @@
   (add-to-list 'default-frame-alist (cons 'width width))
   (add-to-list 'default-frame-alist (cons 'top top))
   (add-to-list 'default-frame-alist (cons 'left left)))
-
-
 
 (set-frame-parameter nil 'alpha '(100 100))
 

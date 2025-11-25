@@ -8,9 +8,11 @@
          (display-buffer-reuse-window
           display-buffer-at-bottom))
 
+        ((derived-mode . magit-status-mode)
+         (display-buffer-use-some-window)
+         (body-function . delete-other-windows))
 
-
-        ("^\\*Occur\\*"
+        ("^\\*\\(Occur\\|grep\\|rg\\)"
          (display-buffer-reuse-window
           display-buffer-in-direction)
          (direction . below)
@@ -19,11 +21,6 @@
          (body-function . (lambda (w) (select-window w))))))
 
 ;;; ChatGPT 5.1
-(add-to-list 'display-buffer-alist
-             '("^[*]rg[*].*"
-               (display-buffer-reuse-window
-                display-buffer-at-bottom)))
-
 (defvar my/rg-rr-windows nil
   "List of windows participating in round-robin target selection.")
 
