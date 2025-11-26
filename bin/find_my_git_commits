@@ -1,0 +1,70 @@
+#! /usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+# ]
+# ///
+
+import sys, datetime, subprocess, pathlib
+
+def user_input(prompt, default=None):
+    if default:
+        prompt = f"{prompt} (default={repr(default)})"
+    response = input(f"{prompt}: ").strip()
+    if response in ("quit", "exit", "q"):
+        sys.exit(0)
+    if len(response) == 0:
+        return default
+    else:
+        return response
+
+def author_commits_for(repo_path, author, since, until):
+    cmd = ["git", "-C", str(repo_path.absolute()), "log",
+           f'--since={since}',
+           f'--until={until}',
+           f'--author={author}',
+           "--pretty=format:%h %ad %s",
+           "--date=short"]
+    result = subprocess.run(
+        cmd,
+        capture_output=True,
+        text=True,
+        check=False)
+    output = result.stdout.strip()
+    if len(output) == 0:
+        return None, None
+    else:
+        return output.split("\n"), cmd
+
+def main():
+    today = datetime.date.today()
+    author = sys.argv[1] if len(sys.argv) == 2 else None
+    directory = "."
+    since = today.strftime("%Y-01-01")
+    until = today.strftime("%Y-%m-%d")
+
+    print("[Ctrl-c, 'q', 'exit', 'quit' to exit; Ctrl-d to start search]")
+    try:
+        author = author or user_input("Git author", author)
+        directory = user_input("Dir", directory)
+        since = user_input("Start date", since)
+        until = user_input("End date", until)
+    except EOFError:
+        pass
+    except KeyboardInterrupt:
+        return
+
+    for (dirpath, dirnames, filenames) in pathlib.Path(directory).walk(): # walk requires Python 3.12
+        if dirpath.is_dir() and (dirpath / ".git").exists():
+            commits, cmd = author_commits_for(dirpath, author, since, until)
+            if commits:
+                print(f"* {dirpath.absolute()}: {len(commits)} commits")
+                print(f"command: {' '.join(cmd)}")
+                for c in commits:
+                    print(f"  {c}")
+                print("=" * 72)
+            # Don't iterate further in the Git directory.
+            dirnames[:] = []
+
+if __name__ == "__main__":
+    main()

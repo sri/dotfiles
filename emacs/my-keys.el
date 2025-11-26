@@ -52,6 +52,8 @@
  ("s-3" . split-window-horizontally)
  ("s-c" . my/copy-line-or-region)
  ("s-d" . my/dired)
+ ("s-f" . my/isearch)
+ ("s-F" . isearch-backward)
  ("s-x" . my/kill-line-or-region)
  ("s-g" . my/rg)
  ("s-G" . rg)
@@ -60,9 +62,10 @@
  ("s-o" . my/ffap-or-find-file)
  ("s-." . end-of-buffer)
  ("s-j" . other-window)
- ;("s-p" . my/switch-to-buffer)
+ ("s-s" . save-buffer)
  ("s-t" . tab-new)
- ("s-w" . tab-close))
+ ("s-w" . tab-close)
+ ("s-z" . undo))
 
 ;; https://emacs.stackexchange.com/questions/32183/how-to-make-exceptions-to-bind-key-overriding-behavior
 

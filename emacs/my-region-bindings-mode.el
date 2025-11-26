@@ -56,6 +56,7 @@
 
            ("i" . indent-rigidly)
            ("s" . my/region-bindings-s)
+           ("/" . er/expand-region)
            ;; ("L" . ace-jump-line-mode)
            ;; By default, TAB does indent-region
            )
