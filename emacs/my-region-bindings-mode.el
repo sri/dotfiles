@@ -4,6 +4,9 @@
 (require 'which-key)
 (require 'expand-region)
 
+
+(add-hook 'magit-mode-hook 'region-bindings-mode-off)
+
 (region-bindings-mode-enable)
 
 (defun my/which-key-region-bindings ()

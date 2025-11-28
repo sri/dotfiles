@@ -102,6 +102,7 @@
  ("C-w" . my/kill-current-buffer)
  ("C-y" . my/yank)
  ("C-z" . undo)
+ ("C-c ~" . my/open-repo-in-browser)
  ("C-c C" . org-capture)
  ("S-SPC" . dabbrev-completion)
  ("C-c \\" . align-regexp)

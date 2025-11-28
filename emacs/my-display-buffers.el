@@ -4,7 +4,7 @@
          (display-buffer-reuse-window
           display-buffer-at-bottom))
         ("^\\*Embark Export:.*" display-buffer-at-bottom)
-        ("^magit-revision:.*"
+        ("^magit-\\(revision\\|stash\\|diff\\):.*"
          (display-buffer-reuse-window
           display-buffer-at-bottom))
 
