@@ -170,3 +170,8 @@
 ;;             (my/org-create-dynamic-link
 ;;              "\\([[:alpha:]]\\{2,5\\}-[[:digit:]]+\\)"
 ;;              "https://www.example.com/%s")))
+
+(bind-keys :map org-mode-map
+           ("M-<down>" . outline-backward-same-level)
+           ("M-<up>" . outline-forward-same-level)
+           ("C-c t" . org-toggle-link-display))
