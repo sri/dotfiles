@@ -37,7 +37,7 @@
            'acme)))
   "Can be defined in ~/.emacs.private.el.")
 
-(setq my-theme 'solarized-dark)
+(setq my-theme 'solarized-zenburn)
 
 (defun my-try-theme (theme)
   (mapc #'disable-theme custom-enabled-themes)

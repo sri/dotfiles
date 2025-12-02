@@ -26,21 +26,23 @@
    '(ol-bbdb ol-bibtex ol-docview ol-gnus ol-info ol-irc ol-mhe ol-rmail
              ol-w3m))
  '(package-selected-packages
-   '(ace-window ace-jump-mode acme-theme bm button-lock casual
-                catppuccin-theme company company-go consult csv-mode
-                diff-hl doom-themes eat ef-themes elisp-slime-nav
-                embark embark-consult exec-path-from-shell
-                expand-region flycheck flycheck-golangci-lint git-link
-                go-eldoc go-mode gotest gptel gruvbox-theme howm hydra
-                jetbrains-darcula-theme leuven-theme macrostep magit
-                marginalia markdown-mode mistty multiple-cursors
-                orderless org org-bullets projectile protobuf-mode
-                rainbow-mode region-bindings-mode rg rjsx-mode
-                ruby-end s smart-mode-line solarized-theme
-                spacemacs-theme string-inflection typescript-mode
-                undo-tree use-package vertico vertico-posframe
-                visual-regexp vterm web-mode which-key xterm-color
-                yaml-mode yasnippet zenburn-theme zig-mode))
+   '(ace-jump-mode ace-window acme-theme bm button-lock casual
+                   catppuccin-theme company company-go consult
+                   csv-mode diff-hl doom-themes eat ef-themes
+                   elisp-slime-nav embark embark-consult
+                   exec-path-from-shell expand-region flycheck
+                   flycheck-golangci-lint git-link go-eldoc go-mode
+                   gotest gptel gruvbox-theme howm hydra
+                   jetbrains-darcula-theme json-mode leuven-theme
+                   macrostep magit marginalia markdown-mode mistty
+                   multiple-cursors orderless org org-bullets
+                   projectile protobuf-mode rainbow-mode
+                   region-bindings-mode rg rjsx-mode ruby-end s
+                   smart-mode-line solarized-theme spacemacs-theme
+                   string-inflection typescript-mode undo-tree
+                   use-package vertico vertico-posframe visual-regexp
+                   vterm web-mode which-key xterm-color yaml-mode
+                   yasnippet zenburn-theme zig-mode))
  '(typescript-indent-level 2))
 
 
@@ -49,4 +51,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 140 :family "JetBrains Mono")))))
+ '(default ((t (:height 140 :family "JetBrains Mono"))))
+ '(bm-persistent-face ((t (:extend t :background "#6e52b9" :overline nil))))
+ '(region ((t (:background "#8E8E93" :foreground "black")))))
