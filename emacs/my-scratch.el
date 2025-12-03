@@ -66,6 +66,17 @@ Finally, the dired buffer of the file is updated."
       (save-buffer)
       (message "Pasted from kill-ring"))))
 
+(defun my/scratch-new-temp (&optional paste-from-kill-ring)
+  (interactive)
+  (switch-to-buffer (generate-new-buffer "*my-temp*"))
+  (when paste-from-kill-ring
+    (save-excursion (yank))
+    (message "Pasted from kill-ring")))
+
+(defun my/scratch-new-temp-from-clipboard ()
+  (interactive)
+  (my/scratch-new-temp t))
+
 (defun my/scratch-new-from-clipboard ()
   "Create a new persistent scratch buffer with initial contents
 yanked from the kill-ring."

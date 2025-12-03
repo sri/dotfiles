@@ -129,6 +129,8 @@
  ("C-c q" . quoted-insert)
  ("C-c r" . consult-recent-file)
  ("C-c s" . sort-lines)
+ ("C-c t" . my/scratch-new-temp)
+ ("C-c T" . my/scratch-new-temp-from-clipboard)
  ("C-c v" . my/scratch-new)
  ("C-c V" . my/scratch-new-from-clipboard)
  ("C-c O" . open-line)
