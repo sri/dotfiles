@@ -34,10 +34,10 @@
            'solarized-gruvbox-dark)
           (t
            'leuven
-           'acme)))
-  "Can be defined in ~/.emacs.private.el.")
+           'acme))
 
-(setq my-theme 'solarized-zenburn)
+    'solarized-dark)
+  "Can be defined in ~/.emacs.private.el.")
 
 (defun my-try-theme (theme)
   (mapc #'disable-theme custom-enabled-themes)
