@@ -48,7 +48,7 @@
 ;; HOLD: waiting for some internal change (of mind)
 ;; STOP: stopped waiting, decided not to work on it
 ;; NOTE: end state, just keep track of it
-(setq org-todo-keyword-faces
+'(setq org-todo-keyword-faces
     '(("NOTE" :foreground "#4b4f89")
       ("IDEA" :foreground "#4b4f89" :box t)
       ("TODO" :foreground "medium blue" :weight bold)
@@ -60,7 +60,7 @@
       ("DONE" :foreground "#088e8e" :weight bold)
       ("STOP" :foreground "#088e8e" :weight bold)))
 
-(setq org-todo-keyword-faces
+'(setq org-todo-keyword-faces
       '(("TODO"       . (:foreground "tomato" :weight bold))
         ("IN-PROGRESS". (:foreground "gold" :weight bold))
         ("WAITING"    . (:foreground "orange" :weight bold))

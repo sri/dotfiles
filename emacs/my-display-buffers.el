@@ -12,6 +12,10 @@
          (display-buffer-use-some-window)
          (body-function . delete-other-windows))
 
+        ("^\\*Calendar\\*"
+         (display-buffer-reuse-window
+          display-buffer-at-bottom))
+
         ("^\\*\\(Occur\\|grep\\|rg\\)"
          (display-buffer-reuse-window
           display-buffer-in-direction)
@@ -65,7 +69,7 @@
 
 ;; Advice compilation-goto-locus to use our round-robin window
 (defun my/compilation-goto-locus-rr (orig fun-with info &rest args)
-  (if (eq major-mode 'rg-mode)
+  (if (memq major-mode '(rg-mode grep-mode))
       (let ((display-buffer-overriding-action
              `((display-buffer-reuse-window
                 display-buffer-use-some-window)
