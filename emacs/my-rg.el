@@ -47,3 +47,10 @@
 (define-key rg-mode-map (kbd "m") 'my/rg-menu)
 (define-key rg-mode-map (kbd "N") 'rg-next-file)
 (define-key rg-mode-map (kbd "P") 'rg-prev-file)
+(define-key rg-mode-map (kbd "TAB") 'outline-cycle)
+(define-key rg-mode-map (kbd "S-<tab>") 'outline-cycle-buffer)
+
+(add-hook 'rg-mode-hook
+          (lambda ()
+            (setq-local outline-regexp "File:")
+            (outline-minor-mode 1)))

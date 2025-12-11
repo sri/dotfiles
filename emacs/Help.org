@@ -183,3 +183,13 @@ https://www.reddit.com/r/emacs/comments/1benj4g/things_you_do_in_emacs_that_will
 * Shell debug
 ansi-color-for-comint-mode-off
 comint-output-filter
+* Notes
+** EmacsConf 2025: Zettelkasten for regular Emacs hackers - Christian Tietze (he)
+https://www.youtube.com/watch?v=wE8vCWyr1Eo
+
+writing is important - without it you won't be able to cross a certain complexity threshold
+
+don't collect fact - write about a train of thought; model to understand the world; collect to remember but use zettelkasten to think
+
+write; connect; correct; design for use; create structures
+
