@@ -21,3 +21,5 @@ csvlens & tidy viewer - great viewers for CSV files, beautiful and fun
 qsv - filter, sort, combine, join... (a fork of xsv)
 Terminal::Table - wonderful rubygem for pretty printing tables, great for non-hash data like confusion matrices
 visidata - the best for poking around large files, it does everything
+
+jj
