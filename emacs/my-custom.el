@@ -40,9 +40,9 @@
                    region-bindings-mode rg rjsx-mode ruby-end s
                    smart-mode-line solarized-theme spacemacs-theme
                    string-inflection typescript-mode undo-tree
-                   use-package vertico vertico-posframe visual-regexp
-                   vterm web-mode which-key xterm-color yaml-mode
-                   yasnippet zenburn-theme zig-mode))
+                   use-package vc-jj vertico vertico-posframe
+                   visual-regexp vterm web-mode which-key xterm-color
+                   yaml-mode yasnippet zenburn-theme zig-mode))
  '(typescript-indent-level 2))
 
 
