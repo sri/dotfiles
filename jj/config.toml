@@ -1,0 +1,14 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[user]
+name = "Sriram Thaiyar"
+email = "sriram.thaiyar@gmail.com"
+
+[ui]
+default-command = "log"
+ui.diff-formatter = ":git"
+conflict-marker-style = "git"
+
+[colors]
+"diff added token" = { underline = false }
+"diff removed token" = { underline = false }
