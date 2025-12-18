@@ -6,6 +6,8 @@ import platform
 import pathlib
 
 links = {
+    "jj/config.toml"        : "~/.config/jj/config.toml",
+    "ghostty-config"        : "~/.config/ghostty/config",
     "emacs/my-dot-emacs.el" : "~/.emacs.el",
     "emacs/my-early-init.el": "~/.emacs.d/early-init.el",
     "bash/bashrc"           : "~/.bashrc",
