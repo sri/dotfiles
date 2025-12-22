@@ -16,8 +16,9 @@ https://ylluminarious.github.io/2019/05/23/emacs-mac-port-introduction/
   xcode-select --install # ensure it is installed
   brew install tree-sitter libgccjit librsvg
   ./autogen.sh
-  CFLAGS="-O3 -mcpu=native" ./configure --with-native-compilation --with-tree-sitter --enable-mac-app=yes --enable-mac-self-contained
-  make -j4
+  CFLAGS="-O2 -mcpu=native" ./configure  --with-tree-sitter  --enable-mac-app=yes --enable-mac-self-contained # --with-native-compilation -> errors out
+
+  make -j4 # this fails, but running below 2 commands makes it work
   # renamed existing NS Emacs.app to Emacs-NS.app
   make bootstrap
   make install
