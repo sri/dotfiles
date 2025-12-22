@@ -59,7 +59,10 @@
 
            ("i" . indent-rigidly)
            ("s" . my/region-bindings-s)
+           ("x" . exchange-point-and-mark)
+           ("h" . mark-whole-buffer)
            ("/" . er/expand-region)
+           ("|" . shell-command-on-region)
            ;; ("L" . ace-jump-line-mode)
            ;; By default, TAB does indent-region
            )
