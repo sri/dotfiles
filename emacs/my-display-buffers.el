@@ -16,7 +16,7 @@
          (display-buffer-reuse-window
           display-buffer-at-bottom))
 
-        ("^\\*\\(Occur\\|grep\\|rg\\)"
+        ("^\\*\\(Occur\\|grep\\|rg\\|Help\\)"
          (display-buffer-reuse-window
           display-buffer-in-direction)
          (direction . below)
