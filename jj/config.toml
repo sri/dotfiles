@@ -12,3 +12,15 @@ conflict-marker-style = "git"
 [colors]
 "diff added token" = { underline = false }
 "diff removed token" = { underline = false }
+
+[aliases]
+
+# https://shaddy.dev/notes/jj-tug/
+#
+# The alias will take the closest #ancestor bookmark and move them the
+# current change.
+#
+# Or to break it down, ::@- refers to ancestors of the parent change,
+# bookmarks() refers to all changes with bookmarks, and heads()
+# instructs to only take the latest change
+tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
