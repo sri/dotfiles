@@ -65,6 +65,7 @@
  ("s-n" . make-frame-command)
  ("s-s" . save-buffer)
  ("s-t" . tab-new)
+ ("s-v" . my/yank)
  ("s-w" . tab-close)
  ("s-z" . undo))
 
