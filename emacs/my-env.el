@@ -103,6 +103,7 @@ Fundamental mode."
 (setq use-dialog-box nil)
 (setq mac-command-modifier 'super)
 (setq mac-option-modifier 'meta)
+(setq mouse-autoselect-window t)
 
 (setq fill-column 80)
 
