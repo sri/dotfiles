@@ -4,8 +4,8 @@ cargo install tokei
 cargo install fd-find
 # https://github.com/BurntSushi/ripgrep
 cargo install ripgrep
-# https://github.com/ogham/exa
-cargo install exa
+
+cargo install eza
 
 # https://github.com/nicolargo/glances
 pip3 install glances
@@ -22,3 +22,6 @@ qsv - filter, sort, combine, join... (a fork of xsv)
 Terminal::Table - wonderful rubygem for pretty printing tables, great for non-hash data like confusion matrices
 visidata - the best for poking around large files, it does everything
 jj - vcs # learn vc-jj.el
+
+gls
+gnufind
