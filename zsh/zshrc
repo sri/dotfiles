@@ -89,3 +89,169 @@ fi
 if [[ -e $HOME/.cargo/env ]]; then
   . $HOME/.cargo/env
 fi
+
+
+# -*- mode: sh -*-
+
+alias tab='open . -a iterm'
+
+alias d='git diff'
+#__git_complete d _git_diff
+alias gd='git diff'
+#__git_complete gd _git_diff
+alias s='git status --short --branch'
+alias gs='git status'
+alias gg='git grep'
+alias ggi='git grep -i'
+
+
+function gc() {
+  if [ $# -eq 0 ]; then
+    url="$(pbpaste)"
+    if [[ "$url" == http* ]]; then
+      git clone "$url"
+    else
+      echo "Error: Clipboard content does not start with 'http'."
+    fi
+  else
+    git clone "$1"
+  fi
+}
+
+
+function g() {
+    local search=$1
+    local downcased=${search,,}
+
+    if [ "$search" = "$downcased" ]; then
+        # If all lowercase, do a case-insensitive search.
+        git grep --color --break -n -i "$1"
+    else
+        # Otherwise search for that term exactly.
+        git grep --color --break -n "$1"
+    fi
+}
+
+export RIPGREP_CONFIG_PATH=~/.ripgreprc
+
+alias gcontains='git branch -a --contains'
+alias gwhich='git branch -a | grep -i '
+alias gss='git show -p'
+alias gds='git diff --staged'
+
+alias gl='git log --graph --all --decorate --oneline -5'
+#__git_complete gl _git_log
+
+alias gall='git log --graph --all --decorate --no-merges'
+
+alias glp='gl -p'
+#__git_complete glp _git_log
+alias gp='git pull'
+
+alias cdr='cd "$(git rev-parse --show-toplevel)"'
+
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+
+alias ..='c ..'
+alias dt='c ~/Desktop'
+alias cddotfiles='c ~/my/dotfiles'
+
+alias x='chmod +x'
+
+alias rr='. ~/.zshrc'
+alias brc='emacsclient ~/.zshrc; . ~/.zshrc'
+
+alias df='df -h'
+alias du='du -c -h'
+alias du1='du --max-depth=1'
+
+alias topcmds='cat ~/.zsh_history | awk -F";" "{ print $2 }" | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
+
+alias ll='ls -ltr --color=auto'
+alias lsz='ls -lSrh --color=auto'
+
+# From https://blog.cloudflare.com/a-question-of-timing/
+alias curl_info='curl -so /dev/null -w "dnslookup: %{time_namelookup} | connect: %{time_connect} | appconnect: %{time_appconnect} | pretransfer: %{time_pretransfer} | starttransfer: %{time_starttransfer} | total: %{time_total} | size: %{size_download}\n"'
+
+
+alias r='my_ruby'
+function my_ruby() {
+    if [ -f ./Gemfile ]; then
+        if [ -n "$INSIDE_EMACS" ]; then
+            rails console -- --inf-ruby-mode
+        else
+            rails console
+        fi
+    else
+        if [ -n "$INSIDE_EMACS" ]; then
+            irb --inf-ruby-mode
+        else
+            irb
+        fi
+    fi
+}
+
+alias p='my_python'
+function my_python() {
+    if [ -x "$(command -v ipython)" ]; then
+        if [ -n "$INSIDE_EMACS" ]; then
+            ipython --simple-prompt "$@"
+        else
+            ipython "$@"
+        fi
+    elif [ -x "$(command -v python3)" ]; then
+        python3 "$@"
+    else
+        python "$@"
+    fi
+}
+
+
+# Run `less' if argument is a file, otherwise `ls'.
+alias l='my_ls'
+function my_ls() {
+  if [ $# = 1 ]; then
+    if [ -f $1 ]; then
+      less $1;
+      return
+    fi
+  fi
+  ll $*;
+}
+
+alias c="cd_ls"
+function cd_ls () {
+   if [ $# = 0 ]; then
+      cd && ls -G
+   else
+      cd "$*" && ls -G
+   fi
+}
+
+function e() {
+    ~/progs/emacs/bin/emacs &
+#    if [ "$TMUX" = "" ]; then
+#        ~/src/emacs/src/emacs -nw "$@"
+#    else
+#        TERM=xterm-256color emacs -nw "$@"
+#    fi#
+}
+
+# Prints value of env var passed in.
+# This is so you don't have to type the variable upcased.
+function ev() {
+    local arg="$1"
+    local envvar="${arg^^}"
+    eval echo $envvar=\${$envvar}
+}
+
+# Same as `ev' but prints all matches
+function evall() {
+    local arg="$1"
+    local envvar="${arg^^}"
+    eval env | grep $envvar | sort
+}
+
+function find_broken_symlinks() {
+    find . -type l ! -exec test -e {} \; -print
+}
