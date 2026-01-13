@@ -13,9 +13,9 @@ if [[ -e "$HOME/.asdf/asdf.sh" ]]; then
   fpath=(${ASDF_DIR}/completions $fpath)
 fi
 
-# initialise completions with ZSH's compinit
-autoload -Uz compinit && compinit
-eval "$(~/.rbenv/bin/rbenv init - zsh)"
+if [[ -e ~/.rbenv/bin/rbenv ]]; then
+  eval "$(~/.rbenv/bin/rbenv init - zsh)"
+fi
 
 # https://unix.stackexchange.com/questions/273861/unlimited-history-in-zsh
 HISTFILE="$HOME/.zsh_history"
@@ -38,6 +38,8 @@ setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 export PYTHONSTARTUP=~/.pythonrc.py
 export RIPGREP_CONFIG_PATH=~/.ripgreprc
 
+# initialise completions with ZSH's compinit
+autoload -Uz compinit && compinit
 
 # Load Git prompt functions
 autoload -Uz vcs_info
@@ -223,34 +225,6 @@ function cd_ls () {
    else
       cd "$*" && ls -G
    fi
-}
-
-function e() {
-    ~/progs/emacs/bin/emacs &
-#    if [ "$TMUX" = "" ]; then
-#        ~/src/emacs/src/emacs -nw "$@"
-#    else
-#        TERM=xterm-256color emacs -nw "$@"
-#    fi#
-}
-
-# Prints value of env var passed in.
-# This is so you don't have to type the variable upcased.
-function ev() {
-    local arg="$1"
-    local envvar="${arg^^}"
-    eval echo $envvar=\${$envvar}
-}
-
-# Same as `ev' but prints all matches
-function evall() {
-    local arg="$1"
-    local envvar="${arg^^}"
-    eval env | grep $envvar | sort
-}
-
-function find_broken_symlinks() {
-    find . -type l ! -exec test -e {} \; -print
 }
 
 if [[ -e ~/.zshrc_private ]]; then
