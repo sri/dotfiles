@@ -9,10 +9,9 @@ path=(~/my/dotfiles/bin "$path[@]")
 if [[ -e "$HOME/.asdf/asdf.sh" ]]; then
   echo loading asdf.sh
   . "$HOME/.asdf/asdf.sh"
+  # append completions to fpath
+  fpath=(${ASDF_DIR}/completions $fpath)
 fi
-
-# append completions to fpath
-fpath=(${ASDF_DIR}/completions $fpath)
 
 # initialise completions with ZSH's compinit
 autoload -Uz compinit && compinit
@@ -37,6 +36,8 @@ setopt HIST_VERIFY               # Don't execute immediately upon history expans
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
 export PYTHONSTARTUP=~/.pythonrc.py
+export RIPGREP_CONFIG_PATH=~/.ripgreprc
+
 
 # Load Git prompt functions
 autoload -Uz vcs_info
@@ -125,7 +126,6 @@ function g() {
     fi
 }
 
-export RIPGREP_CONFIG_PATH=~/.ripgreprc
 
 alias gcontains='git branch -a --contains'
 alias gwhich='git branch -a | grep -i '
@@ -159,7 +159,6 @@ alias du='du -c -h'
 alias du1='du --max-depth=1'
 
 alias topcmds='cat ~/.zsh_history | awk -F";" "{ print $2 }" | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
-
 
 alias ll='eza --long --sort modified --total-size --almost-all --group-directories-first'
 alias llsz='eza --long --sort size --total-size --almost-all --group-directories-first'
