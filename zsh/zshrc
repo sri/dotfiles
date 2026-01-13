@@ -4,12 +4,13 @@ typeset -U path PATH
 
 path=(~/my/dotfiles/bin "$path[@]")
 
-
-alias sub="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
-
 # asdf
 # https://asdf-vm.com/guide/getting-started.html
-. "$HOME/.asdf/asdf.sh"
+if [[ -e "$HOME/.asdf/asdf.sh" ]]; then
+  echo loading asdf.sh
+  . "$HOME/.asdf/asdf.sh"
+fi
+
 # append completions to fpath
 fpath=(${ASDF_DIR}/completions $fpath)
 
@@ -36,7 +37,6 @@ setopt HIST_VERIFY               # Don't execute immediately upon history expans
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
 export PYTHONSTARTUP=~/.pythonrc.py
-
 
 # Load Git prompt functions
 autoload -Uz vcs_info
@@ -78,20 +78,13 @@ function custom_prompt() {
 # Set the precmd function to be called before each command execution
 precmd_functions+=(custom_prompt)
 
-
-. ~/my/dotfiles/zsh/aliases
-echo done loading my zshrc
-
-if [[ -e ~/.zshrc_private ]]; then
-  . ~/.zshrc_private
-fi
-
 if [[ -e $HOME/.cargo/env ]]; then
   . $HOME/.cargo/env
 fi
 
 
-# -*- mode: sh -*-
+# Aliases
+alias sub="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 
 alias tab='open . -a iterm'
 
@@ -167,8 +160,13 @@ alias du1='du --max-depth=1'
 
 alias topcmds='cat ~/.zsh_history | awk -F";" "{ print $2 }" | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
 
-alias ll='ls -ltr --color=auto'
-alias lsz='ls -lSrh --color=auto'
+
+alias ll='eza --long --sort modified --total-size --almost-all --group-directories-first'
+alias llsz='eza --long --sort size --total-size --almost-all --group-directories-first'
+alias llt='eza --tree'
+
+# alias ll='ls -ltr --color=auto'
+# alias lsz='ls -lSrh --color=auto'
 
 # From https://blog.cloudflare.com/a-question-of-timing/
 alias curl_info='curl -so /dev/null -w "dnslookup: %{time_namelookup} | connect: %{time_connect} | appconnect: %{time_appconnect} | pretransfer: %{time_pretransfer} | starttransfer: %{time_starttransfer} | total: %{time_total} | size: %{size_download}\n"'
@@ -255,3 +253,7 @@ function evall() {
 function find_broken_symlinks() {
     find . -type l ! -exec test -e {} \; -print
 }
+
+if [[ -e ~/.zshrc_private ]]; then
+  . ~/.zshrc_private
+fi
