@@ -22,6 +22,12 @@ links = {
     }.get(platform.system())
 }
 
+def user_proceeds(prompt):
+    if input(f"{prompt} ").strip() in ("y",):
+        return True
+    else:
+        return False
+
 
 def main(args):
     only_new = "-new" in args
@@ -59,11 +65,13 @@ def main(args):
                 bkp = dest.with_name(f"{dest.name}.{timestamp}.bkp")
                 print(f"  renaming existing {try_pretty_name(dest)} to {try_pretty_name(bkp)}")
                 if actual_run:
-                    dest.rename(bkp)
+                    if user_proceeds("Rename(y/n)?"):
+                        dest.rename(bkp)
 
         print(f"  symlinking as {try_pretty_name(dest)}")
         if actual_run:
-            dest.symlink_to(dotdir.joinpath(src))
+            if user_proceeds("Symlink(y/n)?"):
+                dest.symlink_to(dotdir.joinpath(src))
         print()
 
 if __name__ == "__main__":
