@@ -21,26 +21,49 @@ links = {
     }.get(platform.system())
 }
 
+
 def main(args):
-    onlynew = "-new" in args
-    run = "-f" in args
-    if not run:
-        print("*** fake run; use `-f' for actual run")
+    only_new = "-new" in args
+    actual_run = "-f" in args
+
+    if not actual_run:
+        print("TEST RUN; use `-f' for actual run\n")
+
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     dotdir = pathlib.Path(__file__).resolve().parents[1]
+    user_home = str(pathlib.Path.home())
+
+    def try_pretty_name(path):
+        path = str(path)
+        if path.startswith(user_home):
+            path = path.removeprefix(user_home)
+            path = "~" + path
+        return path
+
     for (src, dest) in links.items():
+        print(f"{src}:")
         if dest is None:
-            print(f"skipping {src}, has no dest")
+            print(f"  has no dest...skipping")
             continue
+
         dest = pathlib.Path(dest).expanduser()
-        if dest.exists() and not onlynew:
-            bkp = dest.with_name(f"{dest.name}.{timestamp}.bkp")
-            print(f"  [renaming existing {dest} to {bkp}]")
-            if run:
-                dest.rename(bkp)
-        print(f"\033[31msymlinking {src} as {dest}\033[0m")
-        if run:
+        if not dest.parent.exists():
+            print(f"  {try_pretty_name(dest.parent)} does not exist...skipping")
+            continue
+
+        if dest.exists():
+            if only_new:
+                print(f"  skipping renaming existing {try_pretty_name(dest)} to {try_pretty_name(bkp)}....only_new flag passed")
+            else:
+                bkp = dest.with_name(f"{dest.name}.{timestamp}.bkp")
+                print(f"  renaming existing {try_pretty_name(dest)} to {try_pretty_name(bkp)}")
+                if actual_run:
+                    dest.rename(bkp)
+
+        print(f"  symlinking as {try_pretty_name(dest)}")
+        if actual_run:
             dest.symlink_to(dotdir.joinpath(src))
+        print()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
