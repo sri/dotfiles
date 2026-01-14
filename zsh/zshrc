@@ -162,8 +162,8 @@ alias du1='du --max-depth=1'
 
 alias topcmds='cat ~/.zsh_history | awk -F";" "{ print $2 }" | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
 
-alias ll='eza --long --sort modified --total-size --almost-all --group-directories-first'
-alias llsz='eza --long --sort size --total-size --almost-all --group-directories-first'
+alias ll='eza --long --sort modified --almost-all --group-directories-first'
+alias llsz='eza --long --sort size --almost-all --group-directories-first'
 alias llt='eza --tree'
 
 # alias ll='ls -ltr --color=auto'
