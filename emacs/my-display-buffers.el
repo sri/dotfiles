@@ -17,11 +17,10 @@
           display-buffer-at-bottom))
 
         ("^\\*\\(Occur\\|grep\\|rg\\|Help\\)"
-         (display-buffer-reuse-window
+         (display-buffer-reuse-mode-window
           display-buffer-in-direction)
          (direction . below)
          (window-height . 0.3)
-         (dedicated . t)
          (body-function . (lambda (w) (select-window w))))))
 
 ;;; ChatGPT 5.1
