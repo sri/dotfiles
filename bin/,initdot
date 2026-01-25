@@ -16,6 +16,7 @@ links = {
     "sqliterc"              : "~/.sqliterc",
     "pythonrc.py"           : "~/.pythonrc",
     "zsh/zshrc"             : "~/.zshrc",
+    "visidata/visidatarc"   : "~/.visidatarc",
     "sublime/prefs.json"    : {
         "Linux" : "~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
         "Darwin": "~/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings"

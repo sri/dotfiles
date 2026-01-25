@@ -1,0 +1,25 @@
+# -*-mode: python-*-
+
+from visidata import VisiData, TextSheet, vd, Path, Sheet
+
+@VisiData.api
+class MyHelpSheet(TextSheet):
+    guide = open("/Users/sri/my/dotfiles/visidata/visidata.org").read()
+
+
+
+BaseSheet.addCommand(
+    '^A',
+    'open-my-help-csv',
+    "vd.push(MyHelpSheet(name, rows=[]))",
+    'open a specific CSV')
+
+# @BaseSheet.api
+# def show_cheatsheet(sheet):
+#     # hs = HelpSheet("Cheatsheet")
+#     # hs.source = CHEATSHEET.strip().splitlines()
+#     vd.view_text(CHEATSHEET, title="Cheatsheet")
+#     # vd.push(hs)
+
+# # BaseSheet.bindkey('^A', 'show-cheatsheet')
+# # BashSheet.bindkey('^A', 'show-cheatsheet', 'show_cheatsheet(sheet)')
