@@ -6,6 +6,6 @@ from visidata import vd, BaseSheet
 
 my_help = str(pathlib.Path("~/my/dotfiles/visidata/help.csv"))
 # see openSource definition in _open.py
-command = f"s = openSource('{my_help}', default_width=65); vd.push(s); [setattr(c, 'width', None) for c in sheet.columns]"
+command = f"vd.push(openSource('{my_help}', default_width=65))"
 
 BaseSheet.addCommand("^A", "", command, "open my help")
