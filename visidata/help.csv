@@ -1,0 +1,37 @@
+key,action,category
+j,move down,movement
+k,move up,movement
+J,move row down,movement
+K,move row up,movement
+gj,goto last row,movement
+gk,goto first row,movement
+h,move col left,movement
+l,move col right,movement
+gh,move to first col,movement
+gl,move to last col,movement
+SPC,command palette,commands
+ctrl-r,reload sheet,commands
+shift-s,list all sheets,commands
+shift-f,frequence table,commands
+shift-c,view all cols as a table,commands
+-,hide column,commands
+gv,show all columns,commands
+"""",selected rows into new sheet,selection
+s,select current row,selection
+u,unselect current row,selection
+t,toggle selection/unselection current row,selection
+gs,select all,selection
+gu,unselect all,selection
+gt,toggle all,selection
+gzY,"select all column values (rows must be selected first)",selection
+| (pipe),select matching in current col,selection
+\,unselect matching in current col,selection
+g|,select matching in any col,selection
+g\,unselect SELECTED matching in any col,selection
+z|,select rows matching python in any visible col,selection
+z\,unselect SELECTED rows matching python in any visible col,selection
+",","select rows matching current cell in current col",selection
+"g,","select rows matching entire current row in all visible cols",selection
+/,"search",misc
+#,"interpret column as number",misc
+gz ^H,show list of all commands as a table,help
