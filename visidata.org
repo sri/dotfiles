@@ -1,0 +1,39 @@
+cheatsheet: https://jsvine.github.io/visidata-cheat-sheet/en/
+
+|----------------------+-------------------------------------------------------------|
+| KEY                  | DESCRIPTION                                                 |
+|----------------------+-------------------------------------------------------------|
+| MOVEMENT             |                                                             |
+|----------------------+-------------------------------------------------------------|
+| j, k                 | move down, move up                                          |
+| J, K                 | move row down, move row up                                  |
+| gj, gk               | last row, first row                                         |
+| h, l                 | move col left, move col right                               |
+| gh, gl               | move first column, move to last column                      |
+|----------------------+-------------------------------------------------------------|
+| COMMANDS             |                                                             |
+|----------------------+-------------------------------------------------------------|
+| SPC                  | command palette                                             |
+| ctrl-r               | reload sheet                                                |
+| shift-s              | list all sheets                                             |
+| shift-f              | frequence table                                             |
+| shift-c              | view all cols as a table                                    |
+| -                    | hide column                                                 |
+|----------------------+-------------------------------------------------------------|
+| SELECTION            |                                                             |
+|----------------------+-------------------------------------------------------------|
+| "                    | selected rows into new sheet                                |
+| s, u, t              | select, unselect, toggle                                    |
+| gs, gu, gt           | select all, select none, toggle all                         |
+| gzY                  | select all column values (rows must be selected first)      |
+| \vert (pipe), g\vert | select matching in current col, select matching any col     |
+| \, g\                | unselect matching in current col, unselect matching any col |
+| z\vert, z\           | select/unselect rows matchng Python expr in any visible col |
+| ,                    | select rows matching current cell in current col            |
+| g,                   | select rows matching entire current row in all vialble cols |
+|----------------------+-------------------------------------------------------------|
+| MISC                 |                                                             |
+|----------------------+-------------------------------------------------------------|
+| /                    | search                                                      |
+| #                    | interpret column as number                                  |
+|----------------------+-------------------------------------------------------------|
