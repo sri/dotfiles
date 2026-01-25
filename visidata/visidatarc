@@ -5,6 +5,7 @@ import pathlib
 from visidata import vd, BaseSheet
 
 my_help = str(pathlib.Path("~/my/dotfiles/visidata/help.csv"))
-command = f"s = vd.push(openSource('{my_help}')); [setattr(c, 'width', 30) for c in s.columns]"
+# setting cols to full width doesn't work
+command = f"s = vd.push(openSource('{my_help}')); [setattr(c, 'width', None) for c in s.columns]"
 
 BaseSheet.addCommand("^A", "", command, "open my help")
