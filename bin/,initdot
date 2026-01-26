@@ -61,7 +61,7 @@ def main(args):
 
         if dest.exists():
             if only_new:
-                print(f"  skipping renaming existing {try_pretty_name(dest)} to {try_pretty_name(bkp)}....only_new flag passed")
+                print(f"  skipping renaming existing {try_pretty_name(dest)}....only_new flag passed")
             else:
                 bkp = dest.with_name(f"{dest.name}.{timestamp}.bkp")
                 print(f"  renaming existing {try_pretty_name(dest)} to {try_pretty_name(bkp)}")
