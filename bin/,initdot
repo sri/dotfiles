@@ -10,7 +10,7 @@ links = {
     "ghostty-config"        : "~/.config/ghostty/config",
     "emacs/my-dot-emacs.el" : "~/.emacs.el",
     "emacs/my-early-init.el": "~/.emacs.d/early-init.el",
-    "bash/bashrc"           : "~/.bashrc",
+    # "bash/bashrc"           : "~/.bashrc",
     "git/gitconfig"         : "~/.gitconfig",
     "ripgreprc"             : "~/.ripgreprc",
     "sqliterc"              : "~/.sqliterc",
@@ -29,13 +29,8 @@ def user_proceeds(prompt):
     else:
         return False
 
-
-def main(args):
-    only_new = "-new" in args
-    actual_run = "-f" in args
-
-    if not actual_run:
-        print("TEST RUN; use `-f' for actual run\n")
+def main():
+    only_new = user_proceeds("only new?")
 
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     dotdir = pathlib.Path(__file__).resolve().parents[1]
@@ -50,30 +45,30 @@ def main(args):
 
     for (src, dest) in links.items():
         print(f"{src}:")
+
         if dest is None:
             print(f"  has no dest...skipping")
             continue
-
         dest = pathlib.Path(dest).expanduser()
         if not dest.parent.exists():
-            print(f"  {try_pretty_name(dest.parent)} does not exist...skipping")
+            print(f"  parent directory {try_pretty_name(dest.parent)} does not exist...skipping")
             continue
 
         if dest.exists():
             if only_new:
-                print(f"  skipping renaming existing {try_pretty_name(dest)}....only_new flag passed")
+                print(f"  {try_pretty_name(dest)} exists but only new is asked so skipping")
+                # if dest already exists, but only the new one is asked for, we skip it
+                continue
             else:
                 bkp = dest.with_name(f"{dest.name}.{timestamp}.bkp")
                 print(f"  renaming existing {try_pretty_name(dest)} to {try_pretty_name(bkp)}")
-                if actual_run:
-                    if user_proceeds("Rename(y/n)?"):
-                        dest.rename(bkp)
+                if user_proceeds("Rename(y/n)?"):
+                    dest.rename(bkp)
 
         print(f"  symlinking as {try_pretty_name(dest)}")
-        if actual_run:
-            if user_proceeds("Symlink(y/n)?"):
-                dest.symlink_to(dotdir.joinpath(src))
+        if user_proceeds("Symlink(y/n)?"):
+            dest.symlink_to(dotdir.joinpath(src))
         print()
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
