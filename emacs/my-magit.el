@@ -15,6 +15,7 @@
 
 (setq git-link-open-in-browser t)
 (setq git-link-use-commit t)
+(setq magit-diff-visit-prefer-worktree t)
 
 (setq magit-section-visibility-indicator nil)
 (setq magit-save-repository-buffers 'dontask)
