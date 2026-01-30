@@ -15,4 +15,3 @@ fi
 # Commit and push
 git commit -m "$msg"
 git push
-g
