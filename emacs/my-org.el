@@ -26,28 +26,27 @@
 (setq org-fontify-done-headline t)
 (setq org-closed-keep-when-no-todo t)
 
-(setq org-log-done nil)
+(setq org-log-done 'time)
 ;; This only works if org-todo-keywords are annotated with `!'
 ;; (for timestamp) and `@' (for note), like:
 ;; (setq org-todo-keywords
 ;;       '((sequence "TODO(t)" "WAIT(w!)" "|" "DONE(d!)" "CANCELED(c!)")))
 (setq org-log-into-drawer t)
+(setq org-tag-alist
+      '(("ADMIN" . ?a)
+        ("SOMEDAY" . ?s)
+        ))
 
 (setq org-confirm-babel-evaluate nil)
-(setq org-agenda-files '("~/my/dotfiles/emacs"))
+(setq org-agenda-files '("~/my/notes"))
 (setq org-babel-python-command "python3")
 
-;; From https://amitp.blogspot.com/2023/12/status-codes.html
-;; IDEA: maybe someday
-;; TODO: doing later
-;; SOON: doing soon
-;; NEXT: doing now
+;; TODO: do later
+;; NEXT: do now
 ;; DONE: done
-;; HACK: done in a cheesy way, blend of todo and done
 ;; WAIT: waiting for some external change (event)
-;; HOLD: waiting for some internal change (of mind)
 ;; STOP: stopped waiting, decided not to work on it
-;; NOTE: end state, just keep track of it
+;; CANCELED: discarded
 '(setq org-todo-keyword-faces
     '(("NOTE" :foreground "#4b4f89")
       ("IDEA" :foreground "#4b4f89" :box t)
@@ -74,9 +73,9 @@
 
 
 (setq org-todo-keywords
-      '((sequence "NOTE" "IDEA" "TODO" "WAIT" "HOLD" "HACK" "IN-PROGRESS"
+      '((sequence "TODO(t)" "IDEA(i)" "NEXT(n)" "WAIT(w)"
                   "|"
-                  "DONE" "STOP")))
+                  "DONE(d)" "CANCELLED(c)")))
 
 (setq org-src-preserve-indentation t)
 
