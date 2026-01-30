@@ -118,6 +118,8 @@
  ("C-c k" . ace-jump-line-mode)
  ("C-c l" . toggle-truncate-lines)
  ("C-c m" . imenu)
+ ("C-c C-t" . my/frame-always-on-top-toggle)
+
 
  ("C-c I" . my/find-matching-indentation-level)
 

@@ -564,3 +564,10 @@ formats them into a list of clickable links."
   (interactive)
   (let ((confirm-kill-emacs nil))
     (restart-emacs)))
+
+(defun my/frame-always-on-top-toggle ()
+  (interactive)
+  (let ((current (frame-parameter nil 'z-group)))
+    (set-frame-parameter
+     nil 'z-group
+     (if (eq current 'above) nil 'above))))
