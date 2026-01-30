@@ -7,11 +7,8 @@
 
 (setq org-capture-templates
       '(
-        ("a" "Todo" entry (file+headline "~/Desktop/agenda.org" "INBOX") "* DRAFT %T\n%?")
-        ("b" "Item" item (file+headline "~/Desktop/agenda.org" "INBOX"))
-        ("c" "CheckItem" checkitem (file+headline "~/Desktop/agenda.org" "INBOX"))
-
-))
+        ("t" "Inbox" entry (file "~/my/notes/inbox.org") "* TODO %?\n")
+        ))
 
 (setq org-cycle-include-plain-lists 'integrate)
 (setq org-blank-before-new-entry nil)
@@ -40,6 +37,13 @@
 (setq org-confirm-babel-evaluate nil)
 (setq org-agenda-files '("~/my/notes"))
 (setq org-babel-python-command "python3")
+
+(setq org-refile-targets
+      '((org-agenda-files :maxlevel . 3)))
+(setq org-refile-use-outline-path 'file)
+(setq org-outline-path-complete-in-steps nil)
+;;(setq org-refile-allow-creating-parent-nodes 'confirm)
+
 
 ;; TODO: do later
 ;; NEXT: do now
