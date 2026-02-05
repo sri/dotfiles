@@ -17,6 +17,7 @@
 
 (bind-keys :map region-bindings-mode-map
            ("?" . my/which-key-region-bindings)
+           ("." . set-mark-command)
 
            ("A" . beginning-of-buffer)
            ("E" . end-of-buffer)

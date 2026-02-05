@@ -49,19 +49,10 @@
            (nth (random (length my-themes)) my-themes))))
   (when theme
     (message "using theme %s" theme)
-    (load-theme theme t))
+    (load-theme theme t)))
 
-  (cond ((eq theme 'solarized-zenburn)
-         (custom-set-faces
-          '(region ((t (:background "#8E8E93" :foreground "black"))))
-          '(bm-persistent-face ((t (:extend t :background "#6e52b9" :overline nil))))))
-        ((eq theme 'solarized-dark)
-         (custom-set-faces
-          '(region ((t (:inherit magit-blame-highlight :extend t :stipple nil :background "#073642" :foreground "#839496"))))
-          '(bm-persistent-face ((t (:extend t :background "#6e52b9" :overline nil))))))))
 
-(set-face-attribute 'bm-persistent-face nil :extend t
-                    :background "#6e52b9")
+(set-cursor-color "#FFBF00")
 
 ;; Mac selector colors in hex.
 ;; Purple          : #AF52DE
