@@ -636,3 +636,61 @@ With prefix arg SELECT-BRANCH, prompt for branch."
                     repo branch rel-path)))
     (browse-url url)))
 ;; End of ChatGPT
+
+
+(defun my/meeting-notes ()
+  "Clone an indirect buffer, optionally narrow (Org), and show it in a bottom-right frame.
+
+Preserves the current frame's windows and buffers.
+
+Behavior:
+- If in org-mode: move point to current heading.
+- Clone an indirect buffer (all modes).
+- If in org-mode: narrow to the current subtree.
+- Open the indirect buffer in a new frame sized 90x15.
+- Position the frame so its bottom-right corner aligns with the display bottom-right.
+- Toggle always-on-top if available."
+  (interactive)
+
+  ;; Org-specific: ensure point is on heading
+  (when (derived-mode-p 'org-mode)
+    (org-back-to-heading t))
+
+  ;; Clone indirect buffer without affecting current frame
+  (let ((indirect (clone-indirect-buffer nil t)))
+    (with-current-buffer indirect
+      (when (derived-mode-p 'org-mode)
+        (org-narrow-to-subtree)))
+
+    ;; Create the frame
+    (let* ((frame
+            (make-frame
+             '((name . "indirect-focus")
+               (minibuffer . nil)
+               (width . 90)
+               (height . 15)
+               (undecorated . t)
+               (internal-border-width . 0)
+               (vertical-scroll-bars . nil)
+               (horizontal-scroll-bars . nil)
+               (menu-bar-lines . 0)
+               (tool-bar-lines . 0))))
+           ;; Pixel sizes
+           (frame-px-width  (frame-pixel-width frame))
+           (frame-px-height (frame-pixel-height frame))
+           (disp-px-width   (display-pixel-width))
+           (disp-px-height  (display-pixel-height))
+           ;; Bottom-right position
+           (left (- disp-px-width frame-px-width))
+           (top  (- disp-px-height frame-px-height 30)))
+
+      ;; Position frame
+      (set-frame-position frame (max left 0) (max top 0))
+
+      ;; Populate the new frame WITHOUT touching the current one
+      (with-selected-frame frame
+        (set-window-buffer (selected-window) indirect)
+        (select-frame-set-input-focus frame)
+        (setq-local mode-line-format nil)
+        (when (fboundp 'my/frame-always-on-top-toggle)
+          (my/frame-always-on-top-toggle))))))
