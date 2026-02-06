@@ -193,6 +193,7 @@
            ("b" . magit-blame-addition)
            ("f" . magit-log-buffer-file)
            ("r" . my/git-grep-from-root)
+           ("v" . my/github-visit-file)
            ("g" . consult-git-grep))
 
 (when (eq system-type 'darwin)

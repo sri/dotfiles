@@ -571,3 +571,68 @@ formats them into a list of clickable links."
     (set-frame-parameter
      nil 'z-group
      (if (eq current 'above) nil 'above))))
+
+;;; ChatGPT
+(require 'vc-git)
+(require 'browse-url)
+(require 'subr-x)
+
+(defun my/github--current-branch ()
+  (string-trim
+   (shell-command-to-string
+    "git branch --show-current")))
+
+(defun my/github--all-branches ()
+  (delete-dups
+   (split-string
+    (shell-command-to-string
+     "git for-each-ref --format='%(refname:short)' refs/heads refs/remotes")
+    "\n" t)))
+
+(defun my/github--repo ()
+  (let ((remote
+         (string-trim
+          (shell-command-to-string
+           "git remote get-url origin"))))
+    (unless (string-match
+             "github.com[:/]\\([^/]+\\)/\\(.+?\\)\\(.git\\)?$"
+             remote)
+      (error "Not a GitHub remote"))
+    (format "%s/%s"
+            (match-string 1 remote)
+            (match-string 2 remote))))
+
+(defun my/github-visit-file (&optional select-branch)
+  "Open current file or dired directory on GitHub.
+With prefix arg SELECT-BRANCH, prompt for branch."
+  (interactive "P")
+  (let* ((path (cond
+                ((derived-mode-p 'dired-mode)
+                 (dired-current-directory))
+                (buffer-file-name)
+                (t (error "Not visiting a file or directory"))))
+         (repo-root (vc-git-root path))
+         (rel-path (directory-file-name
+                    (file-relative-name path repo-root)))
+         (default-branch (my/github--current-branch))
+         (branch
+          (if select-branch
+              (completing-read
+               "Branch: "
+               (my/github--all-branches)
+               nil t default-branch)
+            default-branch))
+         ;; normalize origin/foo -> foo
+         (branch (string-remove-prefix "origin/" branch))
+         (repo (my/github--repo))
+         (url
+          (format "https://github.com/%s/tree/%s/%s"
+                  repo branch rel-path)))
+    ;; if regular file, use blob instead of tree
+    (when (and (buffer-file-name)
+               (not (file-directory-p path)))
+      (setq url
+            (format "https://github.com/%s/blob/%s/%s"
+                    repo branch rel-path)))
+    (browse-url url)))
+;; End of ChatGPT
