@@ -1,7 +1,47 @@
 https://www.youtube.com/watch?v=43Dg5zYPHTU
 
-
-
+* Edebug from ChatGPT
+Edebug: useful commands (beyond n)
+Stepping / movement
+n — next form (step over)
+s — step into
+o — step out (run until current function returns)
+g — go (run until next breakpoint or end)
+c — continue (same as g)
+f — forward sexp
+h — go to here (run until point)
+Breakpoints
+b — set breakpoint at point
+u — unset breakpoint at point
+B — list breakpoints
+C-b — temporary breakpoint (cleared after hit)
+Evaluation / inspection
+e — eval expression
+E — eval last sexp
+p — pretty-print value of sexp at point
+v — view local variables
+w — where am I (show backtrace-ish context)
+Control / quit
+q — quit edebug (abort)
+r — re-enter edebug
+? — help (full command list)
+Run until a specific location (long function)
+You have three practical options:
+Temporary breakpoint (best for one-off)
+Move point to the target form.
+Press C-b.
+Press g.
+Execution stops exactly there, then the breakpoint is removed.
+“Go to here”
+Move point to the target form.
+Press h.
+Runs until that location is reached.
+Regular breakpoint
+b at the target.
+g to run.
+Use u later to remove it.
+Tip: h and C-b are ideal when stepping through long functions without cluttering breakpoint state.
+If you want, I can give a minimal workflow for debugging recursive or higher-order functions (where n becomes misleading).
 * Emacs Mac (aka Carbon)
 GNU Emacs 31.0.50 (build 1, aarch64-apple-darwin24.6.0, Carbon Version 170 AppKit 2575.7) of 2025-08-22
 
