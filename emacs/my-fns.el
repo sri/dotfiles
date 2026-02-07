@@ -694,3 +694,14 @@ Behavior:
         (setq-local mode-line-format nil)
         (when (fboundp 'my/frame-always-on-top-toggle)
           (my/frame-always-on-top-toggle))))))
+
+(defun my/org-insert-date-lines (days)
+  "Insert one Org-style date line per day.
+Defaults to next 7 days. With prefix arg DAYS, insert that many days."
+  (interactive "P")
+  (let* ((n (if days (prefix-numeric-value days) 7))
+         (time (current-time)))
+    (dotimes (i n)
+      (let ((tm (time-add time (days-to-time i))))
+        (insert (format "* [%s]\n"
+                        (format-time-string "%Y-%m-%d %a" tm)))))))
