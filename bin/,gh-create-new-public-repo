@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v gh >/dev/null 2>&1; then
+  echo "Error: GitHub CLI (gh) is not installed." >&2
+  echo "Install: https://cli.github.com/" >&2
+  exit 1
+fi
+
+if ! gh auth status >/dev/null 2>&1; then
+  echo "Error: gh is not authenticated. Run: gh auth login" >&2
+  exit 1
+fi
+
+default_repo_name="$(basename "$PWD")"
+read -r -p "Repository name [${default_repo_name}]: " repo_name
+repo_name="${repo_name:-$default_repo_name}"
+
+if [ ! -d .git ]; then
+  echo "No git repo found. Initializing..."
+  git init
+fi
+
+if ! git rev-parse --verify HEAD >/dev/null 2>&1; then
+  echo "No commits found. Creating initial commit..."
+  git add -A
+  git commit -m "Initial commit"
+fi
+
+if git remote get-url origin >/dev/null 2>&1; then
+  echo "Error: git remote 'origin' already exists." >&2
+  echo "Remove it first or push manually." >&2
+  exit 1
+fi
+
+gh repo create "$repo_name" --public --source=. --remote=origin --push
+echo "Done: created public repo and pushed current branch."
+
+repo_url="$(gh repo view --json url -q .url)"
+echo "Done: created public repo and pushed current branch."
+echo "Repo: $repo_url"
+
+gh repo view --web
