@@ -51,6 +51,10 @@
     (message "using theme %s" theme)
     (load-theme theme t)))
 
+(defvar my/theme-overrides-dir
+  (expand-file-name "theme-overrides" my/dotfiles-dir))
+
+(load (expand-file-name "my-solarized-dark-faces.el" my/theme-overrides-dir))
 
 (set-cursor-color "#FFBF00")
 
@@ -70,10 +74,6 @@
               (message "*** after-load-theme-hook called with theme %s" theme)
               (when (member theme custom-enabled-themes)
                 (apply #'custom-theme-set-faces theme args)))))
-
-
-
-
 
 ;; (add-hook 'focus-out-hook
 ;;           (lambda ()
