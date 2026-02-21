@@ -27,6 +27,7 @@
              ol-w3m))
  '(package-selected-packages
    '(ace-jump-mode ace-window acme-theme bm button-lock casual
+                   doom-themes
                    catppuccin-theme company company-go consult
                    csv-mode diff-hl doom-themes eat ef-themes
                    elisp-slime-nav embark embark-consult
@@ -35,14 +36,18 @@
                    gotest gptel gruvbox-theme howm hydra
                    jetbrains-darcula-theme json-mode leuven-theme
                    macrostep magit marginalia markdown-mode mistty
-                   multiple-cursors orderless org org-bullets
-                   projectile protobuf-mode rainbow-mode
-                   region-bindings-mode rg rjsx-mode ruby-end s
-                   smart-mode-line solarized-theme spacemacs-theme
-                   string-inflection typescript-mode undo-tree
-                   use-package vc-jj vertico vertico-posframe
-                   visual-regexp vterm web-mode which-key xterm-color
-                   yaml-mode yasnippet zenburn-theme zig-mode))
+                   multiple-cursors nord-theme orderless org
+                   org-bullets phscroll pi-coding-agent projectile
+                   protobuf-mode rainbow-mode region-bindings-mode rg
+                   rjsx-mode ruby-end s smart-mode-line
+                   solarized-theme spacemacs-theme string-inflection
+                   typescript-mode undo-tree use-package vc-jj vertico
+                   vertico-posframe visual-regexp vterm web-mode
+                   which-key xterm-color yaml-mode yasnippet
+                   zenburn-theme zig-mode))
+ '(package-vc-selected-packages
+   '((phscroll :vc-backend Git :url
+               "https://github.com/misohena/phscroll")))
  '(typescript-indent-level 2))
 
 
@@ -51,4 +56,19 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 140 :family "JetBrains Mono")))))
+ '(default ((t (:height 140 :family "JetBrains Mono"))))
+ '(bm-persistent-face ((t (:foreground "#000000" :background "#916e00"))))
+ '(link ((t (:foreground "#997544"))))
+ '(org-todo ((((class color) (min-colors 89)) (:weight normal :foreground "#3085f1"))))
+ '(org-done ((((class color) (min-colors 89)) (:weight normal :foreground "#6a7a00"))))
+ '(org-headline-done ((t (:foreground "#859900"))))
+ '(org-level-1 ((t (:inherit variable-pitch :extend nil :background "#073642" :foreground "#997544" :overline "#8E7448" :weight normal :height 1.3))))
+ '(org-level-2 ((t (:inherit variable-pitch :extend nil :background "#073642" :foreground "#839496" :height 1.2))))
+ '(org-table ((t (:foreground "#93a1a1" :background "#073642" :weight normal))))
+ '(org-table-header ((t (:foreground "#93a1a1" :background "#073642" :weight normal))))
+ '(org-table-row ((t (:foreground "#839496" :weight normal))))
+ '(magit-diff-added ((t (:foreground "#5f8700" :background "#17351f" :weight normal))))
+ '(magit-diff-added-highlight ((t (:foreground "#5f8700" :background "#1b3d24" :weight normal))))
+ '(magit-diff-removed ((t (:foreground "#af3a32" :background "#3a2020" :weight normal))))
+ '(magit-diff-removed-highlight ((t (:foreground "#af3a32" :background "#442626" :weight normal))))
+ '(region ((t (:extend t :background "#073642")))))
