@@ -79,10 +79,17 @@
         ("DUPLICATE"  . (:foreground "gray70" :weight bold))))
 
 
+;; - `TODO` → `!` +  📌
+;; - `IDEA` → `?` + 💡
+;; - `NOW` → `.` + 🔥
+;; - `NEXT` → `>` + ➜
+;; - `WAIT` → `~` + ⏳
+;; - `DONE` → `+` + ✅
+;; - `CANCELLED` → `x` + ❌
+
+
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "IDEA(i)" "NOW(n)" "NEXT(e)" "WAIT(w)"
-                  "|"
-                  "DONE(d)" "CANCELLED(c)")))
+     '((sequence "TODO(t)" "IDEA(i)" "NOW(n)" "NEXT(e)" "WAIT(w)" "|" "DONE(d)" "CANCELLED(c)")))
 
 (setq org-src-preserve-indentation t)
 
