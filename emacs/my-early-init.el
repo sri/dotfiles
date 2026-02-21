@@ -6,6 +6,7 @@
 (defvar my/dotfiles-dir "~/my/dotfiles/emacs")
 (setq custom-file (expand-file-name "my-custom.el" my/dotfiles-dir))
 (load custom-file)
+(load (expand-file-name "my-solarized-dark-faces.el" my/dotfiles-dir) t)
 
 (require 'package)
 (package-initialize)
