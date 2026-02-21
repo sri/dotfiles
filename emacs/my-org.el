@@ -80,7 +80,7 @@
 
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "IDEA(i)" "NEXT(n)" "WAIT(w)"
+      '((sequence "TODO(t)" "IDEA(i)" "NOW(n)" "NEXT(e)" "WAIT(w)"
                   "|"
                   "DONE(d)" "CANCELLED(c)")))
 
