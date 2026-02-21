@@ -11,7 +11,7 @@
    '(org-done ((((class color) (min-colors 89))
                 (:weight normal :foreground "#8c9a43" :box (:line-width 1 :color "#8c9a43")))))
    '(org-headline-done ((t (:foreground "#859900"))))
-   '(org-level-1 ((t (:inherit variable-pitch :extend nil :background "#073642" :foreground "#C26D3A" :overline "#C26D3A" :weight normal :height 1.3))))
+   '(org-level-1 ((t (:inherit variable-pitch :extend t :background "#073642" :foreground "#C26D3A" :overline "#C26D3A" :weight normal :height 1.3))))
    '(org-level-2 ((t (:inherit variable-pitch :extend nil :foreground "#A9552B" :weight normal :height 1.2))))
    '(org-level-3 ((t (:inherit variable-pitch :extend nil :foreground "#6c71c4" :weight normal :height 1.15))))
    '(org-level-4 ((t (:inherit variable-pitch :extend nil :foreground "#839496" :weight normal :height 1.1))))
@@ -21,8 +21,8 @@
    '(org-level-8 ((t (:inherit variable-pitch :extend nil :foreground "#839496" :weight normal :height 1.02))))
    '(org-table ((t (:foreground "#93a1a1" :background "#073642" :weight normal))))
    '(org-block ((t (:background "#073642"))))
-   '(org-block-begin-line ((t (:extend t :background "#4d4d4d" :underline "#93a1a1"))))
-   '(org-block-end-line ((t (:extend t :background "#4d4d4d" :overline "#93a1a1"))))
+   '(org-block-begin-line ((t (:extend t :background "#06303b" :underline "#06303b"))))
+   '(org-block-end-line ((t (:extend t :background "#06303b" :overline "#06303b"))))
    '(org-table-header ((t (:foreground "#93a1a1" :background "#073642" :weight normal))))
    '(org-table-row ((t (:foreground "#839496" :weight normal))))
    '(magit-diff-added ((t (:foreground "#5f8700" :background "#17351f" :weight normal))))
@@ -38,7 +38,9 @@
   (when (memq 'solarized-dark custom-enabled-themes)
     (my/apply-solarized-dark-face-overrides)
     ;; Re-enable so merged face specs refresh immediately.
-    (enable-theme 'solarized-dark)))
+    (enable-theme 'solarized-dark)
+    ;; Force realized face attr; theme spec alone sometimes doesn't set this.
+    (set-face-attribute 'org-level-1 nil :extend t)))
 
 (add-hook 'after-load-theme-hook #'my/maybe-apply-solarized-dark-face-overrides)
 (my/maybe-apply-solarized-dark-face-overrides)

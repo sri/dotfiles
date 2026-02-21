@@ -45,8 +45,14 @@
   (message "trying theme: %s" theme))
 
 (let ((theme
-       (or my-theme
-           (nth (random (length my-themes)) my-themes))))
+       (if (eq my-theme 'ask)
+           (intern
+            (completing-read
+             "Select theme: "
+             (mapcar #'symbol-name my-themes)
+             nil t))
+         (or my-theme
+             (nth (random (length my-themes)) my-themes)))))
   (when theme
     (message "using theme %s" theme)
     (load-theme theme t)))
