@@ -1,0 +1,255 @@
+#+TITLE: Sample Org Face Test
+#+AUTHOR: sri
+#+STARTUP: overview
+#+OPTIONS: toc:2 num:t
+
+# This file is intentionally dense to exercise org-mode faces.
+
+* Level 1 Heading :L1:demo:
+** Level 2 Heading :L2:
+*** Level 3 Heading :L3:
+**** Level 4 Heading :L4:
+***** Level 5 Heading :L5:
+****** Level 6 Heading :L6:
+******* Level 7 Heading :L7:
+******** Level 8 Heading :L8:
+         This is level 8 body text with *bold*, /italic/, _underline_, =verbatim=, and ~code~.
+
+* Org elements overview
+** Priorities, tags, and planning
+*** TODO [#A] Priority A item :work:urgent:
+SCHEDULED: <2026-03-01 Sun> DEADLINE: <2026-03-03 Tue>
+:PROPERTIES:
+:Owner: Sri
+:Effort: 1:30
+:Ticket: ABC-1234
+:END:
+*** WAIT [#B] Waiting item :blocked:
+SCHEDULED: <2026-03-04 Wed +1w>
+*** DONE [#C] Completed item :done:
+CLOSED: [2026-03-02 Mon 09:42]
+:LOGBOOK:
+- State "DONE"       from "NEXT"       [2026-03-02 Mon 09:42]
+:END:
+
+** Lists and checkboxes
+*** Unordered list
+- first bullet
+- second bullet
+  - nested bullet
+  - nested bullet with link [[https://orgmode.org][Org Mode]]
+- third bullet
+
+*** Ordered list
+1. step one
+2. step two
+3. step three
+
+*** Checkbox list [2/5]
+- [X] done checkbox
+- [ ] pending checkbox
+- [X] another done checkbox
+- [ ] pending checkbox
+- [ ] pending checkbox
+
+*** Definition list
+- Emacs :: Extensible editor
+- Org :: Plain text outlining and planning mode
+- Babel :: Literate programming in Org
+
+** Tables
+| Item   | Qty | Price | Total |
+|--------+-----+-------+-------|
+| Apples |   2 |   1.5 |   3.0 |
+| Pears  |   4 |  0.75 |   3.0 |
+| Plums  |   3 |   1.2 |   3.6 |
+|--------+-----+-------+-------|
+| SUM    |     |       |   9.6 |
+#+TBLFM: $4=$2*$3
+
+** Blocks
+*** Quote block
+#+begin_quote
+Simplicity is prerequisite for reliability.
+#+end_quote
+
+*** Example block
+#+begin_example
+$ emacsclient -e "(message \"hello\")"
+#+end_example
+
+*** Verse block
+#+begin_verse
+Roses are #ff0000,
+Violets are #0000ff,
+Org mode is delightful,
+And face testing is too.
+#+end_verse
+
+*** Source blocks
+#+begin_src emacs-lisp
+(message "Org face test from emacs-lisp")
+#+end_src
+
+#+begin_src python :results output
+print("Org face test from python")
+#+end_src
+
+#+begin_src shell
+echo "Org face test from shell"
+#+end_src
+
+#+begin_src sql
+select 'org face test' as message;
+#+end_src
+
+*** Export block
+#+begin_export html
+<div class="org-demo">Export block content</div>
+#+end_export
+
+** Dates and timestamps
+- Active timestamp: <2026-03-07 Sat>
+- Inactive timestamp: [2026-03-07 Sat]
+- Range: <2026-03-08 Sun 10:00-11:30>
+- Repeater: <2026-03-09 Mon +2w>
+- Diary style: <%%(diary-float t 1 1)>
+
+** Drawers, comments, and footnotes
+:NOTES:
+This is a custom drawer.
+:END:
+
+# This is an org comment line.
+
+A sentence with a footnote reference[fn:1] and another link [[file:README.md][local file link]].
+
+[fn:1] Footnote content for visual testing.
+
+* Todo keyword matrix (all states)
+** TODO TODO state sample
+SCHEDULED: <2026-03-10 Tue>
+** IDEA IDEA state sample
+** NOW NOW state sample
+** NEXT NEXT state sample
+** WAIT WAIT state sample
+** DONE DONE state sample
+CLOSED: [2026-03-05 Thu 15:10]
+** CANCELLED CANCELLED state sample
+CLOSED: [2026-03-06 Fri 11:00]
+
+* Large task set (100 headlines)
+** TODO Task 001
+** TODO Task 002
+** TODO Task 003
+** TODO Task 004
+** TODO Task 005
+** TODO Task 006
+** TODO Task 007
+** TODO Task 008
+** TODO Task 009
+** TODO Task 010
+** TODO Task 011
+** TODO Task 012
+** TODO Task 013
+** TODO Task 014
+** TODO Task 015
+** TODO Task 016
+** TODO Task 017
+** TODO Task 018
+** TODO Task 019
+** TODO Task 020
+** TODO Task 021
+** TODO Task 022
+** TODO Task 023
+** TODO Task 024
+** TODO Task 025
+** TODO Task 026
+** TODO Task 027
+** TODO Task 028
+** TODO Task 029
+** TODO Task 030
+** IDEA Task 031
+** IDEA Task 032
+** IDEA Task 033
+** IDEA Task 034
+** IDEA Task 035
+** IDEA Task 036
+** IDEA Task 037
+** IDEA Task 038
+** IDEA Task 039
+** IDEA Task 040
+** NOW Task 041
+** NOW Task 042
+** NOW Task 043
+** NOW Task 044
+** NOW Task 045
+** NOW Task 046
+** NOW Task 047
+** NOW Task 048
+** NOW Task 049
+** NOW Task 050
+** NEXT Task 051
+** NEXT Task 052
+** NEXT Task 053
+** NEXT Task 054
+** NEXT Task 055
+** NEXT Task 056
+** NEXT Task 057
+** NEXT Task 058
+** NEXT Task 059
+** NEXT Task 060
+** WAIT Task 061
+** WAIT Task 062
+** WAIT Task 063
+** WAIT Task 064
+** WAIT Task 065
+** WAIT Task 066
+** WAIT Task 067
+** WAIT Task 068
+** WAIT Task 069
+** WAIT Task 070
+** DONE Task 071
+CLOSED: [2026-03-11 Wed 09:00]
+** DONE Task 072
+CLOSED: [2026-03-11 Wed 09:05]
+** DONE Task 073
+** DONE Task 074
+** DONE Task 075
+** DONE Task 076
+** DONE Task 077
+** DONE Task 078
+** DONE Task 079
+** DONE Task 080
+** DONE Task 081
+** DONE Task 082
+** DONE Task 083
+** DONE Task 084
+** DONE Task 085
+** DONE Task 086
+** DONE Task 087
+** DONE Task 088
+** DONE Task 089
+** DONE Task 090
+** CANCELLED Task 091
+CLOSED: [2026-03-12 Thu 10:00]
+** CANCELLED Task 092
+** CANCELLED Task 093
+** CANCELLED Task 094
+** CANCELLED Task 095
+** CANCELLED Task 096
+** CANCELLED Task 097
+** CANCELLED Task 098
+** CANCELLED Task 099
+** CANCELLED Task 100
+
+* Extra visual tests
+** Inline styles
+- *bold* /italic/ _underline_ +strike-through+ =verbatim= ~code~
+- @@html:<span style="color:#dc322f">inline raw export span</span>@@
+
+** Horizontal rule
+-----
+
+** Clock line
+CLOCK: [2026-03-13 Fri 09:00]--[2026-03-13 Fri 09:25] =>  0:25
