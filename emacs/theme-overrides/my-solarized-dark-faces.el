@@ -7,9 +7,10 @@
    '(bm-persistent-face ((t (:foreground "#000000" :background "#916e00"))))
    '(link ((t (:foreground "#997544"))))
    '(org-todo ((((class color) (min-colors 89))
-                (:weight normal :foreground "#A9552B" :box (:line-width 1 :color "#A9552B")))))
+                (:weight normal :foreground "#A9552B" :background "#4d2c1f" :box (:line-width 1 :color "#A9552B" :style released-button)))))
    '(org-done ((((class color) (min-colors 89))
-                (:weight normal :foreground "#8c9a43" :box (:line-width 1 :color "#8c9a43")))))
+                (:weight normal :foreground "#8c9a43" :background "#2f4321" :box (:line-width 1 :color "#8c9a43" :style released-button)))))
+   '(org-date ((t (:foreground "#268bd2" :background "#003f5e" :box (:line-width 1 :color "#268bd2" :style released-button)))))
    '(org-headline-done ((t (:foreground "#859900"))))
    '(org-level-1 ((t (:inherit variable-pitch :extend t :background "#073642" :foreground "#C26D3A" :overline "#C26D3A" :weight normal :height 1.3))))
    '(org-level-2 ((t (:inherit variable-pitch :extend nil :foreground "#A9552B" :weight normal :height 1.2))))
@@ -31,16 +32,25 @@
    '(magit-diff-removed-highlight ((t (:foreground "#af3a32" :background "#442626" :weight normal))))
    '(hl-line ((t (:extend t :background "#083e4a"))))
    '(region ((t (:extend t :background "#073642"))))
-   '(tab-bar-tab ((t (:box (:line-width 1 :color "#586e75") :weight normal))))
+   '(tab-bar-tab ((t (:box (:line-width 1 :color "black") :weight normal))))
    '(tab-bar-tab-highlight ((t (:background "#0b3a46" :weight normal))))))
 
 (defun my/maybe-apply-solarized-dark-face-overrides (&rest _)
   (when (memq 'solarized-dark custom-enabled-themes)
+    (require 'color)
     (my/apply-solarized-dark-face-overrides)
     ;; Re-enable so merged face specs refresh immediately.
     (enable-theme 'solarized-dark)
     ;; Force realized face attr; theme spec alone sometimes doesn't set this.
-    (set-face-attribute 'org-level-1 nil :extend t)))
+    (set-face-attribute 'org-level-1 nil :extend t)
+    ;; Selected tab border: 20% darker than current selected-tab background.
+    (let* ((bg (or (face-attribute 'tab-bar-tab :background nil t)
+                   (face-background 'tab-bar-tab nil t)
+                   (face-background 'default nil t)))
+           (border (and (stringp bg) (color-darken-name bg 20))))
+      (when border
+        (set-face-attribute 'tab-bar-tab nil
+                            :box `(:line-width 1 :color ,border))))))
 
 (add-hook 'after-load-theme-hook #'my/maybe-apply-solarized-dark-face-overrides)
 (my/maybe-apply-solarized-dark-face-overrides)
