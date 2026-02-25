@@ -1,5 +1,41 @@
 ;; -*- lexical-binding: t; -*-
 
+(defvar my/org-todo-keyword-faces-default org-todo-keyword-faces
+  "Default `org-todo-keyword-faces` to restore outside solarized-dark.")
+
+(defconst my/solarized-dark-org-todo-keyword-faces
+  '(("TODO"      . (:foreground "#A9552B" :weight normal
+                     :box (:line-width 1 :color "#A9552B" :style released-button)))
+    ("IDEA"      . (:foreground "#6c71c4" :slant italic :weight normal
+                     :box (:line-width 1 :color "#6c71c4" :style released-button)))
+    ("NOW"       . (:foreground "#268bd2" :weight normal
+                     :box (:line-width 1 :color "#268bd2" :style released-button)))
+    ("NEXT"      . (:foreground "#b58900" :weight normal
+                     :box (:line-width 1 :color "#b58900" :style released-button)))
+    ("WAIT"      . (:foreground "#cb4b16" :slant italic
+                     :underline (:style wave :color "#cb4b16")
+                     :box (:line-width 1 :color "#cb4b16" :style released-button)))
+    ("DONE"      . (:foreground "#5E8B6F" :weight normal
+                     :box (:line-width 1 :color "#5E8B6F" :style released-button)))
+    ("CANCELLED" . (:foreground "#dc322f" :strike-through t :weight normal
+                     :box (:line-width 1 :color "#dc322f" :style released-button))))
+  "Org TODO keyword faces used only for `solarized-dark`.")
+
+(defun my/apply-org-todo-keyword-faces-for-current-theme ()
+  "Apply theme-specific `org-todo-keyword-faces`.
+Uses solarized-dark mappings only when that theme is enabled."
+  (setq org-todo-keyword-faces
+        (if (memq 'solarized-dark custom-enabled-themes)
+            my/solarized-dark-org-todo-keyword-faces
+          my/org-todo-keyword-faces-default))
+  (when (fboundp 'org-set-regexps-and-options)
+    (org-set-regexps-and-options))
+  (dolist (b (buffer-list))
+    (with-current-buffer b
+      (when (derived-mode-p 'org-mode)
+        (font-lock-flush)
+        (font-lock-ensure)))))
+
 (defun my/apply-solarized-dark-face-overrides ()
   "Apply my face overrides only to the `solarized-dark' theme."
   (custom-theme-set-faces
@@ -37,12 +73,14 @@
    '(tab-bar-tab-highlight ((t (:background "#144855" :weight normal))))))
 
 (defun my/maybe-apply-solarized-dark-face-overrides (&rest _)
-  (when (memq 'solarized-dark custom-enabled-themes)
-    (my/apply-solarized-dark-face-overrides)
-    ;; Re-enable so merged face specs refresh immediately.
-    (enable-theme 'solarized-dark)
-    ;; Force realized face attr; theme spec alone sometimes doesn't set this.
-    (set-face-attribute 'org-level-1 nil :extend t)))
+  (if (memq 'solarized-dark custom-enabled-themes)
+      (progn
+        (my/apply-solarized-dark-face-overrides)
+        ;; Re-enable so merged face specs refresh immediately.
+        (enable-theme 'solarized-dark)
+        ;; Force realized face attr; theme spec alone sometimes doesn't set this.
+        (set-face-attribute 'org-level-1 nil :extend t)))
+  (my/apply-org-todo-keyword-faces-for-current-theme))
 
 (add-hook 'after-load-theme-hook #'my/maybe-apply-solarized-dark-face-overrides)
 (my/maybe-apply-solarized-dark-face-overrides)

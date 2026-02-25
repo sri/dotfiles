@@ -91,6 +91,9 @@
 (setq org-todo-keywords
      '((sequence "TODO(t)" "IDEA(i)" "NOW(n)" "NEXT(e)" "WAIT(w)" "|" "DONE(d)" "CANCELLED(c)")))
 
+;; Theme-specific `org-todo-keyword-faces` are applied from
+;; `emacs/theme-overrides/my-solarized-dark-faces.el`.
+
 (setq org-src-preserve-indentation t)
 
 (add-hook 'org-mode-hook
