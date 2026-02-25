@@ -46,7 +46,7 @@ Uses solarized-dark mappings only when that theme is enabled."
                 (:weight normal :foreground "#A9552B" :background "#1F3328" :box (:line-width 1 :color "#A9552B" :style released-button)))))
    '(org-done ((((class color) (min-colors 89))
                 (:weight normal :foreground "#5E8B6F" :background "#1F3328" :box (:line-width 1 :color "#5E8B6F" :style released-button)))))
-   '(org-date ((t (:foreground "#268bd2" :background "#003f5e" :box (:line-width 1 :color "#268bd2" :style released-button)))))
+   '(org-date ((t (:foreground "#C26D3A" :background unspecified :box nil :weight normal))))
    '(org-headline-done ((t (:foreground "#5E8B6F"))))
    '(org-level-1 ((t (:inherit variable-pitch :extend t :background "#073642" :foreground "#C26D3A" :overline "#C26D3A" :weight normal :height 1.3))))
    '(org-level-2 ((t (:inherit variable-pitch :extend nil :foreground "#A9552B" :weight normal :height 1.2))))
