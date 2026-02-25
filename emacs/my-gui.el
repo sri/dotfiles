@@ -64,6 +64,19 @@
 
 (set-cursor-color "#FFBF00")
 
+(defun my/sync-mc-cursor-faces-to-cursor-color (&rest _)
+  "Make multiple-cursors cursors match the current cursor color."
+  (let ((c (or (frame-parameter nil 'cursor-color)
+               (face-attribute 'cursor :background nil t)
+               "#FFBF00")))
+    (when (facep 'mc/cursor-face)
+      (set-face-attribute 'mc/cursor-face nil :background c :foreground "#002b36"))
+    (when (facep 'mc/cursor-bar-face)
+      (set-face-attribute 'mc/cursor-bar-face nil :background c :foreground c))))
+
+(add-hook 'after-load-theme-hook #'my/sync-mc-cursor-faces-to-cursor-color)
+(my/sync-mc-cursor-faces-to-cursor-color)
+
 ;; Mac selector colors in hex.
 ;; Purple          : #AF52DE
 ;; Pink            : #FF2D55

@@ -127,8 +127,9 @@
  ("C-S-<down>" . forward-paragraph)
 
  ("C-c n" . next-error)
+ ("C-c N" . previous-error)
  ("C-c o" . my/occur)
- ("C-c p" . previous-error)
+ ("C-c p" . pi-coding-agent)
  ("C-c q" . quoted-insert)
  ("C-c r" . consult-recent-file)
  ("C-c s" . sort-lines)

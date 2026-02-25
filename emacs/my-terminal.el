@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 ;(load-theme 'ample-flat)
 
-(load-theme 'solarized-gruvbox-dark t)
+(load-theme 'solarized-dark t)
 
 (face-spec-set 'isearch '((t (:background "#22aa22" :foreground "black"))))
 (face-spec-set 'lazy-highlight '((t (:foreground "black" :background "green"))))
