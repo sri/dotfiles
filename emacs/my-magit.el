@@ -90,7 +90,7 @@
      "Compare against branch"
      (or (magit-get-current-branch) "develop"))))
   (let* ((current (magit-get-current-branch))
-         (range   (format "origin/%s..%s" branch current)))
+         (range   (format "origin/%s...%s" branch current)))
     (magit-diff-range range)))
 
 (with-eval-after-load 'magit
