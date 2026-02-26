@@ -82,6 +82,22 @@
     (message "Opening %s (origin-url: %s)" url origin-url)
     (browse-url url)))
 
+(defun my/magit-diff-against-default-branch (branch)
+  "Diff current branch against selected default BRANCH (range: origin/BRANCH..HEAD)."
+  (interactive
+   (list
+    (magit-read-branch-or-commit
+     "Compare against branch"
+     (or (magit-get-current-branch) "develop"))))
+  (let* ((current (magit-get-current-branch))
+         (range   (format "origin/%s..%s" branch current)))
+    (magit-diff-range range)))
+
+(with-eval-after-load 'magit
+  (transient-append-suffix 'magit-diff "d"
+    '("D" "Diff vs default branch (origin/BRANCH..HEAD)"
+      my/magit-diff-against-default-branch)))
+
 (add-hook 'magit-mode-hook
           (lambda ()
             (bind-keys :map magit-mode-map
