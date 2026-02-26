@@ -20,7 +20,7 @@
 (setq org-special-ctrl-k nil)
 (setq org-return-follows-link nil)
 (setq org-use-speed-commands t)
-(setq org-fontify-done-headline t)
+(setq org-fontify-done-headline nil)
 (setq org-closed-keep-when-no-todo t)
 
 (setq org-log-done 'time)
