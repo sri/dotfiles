@@ -68,7 +68,7 @@ Uses solarized-dark mappings only when that theme is enabled."
    '(magit-diff-removed-highlight ((t (:foreground "#af3a32" :background "#442626" :weight normal))))
    '(hl-line ((t (:extend t :background "#083e4a"))))
    '(region ((t (:extend t :background "#073642"))))
-   '(tab-bar-tab ((t (:background "#0b3a46" :foreground "#93a1a1" :box nil :overline "#268bd2" :weight semi-bold))))
+   '(tab-bar-tab ((t (:background unspecified :foreground "#93a1a1" :box nil :overline "#268bd2" :weight semi-bold))))
    '(tab-bar-tab-inactive ((t (:background "#073642" :foreground "#657b83" :box nil :weight normal))))
    '(tab-bar-tab-highlight ((t (:background "#144855" :weight normal))))))
 
@@ -79,7 +79,11 @@ Uses solarized-dark mappings only when that theme is enabled."
         ;; Re-enable so merged face specs refresh immediately.
         (enable-theme 'solarized-dark)
         ;; Force realized face attr; theme spec alone sometimes doesn't set this.
-        (set-face-attribute 'org-level-1 nil :extend t)))
+        (set-face-attribute 'org-level-1 nil :extend t)
+        ;; Make selected tab background match buffer/default background.
+        (let ((bg (face-background 'default nil t)))
+          (when (stringp bg)
+            (set-face-attribute 'tab-bar-tab nil :background bg)))))
   (my/apply-org-todo-keyword-faces-for-current-theme))
 
 (add-hook 'after-load-theme-hook #'my/maybe-apply-solarized-dark-face-overrides)
