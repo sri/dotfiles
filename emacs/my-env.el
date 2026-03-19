@@ -214,7 +214,7 @@ Fundamental mode."
 (require 'vertico-directory)
 (require 'vertico-quick)
 (require 'vertico-posframe)
-(vertico-posframe-mode 1)
+(vertico-posframe-mode -1)
 ;; (vertico-multiform-mode -1)
 
 ;; (setq vertico-multiform-commands
