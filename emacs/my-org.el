@@ -190,7 +190,7 @@
 (bind-keys :map org-mode-map
            ("M-<down>" . outline-backward-same-level)
            ("M-<up>" . outline-forward-same-level)
-           ("C-c t" . org-toggle-link-display))
+           ("C-c C-t" . org-toggle-link-display))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
