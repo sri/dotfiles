@@ -37,7 +37,6 @@
   (interactive)
   (let ((files (my/embark--unique-files files))
         (orig-tab (1+ (tab-bar--current-tab-index (funcall tab-bar-tabs-function)))))
-    (message "%s" files)
     (unless files (user-error "No files selected"))
     (dolist (file files)
       (tab-bar-new-tab)

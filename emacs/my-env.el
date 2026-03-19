@@ -238,6 +238,7 @@ Fundamental mode."
 (require 'saveplace)
 (save-place-mode 1)
 
+(setq read-minibuffer-restore-windows nil)
 (setq minibuffer-prompt-properties
       '(read-only t cursor-intangible t face minibuffer-prompt))
 (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
