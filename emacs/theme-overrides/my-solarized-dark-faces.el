@@ -41,6 +41,7 @@ Uses solarized-dark mappings only when that theme is enabled."
   (custom-theme-set-faces
    'solarized-dark
    '(bm-persistent-face ((t (:foreground "#000000" :background "#916e00"))))
+   '(vertico-current ((t (:foreground "#000000" :background "#916e00" :weight normal))))
    '(link ((t (:foreground "#997544"))))
    '(org-todo ((((class color) (min-colors 89))
                 (:weight normal :foreground "#A9552B" :background "#1F3328" :box (:line-width 1 :color "#A9552B" :style released-button)))))
