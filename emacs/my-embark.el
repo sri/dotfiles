@@ -74,5 +74,15 @@
              ("T" . my/embark-open-files-in-new-tabs)
              ("W" . my/embark-open-files-in-side-by-side-windows)))
 
+(defun my/embark-select-and-next ()
+  "Select current Vertico candidate, then move down one (no wrap)."
+  (interactive)
+  (embark-select)
+  (when (and (boundp 'vertico--total)
+             (> vertico--total 0)
+             (< vertico--index (1- vertico--total)))
+    (vertico-next 1)))
+
 (bind-keys :map vertico-map
-           ("C-;" . embark-act-all))
+           ("C-;" . embark-act-all)
+           ("C-SPC" . my/embark-select-and-next))
