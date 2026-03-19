@@ -42,7 +42,8 @@
            ("S-<wheel-up>"    . ignore)
            ("S-<wheel-down>"  . ignore)
            ("S-<wheel-left>"  . ignore)
-           ("S-<wheel-right>" . ignore))
+           ("S-<wheel-right>" . ignore)
+           ("<down-mouse-3>"  . my/tab-bar-mouse-context-menu))
 
 ;; Apple CMD Key
 (bind-keys*

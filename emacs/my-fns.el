@@ -71,6 +71,59 @@ Othewise, invoke `hippie-expand'."
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 
+(defun my/tab-bar-close-tabs-to-right (&optional tab-number)
+  "Close all tabs to the right of TAB-NUMBER.
+When called interactively, uses the current tab."
+  (interactive)
+  (let* ((tabs (funcall tab-bar-tabs-function))
+         (tab-number (or tab-number
+                         (1+ (tab-bar--current-tab-index tabs))))
+         (i (length tabs)))
+    (while (> i tab-number)
+      (tab-bar-close-tab i)
+      (setq i (1- i)))))
+
+(defun my/tab-bar-mouse-context-menu (event &optional posn)
+  "Pop up a tab bar context menu with extra actions."
+  (interactive "e")
+  (let* ((item (tab-bar--event-to-item (or posn (event-start event))))
+         (tab-number (tab-bar--key-to-number (nth 0 item)))
+         (menu (make-sparse-keymap (propertize "Context Menu" 'hide t))))
+    (cond
+     ((eq tab-number t)
+      (define-key-after menu [new-tab]
+        '(menu-item "New tab" tab-bar-new-tab
+                    :help "Create a new tab"))
+      (when tab-bar-closed-tabs
+        (define-key-after menu [undo-close]
+          '(menu-item "Reopen closed tab" tab-bar-undo-close-tab
+                      :help "Undo closing the tab"))))
+     (t
+      (define-key-after menu [duplicate-tab]
+        `(menu-item "Duplicate" (lambda () (interactive)
+                                  (tab-bar-duplicate-tab
+                                   nil ,tab-number))
+                    :help "Clone the tab"))
+      (define-key-after menu [detach-tab]
+        `(menu-item "Detach" (lambda () (interactive)
+                               (tab-bar-detach-tab
+                                ,tab-number))
+                    :help "Move the tab to new frame"))
+      (define-key-after menu [close]
+        `(menu-item "Close" (lambda () (interactive)
+                              (tab-bar-close-tab ,tab-number))
+                    :help "Close the tab"))
+      (define-key-after menu [close-right]
+        `(menu-item "Close tabs to the right" (lambda () (interactive)
+                                                (my/tab-bar-close-tabs-to-right ,tab-number))
+                    :help "Close tabs to the right of this tab"))
+      (define-key-after menu [close-other]
+        `(menu-item "Close other tabs"
+                    (lambda () (interactive)
+                      (tab-bar-close-other-tabs ,tab-number))
+                    :help "Close all other tabs"))))
+    (popup-menu menu event)))
+
 (defvar my/yank-keymap
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "y") 'yank-pop)
