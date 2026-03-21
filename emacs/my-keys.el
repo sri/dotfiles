@@ -67,7 +67,7 @@
  ("s-s" . save-buffer)
  ("s-t" . tab-new)
  ("s-v" . my/yank)
- ("s-w" . tab-close)
+ ("s-w" . my/close-tab-or-frame)
  ("s-z" . undo))
 
 ;; https://emacs.stackexchange.com/questions/32183/how-to-make-exceptions-to-bind-key-overriding-behavior

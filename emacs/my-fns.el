@@ -758,3 +758,10 @@ Defaults to next 7 days. With prefix arg DAYS, insert that many days."
       (let ((tm (time-add time (days-to-time i))))
         (insert (format "* [%s]\n"
                         (format-time-string "%Y-%m-%d %a" tm)))))))
+
+(defun my/close-tab-or-frame ()
+  "Close the current tab if more than one tab exists, otherwise close the frame."
+  (interactive)
+  (if (null (cdr (frame-parameter (selected-frame) 'tabs)))
+      (delete-frame)
+    (tab-bar-close-tab)))
