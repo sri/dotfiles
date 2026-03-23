@@ -28,8 +28,8 @@
  '(package-selected-packages
    '(ace-jump-mode ace-window acme-theme bm button-lock casual
                    catppuccin-theme company company-go consult
-                   csv-mode diff-hl doom-themes doom-themes eat
-                   ef-themes elisp-slime-nav embark embark-consult
+                   csv-mode diff-hl doom-themes doom-themes dumb-jump
+                   eat ef-themes elisp-slime-nav embark embark-consult
                    exec-path-from-shell expand-region flycheck
                    flycheck-golangci-lint git-link go-eldoc go-mode
                    gotest gptel gruvbox-theme howm hydra
