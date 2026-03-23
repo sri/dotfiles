@@ -68,6 +68,9 @@
                 my/embark-open-files-in-side-by-side-windows))
     (add-to-list 'embark-multitarget-actions fn))
 
+  (bind-keys :map embark-variable-map
+             ("k" . describe-keymap))
+
   ;; Actions in file action map
   (bind-keys :map embark-file-map
              ("T" . my/embark-open-files-in-new-tabs)
