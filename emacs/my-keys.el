@@ -101,7 +101,7 @@
  ("C-r" . vr/query-replace)
  ("C-s" . save-buffer)
  ;; ("C-t" . )
- ("C-v" . consult-buffer)
+ ("C-v" . consult-project-buffer)
  ("C-w" . my/kill-current-buffer)
  ("C-y" . my/yank)
  ("C-z" . undo)
