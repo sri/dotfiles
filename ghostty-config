@@ -1,5 +1,5 @@
 font-family = JetBrains Mono
-#theme = Afterglow
+theme = iTerm2 Solarized Dark
 auto-update-channel = tip
 #keybind = shift+enter=text:\n
 #background-blur = macos-glass-clear
