@@ -102,6 +102,7 @@
  ("C-s" . save-buffer)
  ;; ("C-t" . )
  ("C-v" . consult-project-buffer)
+ ("C-S-v" . consult-buffer)
  ("C-w" . my/kill-current-buffer)
  ("C-y" . my/yank)
  ("C-z" . undo)
