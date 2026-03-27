@@ -1,5 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 (require 'magit)
+(require 'magit-extras) ; to make Magit show up in project-switch-project
 
 (require 'git-link)
 
