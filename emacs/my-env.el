@@ -34,7 +34,11 @@ Fundamental mode."
 (setq whitespace-line-column 78)
 
 (defun my/turn-on-whitespace ()
-  (whitespace-mode 1))
+  ;; messes up *Help* buffers with lisp value
+  ;; i think the lisp value gets inserted into a *temp* buffer
+  ;; that's in lisp-data-mode.
+  (unless (derived-mode-p 'lisp-data-mode)
+    (whitespace-mode 1)))
 (add-hook 'prog-mode-hook 'my/turn-on-whitespace)
 (add-hook 'diff-mode-hook 'my/turn-on-whitespace)
 
