@@ -127,16 +127,50 @@ yanked from the kill-ring."
                   (lambda (a b)
                     (time-less-p (cdr b) (cdr a)))))))
 
+(defun my/scratch-browse--relative-time (time)
+  (let* ((seconds (max 0 (floor (float-time (time-subtract (current-time) time)))))
+         (minutes (max 1 (floor (/ seconds 60.0))))
+         (hours (max 1 (floor (/ seconds 3600.0))))
+         (days (max 1 (floor (/ seconds 86400.0))))
+         (weeks (max 1 (floor (/ days 7.0))))
+         (months (max 1 (floor (/ days 30.0))))
+         (years (max 1 (floor (/ days 365.0)))))
+    (cond
+     ((< minutes 60) (format "%d %s ago" minutes (if (= minutes 1) "min" "mins")))
+     ((< hours 24) (format "%d %s ago" hours (if (= hours 1) "hour" "hours")))
+     ((< days 7) (format "%d %s ago" days (if (= days 1) "day" "days")))
+     ((< days 30) (format "%d %s ago" weeks (if (= weeks 1) "week" "weeks")))
+     ((< days 365) (format "%d %s ago" months (if (= months 1) "month" "months")))
+     (t (format "%d %s ago" years (if (= years 1) "year" "years"))))))
+
 (defun my/scratch-browse--file-at-point ()
   (get-text-property (point) 'my/scratch-file))
 
 (defun my/scratch-browse--render (&optional keep-file)
-  (let ((inhibit-read-only t)
-        (files (my/scratch-browse--sorted-files my/scratch-browse-sort-kind)))
+  (let* ((inhibit-read-only t)
+         (files (my/scratch-browse--sorted-files my/scratch-browse-sort-kind))
+         (entries (mapcar (lambda (file)
+                            (let* ((time (my/scratch-browse--file-time file my/scratch-browse-sort-kind))
+                                   (relative-time (my/scratch-browse--relative-time time)))
+                              (list :file file
+                                    :path (file-relative-name file my/scratch-directory)
+                                    :relative-time relative-time)))
+                          files))
+         (path-width (if entries
+                         (apply #'max (mapcar (lambda (it) (length (plist-get it :path))) entries))
+                       0))
+         (relative-width (if entries
+                             (apply #'max (mapcar (lambda (it) (length (plist-get it :relative-time))) entries))
+                           0))
+         (line-format (format "%%-%ds - %%-%ds" path-width relative-width)))
     (erase-buffer)
-    (dolist (file files)
-      (let ((line-start (point)))
-        (insert (file-relative-name file my/scratch-directory) "\n")
+    (dolist (entry entries)
+      (let ((line-start (point))
+            (file (plist-get entry :file)))
+        (insert (format line-format
+                        (plist-get entry :path)
+                        (plist-get entry :relative-time))
+                "\n")
         (add-text-properties line-start
                              (1- (point))
                              `(my/scratch-file ,file))))
@@ -189,7 +223,7 @@ yanked from the kill-ring."
   (message "%s"
            (if (eq my/scratch-browse-sort-kind 'modified)
                "Sorted by last modified time (newest first)"
-             "Sorted by creation time (newest first)")))
+             "Sorted by last created time (newest first)")))
 
 (defun my/scratch-browse-edit-file ()
   (interactive)
