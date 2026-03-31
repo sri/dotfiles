@@ -97,6 +97,7 @@ yanked from the kill-ring."
     (define-key map (kbd "N") #'my/scratch-browse-next)
     (define-key map (kbd "P") #'my/scratch-browse-previous)
     (define-key map (kbd "s") #'my/scratch-browse-toggle-sort)
+    (define-key map (kbd "/") #'my/scratch-search)
     (define-key map (kbd "RET") #'my/scratch-browse-edit-file)
     map))
 
@@ -142,6 +143,23 @@ yanked from the kill-ring."
      ((< days 30) (format "%d %s ago" weeks (if (= weeks 1) "week" "weeks")))
      ((< days 365) (format "%d %s ago" months (if (= months 1) "month" "months")))
      (t (format "%d %s ago" years (if (= years 1) "year" "years"))))))
+
+(defun my/scratch--rg-sort-arg (&optional sort-kind)
+  (pcase (or sort-kind my/scratch-browse-sort-kind 'created)
+    ('modified "--sortr=modified")
+    (_ "--sortr=created")))
+
+(defun my/scratch-search (query)
+  "Search all files under `my/scratch-directory' using ripgrep."
+  (interactive (list (read-string "Scratch search: ")))
+  (if (fboundp 'consult-ripgrep)
+      (let ((consult-ripgrep-args (concat (if (boundp 'consult-ripgrep-args)
+                                              consult-ripgrep-args
+                                            "rg --null --line-buffered --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --line-number . ARG OPTS")
+                                          " "
+                                          (my/scratch--rg-sort-arg))))
+        (consult-ripgrep my/scratch-directory query))
+    (rgrep query "*" my/scratch-directory)))
 
 (defun my/scratch-browse--file-at-point ()
   (get-text-property (point) 'my/scratch-file))
