@@ -84,52 +84,141 @@ yanked from the kill-ring."
   (my/scratch-new t))
 
 (defvar my/scratch-browse-previous-window-configuration nil)
+(defvar my/scratch-browse-preview-window nil)
+(defvar my/scratch-browse-buffer-name "*scratch files*")
+(defvar-local my/scratch-browse-sort-kind 'created)
 
-(defun my/scratch-browse-view-file (file)
-  (other-window 1)
-  (find-file (expand-file-name file my/scratch-directory))
-  (other-window 1))
+(defvar my/scratch-browse-mode-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map special-mode-map)
+    (define-key map (kbd "q") #'my/scratch-browse-quit)
+    (define-key map (kbd "n") #'my/scratch-browse-next)
+    (define-key map (kbd "p") #'my/scratch-browse-previous)
+    (define-key map (kbd "N") #'my/scratch-browse-next)
+    (define-key map (kbd "P") #'my/scratch-browse-previous)
+    (define-key map (kbd "s") #'my/scratch-browse-toggle-sort)
+    (define-key map (kbd "RET") #'my/scratch-browse-edit-file)
+    map))
+
+(define-derived-mode my/scratch-browse-mode special-mode "Scratch-Browse"
+  "Major mode for browsing persistent scratch files."
+  (setq-local truncate-lines t)
+  (setq-local default-directory my/scratch-directory)
+  (setq-local my/scratch-browse-sort-kind 'created))
+
+(defun my/scratch-browse--file-time (file sort-kind)
+  (let* ((attrs (file-attributes file))
+         (modified (file-attribute-modification-time attrs))
+         (created (and (fboundp 'file-attribute-creation-time)
+                       (ignore-errors
+                         (file-attribute-creation-time attrs)))))
+    (pcase sort-kind
+      ('modified modified)
+      (_ (or created modified)))))
+
+(defun my/scratch-browse--sorted-files (&optional sort-kind)
+  (let* ((kind (or sort-kind my/scratch-browse-sort-kind 'created))
+         (files (directory-files-recursively my/scratch-directory ".*" nil))
+         (files-with-times (mapcar (lambda (file)
+                                     (cons file (my/scratch-browse--file-time file kind)))
+                                   files)))
+    (mapcar #'car
+            (sort files-with-times
+                  (lambda (a b)
+                    (time-less-p (cdr b) (cdr a)))))))
+
+(defun my/scratch-browse--file-at-point ()
+  (get-text-property (point) 'my/scratch-file))
+
+(defun my/scratch-browse--render (&optional keep-file)
+  (let ((inhibit-read-only t)
+        (files (my/scratch-browse--sorted-files my/scratch-browse-sort-kind)))
+    (erase-buffer)
+    (dolist (file files)
+      (let ((line-start (point)))
+        (insert (file-relative-name file my/scratch-directory) "\n")
+        (add-text-properties line-start
+                             (1- (point))
+                             `(my/scratch-file ,file))))
+    (goto-char (point-min))
+    (when keep-file
+      (let ((found nil))
+        (while (and (not found) (not (eobp)))
+          (if (equal (my/scratch-browse--file-at-point) keep-file)
+              (setq found t)
+            (forward-line 1)))
+        (unless found
+          (goto-char (point-min)))))
+    files))
+
+(defun my/scratch-browse-view-file (file &optional select-window)
+  (when file
+    (let ((origin-window (selected-window)))
+      (unless (window-live-p my/scratch-browse-preview-window)
+        (setq my/scratch-browse-preview-window (split-window origin-window nil 'below)))
+      (set-window-buffer my/scratch-browse-preview-window (find-file-noselect file))
+      (when select-window
+        (select-window my/scratch-browse-preview-window)))))
+
+(defun my/scratch-browse--preview-at-point ()
+  (if-let ((file (my/scratch-browse--file-at-point)))
+      (my/scratch-browse-view-file file)
+    (message "No file on this line")))
 
 (defun my/scratch-browse-next ()
   (interactive)
   (forward-line 1)
-  (my/scratch-browse-view-file
-   (buffer-substring-no-properties (point)
-                                   (point-at-eol))))
+  (when (eobp)
+    (forward-line -1))
+  (my/scratch-browse--preview-at-point))
+
+(defun my/scratch-browse-previous ()
+  (interactive)
+  (forward-line -1)
+  (my/scratch-browse--preview-at-point))
+
+(defun my/scratch-browse-toggle-sort ()
+  (interactive)
+  (setq-local my/scratch-browse-sort-kind
+              (if (eq my/scratch-browse-sort-kind 'modified)
+                  'created
+                'modified))
+  (let ((current-file (my/scratch-browse--file-at-point)))
+    (my/scratch-browse--render current-file)
+    (my/scratch-browse--preview-at-point))
+  (message "%s"
+           (if (eq my/scratch-browse-sort-kind 'modified)
+               "Sorted by last modified time (newest first)"
+             "Sorted by creation time (newest first)")))
+
+(defun my/scratch-browse-edit-file ()
+  (interactive)
+  (if-let ((file (my/scratch-browse--file-at-point)))
+      (my/scratch-browse-view-file file t)
+    (message "No file on this line")))
 
 (defun my/scratch-browse-quit ()
   (interactive)
   (when my/scratch-browse-previous-window-configuration
     (set-window-configuration my/scratch-browse-previous-window-configuration)
-    (setq my/scratch-browse-previous-window-configuration nil)))
+    (setq my/scratch-browse-previous-window-configuration nil)
+    (setq my/scratch-browse-preview-window nil)))
 
 (defun my/scratch-browse ()
   (interactive)
-  (let* ((default-directory my/scratch-directory)
-         (du (->> "du -hs"
-                  shell-command-to-string
-                  split-string
-                  car))
-         (files (->> "find . -type f"
-                     shell-command-to-string
-                     split-string))
-         (current-file (car files))
-         (files-buffer (get-buffer-create "*scratch files*")))
+  (f-mkdir-full-path my/scratch-directory)
+  (let* ((files-buffer (get-buffer-create my/scratch-browse-buffer-name))
+         files)
     (setq my/scratch-browse-previous-window-configuration
           (current-window-configuration))
     (delete-other-windows)
-    (split-window-vertically)
+    (setq my/scratch-browse-preview-window (split-window-below))
     (with-current-buffer files-buffer
-      (setq default-directory my/scratch-directory)
-      (erase-buffer)
-      (insert "Size: " du
-              "; total files: " (number-to-string (length files))
-              "\n")
-      (dolist (f files)
-        (insert f "\n"))
-      (goto-char (point-min))
-      (forward-line 1)
-      (local-set-key (kbd "q") 'my/scratch-browse-quit)
-      (local-set-key (kbd "n") 'my/scratch-browse-next))
+      (my/scratch-browse-mode)
+      (setq files (my/scratch-browse--render)))
     (switch-to-buffer files-buffer)
-    (my/scratch-browse-view-file current-file)))
+    (if files
+        (my/scratch-browse--preview-at-point)
+      (set-window-buffer my/scratch-browse-preview-window
+                         (get-buffer-create "*scratch preview*"))
+      (message "No scratch files found in %s" my/scratch-directory))))
