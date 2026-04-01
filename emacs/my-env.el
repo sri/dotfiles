@@ -17,9 +17,23 @@ Fundamental mode."
 
 (defun my/view-sqlite-file ()
   (require 'sqlite-mode)
-  (sqlite-mode-open-file
-   (prog1 buffer-file-name
-     (kill-current-buffer))))
+  (let ((file buffer-file-name))
+    (unless (sqlite-available-p)
+      (error "This Emacs doesn't have SQLite support, so it can't view SQLite files"))
+    (when (file-remote-p file)
+      (error "Remote SQLite files are not yet supported"))
+    ;; `magic-mode-alist' runs after the file is visited.  Reuse the current
+    ;; buffer instead of killing it and opening a second SQLite buffer.
+    (set-visited-file-name nil t)
+    (rename-buffer (format "*SQLite %s*" (file-name-nondirectory file)) t)
+    (let ((inhibit-read-only t))
+      (erase-buffer))
+    (sqlite-mode)
+    (setq-local sqlite--db (sqlite-open file))
+    (unless (sqlitep sqlite--db)
+      (error "`sqlite-open' failed to open SQLite file"))
+    (add-hook 'kill-buffer-hook (lambda () (sqlite-close sqlite--db)) nil t)
+    (sqlite-mode-list-tables)))
 
 (add-to-list 'magic-mode-alist '("SQLite format 3\x00" . my/view-sqlite-file))
 

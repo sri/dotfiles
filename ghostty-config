@@ -1,6 +1,8 @@
 font-family = JetBrains Mono
 theme = iTerm2 Solarized Dark
 auto-update-channel = tip
+keybind = cmd+3=new_split:right
+keybind = cmd+2=new_split:down
 #keybind = shift+enter=text:\n
 #background-blur = macos-glass-clear
 #background-opacity = 1
