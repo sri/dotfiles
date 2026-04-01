@@ -137,12 +137,12 @@ yanked from the kill-ring."
          (months (max 1 (floor (/ days 30.0))))
          (years (max 1 (floor (/ days 365.0)))))
     (cond
-     ((< minutes 60) (format "%d %s ago" minutes (if (= minutes 1) "min" "mins")))
-     ((< hours 24) (format "%d %s ago" hours (if (= hours 1) "hour" "hours")))
-     ((< days 7) (format "%d %s ago" days (if (= days 1) "day" "days")))
-     ((< days 30) (format "%d %s ago" weeks (if (= weeks 1) "week" "weeks")))
-     ((< days 365) (format "%d %s ago" months (if (= months 1) "month" "months")))
-     (t (format "%d %s ago" years (if (= years 1) "year" "years"))))))
+     ((< minutes 60) (format "%2dm ago" minutes))
+     ((< hours 24) (format "%2dh ago" hours))
+     ((< days 7) (format "%2dd ago" days))
+     ((< days 30) (format "%2dw ago" weeks))
+     ((< days 365) (format "%2dm ago" months))
+     (t (format "%2dy ago" years)))))
 
 (defun my/scratch--rg-sort-arg (&optional sort-kind)
   (pcase (or sort-kind my/scratch-browse-sort-kind 'created)
