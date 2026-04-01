@@ -29,7 +29,7 @@
            ("F" . forward-sexp)
 
            ("b" . backward-word)
-           ("f" . forward-word)
+           ("f" . my/isearch)
 
            ("w" . my/select-word)
 
@@ -41,7 +41,7 @@
            ("C" . my/kill-line-or-region)
 
            (";" . my/comment-line-or-region)
-           ("g" . my/rg)
+           ("r" . my/rg)
            ("G" . my/google-search)
            ("J" . ace-jump-word-mode)
            ("m" . vr/mc-mark) ;; ?

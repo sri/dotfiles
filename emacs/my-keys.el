@@ -54,7 +54,6 @@
  ("s-c" . my/copy-line-or-region)
  ("s-d" . my/dired)
  ("s-f" . my/isearch)
- ("s-F" . isearch-backward)
  ("s-x" . my/kill-line-or-region)
  ("s-r" . my/rg)
  ("s-R" . rg)
@@ -78,6 +77,16 @@
            ;("C-d" . kill-word)
            ("C-b" . backward-kill-word))
 
+;; Ctrl-i
+;; Ctrl-p
+;; improve C-r
+;; other unused:
+;; - C-c d, C-c e, C-c h, C-c u, C-c w, C-c x, C-c y, C-c z
+;;  - C-,, C-;, C-=
+;;  - M-[, M-]
+
+
+
 (bind-keys*
  ("<C-tab>" . tab-next)
  ("<S-C-tab>" . tab-previous)
@@ -90,7 +99,6 @@
  ("C-a" . my/beginning-of-line)
  ("C-b" . backward-kill-word)
  ("C-f" . my/isearch)
- ("S-C-f" . isearch-forward-regexp)
  ("C-j" . other-window)
  ("C-S-j" . ace-jump-word-mode)
  ("C-k" . my/kill-line-or-region)
@@ -103,7 +111,6 @@
  ;; ("C-t" . )
  ("C-v" . consult-project-buffer)
  ("C-S-v" . consult-buffer)
- ("C-w" . my/kill-current-buffer)
  ("C-y" . my/yank)
  ("C-z" . undo)
  ("C-c ~" . my/open-repo-in-browser)
@@ -195,6 +202,9 @@
  ("C-x <right>" . windmove-right)
  )
 
+;; Don't let global C-w kill the Pi prompt buffer.
+(bind-key* "C-w" 'my/kill-current-buffer
+           (not (derived-mode-p 'pi-coding-agent-input-mode)))
 
 ;; Git related under: C-c g <letter>
 (bind-keys :prefix-map my/ctl-c-g-map

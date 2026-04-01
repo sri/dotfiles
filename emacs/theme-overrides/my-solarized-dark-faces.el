@@ -217,6 +217,8 @@ ALPHA=0 means BG, ALPHA=1 means FG."
    '(magit-diff-removed-highlight ((t (:foreground "#af3a32" :background "#442626" :weight normal))))
    '(hl-line ((t (:extend t :background "#083e4a"))))
    '(region ((t (:extend t :background "#073642"))))
+   ;; '(mode-line ((t (:overline "#268bd2"))))
+   ;; '(mode-line-inactive ((t (:overline nil))))
    '(tab-bar-tab ((t (:background unspecified :foreground "#93a1a1" :box nil :overline "#268bd2" :weight semi-bold))))
    '(tab-bar-tab-inactive ((t (:background "#073642" :foreground "#657b83" :box nil :weight normal))))
    '(tab-bar-tab-highlight ((t (:background "#144855" :weight normal))))))
