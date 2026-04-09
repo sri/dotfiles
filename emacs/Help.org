@@ -1,5 +1,8 @@
 https://www.youtube.com/watch?v=43Dg5zYPHTU
 
+* https://www.reddit.com/r/emacs/comments/1sf0xmd/stealing_from_the_best_emacs_configs/
+re-builder?
+
 * Edebug from ChatGPT
 Edebug: useful commands (beyond n)
 Stepping / movement

@@ -89,10 +89,6 @@ Fundamental mode."
 
 (add-to-list 'interpreter-mode-alist '("uv" . python-mode))
 
-;; Problem: when this is t, splitting a buffer into 2 windows, and
-;; clicking into the windows causes weird region UI highlighting
-(setq highlight-nonselected-windows nil)
-
 (setq echo-keystrokes 0.1)
 (setq vc-follow-symlinks t)
 (setq mouse-drag-copy-region t)
@@ -122,6 +118,27 @@ Fundamental mode."
 (setq mac-command-modifier 'super)
 (setq mac-option-modifier 'meta)
 ;;(setq mouse-autoselect-window t)
+
+;; From https://emacsredux.com/blog/2026/04/07/stealing-from-the-best-emacs-configs/
+(setq-default bidi-display-reordering 'left-to-right
+              bidi-paragraph-direction 'left-to-right)
+(setq bidi-inhibit-bpa t)
+(setq redisplay-skip-fontification-on-input t)
+;; (setq read-process-output-max (* 4 1024 1024)) ; 4MB
+(setq-default cursor-in-non-selected-windows nil)
+;; Problem: when this is t, splitting a buffer into 2 windows, and
+;; clicking into the windows causes weird region UI highlighting
+(setq highlight-nonselected-windows nil)
+(setq kill-do-not-save-duplicates t)
+;; Doesn't seem to be worth it.
+;; (add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
+(setq reb-re-syntax 'string)
+;; Disable "Pinging 4.to (Tonga)..." message
+;; when you TAB complete
+(setq ffap-machine-p-known 'reject)
+;; After C-u C-SPC, you can just keep hitting C-SPC.
+(setq set-mark-command-repeat-pop t)
+help-window-select
 
 (setq fill-column 80)
 
@@ -255,6 +272,9 @@ Fundamental mode."
 
 (require 'saveplace)
 (save-place-mode 1)
+(advice-add 'save-place-find-file-hook :after
+            (lambda (&rest _)
+              (when buffer-file-name (ignore-errors (recenter)))))
 
 (setq read-minibuffer-restore-windows nil)
 (setq minibuffer-prompt-properties
