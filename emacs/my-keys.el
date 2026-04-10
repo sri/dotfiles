@@ -126,7 +126,7 @@
  ("C-c j" . ace-jump-word-mode)
  ("C-c k" . ace-jump-line-mode)
  ("C-c l" . toggle-truncate-lines)
- ("C-c m" . imenu)
+ ("C-c m" . my/imenu)
  ("C-c C-t" . my/frame-always-on-top-toggle)
  ;; when i accidentally have an input prompt
  ;; waiting for me in the minibuffer, but am
