@@ -29,7 +29,7 @@
            ("F" . forward-sexp)
 
            ("b" . backward-word)
-           ("f" . my/isearch)
+           ("f" . forward-word)
 
            ("w" . my/select-word)
 
