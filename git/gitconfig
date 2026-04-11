@@ -19,5 +19,14 @@
         which = !git branch -a | grep
         teamlog = log -p --all --no-merges
         co = checkout
+        my = !echo mostchanged rank[6,12] bugcluster commitsbymonth crisisfreq
+        mostchanged = !git log --pretty=format: --name-only --since=1.year | sed '/^$/d' | sort | uniq -c | sort -nr | head -n 20
+        rank = !git shortlog -sn --no-merges
+        rank6 = !git shortlog -sn --no-merges --since=6.months
+        rank12 = !git shortlog -sn --no-merges --since=12.months
+        bugcluster = !git log -i -E --grep='fix|bug|broken' --name-only --format='' | sort | uniq -c | sort -nr | head -20
+        commitsbymonth = !git log --format='%ad' --date=format:'%Y-%m' | sort | uniq -c
+        crisisfreq = !git log --oneline --since=1.year | grep -iE 'revert|hotfix|emergency|rollback'
+
 [grep]
         linenumber = true

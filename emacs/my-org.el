@@ -192,6 +192,12 @@
            ("M-<up>" . outline-forward-same-level)
            ("C-c C-t" . org-toggle-link-display))
 
+(setq org-agenda-prefix-format
+      '((agenda . " %i %-12:c%?-12t% s")
+        (todo   . " %i %-12:c ")
+        (tags   . " %i %-12:c ")
+        (search . " %i %-12:c ")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The following is to make grandparent nodes of checkboxes have the
