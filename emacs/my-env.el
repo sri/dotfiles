@@ -292,6 +292,8 @@ help-window-select
 (setq project-vc-merge-submodules nil)
 
 (require 'grep)
+(when-let ((gnu-find (executable-find "gfind")))
+  (setq find-program gnu-find))
 (add-hook 'grep-mode-hook (lambda () (toggle-truncate-lines 1)))
 ;; Conflicts with rg.el's "r" key.
 ;; (require 'wgrep)
