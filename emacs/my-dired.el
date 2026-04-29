@@ -72,6 +72,29 @@
       (dired root)
       (message "in git repo root"))))
 
+(defun my/dired--marked-files-only ()
+  "Return marked files in Dired, or error if none are marked."
+  (dired-get-marked-files nil 'marked nil nil
+                          "No files marked (mark with m)"))
+
+(defun my/dired-open-marked-files-in-new-tabs ()
+  "Open marked Dired files, one per new tab."
+  (interactive)
+  (my/embark-open-files-in-new-tabs
+   (my/dired--marked-files-only)))
+
+(defun my/dired-open-marked-files-in-side-by-side-windows ()
+  "Open marked Dired files in current frame, one per window."
+  (interactive)
+  (my/embark-open-files-in-side-by-side-windows
+   (my/dired--marked-files-only)))
+
+(defun my/dired-open-marked-files-menu ()
+  "Choose how to open marked Dired files."
+  (interactive)
+  (pcase (read-char-choice "Open marked files: [t]abs, [w]indows: " '(?t ?w))
+    (?t (my/dired-open-marked-files-in-new-tabs))
+    (?w (my/dired-open-marked-files-in-side-by-side-windows))))
 
 (require 'casual-dired-sort-by)
 
@@ -104,6 +127,7 @@
                        ("G"   . magit-status)
                        ("S-SPC" . scroll-down)
                        ("N" . dired-create-empty-file)
+                       ("o" . my/dired-open-marked-files-menu)
                        ([left] . dired-up-directory)
                        ([right] . my/dired-right-arrow-key)
                        ("s" . casual-dired-sort-by-tmenu)
