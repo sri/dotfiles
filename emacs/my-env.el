@@ -154,7 +154,11 @@ help-window-select
   (require 'tab-bar)
   (setq tab-bar-show 1)
   (setq tab-bar-tab-name-truncated-max 12)
-  (setq tab-bar-tab-name-function 'tab-bar-tab-name-truncated))
+  (setq tab-bar-tab-name-function 'tab-bar-tab-name-truncated)
+  (when (featurep 'mac)
+    ;; Emacs-mac has its own native Mac tabs.
+    ;; But seems to send 2 events when you click on tab-bar.
+    (define-key tab-bar-map "<mouse-2>" #'ignore)))
 
 ;; Ignore accidentally hitting the trackpad while typing and having it
 ;; pop up a menu.
@@ -163,7 +167,7 @@ help-window-select
          "<C-down-mouse-1>"
          "<C-mouse-1>")))
   (dolist (key mouse-keys-to-ignore)
-    (global-set-key (kbd key) (lambda () (interactive)))))
+    (global-set-key (kbd key) #'ignore)))
 
 (context-menu-mode 1)
 
