@@ -42,44 +42,64 @@ export RIPGREP_CONFIG_PATH=~/.ripgreprc
 autoload -Uz compinit && compinit
 
 # Load Git prompt functions
+# --- git branch ---
 autoload -Uz vcs_info
+zstyle ':vcs_info:git:*' formats '(%b)'
 zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:*' formats '(%b)'
 
-function preexec() {
-  # Record the start time of the command
+# --- track command start time ---
+preexec() {
   cmd_start_time=$SECONDS
 }
 
-preexec_functions+=(preexec)
-
-
-# Function to customize the prompt
-function custom_prompt() {
-  # Get the exit status of the last command
-  # NOTE: this needs to be the first statement in this function.
+# --- prompt ---
+custom_prompt() {
+  # MUST be first
   local last_exit_status=$?
 
   local cmd_duration=$((SECONDS - cmd_start_time))
-
-  # Get the current Git branch, if any
   vcs_info
 
-  # Display a green checkmark for successful commands, red 'x' for failed ones
-  local prompt_status
-  if [ $last_exit_status -eq 0 ]; then
-    prompt_status="%F{green}✔%f"
-  else
-    prompt_status="%F{red}✘%f"
+  # detect emacs / dumb terminal
+  local in_emacs=0
+  if [[ -n "$INSIDE_EMACS" || "$TERM" == "dumb" ]]; then
+    in_emacs=1
   fi
 
-  # Set the prompt (PS1)
-  PROMPT="%F{cyan}%D{%H:%M:%S}%f %F{magenta}[%~]%f ${vcs_info_msg_0_} {$cmd_duration s:$prompt_status}"$'\n'"→ "
+  local prompt_status time_str dir_str branch_str duration_str arrow
 
+  if [[ $in_emacs -eq 1 ]]; then
+    # plain ascii, no colors
+    time_str="$(date +%H:%M:%S)"
+    dir_str="[${PWD/#$HOME/~}]"
+    branch_str="${vcs_info_msg_0_}"
+
+    if [[ $last_exit_status -eq 0 ]]; then
+      prompt_status="OK"
+    else
+      prompt_status="ERR($last_exit_status)"
+    fi
+
+    duration_str="{${cmd_duration}s:${prompt_status}}"
+    arrow="> "
+
+    PROMPT="${time_str} ${dir_str} ${branch_str} ${duration_str}"$'\n'"${arrow}"
+  else
+    # fancy version
+    local status_symbol
+    if [[ $last_exit_status -eq 0 ]]; then
+      status_symbol="%F{green}✔%f"
+    else
+      status_symbol="%F{red}✘%f"
+    fi
+
+    PROMPT="%F{cyan}%D{%H:%M:%S}%f %F{magenta}[%~]%f ${vcs_info_msg_0_} {${cmd_duration}s:${status_symbol}}"$'\n'"→ "
+  fi
 }
 
-# Set the precmd function to be called before each command execution
-precmd_functions+=(custom_prompt)
+precmd() {
+  custom_prompt
+}
 
 if [[ -e $HOME/.cargo/env ]]; then
   . $HOME/.cargo/env
