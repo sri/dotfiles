@@ -1,13 +1,21 @@
 ;; -*- lexical-binding: t; -*-
 (require 's)
+(require 'url-util)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utilities
 (defmacro def-with-selected-window (name &rest body)
-  `(defun ,name (event)
-     (interactive "e")
-     (with-selected-window (posn-window (event-start event))
+  `(defun ,name (&optional event)
+     (interactive (list last-input-event))
+     (with-selected-window (if (mouse-event-p (my/effective-mouse-event event))
+                               (posn-window (event-start (my/effective-mouse-event event)))
+                             (selected-window))
        ,@body)))
+
+(defun my/effective-mouse-event (&optional event)
+  (if (mouse-event-p event)
+      event
+    last-nonmenu-event))
 
 (defmacro def-modeline-var (name &rest body)
   `(progn
@@ -106,6 +114,116 @@
       (kill-new path)
       (message "Copied: `%s'" path))))
 
+(defun my/vc-mode-line--repo-root ()
+  (let ((path (or buffer-file-name default-directory)))
+    (and path (vc-git-root path))))
+
+(defun my/vc-mode-line--current-branch ()
+  (or (magit-get-current-branch)
+      (and buffer-file-name
+           (vc-git--symbolic-ref buffer-file-name))
+      (error "Can't determine current branch")))
+
+(defun my/vc-mode-line--all-branches ()
+  (let ((default-directory (or (my/vc-mode-line--repo-root) default-directory)))
+    (delete-dups
+     (process-lines "git" "for-each-ref" "--format=%(refname:short)"
+                    "refs/heads" "refs/remotes"))))
+
+(defun my/vc-mode-line--read-branch ()
+  (let* ((default-branch (my/vc-mode-line--current-branch))
+         (branch (completing-read "Branch: "
+                                  (my/vc-mode-line--all-branches)
+                                  nil t nil nil default-branch)))
+    (string-remove-prefix "origin/" branch)))
+
+(defun my/vc-mode-line--github-repo-base ()
+  (let ((url (magit-get "remote" "origin" "url")))
+    (unless url
+      (error "No origin remote configured"))
+    (setq url (s-trim url))
+    (cond
+     ((string-match "\\`git@github\\.com:\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+      (format "https://github.com/%s" (match-string 1 url)))
+     ((string-match "\\`ssh://git@github\\.com[:/]\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+      (format "https://github.com/%s" (match-string 1 url)))
+     ((string-match "\\`https?://github\\.com/\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+      (format "https://github.com/%s" (match-string 1 url)))
+     (t
+      (error "Origin is not a github.com remote: %s" url)))))
+
+(defun my/vc-mode-line--github-repo ()
+  (replace-regexp-in-string
+   "\\`https://github\\.com/" ""
+   (my/vc-mode-line--github-repo-base)))
+
+(defun my/vc-mode-line--relative-file-name ()
+  (unless buffer-file-name
+    (error "Current buffer is not visiting a file"))
+  (let ((repo-root (my/vc-mode-line--repo-root)))
+    (unless repo-root
+      (error "Current buffer is not in a Git repo"))
+    (file-relative-name buffer-file-name repo-root)))
+
+(defun my/vc-mode-line--github-path (path)
+  (mapconcat #'url-hexify-string (split-string path "/" t) "/"))
+
+(defun my/vc-mode-line--github-ref (ref)
+  (url-hexify-string ref))
+
+(defun my/vc-mode-line--selected-line-range ()
+  (when (use-region-p)
+    (let* ((start (region-beginning))
+           (end (region-end))
+           (line-start (line-number-at-pos start))
+           ;; Region end is exclusive, so step back one char to avoid
+           ;; anchoring to the next line when the region ends at BOL.
+           (line-end (line-number-at-pos (max start (1- end)))))
+      (cons line-start line-end))))
+
+(defun my/vc-mode-line--current-line-web-url ()
+  (if-let ((line-range (my/vc-mode-line--selected-line-range)))
+      (my/vc-mode-line--file-web-url nil (car line-range) (cdr line-range))
+    (my/vc-mode-line--file-web-url nil (line-number-at-pos))))
+
+(defun my/vc-mode-line--file-web-url (&optional branch line-start line-end)
+  (concat
+   (format "%s/blob/%s/%s"
+           (my/vc-mode-line--github-repo-base)
+           (my/vc-mode-line--github-ref
+            (or branch (my/vc-mode-line--current-branch)))
+           (my/vc-mode-line--github-path
+            (my/vc-mode-line--relative-file-name)))
+   (if line-start
+       (if (and line-end (/= line-start line-end))
+           (format "#L%d-L%d" line-start line-end)
+         (format "#L%d" line-start))
+     "")))
+
+(defun my/vc-mode-line--raw-file-web-url (&optional branch)
+  (format "https://raw.githubusercontent.com/%s/%s/%s"
+          (my/vc-mode-line--github-repo)
+          (my/vc-mode-line--github-ref
+           (or branch (my/vc-mode-line--current-branch)))
+          (my/vc-mode-line--github-path
+           (my/vc-mode-line--relative-file-name))))
+
+(defun my/vc-mode-line--pull-request-url ()
+  (let ((default-directory (or (my/vc-mode-line--repo-root) default-directory)))
+    (condition-case nil
+        (car (process-lines "gh" "pr" "view" "--json" "url" "--jq" ".url"))
+      (error
+       (let* ((repo (my/vc-mode-line--github-repo))
+              (owner (car (split-string repo "/")))
+              (branch (my/vc-mode-line--current-branch))
+              (query (url-hexify-string
+                      (format "is:pr head:%s:%s" owner branch))))
+         (format "https://github.com/%s/pulls?q=%s" repo query))))))
+
+(defun my/vc-mode-line-copy-url (url)
+  (kill-new url)
+  (message "Copied %s" url))
+
 (defun my/mode-line-get-file-name-in-repo (&optional exclude-repo-name exclude-line-num)
   (let* ((path buffer-file-name)
          (git-root (my/git-repo-root)))
@@ -128,19 +246,7 @@
     (message "Copied: `%s'" path)))
 
 (defun my/file-in-remote ()
-  (let* ((filename (my/mode-line-get-file-name-in-repo t t))
-         (url (magit-get "remote" "origin" "url")))
-    (unless (string-match "^http" url)
-      (setq url
-            (replace-regexp-in-string "\\(.*\\)@\\(.*\\):\\(.*\\)\\(\\.git?\\)"
-                                      "https://\\2/\\3"
-                                      url)))
-    (cond ((or (string-match "github" url)
-               (string-match "gitlab" url))
-           (setq url (format "%s/blob/%s/%s" url
-                             (magit-get-current-branch)
-                             filename))))
-    url))
+  (my/vc-mode-line--file-web-url))
 
 (def-with-selected-window my/mode-line-copy-file-name-in-remote ()
   (let ((url (my/file-in-remote)))
@@ -229,10 +335,87 @@
 (def-with-selected-window my/magit-log-buffer ()
   (magit-log-buffer-file))
 
+(def-with-selected-window my/vc-mode-line-view-pr ()
+  (browse-url
+   (my/vc-mode-line--pull-request-url)))
+
+(def-with-selected-window my/vc-mode-line-copy-pr ()
+  (my/vc-mode-line-copy-url
+   (my/vc-mode-line--pull-request-url)))
+
+(def-with-selected-window my/vc-mode-line-view-file-on-web ()
+  (browse-url
+   (my/vc-mode-line--file-web-url)))
+
+(def-with-selected-window my/vc-mode-line-copy-file-on-web ()
+  (my/vc-mode-line-copy-url
+   (my/vc-mode-line--file-web-url)))
+
+(def-with-selected-window my/vc-mode-line-view-raw-file-on-web ()
+  (browse-url
+   (my/vc-mode-line--raw-file-web-url)))
+
+(def-with-selected-window my/vc-mode-line-copy-raw-file-on-web ()
+  (my/vc-mode-line-copy-url
+   (my/vc-mode-line--raw-file-web-url)))
+
+(def-with-selected-window my/vc-mode-line-view-file-at-current-line ()
+  (browse-url
+   (my/vc-mode-line--current-line-web-url)))
+
+(def-with-selected-window my/vc-mode-line-copy-file-at-current-line ()
+  (my/vc-mode-line-copy-url
+   (my/vc-mode-line--current-line-web-url)))
+
+(def-with-selected-window my/vc-mode-line-view-file-different-branch ()
+  (browse-url
+   (my/vc-mode-line--file-web-url
+    (my/vc-mode-line--read-branch))))
+
+(def-with-selected-window my/vc-mode-line-copy-file-different-branch ()
+  (my/vc-mode-line-copy-url
+   (my/vc-mode-line--file-web-url
+    (my/vc-mode-line--read-branch))))
+
+(def-with-selected-window my/vc-mode-line-view-repo-on-web ()
+  (browse-url
+   (my/vc-mode-line--github-repo-base)))
+
+(def-with-selected-window my/vc-mode-line-copy-repo-on-web ()
+  (my/vc-mode-line-copy-url
+   (my/vc-mode-line--github-repo-base)))
+
+(defvar my/vc-mode-line-menu-map
+  (easy-menu-create-menu
+   ""
+   '(["Magit blame" my/magit-blame t]
+     ["Magit log buffer file" my/magit-log-buffer t]
+     "---"
+     ["View PR" my/vc-mode-line-view-pr t]
+     ["(copy)" my/vc-mode-line-copy-pr t]
+     "---"
+     ["View file on Web" my/vc-mode-line-view-file-on-web buffer-file-name]
+     ["(copy)" my/vc-mode-line-copy-file-on-web buffer-file-name]
+     "---"
+     ["View Raw File on Web" my/vc-mode-line-view-raw-file-on-web buffer-file-name]
+     ["(copy)" my/vc-mode-line-copy-raw-file-on-web buffer-file-name]
+     "---"
+     ["View File at Current Line" my/vc-mode-line-view-file-at-current-line buffer-file-name]
+     ["(copy)" my/vc-mode-line-copy-file-at-current-line buffer-file-name]
+     "---"
+     ["View File Different Branch" my/vc-mode-line-view-file-different-branch buffer-file-name]
+     ["(copy)" my/vc-mode-line-copy-file-different-branch buffer-file-name]
+     "---"
+     ["View repo on Web" my/vc-mode-line-view-repo-on-web t]
+     ["(copy)" my/vc-mode-line-copy-repo-on-web t])))
+
 (defvar my/vc-mode-line-keymap
   (let ((map (make-sparse-keymap)))
-    (define-key map [mode-line mouse-1] 'my/magit-blame)
-    (define-key map [mode-line S-mouse-1] 'my/magit-log-buffer)
+    (bindings--define-key map [mode-line down-mouse-1]
+      `(menu-item "Menu Bar" ignore
+                  :filter ,(lambda (_) my/vc-mode-line-menu-map)))
+    (define-key map [mode-line mouse-1] 'ignore)
+    (define-key map [mode-line S-mouse-1] 'my/vc-mode-line-copy-file-at-current-line)
     map))
 
 ;; Let's only care about Git for now.
@@ -242,7 +425,7 @@
     (setq vc-mode
           (propertize (format "(%s)" (vc-git--symbolic-ref file))
                       'mouse-face 'mode-line-highlight
-                      'help-echo "Click for Magit blame\nS-mouse-1: Magit log buffer"
+                      'help-echo "mouse-1: branch menu\nS-mouse-1: copy file URL"
                       'local-map my/vc-mode-line-keymap))
     (force-mode-line-update)))
 
