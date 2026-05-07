@@ -29,7 +29,7 @@
       (my/set-face-if-exists
        'tty-menu-header-face
        :foreground "#268bd2" :background menu-bg :weight 'bold
-       :box `(:line-width -1 :color ,menu-border))))))
+       :box `(:line-width -1 :color ,menu-border)))))
 
 (add-hook 'tty-setup-hook #'my/solarized-tty-menu-faces)
 
