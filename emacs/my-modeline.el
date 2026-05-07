@@ -57,10 +57,12 @@
   (easy-menu-create-menu
    ""
    '(["Copy filename" my/mode-line-copy-file-name t]
-     ["Copy directory" my/mode-line-copy-directory t]
-     ["Copy absolute path" my/mode-line-copy-full-path t]
-     ["Copy path relative to repo" my/mode-line-copy-file-name-relative-to-repo t]
-     ["Copy path with repo name & line num" my/mode-line-copy-file-name-in-repo t]
+     ["Copy abs path" my/mode-line-copy-full-path t]
+     ["Copy rel path to repo" my/mode-line-copy-file-name-relative-to-repo t]
+     ["Copy rel path to repo name & line num" my/mode-line-copy-file-name-in-repo t]
+     "---"
+     ["Copy abs dir" my/mode-line-copy-directory t]
+     "---"
      ["Copy path in remote web (current branch)" my/mode-line-copy-file-name-in-remote t]
      ["Open path in remote web (current branch)" my/mode-line-open-file-name-in-remote t]
      "---"
