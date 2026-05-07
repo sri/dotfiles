@@ -213,7 +213,7 @@ yanked from the kill-ring."
         (select-window my/scratch-browse-preview-window)))))
 
 (defun my/scratch-browse--preview-at-point ()
-  (if-let ((file (my/scratch-browse--file-at-point)))
+  (if-let* ((file (my/scratch-browse--file-at-point)))
       (my/scratch-browse-view-file file)
     (message "No file on this line")))
 
@@ -245,7 +245,7 @@ yanked from the kill-ring."
 
 (defun my/scratch-browse-edit-file ()
   (interactive)
-  (if-let ((file (my/scratch-browse--file-at-point)))
+  (if-let* ((file (my/scratch-browse--file-at-point)))
       (my/scratch-browse-view-file file t)
     (message "No file on this line")))
 

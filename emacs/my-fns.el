@@ -308,7 +308,7 @@ will bring it back."
 
 (defun my/find-file-as-sudo ()
   (interactive)
-  (when-let ((file-name (buffer-file-name)))
+  (when-let* ((file-name (buffer-file-name)))
     (find-alternate-file (concat "/sudo::" file-name))))
 
 (defun my/occur ()
@@ -336,7 +336,7 @@ will bring it back."
 
 (defun my/toggle-camel-case-and-underscore ()
   (interactive)
-  (when-let ((bounds (bounds-of-thing-at-point 'sexp)))
+  (when-let* ((bounds (bounds-of-thing-at-point 'sexp)))
     (let* ((word (buffer-substring-no-properties (car bounds)
                                                  (cdr bounds)))
            (underscore (string-match "_" word))

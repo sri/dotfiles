@@ -184,7 +184,7 @@
       (cons line-start line-end))))
 
 (defun my/vc-mode-line--current-line-web-url ()
-  (if-let ((line-range (my/vc-mode-line--selected-line-range)))
+  (if-let* ((line-range (my/vc-mode-line--selected-line-range)))
       (my/vc-mode-line--file-web-url nil (car line-range) (cdr line-range))
     (my/vc-mode-line--file-web-url nil (line-number-at-pos))))
 
@@ -267,7 +267,7 @@
 
 (def-with-selected-window my/mode-line-open-folder ()
   (apply 'call-process "open" nil nil nil
-         (if-let (name (buffer-file-name))
+         (if-let* (name (buffer-file-name))
            (list "-R" name)
            (list default-directory))))
 
