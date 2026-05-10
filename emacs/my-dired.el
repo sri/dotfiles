@@ -101,12 +101,14 @@
 (add-hook 'dired-mode-hook
           (lambda ()
             (dired-omit-mode 1)
-            ;(dired-hide-details-mode 0)
             (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)
             (setq dired-vc-rename-file t)
             (setq delete-by-moving-to-trash t)
             (setq wdired-allow-to-change-permissions t)
+            ;; (dired-hide-details-mode 0)
+            ;; only in dired-hide-details-mode:
+            (setq dired-hide-details-hide-absolute-location t)
             (my/recentf-add-dired-directory)
 
             (bind-keys :map dired-mode-map
