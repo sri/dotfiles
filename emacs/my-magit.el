@@ -24,28 +24,32 @@
 (setq magit-display-buffer-function
       'magit-display-buffer-same-window-except-diff-v1)
 
-(add-to-list 'magit-section-initial-visibility-alist
-             '(untracked . hide))
-(add-to-list 'magit-section-initial-visibility-alist
-             '(unpushed . hide))
-
-(setq magit-status-sections-hook
-      '(magit-insert-status-headers
-        magit-insert-merge-log
-        magit-insert-rebase-sequence
-        magit-insert-am-sequence
-        magit-insert-sequencer-sequence
-        magit-insert-bisect-output
-        magit-insert-bisect-rest
-        magit-insert-bisect-log
-        magit-insert-unstaged-changes
-        magit-insert-staged-changes
-        magit-insert-stashes
-        magit-insert-unpushed-to-pushremote
-        magit-insert-unpushed-to-upstream-or-recent
-        magit-insert-unpulled-from-pushremote
-        magit-insert-unpulled-from-upstream
-        magit-insert-untracked-files))
+;; Seems to cause issues where some of the keys (like 'k')
+;; are not abound anymore and pressing that key gives an
+;; error messages like "user-error: There is no thing at
+;; point that could be deleted"
+;; (add-to-list 'magit-section-initial-visibility-alist
+;;              '(untracked . hide))
+;; (add-to-list 'magit-section-initial-visibility-alist
+;;              '(unpushed . hide))
+;;
+;; (setq magit-status-sections-hook
+;;       '(magit-insert-status-headers
+;;         magit-insert-merge-log
+;;         magit-insert-rebase-sequence
+;;         magit-insert-am-sequence
+;;         magit-insert-sequencer-sequence
+;;         magit-insert-bisect-output
+;;         magit-insert-bisect-rest
+;;         magit-insert-bisect-log
+;;         magit-insert-unstaged-changes
+;;         magit-insert-staged-changes
+;;         magit-insert-stashes
+;;         magit-insert-unpushed-to-pushremote
+;;         magit-insert-unpushed-to-upstream-or-recent
+;;         magit-insert-unpulled-from-pushremote
+;;         magit-insert-unpulled-from-upstream
+;;         magit-insert-untracked-files))
 
 ;; Show these many commits in the "Recent commits" section.
 (setq magit-log-section-commit-count 10)

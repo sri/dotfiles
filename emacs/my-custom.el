@@ -26,24 +26,24 @@
    '(ol-bbdb ol-bibtex ol-docview ol-gnus ol-info ol-irc ol-mhe ol-rmail
              ol-w3m))
  '(package-selected-packages
-   '(ace-jump-mode ace-window acme-theme bm button-lock casual ghostel
-                   catppuccin-theme company company-go consult
-                   csv-mode diff-hl doom-themes doom-themes dumb-jump
-                   ef-themes elisp-slime-nav embark embark-consult
-                   exec-path-from-shell expand-region flycheck
-                   flycheck-golangci-lint git-link go-eldoc go-mode
-                   gotest gptel gruvbox-theme howm hydra
-                   jetbrains-darcula-theme json-mode leuven-theme
-                   macrostep magit marginalia markdown-mode mistty
-                   multiple-cursors nord-theme orderless org
-                   org-bullets phscroll pi-coding-agent projectile
-                   protobuf-mode rainbow-mode region-bindings-mode rg
-                   rjsx-mode ruby-end s smart-mode-line
-                   solarized-theme spacemacs-theme string-inflection
-                   typescript-mode undo-tree uniline use-package vc-jj
-                   vertico vertico-posframe visual-regexp
-                   web-mode which-key xterm-color yaml-mode yasnippet
-                   zenburn-theme zig-mode))
+   '(ace-jump-mode ace-window acme-theme bm button-lock casual
+                   catppuccin-theme color-theme-modern company
+                   company-go consult csv-mode diff-hl doom-themes
+                   doom-themes dumb-jump ef-themes elisp-slime-nav
+                   embark embark-consult exec-path-from-shell
+                   expand-region flycheck flycheck-golangci-lint
+                   ghostel git-link go-eldoc go-mode gotest gptel
+                   gruvbox-theme howm hydra jetbrains-darcula-theme
+                   json-mode leuven-theme macrostep magit marginalia
+                   markdown-mode mistty multiple-cursors nord-theme
+                   orderless org org-bullets phscroll pi-coding-agent
+                   projectile protobuf-mode rainbow-mode
+                   region-bindings-mode rg rjsx-mode ruby-end s
+                   smart-mode-line solarized-theme spacemacs-theme
+                   string-inflection typescript-mode undo-tree uniline
+                   use-package vc-jj vertico vertico-posframe
+                   visual-regexp web-mode which-key xterm-color
+                   yaml-mode yasnippet zenburn-theme zig-mode))
  '(package-vc-selected-packages
    '((phscroll :vc-backend Git :url
                "https://github.com/misohena/phscroll")))
