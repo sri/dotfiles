@@ -26,10 +26,10 @@
    '(ol-bbdb ol-bibtex ol-docview ol-gnus ol-info ol-irc ol-mhe ol-rmail
              ol-w3m))
  '(package-selected-packages
-   '(ace-jump-mode ace-window acme-theme bm button-lock casual
+   '(ace-jump-mode ace-window acme-theme bm button-lock casual ghostel
                    catppuccin-theme company company-go consult
                    csv-mode diff-hl doom-themes doom-themes dumb-jump
-                   eat ef-themes elisp-slime-nav embark embark-consult
+                   ef-themes elisp-slime-nav embark embark-consult
                    exec-path-from-shell expand-region flycheck
                    flycheck-golangci-lint git-link go-eldoc go-mode
                    gotest gptel gruvbox-theme howm hydra
@@ -41,7 +41,7 @@
                    rjsx-mode ruby-end s smart-mode-line
                    solarized-theme spacemacs-theme string-inflection
                    typescript-mode undo-tree uniline use-package vc-jj
-                   vertico vertico-posframe visual-regexp vterm
+                   vertico vertico-posframe visual-regexp
                    web-mode which-key xterm-color yaml-mode yasnippet
                    zenburn-theme zig-mode))
  '(package-vc-selected-packages

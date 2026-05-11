@@ -69,7 +69,7 @@ And then run the command."
 ;;
 ;; C-p - switches to other shells in order of most recently used
 
-(defvar my/shell-modes '(shell-mode vterm-mode eshell-mode term-mode))
+(defvar my/shell-modes '(shell-mode vterm-mode eshell-mode term-mode ghostel-mode))
 
 (defun my/shell-buffer-p (buffer)
   (and (memq (buffer-local-value 'major-mode buffer) my/shell-modes)
@@ -213,6 +213,7 @@ And then run the command."
             (local-unset-key (kbd "C-d"))
 
             (bind-keys :map comint-mode-map
+                       ("C-b" . unix-word-rubout)
                        ("C-c C-g" . my/shell-rename-and-run-command)
                        ("C-c d" . dirs)
                        ("C-c <return>" . my/shell-dont-scroll)

@@ -183,7 +183,9 @@ decoded URL in the minibuffer."
 (defun my/beginning-of-line ()
   "Move to the beginning of line or beginning of non-whitespace chars."
   (interactive "^")
-  (cond ((and (boundp 'multiple-cursors-mode)
+  (cond ((eq major-mode 'ghostel-mode)
+         (ghostel-beginning-of-input-or-line))
+        ((and (boundp 'multiple-cursors-mode)
               multiple-cursors-mode)
          (beginning-of-line))
         ((eq major-mode 'org-mode)
