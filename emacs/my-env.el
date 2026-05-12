@@ -158,7 +158,10 @@ help-window-select
   (when (featurep 'mac)
     ;; Emacs-mac has its own native Mac tabs.
     ;; But seems to send 2 events when you click on tab-bar.
-    (define-key tab-bar-map "<mouse-2>" #'ignore)))
+    (define-key tab-bar-map "<mouse-2>" #'ignore))
+  (defun tab-bar-mouse-close-tab (event)
+    nil)
+  )
 
 ;; Ignore accidentally hitting the trackpad while typing and having it
 ;; pop up a menu.
