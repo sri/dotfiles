@@ -7,6 +7,8 @@
 (setq custom-file (expand-file-name "my-custom.el" my/dotfiles-dir))
 (load custom-file)
 
+(setq package-install-upgrade-built-in t)
+
 (require 'package)
 (package-initialize)
 
