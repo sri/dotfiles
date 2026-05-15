@@ -212,7 +212,11 @@ help-window-select
 (show-paren-mode t)
 (electric-pair-mode)
 
-(server-start)
+
+(require 'server)
+(if (server-running-p)
+    (message "Server is already running!")
+  (server-start))
 
 (setq mode-line-collapse-minor-modes t)
 

@@ -36,7 +36,7 @@
                    gruvbox-theme howm hydra jetbrains-darcula-theme
                    json-mode leuven-theme macrostep magit marginalia
                    markdown-mode mistty multiple-cursors nord-theme
-                   orderless org org-bullets phscroll pi-coding-agent
+                   orderless org org-bullets
                    projectile protobuf-mode rainbow-mode
                    region-bindings-mode rg rjsx-mode ruby-end s
                    smart-mode-line solarized-theme spacemacs-theme
@@ -44,9 +44,6 @@
                    use-package vc-jj vertico vertico-posframe
                    visual-regexp web-mode which-key xterm-color
                    yaml-mode yasnippet zenburn-theme zig-mode))
- '(package-vc-selected-packages
-   '((phscroll :vc-backend Git :url
-               "https://github.com/misohena/phscroll")))
  '(typescript-indent-level 2))
 
 
