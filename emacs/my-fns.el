@@ -376,6 +376,35 @@ will bring it back."
          (windmove-down)))
   (my/open-project-file-or-find-files))
 
+(defun my/ediff-visible-buffers ()
+  (interactive)
+  (require 'ediff)
+  (let* ((windows (window-list nil 'nomini))
+         (win-a (nth 0 windows))
+         (win-b (nth 1 windows)))
+    (unless (= (length windows) 2)
+      (error "Expected exactly 2 windows on screen"))
+    (let ((buf-a (window-buffer win-a))
+          (buf-b (window-buffer win-b)))
+      (when (eq buf-a buf-b)
+        (error "Both windows show the same buffer: %s" (buffer-name buf-a)))
+      (let ((config (current-window-configuration))
+            restore-hook)
+        (setq restore-hook
+              (lambda ()
+                (remove-hook 'ediff-after-quit-hook-internal restore-hook)
+                (set-window-configuration config)))
+        (add-hook 'ediff-after-quit-hook-internal restore-hook)
+        (cond
+         ((and (with-current-buffer buf-a (derived-mode-p 'dired-mode))
+               (with-current-buffer buf-b (derived-mode-p 'dired-mode)))
+          (ediff-directories
+           (with-current-buffer buf-a (dired-current-directory))
+           (with-current-buffer buf-b (dired-current-directory))
+           nil))
+         (t
+          (ediff-buffers buf-a buf-b)))))))
+
 (defun my/frame-transparency (arg)
   (interactive "p")
   (set-frame-parameter nil 'alpha (list arg arg)))
