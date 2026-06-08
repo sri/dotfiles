@@ -85,3 +85,8 @@
            ([remap isearch-query-replace] . vr/query-replace)
            ([remap isearch-query-replace-regexp] . vr/query-replace)
            ("C-/" . casual-isearch-tmenu))
+
+
+(setq search-whitespace-regexp ".*?")
+(setq isearch-lax-whitespace t)
+(setq isearch-regexp-lax-whitespace nil)

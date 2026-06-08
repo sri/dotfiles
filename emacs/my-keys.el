@@ -69,6 +69,12 @@
  ("s-w" . my/close-tab-or-frame)
  ("s-z" . undo))
 
+;; Function keys
+(bind-keys*
+ ("<f1>" . magit-status)
+ ("<f4>" . my/rg)
+ ("<f5>" . my/scratch-new))
+
 ;; https://emacs.stackexchange.com/questions/32183/how-to-make-exceptions-to-bind-key-overriding-behavior
 
 (bind-key* "C-d" 'kill-word (not (minibufferp)))
