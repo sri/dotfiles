@@ -209,7 +209,9 @@ ALPHA=0 means BG, ALPHA=1 means FG."
   (custom-theme-set-faces
    'solarized-dark
    '(bm-persistent-face ((t (:foreground "#000000" :background "#916e00"))))
-   '(vertico-current ((t (:foreground "#000000" :background "#916e00" :weight normal))))
+   '(vertico-current ((t (:foreground "#e6e1cf" :background "#0b4f5c" :weight normal))))
+
+   ;;'(vertico-current ((t (:foreground "#000000" :background "#916e00" :weight normal))))
    '(link ((t (:foreground "#997544"))))
    '(magit-diff-added ((t (:foreground "#5f8700" :background "#17351f" :weight normal))))
    '(magit-diff-added-highlight ((t (:foreground "#5f8700" :background "#1b3d24" :weight normal))))
