@@ -1,5 +1,8 @@
 https://www.youtube.com/watch?v=43Dg5zYPHTU
 
+* Magit
+** magit-blame-addition - "Who added the line that exists right now?" - goes back in history
+** magit-blame-removal - "Who deleted this line?" - goes forward in history
 * https://www.reddit.com/r/emacs/comments/1sf0xmd/stealing_from_the_best_emacs_configs/
 re-builder?
 
