@@ -376,8 +376,8 @@ will bring it back."
          (windmove-down)))
   (my/open-project-file-or-find-files))
 
-(defun my/ediff-visible-buffers ()
-  (interactive)
+(defun my/ediff-visible-buffers (&optional force-buffer-ediff)
+  (interactive "P")
   (require 'ediff)
   (let* ((windows (window-list nil 'nomini))
          (win-a (nth 0 windows))
@@ -396,7 +396,8 @@ will bring it back."
                 (set-window-configuration config)))
         (add-hook 'ediff-after-quit-hook-internal restore-hook)
         (cond
-         ((and (with-current-buffer buf-a (derived-mode-p 'dired-mode))
+         ((and (not force-buffer-ediff)
+               (with-current-buffer buf-a (derived-mode-p 'dired-mode))
                (with-current-buffer buf-b (derived-mode-p 'dired-mode)))
           (ediff-directories
            (with-current-buffer buf-a (dired-current-directory))
