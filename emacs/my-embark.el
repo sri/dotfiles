@@ -1,5 +1,141 @@
 ;; -*- lexical-binding: t; -*-
 (require 'ace-window)
+(require 'browse-url)
+(require 'embark)
+(require 'seq)
+(require 'subr-x)
+(require 'thingatpt)
+(require 'url-util)
+(require 'vc-git)
+
+(defvar my/ticket-regexp "\\b[A-Z]\\{3,5\\}-[0-9]\\{1,5\\}\\b")
+
+(defvar my/ticket-url-prefix nil
+  "URL prefix or format string used to open tickets.
+If the value contains `%s', format it with the ticket id.
+Otherwise concatenate the value and the ticket id.")
+
+(defvar my/embark-ticket-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "t") #'my/embark-ticket-open)
+    (define-key map (kbd "b") #'my/embark-ticket-open-branch-on-github)
+    (define-key map (kbd "p") #'my/embark-ticket-open-pr-on-github)
+    (define-key map (kbd "m") #'my/embark-ticket-diff-against-main)
+    (define-key map (kbd "d") #'my/embark-ticket-diff-against-develop)
+    (define-key map (kbd "g") #'my/embark-ticket-grep-repo)
+    (define-key map (kbd "G") #'my/embark-ticket-log-commits)
+    map))
+
+(defun my/embark-ticket--repo-root ()
+  (or (vc-git-root default-directory)
+      (error "Not in a Git repository")))
+
+(defun my/embark-ticket--all-branches ()
+  (let ((default-directory (my/embark-ticket--repo-root)))
+    (process-lines "git" "for-each-ref" "--format=%(refname:short)"
+                   "refs/heads" "refs/remotes")))
+
+(defun my/embark-ticket--dedupe-branches (branches)
+  (let ((seen (make-hash-table :test #'equal))
+        result)
+    (dolist (branch branches)
+      (let ((display (string-remove-prefix "origin/" branch)))
+        (unless (gethash display seen)
+          (puthash display t seen)
+          (push branch result))))
+    (nreverse result)))
+
+(defun my/embark-ticket--matching-branches (ticket)
+  (my/embark-ticket--dedupe-branches
+   (seq-filter (lambda (branch)
+                 (string-match-p (regexp-quote ticket) branch))
+               (my/embark-ticket--all-branches))))
+
+(defun my/embark-ticket--read-branch (ticket)
+  (let* ((matching (my/embark-ticket--matching-branches ticket))
+         (branches (or matching
+                       (my/embark-ticket--dedupe-branches
+                        (my/embark-ticket--all-branches)))))
+    (cond
+     ((= (length matching) 1)
+      (car matching))
+     ((> (length matching) 1)
+      (completing-read (format "Branch for %s: " ticket) matching nil t))
+     (t
+      (completing-read (format "No branch match for %s; branch: " ticket)
+                       branches nil t)))))
+
+(defun my/embark-ticket--branch-web-name (branch)
+  (string-remove-prefix "origin/" branch))
+
+(defun my/embark-ticket--repo-url ()
+  (let ((default-directory (my/embark-ticket--repo-root)))
+    (car (process-lines "gh" "repo" "view" "--json" "url" "-q" ".url"))))
+
+(defun my/embark-ticket--pr-url (branch)
+  (let* ((default-directory (my/embark-ticket--repo-root))
+         (branch (my/embark-ticket--branch-web-name branch)))
+    (condition-case nil
+        (car (process-lines "gh" "pr" "view" branch "--json" "url" "-q" ".url"))
+      (error
+       (let* ((repo-url (my/embark-ticket--repo-url))
+              (repo-path (replace-regexp-in-string "\\`https://github\\.com/" ""
+                                                   repo-url))
+              (owner (car (split-string repo-path "/")))
+              (query (url-hexify-string
+                      (format "is:pr head:%s:%s" owner branch))))
+         (format "%s/pulls?q=%s" repo-url query))))))
+
+(defun my/embark-ticket--ticket-url (ticket)
+  (unless (and my/ticket-url-prefix
+               (not (string-empty-p my/ticket-url-prefix)))
+    (error "`my/ticket-url-prefix' is not configured"))
+  (if (string-match-p "%s" my/ticket-url-prefix)
+      (format my/ticket-url-prefix ticket)
+    (concat my/ticket-url-prefix ticket)))
+
+(defun my/embark-ticket--target-at-point ()
+  (save-match-data
+    (when (thing-at-point-looking-at my/ticket-regexp)
+      (cons 'ticket
+            (cons (match-string-no-properties 0)
+                  (cons (match-beginning 0) (match-end 0)))))))
+
+(defun my/embark-ticket-open (ticket)
+  (browse-url (my/embark-ticket--ticket-url ticket)))
+
+(defun my/embark-ticket-open-branch-on-github (ticket)
+  (let* ((branch (my/embark-ticket--read-branch ticket))
+         (url (format "%s/tree/%s"
+                      (my/embark-ticket--repo-url)
+                      (url-hexify-string
+                       (my/embark-ticket--branch-web-name branch)))))
+    (browse-url url)))
+
+(defun my/embark-ticket-open-pr-on-github (ticket)
+  (browse-url
+   (my/embark-ticket--pr-url
+    (my/embark-ticket--read-branch ticket))))
+
+(defun my/embark-ticket-diff-against-main (ticket)
+  (require 'magit)
+  (let ((branch (my/embark-ticket--read-branch ticket)))
+    (magit-diff-range (format "origin/main...%s" branch))))
+
+(defun my/embark-ticket-diff-against-develop (ticket)
+  (require 'magit)
+  (let ((branch (my/embark-ticket--read-branch ticket)))
+    (magit-diff-range (format "origin/develop...%s" branch))))
+
+(defun my/embark-ticket-grep-repo (ticket)
+  (require 'consult)
+  (let ((default-directory (my/embark-ticket--repo-root)))
+    (consult-git-grep default-directory ticket)))
+
+(defun my/embark-ticket-log-commits (ticket)
+  (require 'magit)
+  (let ((default-directory (my/embark-ticket--repo-root)))
+    (magit-log-all (list (format "--grep=%s" ticket)))))
 
 (defun my/ace-window-switch-to-selected-window ()
   (let ((aw-dispatch-always t))
@@ -120,6 +256,9 @@
   (define-key keymap (kbd "W") open-windows-fn))
 
 (with-eval-after-load 'embark
+  (add-to-list 'embark-keymap-alist '(ticket my/embark-ticket-map))
+  (add-hook 'embark-target-finders #'my/embark-ticket--target-at-point)
+
   ;; No "Run ... on N files?" prompt
   (setq embark-confirm-act-all nil)
 
