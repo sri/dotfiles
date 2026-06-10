@@ -2,6 +2,7 @@
 (require 'magit)
 (require 'magit-extras) ; to make Magit show up in project-switch-project
 
+(require 'bug-reference)
 (require 'git-link)
 
 ;; https://stackoverflow.com/questions/462974/what-are-the-differences-between-double-dot-and-triple-dot-in-git-com
@@ -87,6 +88,29 @@
     (message "Opening %s (origin-url: %s)" url origin-url)
     (browse-url url)))
 
+(defun my/magit-github-repo-url ()
+  (let ((url (magit-get "remote" "origin" "url")))
+    (unless url
+      (error "No origin remote"))
+    (cond
+     ((string-match "\\`git@github\\.com:\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+      (format "https://github.com/%s" (match-string 1 url)))
+     ((string-match "\\`ssh://git@github\\.com[:/]\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+      (format "https://github.com/%s" (match-string 1 url)))
+     ((string-match "\\`https?://github\\.com/\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+      (format "https://github.com/%s" (match-string 1 url)))
+     (t
+      (error "Not a GitHub remote: %s" url)))))
+
+(defun my/magit-bug-reference-setup ()
+  (setq-local bug-reference-bug-regexp "#\\([0-9]+\\)")
+  (setq-local bug-reference-url-format
+              (lambda (pr)
+                (format "%s/pull/%s"
+                        (my/magit-github-repo-url)
+                        pr)))
+  (bug-reference-mode 1))
+
 (defun my/magit-diff-against-default-branch (branch)
   "Diff current branch against selected default BRANCH (range: origin/BRANCH..HEAD)."
   (interactive
@@ -109,3 +133,6 @@
                        ("~" . my/open-repo-in-browser)
                        ("C-c C-s" . magit-stash-list)
                        ("C-c C-w" . my/magit-diff-toggle-refine-hunk))))
+
+(add-hook 'magit-log-mode-hook #'my/magit-bug-reference-setup)
+(add-hook 'magit-revision-mode-hook #'my/magit-bug-reference-setup)
