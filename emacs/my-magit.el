@@ -103,13 +103,15 @@
       (error "Not a GitHub remote: %s" url)))))
 
 (defun my/magit-bug-reference-setup ()
-  (setq-local bug-reference-bug-regexp "#\\([0-9]+\\)")
+  (setq-local bug-reference-bug-regexp "\\(#\\([0-9]+\\)\\)")
   (setq-local bug-reference-url-format
-              (lambda (pr)
+              (lambda ()
                 (format "%s/pull/%s"
                         (my/magit-github-repo-url)
-                        pr)))
-  (bug-reference-mode 1))
+                        (match-string-no-properties 2))))
+  (bug-reference-mode 1)
+  (font-lock-flush)
+  (font-lock-ensure))
 
 (defun my/magit-diff-against-default-branch (branch)
   "Diff current branch against selected default BRANCH (range: origin/BRANCH..HEAD)."
