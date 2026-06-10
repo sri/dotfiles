@@ -89,26 +89,28 @@
     (browse-url url)))
 
 (defun my/magit-github-repo-url ()
-  (let ((url (magit-get "remote" "origin" "url")))
-    (unless url
-      (error "No origin remote"))
-    (cond
-     ((string-match "\\`git@github\\.com:\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
-      (format "https://github.com/%s" (match-string 1 url)))
-     ((string-match "\\`ssh://git@github\\.com[:/]\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
-      (format "https://github.com/%s" (match-string 1 url)))
-     ((string-match "\\`https?://github\\.com/\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
-      (format "https://github.com/%s" (match-string 1 url)))
-     (t
-      (error "Not a GitHub remote: %s" url)))))
+  (save-match-data
+    (let ((url (magit-get "remote" "origin" "url")))
+      (unless url
+        (error "No origin remote"))
+      (cond
+       ((string-match "\\`git@github\\.com:\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+        (format "https://github.com/%s" (match-string 1 url)))
+       ((string-match "\\`ssh://git@github\\.com[:/]\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+        (format "https://github.com/%s" (match-string 1 url)))
+       ((string-match "\\`https?://github\\.com/\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+        (format "https://github.com/%s" (match-string 1 url)))
+       (t
+        (error "Not a GitHub remote: %s" url))))))
 
 (defun my/magit-bug-reference-setup ()
   (setq-local bug-reference-bug-regexp "\\(#\\([0-9]+\\)\\)")
   (setq-local bug-reference-url-format
               (lambda ()
-                (format "%s/pull/%s"
-                        (my/magit-github-repo-url)
-                        (match-string-no-properties 2))))
+                (let ((pr (match-string-no-properties 2)))
+                  (format "%s/pull/%s"
+                          (my/magit-github-repo-url)
+                          pr))))
   (bug-reference-mode 1)
   (font-lock-flush)
   (font-lock-ensure))
