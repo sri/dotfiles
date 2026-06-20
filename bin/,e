@@ -1,0 +1,46 @@
+ #!/usr/bin/env bash
+
+set -euo pipefail
+
+EMACS="/Applications/Emacs.app/Contents/MacOS/Emacs"
+SKIP_FILE="$HOME/.emacs.skip"
+
+EMACS_ARGS=()
+SKIP=false
+GUI=true
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -nw)
+      GUI=false
+      EMACS_ARGS+=("-nw")
+      ;;
+    -skip)
+      SKIP=true
+      ;;
+    -q)
+      EMACS_ARGS+=(
+        "-Q"
+        "--eval"
+        "(progn (require 'package) (package-initialize))"
+      )
+      ;;
+    *)
+      EMACS_ARGS+=("$1")
+      ;;
+  esac
+  shift
+done
+
+if $GUI; then
+    echo "started GUI emacs"
+fi
+
+if $SKIP; then
+  touch "$SKIP_FILE"
+else
+  rm -f "$SKIP_FILE"
+fi
+
+# Bash 3.2 treats an empty array expansion as unbound under `set -u`.
+exec "$EMACS" ${EMACS_ARGS[@]+"${EMACS_ARGS[@]}"}
