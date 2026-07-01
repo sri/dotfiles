@@ -1,4 +1,6 @@
 ;; -*- lexical-binding: t; -*-
+(setq native-comp-speed -1)
+(setq native-comp-jit-compilation nil)
 (setq gc-cons-threshold most-positive-fixnum)
 (add-hook 'emacs-startup-hook
           (lambda () (setq gc-cons-threshold (* 50 1024 1024))))

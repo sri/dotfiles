@@ -3,6 +3,32 @@
 
 (require 'subword)
 (require 'bind-key)
+(require 'repeat)
+
+(repeat-mode 1)
+
+;; https://www.reddit.com/r/emacs/comments/1uafbsn/underappreciated_emacs_builtins_hideshow_60/
+(defvar my/hs-repeat-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "<tab>") #'hs-cycle)
+    (define-key map (kbd "TAB") #'hs-cycle)
+    (define-key map (kbd "t") #'hs-toggle-hiding)
+    (define-key map (kbd "h") #'hs-hide-block)
+    (define-key map (kbd "s") #'hs-show-block)
+    (define-key map (kbd "H") #'hs-hide-all)
+    (define-key map (kbd "S") #'hs-show-all)
+    (define-key map (kbd "a") #'hs-toggle-all)
+    map)
+  "Repeat map for hideshow commands.")
+
+(dolist (command '(hs-cycle
+                   hs-toggle-hiding
+                   hs-hide-block
+                   hs-show-block
+                   hs-hide-all
+                   hs-show-all
+                   hs-toggle-all))
+  (put command 'repeat-map 'my/hs-repeat-map))
 
 (bind-keys :map vertico-map
            ("C-." . embark-act)
@@ -222,6 +248,8 @@
            ("r" . my/git-grep-from-root)
            ("v" . my/github-visit-file)
            ("g" . consult-git-grep))
+
+(bind-key* "C-c h" #'hs-cycle)
 
 (when (eq system-type 'darwin)
   ;; Command-<enter>
