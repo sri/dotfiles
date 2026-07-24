@@ -15,6 +15,7 @@
   ;; args were constructed to get the below.
   ;; (align-regexp (progn (forward-line 1) (point)) (progn (forward-sexp) (forward-line 1) (point)) "\\(\\s-*\\)[.]" 1 1 nil)
   '((python     . "py")
+    (go         . "go")
     (emacs-lisp . "el")
     (ruby       . "rb")
     (text       . "txt")
