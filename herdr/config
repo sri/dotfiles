@@ -1,0 +1,18 @@
+# Herdr configuration
+# Install/symlink to ~/.config/herdr/config.toml or set HERDR_CONFIG_PATH to this file.
+
+[keys]
+prefix = "ctrl+q"
+
+[theme]
+name = "solarized"
+
+[ui]
+agent_panel_sort = "spaces"
+accent = "blue"
+pane_borders = true
+pane_gaps = true
+hide_tab_bar_when_single_tab = true
+sidebar_width = 7
+sidebar_min_width = 4
+sidebar_max_width = 16
