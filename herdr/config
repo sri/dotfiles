@@ -19,3 +19,13 @@ hide_tab_bar_when_single_tab = true
 sidebar_width = 7
 sidebar_min_width = 4
 sidebar_max_width = 16
+
+[update]
+version_check = false
+manifest_check = false
+
+[[keys.command]]
+key = "prefix+alt+g"
+type = "pane"
+command = "emacsclient -t -a \"\" --eval \"(progn (require 'magit) (magit-status \\\"$(pwd)\\\"))\""
+description = "launch Magit"
