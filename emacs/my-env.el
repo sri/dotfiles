@@ -138,7 +138,7 @@ Fundamental mode."
 (setq ffap-machine-p-known 'reject)
 ;; After C-u C-SPC, you can just keep hitting C-SPC.
 (setq set-mark-command-repeat-pop t)
-help-window-select
+(setq help-window-select t)
 
 (setq fill-column 80)
 
