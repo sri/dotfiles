@@ -1,20 +1,16 @@
-;; default new-
+;; 2026-07-31 - trying out emacs's default completions
 (defvar my/completions-style nil)
 
-
-
-
-
-;; consult - previews, grouping, narrowing,
-;; vertico,
-;;  marginalia
+(setq completion-styles '(orderless basic substring initials flex))
+(setq completion-category-overrides
+      '((file (styles basic partial-completion))))
+(setq completion-category-defaults nil)
 
 (cond ((eq my/completions-style 'vertico+marginalia)
+       ;; consult - previews, grouping, narrowing,
+       ;; vertico,
+       ;;  marginalia
        (require 'orderless)
-       (setq completion-styles '(orderless basic substring initials flex))
-       (setq completion-category-overrides
-             '((file (styles basic partial-completion))))
-       (setq completion-category-defaults nil)
 
        (require 'vertico)
        (vertico-mode 1)
@@ -24,21 +20,19 @@
        (require 'vertico-quick)
        (require 'vertico-posframe)
        (vertico-posframe-mode -1)
-       ;; (vertico-multiform-mode -1)
-
-       ;; (setq vertico-multiform-commands
-       ;;       '((consult-grep buffer indexed)
-       ;;         (consult-ripgrep buffer indexed)))
-
-       ;; (setq vertico-multiform-categories
-       ;;       '((consult-grep buffer)
-       ;;         (consult-ripgrep buffer)))
-
 
        (require 'marginalia)
        (marginalia-mode 1)
 
-       (require 'consult))
+       (require 'consult)
+       ;; (vertico-multiform-mode -1)
+       ;; (setq vertico-multiform-commands
+       ;;       '((consult-grep buffer indexed)
+       ;;         (consult-ripgrep buffer indexed)))
+       ;; (setq vertico-multiform-categories
+       ;;       '((consult-grep buffer)
+       ;;         (consult-ripgrep buffer)))
+)
       (t
        ;; For default
        (setq completion-show-help nil)
@@ -54,20 +48,8 @@
        (setq completion-eager-display t)
        (setq completion-eager-update t)
 
-       ;; With `minibuffer-visible-completions', RET accepts the candidate at
-       ;; point in *Completions*.  Emacs doesn't currently have a variable to
-       ;; preselect the first candidate, so do it after the completions buffer
-       ;; is shown/updated.
-       (defun my/completions-select-first-candidate (&rest _)
-         (when-let* ((win (get-buffer-window "*Completions*" 'visible)))
-           (with-current-buffer (window-buffer win)
-             (unless (get-text-property (window-point win) 'completion--string)
-               (save-selected-window
-                 (with-selected-window win
-                   (first-completion)
-                   (set-window-point win (point))))))))
-
-       (advice-add 'minibuffer-completion-help
-                   :after #'my/completions-select-first-candidate)
-       (advice-add 'completion-help-at-point
-                   :after #'my/completions-select-first-candidate)))
+       (defun my/completion-select-first-completion ()
+         (with-current-buffer (get-buffer "*Completions*")
+           (minibuffer-next-line-completion 1)))
+       (add-hook 'completion-setup-hook 'my/completion-select-first-completion)
+       ))
