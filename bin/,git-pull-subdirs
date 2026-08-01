@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+root_dir="${1:-$PWD}"
+
+if [[ ! -d "$root_dir" ]]; then
+  echo "Error: not a directory: $root_dir" >&2
+  exit 1
+fi
+
+shopt -s nullglob
+
+repo_count=0
+failure_count=0
+
+for dir in "$root_dir"/*/; do
+  [[ -d "$dir" ]] || continue
+
+  if [[ -d "$dir/.git" || -f "$dir/.git" ]]; then
+    repo_count=$((repo_count + 1))
+    repo_name="$(basename "$dir")"
+
+    echo
+    echo "==> $repo_name"
+
+    if ! git -C "$dir" pull; then
+      failure_count=$((failure_count + 1))
+      echo "Failed: $repo_name" >&2
+    fi
+  fi
+done
+
+if [[ "$repo_count" -eq 0 ]]; then
+  echo "No git repos found under $root_dir"
+  exit 0
+fi
+
+echo
+echo "Processed $repo_count repo(s)"
+
+if [[ "$failure_count" -gt 0 ]]; then
+  echo "Failures: $failure_count" >&2
+  exit 1
+fi
