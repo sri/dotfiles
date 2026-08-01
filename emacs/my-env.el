@@ -243,39 +243,6 @@ Fundamental mode."
             (define-key calendar-mode-map (kbd "n") 'calendar-scroll-left-three-months)
             (define-key calendar-mode-map (kbd "p") 'calendar-scroll-right-three-months)))
 
-;; Better completions
-;; consult - previews, grouping, narrowing,
-;; vertico,
-;;  marginalia
-(require 'orderless)
-(setq completion-styles '(orderless basic substring initials flex))
-(setq completion-category-overrides
-      '((file (styles basic partial-completion))))
-(setq completion-category-defaults nil)
-
-(require 'vertico)
-(vertico-mode 1)
-(setq vertico-cycle t)
-
-(require 'vertico-directory)
-(require 'vertico-quick)
-(require 'vertico-posframe)
-(vertico-posframe-mode -1)
-;; (vertico-multiform-mode -1)
-
-;; (setq vertico-multiform-commands
-;;       '((consult-grep buffer indexed)
-;;         (consult-ripgrep buffer indexed)))
-
-;; (setq vertico-multiform-categories
-;;       '((consult-grep buffer)
-;;         (consult-ripgrep buffer)))
-
-
-(require 'marginalia)
-(marginalia-mode 1)
-
-(require 'consult)
 
 (require 'savehist)
 (savehist-mode 1)

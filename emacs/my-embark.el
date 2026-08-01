@@ -297,6 +297,7 @@ Otherwise concatenate the value and the ticket id.")
              (< vertico--index (1- vertico--total)))
     (vertico-next 1)))
 
-(bind-keys :map vertico-map
-           ("C-;" . embark-act-all)
-           ("C-SPC" . my/embark-select-and-next))
+(when (boundp 'vertico-map)
+  (bind-keys :map vertico-map
+             ("C-;" . embark-act-all)
+             ("C-SPC" . my/embark-select-and-next)))

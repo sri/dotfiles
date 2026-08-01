@@ -30,12 +30,13 @@
                    hs-toggle-all))
   (put command 'repeat-map 'my/hs-repeat-map))
 
-(bind-keys :map vertico-map
-           ("C-." . embark-act)
-           ("C-SPC" . embark-select)
-           ("C-x" . embark-export)
-           ("ESC p" . consult-history)
-           ("C-'" . vertico-quick-insert))
+(when (boundp 'vertico-map)
+  (bind-keys :map vertico-map
+             ("C-." . embark-act)
+             ("C-SPC" . embark-select)
+             ("C-x" . embark-export)
+             ("ESC p" . consult-history)
+             ("C-'" . vertico-quick-insert)))
 
 (require 'embark)
 (bind-keys :map embark-region-map
