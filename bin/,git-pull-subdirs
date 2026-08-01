@@ -13,6 +13,26 @@ shopt -s nullglob
 repo_count=0
 failure_count=0
 
+pull_with_retry() {
+  local dir="$1"
+  local repo_name="$2"
+  local stash_name
+
+  if git -C "$dir" pull; then
+    return 0
+  fi
+
+  stash_name="auto-stash before git pull on $(date '+%Y-%m-%d %H:%M:%S')"
+  echo "Pull failed in $repo_name; stashing local changes and retrying..."
+
+  if ! git -C "$dir" stash push --include-untracked -m "$stash_name"; then
+    echo "Failed to stash changes in $repo_name" >&2
+    return 1
+  fi
+
+  git -C "$dir" pull
+}
+
 for dir in "$root_dir"/*/; do
   [[ -d "$dir" ]] || continue
 
@@ -23,7 +43,7 @@ for dir in "$root_dir"/*/; do
     echo
     echo "==> $repo_name"
 
-    if ! git -C "$dir" pull; then
+    if ! pull_with_retry "$dir" "$repo_name"; then
       failure_count=$((failure_count + 1))
       echo "Failed: $repo_name" >&2
     fi
