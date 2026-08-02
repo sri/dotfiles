@@ -1,8 +1,9 @@
 ;; -*- lexical-binding: t; -*-
 ;(load-theme 'ample-flat)
 
-(load-theme 'solarized-dark t)
-
+(load-theme (or (and (boundp 'my-theme) my-theme)
+                'solarized-dark)
+            t)
 
 (defun my/set-face-if-exists (face &rest attrs)
   (when (facep face)

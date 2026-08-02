@@ -1,5 +1,6 @@
 ;; 2026-07-31 - trying out emacs's default completions
-(defvar my/completions-style nil)
+(defvar my/completions-style 'vertico+marginalia
+  )
 
 (setq completion-styles '(orderless basic substring initials flex))
 (setq completion-category-overrides
@@ -25,14 +26,16 @@
        (marginalia-mode 1)
 
        (require 'consult)
+
        ;; (vertico-multiform-mode -1)
+
        ;; (setq vertico-multiform-commands
        ;;       '((consult-grep buffer indexed)
        ;;         (consult-ripgrep buffer indexed)))
        ;; (setq vertico-multiform-categories
        ;;       '((consult-grep buffer)
        ;;         (consult-ripgrep buffer)))
-)
+       )
       (t
        ;; For default
        (setq completion-show-help nil)
