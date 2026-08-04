@@ -11,7 +11,7 @@ focus_agent = "prefix+alt+1..9"
 name = "terminal"
 
 [ui]
-agent_panel_sort = "spaces"
+agent_panel_sort = "priority"
 accent = "blue"
 pane_borders = true
 pane_gaps = false
@@ -19,6 +19,7 @@ hide_tab_bar_when_single_tab = true
 sidebar_width = 7
 sidebar_min_width = 4
 sidebar_max_width = 16
+prompt_new_tab_name = false
 
 [update]
 version_check = false
@@ -30,3 +31,7 @@ key = "prefix+alt+g"
 type = "pane"
 command = "emacsclient -t -a \"\" --eval \"(progn (require 'magit) (magit-status \\\"$(pwd)\\\"))\""
 description = "launch Magit"
+
+# Local Variables:
+# compile-command: "herdr server reload-config"
+# End:

@@ -221,7 +221,7 @@
 
  ("C-x b" . ibuffer)
  ("C-x C-b" . ibuffer)
- ("C-x c" . compile)
+ ("C-x c" . recompile)
  ("M-g" . consult-goto-line)
  ("C-x l" . my/count-lines-buffer)
  ("C-x r K" . my/copy-from-starting-col-till-eol)
