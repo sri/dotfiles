@@ -123,6 +123,8 @@
 (bind-keys*
  ("<C-tab>" . tab-next)
  ("<S-C-tab>" . tab-previous)
+ ("C-t" . tab-next)
+ ("S-C-t" . tab-previous)
  ("M-t" . tab-new)
  ("C-." . embark-act)
  ("C-`" . my/open-shell-window-for-buffer)
@@ -221,7 +223,7 @@
 
  ("C-x b" . ibuffer)
  ("C-x C-b" . ibuffer)
- ("C-x c" . recompile)
+ ("C-x c" . rceoompile)
  ("M-g" . consult-goto-line)
  ("C-x l" . my/count-lines-buffer)
  ("C-x r K" . my/copy-from-starting-col-till-eol)
