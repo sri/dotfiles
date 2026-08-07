@@ -14,7 +14,9 @@ name = "terminal"
 
 [ui]
 agent_panel_sort = "priority"
-accent = "blue"
+# ANSI "blue" is too low-contrast for selected tabs in kitty's default palette.
+# Use a lighter blue so tab labels (e.g. "1") stay readable.
+accent = "#89b4fa"
 pane_borders = true
 pane_gaps = false
 hide_tab_bar_when_single_tab = true
