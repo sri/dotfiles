@@ -32,11 +32,11 @@
 
 (when (boundp 'vertico-map)
   (bind-keys :map vertico-map
-             ("C-." . embark-act)
-             ("C-SPC" . embark-select)
+             ("C-c ." . embark-act)
+             ("C-j" . embark-select)
              ("C-x" . embark-export)
              ("ESC p" . consult-history)
-             ("C-'" . vertico-quick-insert)))
+             ("C-c q" . vertico-quick-insert)))
 
 (require 'embark)
 (bind-keys :map embark-region-map
@@ -74,27 +74,27 @@
 
 ;; Apple CMD Key
 (bind-keys*
- ("s-0" . delete-window)
- ("s-1" . delete-other-windows)
- ("s-2" . split-window-vertically)
- ("s-3" . split-window-horizontally)
- ("s-c" . my/copy-line-or-region)
- ("s-d" . my/dired)
- ("s-f" . my/isearch)
- ("s-x" . my/kill-line-or-region)
- ("s-r" . my/rg)
- ("s-R" . rg)
- ("s-g" . magit-status)
- ("s-," . beginning-of-buffer)
- ("s-o" . my/ffap-or-find-file)
- ("s-." . end-of-buffer)
- ("s-j" . other-window)
- ("s-n" . make-frame-command)
- ("s-s" . save-buffer)
- ("s-t" . tab-new)
- ("s-v" . my/yank)
- ("s-w" . my/close-tab-or-frame)
- ("s-z" . undo))
+ ("M-0" . delete-window) ;;; PROBLEM
+ ("M-1" . delete-other-windows) ;;; PROBLEM
+ ("M-2" . split-window-vertically) ;;; PROBLEM
+ ("M-3" . split-window-horizontally) ;;; PROBLEM
+ ("M-c" . my/copy-line-or-region) ;;; PROBLEM
+ ("s-d" . my/dired) ;;; PROBLEM
+ ("s-f" . my/isearch) ;;; PROBLEM
+ ("s-x" . my/kill-line-or-region) ;;; PROBLEM
+ ("s-r" . my/rg) ;;; PROBLEM
+ ("s-R" . rg) ;;; PROBLEM
+ ("s-g" . magit-status) ;;; PROBLEM
+ ("s-," . beginning-of-buffer) ;;; PROBLEM
+ ("s-o" . my/ffap-or-find-file) ;;; PROBLEM
+ ("s-." . end-of-buffer) ;;; PROBLEM
+ ("s-j" . other-window) ;;; PROBLEM
+ ("s-n" . make-frame-command) ;;; PROBLEM
+ ("s-s" . save-buffer) ;;; PROBLEM
+ ("s-t" . tab-new) ;;; PROBLEM
+ ("s-v" . my/yank) ;;; PROBLEM
+ ("s-w" . my/close-tab-or-frame) ;;; PROBLEM
+ ("s-z" . undo)) ;;; PROBLEM
 
 ;; Function keys
 (bind-keys*
@@ -121,23 +121,19 @@
 
 
 (bind-keys*
- ("<C-tab>" . tab-next)
- ("<S-C-tab>" . tab-previous)
+ ("<C-tab>" . tab-next) ;;; PROBLEM
+ ("<S-C-tab>" . tab-previous) ;;; PROBLEM
  ("C-t" . tab-next)
- ("S-C-t" . tab-previous)
+ ("S-C-t" . tab-previous) ;;; PROBLEM
  ("M-t" . tab-new)
- ("C-." . embark-act)
- ("C-`" . my/open-shell-window-for-buffer)
- ("C-'" . my/jump-to-matching-char)
- ("C-/" . er/expand-region)
- ("C-|" . tab-bar-switch-to-next-tab)
+ ("C-c `" . my/open-shell-window-for-buffer) ;;; PROBLEM
+ ("C-'" . my/jump-to-matching-char) ;;; PROBLEM
+ ("C-c x" . er/expand-region)
  ("C-a" . my/beginning-of-line)
  ("C-b" . backward-kill-word)
  ("C-f" . my/isearch)
  ("C-j" . other-window)
- ("C-S-j" . ace-jump-word-mode)
  ("C-k" . my/kill-line-or-region)
- ("S-C-k" . my/copy-line-or-region)
  ("C-n" . execute-extended-command)
  ("C-o" . my/ffap-or-find-file)
  ("C-p" . my/shell-switch-to-next-most-recent)
@@ -145,12 +141,13 @@
  ("C-s" . save-buffer)
  ;; ("C-t" . )
  ("C-v" . consult-project-buffer)
- ("C-S-v" . consult-buffer)
+ ("M-v" . consult-buffer)
  ("C-y" . my/yank)
  ("C-z" . undo)
  ("C-c ~" . my/open-repo-in-browser)
+ ("C-c ." . embark-act) ;; aka, right click
  ("C-c C" . org-capture)
- ("S-SPC" . dabbrev-completion)
+ ("S-SPC" . dabbrev-completion) ;;; PROBLEM
  ("C-c \\" . align-regexp)
  ("C-c a" . org-agenda)
  ("C-c b" . rename-buffer)
@@ -191,7 +188,7 @@
  ("C-c V" . my/scratch-new-from-clipboard)
  ("C-c O" . open-line)
  ("C-c C-l" . my/toggle-auto-hscroll-mode)
- ("<C-backspace>" . subword-backward-kill)
+ ("C-c C-b" . subword-backward-kill)
 
  ;; ("M-`" . my/open-shell-window-for-buffer) ; works under both guis and terminals
  ;; ("M-0" . delete-window)
@@ -211,8 +208,6 @@
  ("M-k" . my/kill-whole-line)
  ("M-o" . project-find-file)
  ("M-r" . vr/mc-mark)
- ("<M-tab>" . tab-line-switch-to-next-tab)
- ("<S-M-tab>" . tab-line-switch-to-prev-tab)
 
  ("M-y" . consult-yank-pop)
 
@@ -253,10 +248,6 @@
            ("g" . consult-git-grep))
 
 (bind-key* "C-c h" #'hs-cycle)
-
-(when (eq system-type 'darwin)
-  ;; Command-<enter>
-  (bind-key* "<s-return>" 'toggle-frame-fullscreen))
 
 (define-key emacs-lisp-mode-map (kbd "C-x x") 'eval-defun)
 

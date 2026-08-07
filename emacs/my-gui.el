@@ -118,3 +118,7 @@
 
 (setq frame-title-format nil)
 (setq ns-use-proxy-icon nil)
+
+(when (eq system-type 'darwin)
+  ;; Command-<enter>
+  (bind-key* "<s-return>" 'toggle-frame-fullscreen)) ;;; PROBLEM

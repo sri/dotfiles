@@ -171,5 +171,8 @@ Inspired by Sublime Text."
           (buffer-substring-no-properties start end))
     ;; Body of `ns-copy-including-secondary'.
     (kill-ring-save start end)
-    (gui-set-selection 'SECONDARY text)
+    ;; SECONDARY is a GUI/X selection; terminal OSC52 clipboard support
+    ;; only handles the normal clipboard, so this errors in tty Emacs.
+    (when (display-graphic-p)
+      (gui-set-selection 'SECONDARY text))
     (message "Copied %d characters" (length text))))
