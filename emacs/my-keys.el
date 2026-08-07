@@ -74,33 +74,34 @@
 
 ;; Apple CMD Key
 (bind-keys*
- ("M-0" . delete-window) ;;; PROBLEM
- ("M-1" . delete-other-windows) ;;; PROBLEM
- ("M-2" . split-window-vertically) ;;; PROBLEM
- ("M-3" . split-window-horizontally) ;;; PROBLEM
- ("M-c" . my/copy-line-or-region) ;;; PROBLEM
- ("s-d" . my/dired) ;;; PROBLEM
- ("s-f" . my/isearch) ;;; PROBLEM
- ("s-x" . my/kill-line-or-region) ;;; PROBLEM
- ("s-r" . my/rg) ;;; PROBLEM
- ("s-R" . rg) ;;; PROBLEM
- ("s-g" . magit-status) ;;; PROBLEM
- ("s-," . beginning-of-buffer) ;;; PROBLEM
- ("s-o" . my/ffap-or-find-file) ;;; PROBLEM
- ("s-." . end-of-buffer) ;;; PROBLEM
- ("s-j" . other-window) ;;; PROBLEM
- ("s-n" . make-frame-command) ;;; PROBLEM
- ("s-s" . save-buffer) ;;; PROBLEM
- ("s-t" . tab-new) ;;; PROBLEM
- ("s-v" . my/yank) ;;; PROBLEM
- ("s-w" . my/close-tab-or-frame) ;;; PROBLEM
- ("s-z" . undo)) ;;; PROBLEM
+ ("M-0" . delete-window)
+ ("M-1" . delete-other-windows)
+ ("M-2" . split-window-vertically)
+ ("M-3" . split-window-horizontally)
+ ("M-c" . my/copy-line-or-region)
+ ("M-d" . my/dired)
+ ("M-t" . tab-new)
+ ("M-v" . consult-buffer)
+ ;; ("M-`" . my/open-shell-window-for-buffer) ; works under both guis and terminals
+ ("<M-SPC>" . my/just-one-space)
+ ("M-;" . my/comment-line-or-region)
+ ("M-<up>" . scroll-down)
+ ("M-<down>" . scroll-up)
+ ("M-D" . my/duplicate-line-or-region)
+ ("M-E" . mc/edit-lines)
+ ("M-\\" . my/delete-horizontal-space)
+ ;; ("M-d" . my/dired)
 
-;; Function keys
-(bind-keys*
- ("<f1>" . magit-status)
- ("<f4>" . my/rg)
- ("<f5>" . my/scratch-new))
+ ("M-a" . beginning-of-buffer)
+ ("M-e" . end-of-buffer)
+ ("M-j" . ace-jump-word-mode)
+ ("M-k" . my/kill-whole-line)
+ ("M-o" . my/ffap-or-find-file)
+ ("M-r" . vr/mc-mark)
+
+ ("M-y" . consult-yank-pop)
+ ("M-g" . consult-goto-line)
+ )
 
 ;; https://emacs.stackexchange.com/questions/32183/how-to-make-exceptions-to-bind-key-overriding-behavior
 
@@ -121,13 +122,10 @@
 
 
 (bind-keys*
- ("<C-tab>" . tab-next) ;;; PROBLEM
- ("<S-C-tab>" . tab-previous) ;;; PROBLEM
  ("C-t" . tab-next)
- ("S-C-t" . tab-previous) ;;; PROBLEM
- ("M-t" . tab-new)
- ("C-c `" . my/open-shell-window-for-buffer) ;;; PROBLEM
- ("C-'" . my/jump-to-matching-char) ;;; PROBLEM
+ ;; ("???" . tab-previous)
+ ("C-c `" . my/open-shell-window-for-buffer)
+ ("C-c '" . my/jump-to-matching-char)
  ("C-c x" . er/expand-region)
  ("C-a" . my/beginning-of-line)
  ("C-b" . backward-kill-word)
@@ -141,8 +139,7 @@
  ("C-s" . save-buffer)
  ;; ("C-t" . )
  ("C-v" . consult-project-buffer)
- ("M-v" . consult-buffer)
- ("C-y" . my/yank)
+  ("C-y" . my/yank)
  ("C-z" . undo)
  ("C-c ~" . my/open-repo-in-browser)
  ("C-c ." . embark-act) ;; aka, right click
@@ -190,26 +187,7 @@
  ("C-c C-l" . my/toggle-auto-hscroll-mode)
  ("C-c C-b" . subword-backward-kill)
 
- ;; ("M-`" . my/open-shell-window-for-buffer) ; works under both guis and terminals
- ;; ("M-0" . delete-window)
- ;; ("M-1" . delete-other-windows)
- ;; ("M-2" . split-window-vertically)
- ;; ("M-3" . split-window-horizontally)
- ("<M-SPC>" . my/just-one-space)
- ("M-;" . my/comment-line-or-region)
- ("M-<up>" . scroll-down)
- ("M-<down>" . scroll-up)
- ("M-D" . my/duplicate-line-or-region)
- ("M-E" . mc/edit-lines)
- ("M-\\" . my/delete-horizontal-space)
- ;; ("M-d" . my/dired)
  ("C-x g" . magit-status)
- ("M-j" . ace-jump-word-mode)
- ("M-k" . my/kill-whole-line)
- ("M-o" . project-find-file)
- ("M-r" . vr/mc-mark)
-
- ("M-y" . consult-yank-pop)
 
  ("<home>" . beginning-of-buffer)
  ("<end>" . end-of-buffer)
@@ -219,7 +197,6 @@
  ("C-x b" . ibuffer)
  ("C-x C-b" . ibuffer)
  ("C-x c" . rceoompile)
- ("M-g" . consult-goto-line)
  ("C-x l" . my/count-lines-buffer)
  ("C-x r K" . my/copy-from-starting-col-till-eol)
  ("C-x s" . my/start-line-or-region-swap)
