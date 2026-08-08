@@ -7,6 +7,10 @@ prefix = "ctrl+q"
 switch_tab = "prefix+1..9"
 switch_workspace = "prefix+shift+1..9"
 focus_agent = "prefix+alt+1..9"
+new_workspace = ["prefix+shift+n", "super+n"]
+previous_workspace = "super+up"
+next_workspace = "super+down"
+new_tab = ["prefix+c", "super+t"]
 next_tab = ["prefix+n", "ctrl+tab"]
 previous_tab = ["prefix+p", "ctrl+shift+tab"]
 

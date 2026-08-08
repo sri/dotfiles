@@ -7,6 +7,10 @@ keybind = cmd+2=new_split:down
 # them from plain Tab and Shift+Tab.
 keybind = ctrl+tab=csi:9;5u
 keybind = ctrl+shift+tab=csi:9;6u
+keybind = cmd+t=csi:116;9u
+keybind = cmd+n=csi:110;9u
+keybind = cmd+up=csi:1;9A
+keybind = cmd+down=csi:1;9B
 #keybind = shift+enter=text:\n
 #background-blur = macos-glass-clear
 #background-opacity = 1
