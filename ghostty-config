@@ -1,16 +1,20 @@
 font-family = JetBrains Mono
 theme = iTerm2 Solarized Dark
 auto-update-channel = tip
-keybind = cmd+3=new_split:right
-keybind = cmd+2=new_split:down
-# Forward these using the extended keyboard protocol so Herdr can distinguish
-# them from plain Tab and Shift+Tab.
+# Forward shortcuts using the extended keyboard protocol so Herdr can handle
+# tabs, workspaces, and panes itself.
+keybind = cmd+2=text:\x11-
+keybind = cmd+digit_2=text:\x11-
+keybind = cmd+3=text:\x11v
+keybind = cmd+digit_3=text:\x11v
 keybind = ctrl+tab=csi:9;5u
 keybind = ctrl+shift+tab=csi:9;6u
 keybind = cmd+t=csi:116;9u
 keybind = cmd+n=csi:110;9u
 keybind = cmd+up=csi:1;9A
 keybind = cmd+down=csi:1;9B
+keybind = cmd+z=csi:122;9u
+keybind = cmd+j=csi:106;9u
 #keybind = shift+enter=text:\n
 #background-blur = macos-glass-clear
 #background-opacity = 1

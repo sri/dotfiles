@@ -13,6 +13,10 @@ next_workspace = "super+down"
 new_tab = ["prefix+c", "super+t"]
 next_tab = ["prefix+n", "ctrl+tab"]
 previous_tab = ["prefix+p", "ctrl+shift+tab"]
+split_horizontal = "prefix+minus"
+split_vertical = "prefix+v"
+zoom = ["prefix+z", "super+z"]
+cycle_pane_next = ["prefix+tab", "super+j"]
 
 [theme]
 name = "solarized"
