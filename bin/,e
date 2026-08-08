@@ -2,8 +2,11 @@
 
 set -euo pipefail
 
-EMACS="/Applications/Emacs.app/Contents/MacOS/Emacs"
-EMACSCLIENT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+if [[ -z "${EMACS_DIR+x}" ]]; then
+  EMACS_DIR="/Applications/Emacs.app/Contents/MacOS/bin"
+fi
+EMACS="${EMACS_DIR}/emacs"
+EMACSCLIENT="${EMACS_DIR}/emacsclient"
 SKIP_FILE="$HOME/.emacs.skip"
 
 EMACS_ARGS=()
