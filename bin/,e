@@ -1,24 +1,34 @@
- #!/usr/bin/env bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 
 EMACS="/Applications/Emacs.app/Contents/MacOS/Emacs"
+EMACSCLIENT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
 SKIP_FILE="$HOME/.emacs.skip"
 
 EMACS_ARGS=()
+CLIENT_ARGS=()
 SKIP=false
-GUI=true
+NEW=false
+GUI=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    -new)
+      NEW=true
+      ;;
+    -gui)
+      GUI=true
+      ;;
     -nw)
+      # Kept as a backwards-compatible alias for the default behavior.
       GUI=false
-      EMACS_ARGS+=("-nw")
       ;;
     -skip)
       SKIP=true
       ;;
     -q)
+      # -Q is only meaningful when starting a new Emacs process.
       EMACS_ARGS+=(
         "-Q"
         "--eval"
@@ -27,14 +37,11 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       EMACS_ARGS+=("$1")
+      CLIENT_ARGS+=("$1")
       ;;
   esac
   shift
 done
-
-if $GUI; then
-    echo "started GUI emacs"
-fi
 
 if $SKIP; then
   touch "$SKIP_FILE"
@@ -42,5 +49,19 @@ else
   rm -f "$SKIP_FILE"
 fi
 
-# Bash 3.2 treats an empty array expansion as unbound under `set -u`.
-exec "$EMACS" ${EMACS_ARGS[@]+"${EMACS_ARGS[@]}"}
+emacs_is_running() {
+  pgrep -x Emacs >/dev/null 2>&1 || pgrep -x emacs >/dev/null 2>&1
+}
+
+# Start a new Emacs when requested or when no instance exists. New instances
+# are terminal-only by default; -gui is the only way to start one in GUI mode.
+if $NEW || ! emacs_is_running; then
+  if $GUI; then
+    exec "$EMACS" ${EMACS_ARGS[@]+"${EMACS_ARGS[@]}"}
+  else
+    exec "$EMACS" -nw ${EMACS_ARGS[@]+"${EMACS_ARGS[@]}"}
+  fi
+fi
+
+# An existing instance is always reused in the current terminal.
+exec "$EMACSCLIENT" -t ${CLIENT_ARGS[@]+"${CLIENT_ARGS[@]}"}

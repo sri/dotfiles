@@ -1,3 +1,4 @@
+onboarding = false
 # Herdr configuration
 # Install/symlink to ~/.config/herdr/config.toml or set HERDR_CONFIG_PATH to this file.
 
@@ -10,7 +11,13 @@ next_tab = ["prefix+n", "ctrl+tab"]
 previous_tab = ["prefix+p", "ctrl+shift+tab"]
 
 [theme]
-name = "terminal"
+name = "solarized"
+auto_switch = false
+
+# Herdr's Solarized surface_dim equals its #002b36 panel background, so
+# sidebar separators disappear. Use Solarized base02 for subtle chrome.
+[theme.custom]
+surface_dim = "#073642"
 
 [ui]
 agent_panel_sort = "priority"
@@ -36,6 +43,32 @@ type = "pane"
 command = "emacsclient -t -a \"\" --eval \"(progn (require 'magit) (magit-status \\\"$(pwd)\\\"))\""
 description = "launch Magit"
 
+# [[keys.command]]
+# key = "prefix+m"
+# type = "pane"
+# command = "exec emacs -nw"
+# description = "Emacs"
+
+[[keys.command]]
+key = "prefix+m"
+type = "shell"
+command = '''
+created=$("$HERDR_BIN_PATH" tab create --workspace "$HERDR_ACTIVE_WORKSPACE_ID" --label Emacs --focus)
+pane=$(printf '%s\n' "$created" | jq -r '.result.root_pane.pane_id')
+"$HERDR_BIN_PATH" pane run "$pane" "exec emacs -nw"
+'''
+description = "Emacs in new tab"
+
+[[keys.command]]
+key = "prefix+shift+m"
+type = "pane"
+command = "exec emacsclient -t"
+description = "Emacs client"
+
+
 # Local Variables:
 # compile-command: "herdr server reload-config"
 # End:
+
+[ui.sound]
+enabled = true

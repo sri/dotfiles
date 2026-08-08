@@ -3,6 +3,10 @@ theme = iTerm2 Solarized Dark
 auto-update-channel = tip
 keybind = cmd+3=new_split:right
 keybind = cmd+2=new_split:down
+# Forward these using the extended keyboard protocol so Herdr can distinguish
+# them from plain Tab and Shift+Tab.
+keybind = ctrl+tab=csi:9;5u
+keybind = ctrl+shift+tab=csi:9;6u
 #keybind = shift+enter=text:\n
 #background-blur = macos-glass-clear
 #background-opacity = 1
