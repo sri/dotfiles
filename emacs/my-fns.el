@@ -804,6 +804,43 @@ Defaults to next 7 days. With prefix arg DAYS, insert that many days."
 (require 'url-util)
 (require 'thingatpt)
 
+(defun my/herdr-split-pane (direction)
+  "Split the current Herdr pane in DIRECTION using this buffer's directory."
+  (let* ((frame (selected-frame))
+         (pane-id (getenv "HERDR_PANE_ID" frame))
+         (frame-environment (frame-parameter frame 'environment))
+         (cwd (expand-file-name default-directory))
+         (herdr (executable-find "herdr")))
+    (unless pane-id
+      (user-error "This Emacs frame is not running inside Herdr"))
+    (when (file-remote-p cwd)
+      (user-error "Cannot use a remote default-directory for a local Herdr pane"))
+    (unless herdr
+      (user-error "Cannot find the herdr executable"))
+    (with-temp-buffer
+      ;; An Emacs daemon has one environment per client frame.  Use the
+      ;; selected frame's socket/session variables, not the daemon's startup
+      ;; environment.
+      (let* ((process-environment (or frame-environment process-environment))
+             (status (process-file herdr nil t nil
+                                   "pane" "split" pane-id
+                                   "--direction" direction
+                                   "--cwd" cwd
+                                   "--focus")))
+        (unless (zerop status)
+          (user-error "Herdr split failed: %s" (string-trim (buffer-string))))))
+    (message "Created Herdr pane in %s" cwd)))
+
+(defun my/herdr-split-horizontal ()
+  "Split the current Herdr pane horizontally below this one."
+  (interactive)
+  (my/herdr-split-pane "down"))
+
+(defun my/herdr-split-vertical ()
+  "Split the current Herdr pane vertically to the right."
+  (interactive)
+  (my/herdr-split-pane "right"))
+
 (defun my/inspect-url (&optional url)
   "Pretty-print URL at point or active region."
   (interactive)

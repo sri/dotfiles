@@ -147,6 +147,8 @@
  ("S-SPC" . dabbrev-completion) ;;; PROBLEM
  ("C-c \\" . align-regexp)
  ("C-c a" . org-agenda)
+ ("C-c 2" . my/herdr-split-horizontal)
+ ("C-c 3" . my/herdr-split-vertical)
  ("C-c b" . rename-buffer)
  ("C-c c" . calendar)
  ("C-c f" . my/rg-from-repo-root)
