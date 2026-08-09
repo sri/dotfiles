@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: ,gist [--public|--private] [-d DESCRIPTION] [-f STDIN_NAME] [-w] FILE...
+       command | ,gist [--public|--private] [-d DESCRIPTION] [-f FILENAME]
+
+Create a GitHub gist and print its URL and metadata.
+
+Options:
+  -p, --public          Create a publicly listed gist
+      --private         Create a secret/unlisted gist (the default)
+  -d, --desc TEXT       Set the gist description
+  -f, --filename NAME   Name content read from standard input
+  -w, --web             Open the created gist in a browser
+  -h, --help            Show this help
+
+GitHub "private" gists are secret/unlisted, not access-controlled.
+EOF
+}
+
+if ! command -v gh >/dev/null 2>&1; then
+  echo "Error: GitHub CLI (gh) is not installed." >&2
+  exit 1
+fi
+
+if ! gh auth status >/dev/null 2>&1; then
+  echo "Error: gh is not authenticated. Run: gh auth login" >&2
+  exit 1
+fi
+
+visibility="secret"
+command=(gh gist create)
+inputs=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -p|--public|public)
+      visibility="public"
+      ;;
+    --private|--secret|private|secret)
+      visibility="secret"
+      ;;
+    -d|--desc)
+      [[ $# -ge 2 ]] || { echo "Error: $1 requires a value." >&2; exit 2; }
+      command+=(--desc "$2")
+      shift
+      ;;
+    -f|--filename)
+      [[ $# -ge 2 ]] || { echo "Error: $1 requires a value." >&2; exit 2; }
+      command+=(--filename "$2")
+      shift
+      ;;
+    -w|--web)
+      command+=(--web)
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --)
+      shift
+      while [[ $# -gt 0 ]]; do
+        inputs+=("$1")
+        shift
+      done
+      break
+      ;;
+    -)
+      inputs+=("-")
+      ;;
+    -*)
+      echo "Error: unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      inputs+=("$1")
+      ;;
+  esac
+  shift
+done
+
+if [[ ${#inputs[@]} -eq 0 ]]; then
+  if [[ -t 0 ]]; then
+    echo "Error: provide one or more files, '-' for stdin, or pipe content in." >&2
+    usage >&2
+    exit 2
+  fi
+  inputs+=("-")
+fi
+
+if [[ "$visibility" == "public" ]]; then
+  command+=(--public)
+fi
+command+=("${inputs[@]}")
+url="$("${command[@]}")"
+gist_id="${url##*/}"
+
+# Keep the URL as the first output line so callers can use: ,gist ... | head -1
+printf '%s\n' "$url"
+printf '\nGist created\n'
+printf 'ID:         %s\n' "$gist_id"
+if [[ "$visibility" == "public" ]]; then
+  printf 'Visibility: public\n'
+else
+  printf 'Visibility: secret/unlisted\n'
+fi
+
+if details="$(gh api "gists/$gist_id" --jq '"Owner:      \(.owner.login // "unknown")\nFiles:      \(.files | keys | join(", "))\nCreated:    \(.created_at)\nClone URL:  \(.git_pull_url)"' 2>/dev/null)"; then
+  printf '%s\n' "$details"
+fi
+
+printf '\nUseful commands:\n'
+printf '  gh gist view %q\n' "$gist_id"
+printf '  gh gist edit %q\n' "$gist_id"
+printf '  gh gist delete %q\n' "$gist_id"
