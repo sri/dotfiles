@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ "${TERM_PROGRAM:-}" == "ghostty" || -n "${GHOSTTY_RESOURCES_DIR:-}" ]]; then
+  pkill -USR2 -x ghostty
+  echo "Reloaded Ghostty config"
+elif [[ "${TERM_PROGRAM:-}" == "kitty" || "${TERM:-}" == "xterm-kitty" || -n "${KITTY_WINDOW_ID:-}" ]]; then
+  pkill -USR1 -x kitty
+  echo "Reloaded Kitty config"
+else
+  echo "Unsupported terminal: ${TERM_PROGRAM:-${TERM:-unknown}}" >&2
+  exit 1
+fi
