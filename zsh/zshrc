@@ -182,12 +182,82 @@ alias du1='du --max-depth=1'
 
 alias topcmds='cat ~/.zsh_history | awk -F";" "{ print $2 }" | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
 
-alias ll='eza --long --sort modified --almost-all --group-directories-first'
-alias llsz='eza --long --sort size --almost-all --group-directories-first'
-alias llt='eza --tree'
+# Prefer eza for listings, falling back to macOS ls. Sorted listings include
+# regular files only; directories have misleading size and modification data.
+function _my_mac_ls_filtered() {
+  emulate -L zsh
+  local kind=$1 options=$2 root
+  shift 2
+  local -a roots entries
+  (( $# )) && roots=("$@") || roots=(.)
 
-# alias ll='ls -ltr --color=auto'
-# alias lsz='ls -lSrh --color=auto'
+  for root in "${roots[@]}"; do
+    if [[ -d $root ]]; then
+      if [[ $kind == file ]]; then
+        [[ $root == . ]] && entries+=( *(N.) ) || entries+=( "$root"/*(N.) )
+      else
+        [[ $root == . ]] && entries+=( *(N/) ) || entries+=( "$root"/*(N/) )
+      fi
+    elif [[ $kind == file && -f $root && ! -L $root ]]; then
+      entries+=("$root")
+    fi
+  done
+
+  (( ${#entries} )) || return 0
+  /bin/ls ${=options} -- "${entries[@]}"
+}
+
+function _my_list() {
+  local eza_options=$1 ls_options=$2 kind=$3
+  shift 3
+
+  if (( $+commands[eza] )); then
+    command eza ${=eza_options} "$@"
+  elif [[ -x /bin/ls ]]; then
+    if [[ $kind == all ]]; then
+      /bin/ls ${=ls_options} "$@"
+    else
+      _my_mac_ls_filtered "$kind" "$ls_options" "$@"
+    fi
+  else
+    print -u2 "${funcstack[2]}: neither eza nor macOS ls is available"
+    return 127
+  fi
+}
+
+function l()      { _my_list '--long --group-directories-first' '-lhG'  all  "$@" }
+function la()     { _my_list '--long --all --group-directories-first' '-lAhG' all  "$@" }
+function lf()     { _my_list '--long --only-files'                    '-lhG'  file "$@" }
+function ld()     { _my_list '--long --only-dirs'                     '-ldhG' dir  "$@" }
+function lbig()   { _my_list '--long --only-files --sort=size --reverse'     '-lhGS'  file "$@" }
+function lsmall() { _my_list '--long --only-files --sort=size'               '-lhGSr' file "$@" }
+function lnew()   { _my_list '--long --only-files --sort=modified --reverse' '-lhGt'  file "$@" }
+function lold()   { _my_list '--long --only-files --sort=modified'           '-lhGtr' file "$@" }
+
+function dubig() {
+  emulate -L zsh
+  local -a paths
+
+  if (( $# )); then
+    paths=("$@")
+  else
+    paths=( *(N) )
+  fi
+
+  (( ${#paths} )) || return 0
+  /usr/bin/du -sh -- "${paths[@]}" | /usr/bin/sort -hr
+}
+
+function ltree() {
+  if (( $+commands[eza] )); then
+    command eza --tree "$@"
+  elif (( $+commands[tree] )); then
+    command tree "$@"
+  else
+    print -u2 'ltree: install eza or tree for tree listings'
+    return 127
+  fi
+}
 
 # From https://blog.cloudflare.com/a-question-of-timing/
 alias curl_info='curl -so /dev/null -w "dnslookup: %{time_namelookup} | connect: %{time_connect} | appconnect: %{time_appconnect} | pretransfer: %{time_pretransfer} | starttransfer: %{time_starttransfer} | total: %{time_total} | size: %{size_download}\n"'
@@ -226,16 +296,30 @@ function my_python() {
 }
 
 
-# Run `less' if argument is a file, otherwise `ls'.
-alias l='my_ls'
-function my_ls() {
-  if [ $# = 1 ]; then
-    if [ -f $1 ]; then
-      less $1;
-      return
-    fi
+# Herdr helpers. `htabname New tab name` accepts the label as separate words.
+alias hreload='herdr server reload-config'
+function htabname() {
+  if [[ -z $HERDR_TAB_ID ]]; then
+    print -u2 'htabname: not running inside a Herdr tab'
+    return 1
   fi
-  ll $*;
+  if (( $# == 0 )); then
+    print -u2 'usage: htabname <new tab name>'
+    return 2
+  fi
+  command herdr tab rename "$HERDR_TAB_ID" "$@"
+}
+
+function hwsname() {
+  if [[ -z $HERDR_WORKSPACE_ID ]]; then
+    print -u2 'hwsname: not running inside a Herdr workspace'
+    return 1
+  fi
+  if (( $# == 0 )); then
+    print -u2 'usage: hwsname <new workspace name>'
+    return 2
+  fi
+  command herdr workspace rename "$HERDR_WORKSPACE_ID" "$@"
 }
 
 alias c="cd_ls"
