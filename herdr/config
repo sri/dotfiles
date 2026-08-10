@@ -17,6 +17,7 @@ split_horizontal = "prefix+minus"
 split_vertical = "prefix+v"
 zoom = ["prefix+z", "super+z"]
 cycle_pane_next = ["prefix+tab", "super+j"]
+cycle_pane_previous = ["prefix+shift+tab", "super+shift+j"]
 
 [theme]
 name = "solarized"
