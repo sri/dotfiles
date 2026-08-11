@@ -1,26 +1,47 @@
 # -*- mode: sh -*-
 
-typeset -U path PATH
+# Keep repeated reloads from adding duplicate PATH and completion entries.
+typeset -U path PATH fpath FPATH
 
-path=(~/my/dotfiles/bin "$path[@]")
+path=(
+  ~/my/dotfiles/bin
+  ~/.local/bin
+  ~/.cargo/bin
+  ~/.bun/bin
+  /opt/homebrew/opt/libpq/bin
+  ~/.sdkman/candidates/kotlin/current/bin
+  ~/.sdkman/candidates/java/current/bin
+  "$path[@]"
+)
 
-# asdf
-# https://asdf-vm.com/guide/getting-started.html
-if [[ -e "$HOME/.asdf/asdf.sh" ]]; then
-  echo loading asdf.sh
+# asdf is active: Node and Python currently resolve through it.
+if [[ -r $HOME/.asdf/asdf.sh ]]; then
   . "$HOME/.asdf/asdf.sh"
-  # append completions to fpath
-  fpath=(${ASDF_DIR}/completions $fpath)
+  fpath=($ASDF_DIR/completions $fpath)
 fi
 
-if [[ -e ~/.rbenv/bin/rbenv ]]; then
-  eval "$(~/.rbenv/bin/rbenv init - zsh)"
+# Bun completion is autoloaded by compinit instead of sourced on every startup.
+[[ -r $HOME/.bun/_bun ]] && fpath=($HOME/.bun $fpath)
+
+if [[ -x $HOME/.rbenv/bin/rbenv ]]; then
+  # Rehash only after installing executables, not on every shell startup.
+  eval "$(~/.rbenv/bin/rbenv init - --no-rehash zsh)"
+fi
+
+# Keep SDKMAN available without paying its startup cost in every shell.
+export SDKMAN_DIR=$HOME/.sdkman
+if [[ -r $SDKMAN_DIR/bin/sdkman-init.sh ]]; then
+  function sdk() {
+    unfunction sdk
+    . "$SDKMAN_DIR/bin/sdkman-init.sh"
+    sdk "$@"
+  }
 fi
 
 # https://unix.stackexchange.com/questions/273861/unlimited-history-in-zsh
 HISTFILE="$HOME/.zsh_history"
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=100000
 setopt BANG_HIST                 # Treat the '!' character specially during expansion.
 setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
 setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
@@ -34,12 +55,33 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
+setopt INTERACTIVE_COMMENTS      # Allow comments at an interactive prompt.
+setopt AUTO_PUSHD                # Make cd push directories onto the directory stack.
+setopt PUSHD_IGNORE_DUPS         # Keep duplicate directories out of the stack.
+setopt PUSHD_SILENT              # Do not print the stack after every cd.
 
 export PYTHONSTARTUP=~/.pythonrc.py
 export RIPGREP_CONFIG_PATH=~/.ripgreprc
 
-# initialise completions with ZSH's compinit
-autoload -Uz compinit && compinit
+# Fast cached completion startup, with a full security/refresh check once a day.
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+autoload -Uz compinit
+_zcompdump=$HOME/.zcompdump
+if [[ ! -e $_zcompdump || -n ${_zcompdump}(N.mh+24) ]]; then
+  compinit -d $_zcompdump
+else
+  compinit -C -d $_zcompdump
+fi
+unset _zcompdump
+
+# Fuzzy history search (Ctrl-R), file insertion (Ctrl-T), and directory cd (Alt-C).
+if (( $+commands[fzf] )) && [[ -o interactive && -t 0 ]]; then
+  _fzf_shell=/opt/homebrew/opt/fzf/shell
+  [[ -r $_fzf_shell/completion.zsh ]] && . $_fzf_shell/completion.zsh
+  [[ -r $_fzf_shell/key-bindings.zsh ]] && . $_fzf_shell/key-bindings.zsh
+  unset _fzf_shell
+fi
 
 # Load Git prompt functions
 # --- git branch ---
@@ -48,14 +90,14 @@ zstyle ':vcs_info:git:*' formats '(%b)'
 zstyle ':vcs_info:*' enable git
 
 # --- track command start time ---
+cmd_start_time=$SECONDS
 preexec() {
   cmd_start_time=$SECONDS
 }
 
 # --- prompt ---
 custom_prompt() {
-  # MUST be first
-  local last_exit_status=$?
+  local last_exit_status=$1
 
   local cmd_duration=$((SECONDS - cmd_start_time))
   vcs_info
@@ -70,7 +112,7 @@ custom_prompt() {
 
   if [[ $in_emacs -eq 1 ]]; then
     # plain ascii, no colors
-    time_str="$(date +%H:%M:%S)"
+    time_str='%D{%H:%M:%S}'
     dir_str="[${PWD/#$HOME/~}]"
     branch_str="${vcs_info_msg_0_}"
 
@@ -98,12 +140,9 @@ custom_prompt() {
 }
 
 precmd() {
-  custom_prompt
+  local last_exit_status=$?
+  custom_prompt $last_exit_status
 }
-
-if [[ -e $HOME/.cargo/env ]]; then
-  . $HOME/.cargo/env
-fi
 
 
 # Aliases
@@ -122,7 +161,8 @@ alias ggi='git grep -i'
 
 
 function gc() {
-  if [ $# -eq 0 ]; then
+  local url
+  if (( $# == 0 )); then
     url="$(pbpaste)"
     if [[ "$url" == http* ]]; then
       git clone "$url"
@@ -137,9 +177,9 @@ function gc() {
 
 function g() {
     local search=$1
-    local downcased=${search,,}
+    local downcased=${(L)search}
 
-    if [ "$search" = "$downcased" ]; then
+    if [[ "$search" == "$downcased" ]]; then
         # If all lowercase, do a case-insensitive search.
         git grep --color --break -n -i "$1"
     else
@@ -178,7 +218,8 @@ alias brc='emacsclient ~/.zshrc; . ~/.zshrc'
 
 alias df='df -h'
 alias du='du -c -h'
-alias du1='du --max-depth=1'
+alias du1='command du -chd 1'
+alias cls='clear'
 
 alias topcmds='cat ~/.zsh_history | awk -F";" "{ print $2 }" | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
 
@@ -322,13 +363,8 @@ function hwsname() {
   command herdr workspace rename "$HERDR_WORKSPACE_ID" "$@"
 }
 
-alias c="cd_ls"
-function cd_ls () {
-   if [ $# = 0 ]; then
-      cd && ls -G
-   else
-      cd "$*" && ls -G
-   fi
+function c() {
+  builtin cd "$@" && l
 }
 
 if [[ -e ~/.zshrc_private ]]; then
