@@ -18,6 +18,7 @@ split_vertical = "prefix+v"
 zoom = ["prefix+z", "super+z"]
 cycle_pane_next = ["prefix+tab", "super+j"]
 cycle_pane_previous = ["prefix+shift+tab", "super+shift+j"]
+toggle_sidebar = ["prefix+b", "super+b"]
 
 [theme]
 name = "solarized"

@@ -14,6 +14,7 @@ keybind = cmd+n=csi:110;9u
 keybind = cmd+up=csi:1;9A
 keybind = cmd+down=csi:1;9B
 keybind = cmd+z=csi:122;9u
+keybind = cmd+b=csi:98;9u
 keybind = cmd+j=csi:106;9u
 keybind = cmd+shift+j=csi:106;10u
 #keybind = shift+enter=text:\n
