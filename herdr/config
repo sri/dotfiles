@@ -61,8 +61,7 @@ key = "super+r"
 type = "shell"
 command = '''
 "$HERDR_BIN_PATH" server reload-config
-,terminal_reload
- herdr notification show "Reload config" --body "Terminal & Herdr" --position top-right
+"${SHELL:-/bin/sh}" -lc ',terminal_reload'
 '''
 description = "reload Herdr and terminal config"
 
