@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case $# in
+  0) PR_URL="$(pbpaste)" ;;
+  1) PR_URL="$1" ;;
+  *)
+    echo "usage: ,review [pr-url]" >&2
+    exit 2
+    ;;
+esac
+
+if [[ ! "$PR_URL" =~ ^https?://[^[:space:]]+$ ]]; then
+  echo "error: expected an HTTP(S) pull request URL" >&2
+  exit 2
+fi
+
+# Get all PR metadata in one call.
+IFS=$'\t' read -r PR_NUMBER HEAD_REF HEAD_OWNER HEAD_REPO < <(
+  gh pr view "$PR_URL" \
+    --json number,headRefName,headRepositoryOwner,headRepository \
+    --jq '[.number, .headRefName, .headRepositoryOwner.login, .headRepository.name] | @tsv'
+)
+
+review_prompt="Review pull request $PR_URL.
+
+Read the repository's CLAUDE.md and any relevant project instructions first.
+Run git pull --ff-only before starting the review so the branch is up to date.
+
+Review the PR against its base branch. Focus on:
+- correctness and bugs
+- regressions
+- edge cases
+- security issues
+- concurrency/data consistency issues
+- missing or inadequate tests
+- unnecessary complexity
+
+Do not modify files. Produce a concise review with findings ordered by severity.
+For each finding, include the file and line/range when possible."
+
+# State 2: the review workspace and its waiting agent already exist. Re-prompt it.
+existing_workspace="$(
+  herdr worktree list --cwd "$PWD" --json |
+    jq -r --arg branch "$HEAD_REF" \
+      '[.result.worktrees[] | select(.branch == $branch and .open_workspace_id)][0].open_workspace_id // empty'
+)"
+if [[ -n "$existing_workspace" ]]; then
+  existing_agent="$(
+    herdr agent list |
+      jq -r --arg workspace "$existing_workspace" \
+        '[.result.agents[] | select(.workspace_id == $workspace)][0].pane_id // empty'
+  )"
+  if [[ -z "$existing_agent" ]]; then
+    echo "error: review workspace exists but has no agent" >&2
+    exit 1
+  fi
+  herdr agent prompt "$existing_agent" "$review_prompt"
+  exit 0
+fi
+
+# State 1: fetch the author's latest branch and create a background workspace.
+PR_HOST="${PR_URL#*://}"
+PR_HOST="${PR_HOST%%/*}"
+REMOTE="pr-${PR_NUMBER}"
+REMOTE_URL="https://${PR_HOST}/${HEAD_OWNER}/${HEAD_REPO}.git"
+if git remote get-url "$REMOTE" >/dev/null 2>&1; then
+  git remote set-url "$REMOTE" "$REMOTE_URL"
+else
+  git remote add "$REMOTE" "$REMOTE_URL"
+fi
+git fetch "$REMOTE" "$HEAD_REF"
+UPSTREAM="${REMOTE}/${HEAD_REF}"
+git branch -f "$HEAD_REF" "$UPSTREAM"
+git branch --set-upstream-to="$UPSTREAM" "$HEAD_REF"
+
+created="$(
+  herdr worktree create \
+    --cwd "$PWD" \
+    --branch "$HEAD_REF" \
+    --base "$UPSTREAM" \
+    --label "PR #${PR_NUMBER}" \
+    --no-focus \
+    --json
+)"
+pane_id="$(jq -r '.result.root_pane.pane_id' <<<"$created")"
+agent_name="pr${PR_NUMBER}"
+
+# Use the first available supported review agent.
+possible_agents=(claude grok pi)
+agent_kind=""
+for candidate in "${possible_agents[@]}"; do
+  if command -v "$candidate" >/dev/null 2>&1; then
+    agent_kind="$candidate"
+    break
+  fi
+done
+if [[ -z "$agent_kind" ]]; then
+  echo "error: install one of: ${possible_agents[*]}" >&2
+  exit 1
+fi
+
+# A newly opened workspace can be returned just before its shell is ready.
+# Retry only that transient condition; surface every other error immediately.
+for attempt in {1..20}; do
+  if start_output="$(
+    herdr agent start "$agent_name" \
+      --kind "$agent_kind" \
+      --pane "$pane_id" 2>&1
+  )"; then
+    [[ -n "$start_output" ]] && printf '%s\n' "$start_output"
+    break
+  fi
+
+  if [[ "$start_output" != *'"code":"agent_pane_busy"'* ]] || (( attempt == 20 )); then
+    printf '%s\n' "$start_output" >&2
+    exit 1
+  fi
+  sleep 0.25
+done
+
+herdr agent prompt "$agent_name" "$review_prompt"
