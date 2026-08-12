@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+prompt_review_url() {
+  local initial=""
+  local clipboard=""
+
+  if command -v pbpaste >/dev/null 2>&1; then
+    clipboard="$(pbpaste 2>/dev/null || true)"
+    if [[ "$clipboard" =~ ^https?://[^[:space:]]+$ ]]; then
+      initial="$clipboard"
+    fi
+  fi
+
+  command -v python3 >/dev/null 2>&1 || {
+    echo "Error: python3 is required for the editable URL prompt." >&2
+    return 1
+  }
+
+  printf 'Review URL: ' >&2
+  python3 - "$initial" <<'PY'
+import readline
+import sys
+
+initial = sys.argv[1]
+readline.set_startup_hook(lambda: readline.insert_text(initial))
+try:
+    value = input()
+except (EOFError, KeyboardInterrupt):
+    print(file=sys.stderr)
+    raise SystemExit(130)
+finally:
+    readline.set_startup_hook()
+print(value)
+PY
+}
+
+if [[ $# -gt 1 ]]; then
+  echo "usage: ,review [pr-url]" >&2
+  exit 2
+fi
+
+PR_URL="${1:-}"
+while [[ ! "$PR_URL" =~ ^https?://[^[:space:]]+$ ]]; do
+  if [[ -n "$PR_URL" ]]; then
+    echo "Please enter a valid HTTP(S) review URL." >&2
+  fi
+  PR_URL="$(prompt_review_url)"
+done
+
+# Get PR metadata.
+PR_NUMBER="$(gh pr view "$PR_URL" --json number --jq '.number')"
+HEAD_REF="$(gh pr view "$PR_URL" --json headRefName --jq '.headRefName')"
+HEAD_SHA="$(gh pr view "$PR_URL" --json headRefOid --jq '.headRefOid')"
+
+BRANCH="review/pr-${PR_NUMBER}"
+
+# Make sure we have the PR commit locally.
+git fetch origin "$HEAD_REF"
+
+# Create + open the worktree in Herdr.
+created="$(
+  herdr worktree create \
+    --cwd "$PWD" \
+    --branch "$BRANCH" \
+    --base "$HEAD_SHA" \
+    --label "PR #${PR_NUMBER}" \
+    --focus \
+    --json
+)"
+
+pane_id="$(
+  printf '%s\n' "$created" |
+    jq -r '.result.root_pane.pane_id'
+)"
+
+agent_name="pr${PR_NUMBER}"
+
+# Start Claude in the worktree's root pane.
+herdr agent start "$agent_name" \
+  --kind claude \
+  --pane "$pane_id"
+
+# Give Claude the job.
+herdr agent prompt "$agent_name" \
+  "Review pull request $PR_URL.
+
+Read the repository's CLAUDE.md and any relevant project instructions first.
+
+Review the PR against its base branch. Focus on:
+- correctness and bugs
+- regressions
+- edge cases
+- security issues
+- concurrency/data consistency issues
+- missing or inadequate tests
+- unnecessary complexity
+
+Do not modify files. Produce a concise review with findings ordered by severity.
+For each finding, include the file and line/range when possible."
