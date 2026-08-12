@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Usage: ,review [PR_URL]
+# With no URL, reads the PR URL from the clipboard. This may be run from any
+# directory, but the PR's base repo must be checked out under ~/ws, ~/dev, or ~/my.
 set -euo pipefail
 
 case $# in
