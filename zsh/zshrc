@@ -147,18 +147,11 @@ precmd() {
 
 # Aliases
 alias sub="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
-
-alias tab='open . -a iterm'
-
-alias d='git diff'
-#__git_complete d _git_diff
 alias gd='git diff'
 #__git_complete gd _git_diff
-alias s='git status --short --branch'
-alias gs='git status'
+alias gs='git status --short --branch'
 alias gg='git grep'
 alias ggi='git grep -i'
-
 
 function gc() {
   local url
@@ -214,14 +207,23 @@ alias cddotfiles='c ~/my/dotfiles'
 alias x='chmod +x'
 
 alias rr='. ~/.zshrc'
-alias brc='emacsclient ~/.zshrc; . ~/.zshrc'
 
 alias df='df -h'
 alias du='du -c -h'
 alias du1='command du -chd 1'
 alias cls='clear'
 
-alias topcmds='cat ~/.zsh_history | awk -F";" "{ print $2 }" | cut -d " " -f1 | sort | uniq -c | sort -nr | head -15'
+function topcmds() {
+  local -x LC_ALL=C
+  awk -F';' '
+    /^: [0-9]+:[0-9]+;/ {
+      cmd = $2
+      sub(/^[[:space:]]+/, "", cmd)
+      split(cmd, words, /[[:space:]]+/)
+      print words[1]
+    }
+  ' "$HISTFILE" | sort | uniq -c | sort -nr | head -15
+}
 
 # Prefer eza for listings, falling back to macOS ls. Sorted listings include
 # regular files only; directories have misleading size and modification data.
