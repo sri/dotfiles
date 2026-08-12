@@ -3,7 +3,12 @@
 set -euo pipefail
 
 if [[ "${TERM_PROGRAM:-}" == "ghostty" || -n "${GHOSTTY_RESOURCES_DIR:-}" ]]; then
-  pkill -USR2 -x ghostty
+  if ! pkill -USR2 -x ghostty 2>/dev/null; then
+    # On macOS, pkill does not match Ghostty's app-bundle process path.
+    ghostty_pids=$(ps -axo pid=,comm= | awk '$2 == "/Applications/Ghostty.app/Contents/MacOS/ghostty" { print $1 }')
+    [[ -n "$ghostty_pids" ]]
+    kill -USR2 $ghostty_pids
+  fi
   echo "Reloaded Ghostty config"
 elif [[ "${TERM_PROGRAM:-}" == "kitty" || "${TERM:-}" == "xterm-kitty" || -n "${KITTY_WINDOW_ID:-}" ]]; then
   pkill -USR1 -x kitty

@@ -42,16 +42,28 @@ sidebar_min_width = 0
 sidebar_max_width = 50
 prompt_new_tab_name = false
 
+show_agent_labels_on_pane_borders = false
 [update]
 version_check = false
 
 manifest_check = false
 
 [[keys.command]]
-key = "prefix+alt+g"
-type = "pane"
-command = "emacsclient -t -a \"\" --eval \"(progn (require 'magit) (magit-status \\\"$(pwd)\\\"))\""
-description = "launch Magit"
+key = "super+s"
+type = "popup"
+command = "exec \"${SHELL:-sh}\" -l"
+description = "command popup"
+width = "80%"
+height = "50%"
+
+[[keys.command]]
+key = "super+r"
+type = "shell"
+command = '''
+"$HERDR_BIN_PATH" server reload-config
+,terminal_reload
+'''
+description = "reload Herdr and terminal config"
 
 # [[keys.command]]
 # key = "prefix+m"
@@ -82,3 +94,6 @@ description = "Emacs client"
 
 [ui.sound]
 enabled = true
+
+[ui.toast]
+delivery = "herdr"
