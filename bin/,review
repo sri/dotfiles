@@ -15,12 +15,44 @@ if [[ ! "$PR_URL" =~ ^https?://[^[:space:]]+$ ]]; then
   exit 2
 fi
 
-# Get all PR metadata in one call.
-IFS=$'\t' read -r PR_NUMBER HEAD_REF HEAD_OWNER HEAD_REPO < <(
+# Get all PR metadata in one call. The repository in the URL is the base
+# repository; the head repository may be a fork with a different name.
+IFS=$'\t' read -r PR_NUMBER HEAD_REF HEAD_OWNER HEAD_REPO BASE_REPO_NAME < <(
   gh pr view "$PR_URL" \
-    --json number,headRefName,headRepositoryOwner,headRepository \
-    --jq '[.number, .headRefName, .headRepositoryOwner.login, .headRepository.name] | @tsv'
+    --json number,url,headRefName,headRepositoryOwner,headRepository \
+    --jq '[.number, .headRefName, .headRepositoryOwner.login, .headRepository.name, (.url | split("/") | .[-3])] | @tsv'
 )
+
+# Prefer a matching current checkout, then search one level below the usual
+# workspace directories. Herdr needs the checkout path, not just owner/repo.
+REPO_SEARCH_DIRS=("$HOME/ws" "$HOME/dev" "$HOME/my")
+REPO_DIR=""
+if current_root="$(git -C "$PWD" rev-parse --show-toplevel 2>/dev/null)" &&
+   [[ "$(basename "$current_root")" == "$BASE_REPO_NAME" ]]; then
+  REPO_DIR="$current_root"
+else
+  for parent in "${REPO_SEARCH_DIRS[@]}"; do
+    candidate="$parent/$BASE_REPO_NAME"
+    [[ -d "$candidate" ]] || continue
+    if candidate_root="$(git -C "$candidate" rev-parse --show-toplevel 2>/dev/null)" &&
+       [[ "$(basename "$candidate_root")" == "$BASE_REPO_NAME" ]]; then
+      REPO_DIR="$candidate_root"
+      break
+    fi
+  done
+fi
+
+if [[ -z "$REPO_DIR" ]]; then
+  {
+    echo "error: could not find a Git checkout named '$BASE_REPO_NAME'"
+    printf 'searched the current worktree'
+    for parent in "${REPO_SEARCH_DIRS[@]}"; do
+      printf ", '%s/%s'" "$parent" "$BASE_REPO_NAME"
+    done
+    printf '\n'
+  } >&2
+  exit 1
+fi
 
 review_prompt="Review pull request $PR_URL.
 
@@ -39,11 +71,17 @@ Review the PR against its base branch. Focus on:
 Do not modify files. Produce a concise review with findings ordered by severity.
 For each finding, include the file and line/range when possible."
 
-# State 2: the review workspace and its waiting agent already exist. Re-prompt it.
+# State 3: the review workspace and its waiting agent already exist. Re-prompt it.
+worktree_list="$(herdr worktree list --cwd "$REPO_DIR" --json)"
 existing_workspace="$(
-  herdr worktree list --cwd "$PWD" --json |
-    jq -r --arg branch "$HEAD_REF" \
-      '[.result.worktrees[] | select(.branch == $branch and .open_workspace_id)][0].open_workspace_id // empty'
+  jq -r --arg branch "$HEAD_REF" \
+    '[.result.worktrees[] | select(.branch == $branch and .open_workspace_id)][0].open_workspace_id // empty' \
+    <<<"$worktree_list"
+)"
+existing_worktree_path="$(
+  jq -r --arg branch "$HEAD_REF" \
+    '[.result.worktrees[] | select(.branch == $branch)][0].path // empty' \
+    <<<"$worktree_list"
 )"
 if [[ -n "$existing_workspace" ]]; then
   existing_agent="$(
@@ -59,30 +97,45 @@ if [[ -n "$existing_workspace" ]]; then
   exit 0
 fi
 
-# State 1: fetch the author's latest branch and create a background workspace.
+# Fetch the author's latest branch.
 PR_HOST="${PR_URL#*://}"
 PR_HOST="${PR_HOST%%/*}"
 REMOTE="pr-${PR_NUMBER}"
 REMOTE_URL="https://${PR_HOST}/${HEAD_OWNER}/${HEAD_REPO}.git"
-if git remote get-url "$REMOTE" >/dev/null 2>&1; then
-  git remote set-url "$REMOTE" "$REMOTE_URL"
+if git -C "$REPO_DIR" remote get-url "$REMOTE" >/dev/null 2>&1; then
+  git -C "$REPO_DIR" remote set-url "$REMOTE" "$REMOTE_URL"
 else
-  git remote add "$REMOTE" "$REMOTE_URL"
+  git -C "$REPO_DIR" remote add "$REMOTE" "$REMOTE_URL"
 fi
-git fetch "$REMOTE" "$HEAD_REF"
+git -C "$REPO_DIR" fetch "$REMOTE" "$HEAD_REF"
 UPSTREAM="${REMOTE}/${HEAD_REF}"
-git branch -f "$HEAD_REF" "$UPSTREAM"
-git branch --set-upstream-to="$UPSTREAM" "$HEAD_REF"
 
-created="$(
-  herdr worktree create \
-    --cwd "$PWD" \
-    --branch "$HEAD_REF" \
-    --base "$UPSTREAM" \
-    --label "PR #${PR_NUMBER}" \
-    --no-focus \
-    --json
-)"
+if [[ -n "$existing_worktree_path" ]]; then
+  # State 2: the worktree remains on disk after its workspace was closed.
+  # Reopen it rather than trying to force-update its checked-out branch.
+  git -C "$existing_worktree_path" branch --set-upstream-to="$UPSTREAM" "$HEAD_REF"
+  created="$(
+    herdr worktree open \
+      --cwd "$REPO_DIR" \
+      --path "$existing_worktree_path" \
+      --label "PR #${PR_NUMBER}" \
+      --no-focus \
+      --json
+  )"
+else
+  # State 1: create a new branch, worktree, and background workspace.
+  git -C "$REPO_DIR" branch -f "$HEAD_REF" "$UPSTREAM"
+  git -C "$REPO_DIR" branch --set-upstream-to="$UPSTREAM" "$HEAD_REF"
+  created="$(
+    herdr worktree create \
+      --cwd "$REPO_DIR" \
+      --branch "$HEAD_REF" \
+      --base "$UPSTREAM" \
+      --label "PR #${PR_NUMBER}" \
+      --no-focus \
+      --json
+  )"
+fi
 pane_id="$(jq -r '.result.root_pane.pane_id' <<<"$created")"
 agent_name="pr${PR_NUMBER}"
 
