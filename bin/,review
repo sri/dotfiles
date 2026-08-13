@@ -60,8 +60,9 @@ fi
 
 review_prompt="Review pull request $PR_URL.
 
-Read the repository's CLAUDE.md and any relevant project instructions first.
-Run git pull --ff-only before starting the review so the branch is up to date.
+Read the repository's CLAUDE.md and any relevant project instructions
+first. Run git pull --ff-only before starting the review so the branch
+is up to date.
 
 Review the PR against its base branch. Focus on:
 - correctness and bugs
@@ -72,8 +73,10 @@ Review the PR against its base branch. Focus on:
 - missing or inadequate tests
 - unnecessary complexity
 
-Do not modify files. Produce a concise review with findings ordered by severity.
-For each finding, include the file and line/range when possible."
+Do not modify files. Produce a concise review with findings ordered by
+severity. For each finding, include the file and line/range when
+possible. Do not post anything to the PR after you are done. I want to
+raed your comments first."
 
 # State 3: the review workspace and its waiting agent already exist. Re-prompt it.
 worktree_list="$(herdr worktree list --cwd "$REPO_DIR" --json)"
