@@ -65,7 +65,7 @@ export RIPGREP_CONFIG_PATH=~/.ripgreprc
 
 export FZF_ALT_C_COMMAND='
      printf "%s\n" "$HOME/my" "$HOME/ws" "$HOME/dev"
-     fd --type d --max-depth 3 . "$HOME/my" "$HOME/work" "$HOME/other-projects"
+     fd --type d --max-depth 3 . "$HOME/my" "$HOME/ws" "$HOME/dev"
    '
 
 # Fast cached completion startup, with a full security/refresh check once a day.
