@@ -63,6 +63,11 @@ setopt PUSHD_SILENT              # Do not print the stack after every cd.
 export PYTHONSTARTUP=~/.pythonrc.py
 export RIPGREP_CONFIG_PATH=~/.ripgreprc
 
+export FZF_ALT_C_COMMAND='
+     printf "%s\n" "$HOME/my" "$HOME/ws" "$HOME/dev"
+     fd --type d --max-depth 3 . "$HOME/my" "$HOME/work" "$HOME/other-projects"
+   '
+
 # Fast cached completion startup, with a full security/refresh check once a day.
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
