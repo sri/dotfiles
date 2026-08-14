@@ -136,7 +136,7 @@
  ("C-o" . my/ffap-or-find-file)
  ("C-p" . my/shell-switch-to-next-most-recent)
  ("C-r" . vr/query-replace)
- ("C-s" . save-buffer)
+ ("C-s" . my/save-or-send-agent-prompt)
  ;; ("C-t" . )
  ("C-v" . consult-project-buffer)
   ("C-y" . my/yank)

@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+# External editor for terminal agents running in Herdr.  Emacs records whether
+# the prompt should be submitted, returned for further editing, or cancelled.
+set -u
+
+if [[ $# -ne 1 ]]; then
+  echo "usage: ,agent-editor prompt-file" >&2
+  exit 2
+fi
+
+prompt_file=$1
+action_file="${prompt_file}.agent-editor-action"
+agent_pane=${HERDR_PANE_ID:-}
+emacs_pane=""
+
+cleanup() {
+  rm -f "$action_file"
+}
+trap cleanup EXIT
+
+# Returning normally without an explicit action puts the edited text back in
+# the agent without submitting it.  This also makes C-x # a safe fallback.
+printf 'edit\n' > "$action_file"
+
+# The Emacs server retains the Herdr pane environment in which it was started.
+# emacsclient prints Lisp strings with quotes, so let jq decode the result.
+if [[ -n "$agent_pane" ]] && command -v herdr >/dev/null 2>&1; then
+  emacs_pane=$(
+    emacsclient --quiet --eval '(or (getenv "HERDR_PANE_ID") "")' 2>/dev/null |
+      jq -r 'if type == "string" then . else empty end' 2>/dev/null
+  ) || emacs_pane=""
+fi
+
+focus_pane() {
+  local source=$1 target=$2 layout direction
+  [[ -n "$source" && -n "$target" && "$source" != "$target" ]] || return 0
+
+  layout=$(herdr pane layout --pane "$source" 2>/dev/null) || return 0
+  direction=$(
+    jq -r --arg source "$source" --arg target "$target" '
+      .result.layout.panes as $panes
+      | ($panes[] | select(.pane_id == $source) | .rect) as $s
+      | ($panes[] | select(.pane_id == $target) | .rect) as $t
+      | (($t.x + $t.width / 2) - ($s.x + $s.width / 2)) as $dx
+      | (($t.y + $t.height / 2) - ($s.y + $s.height / 2)) as $dy
+      | if (($dx | fabs) >= ($dy | fabs))
+        then (if $dx < 0 then "left" else "right" end)
+        else (if $dy < 0 then "up" else "down" end)
+        end
+    ' <<<"$layout" 2>/dev/null
+  ) || return 0
+
+  [[ -n "$direction" ]] || return 0
+  herdr pane focus --pane "$source" --direction "$direction" >/dev/null 2>&1 || true
+}
+
+# Run the waiting client in the background so this wrapper can move Herdr focus
+# while Emacs owns the prompt buffer.
+emacsclient --quiet "$prompt_file" &
+client_pid=$!
+focus_pane "$agent_pane" "$emacs_pane"
+
+wait "$client_pid"
+client_status=$?
+action=$(head -n 1 "$action_file" 2>/dev/null || printf 'edit')
+
+focus_pane "$emacs_pane" "$agent_pane"
+
+# The agent does not restore the edited text until this wrapper exits.  Send
+# Enter shortly afterward; sending it synchronously here can be discarded when
+# the agent restarts its terminal UI.
+if [[ $client_status -eq 0 && "$action" == "submit" && -n "$agent_pane" ]]; then
+  nohup bash -c '
+    sleep 0.2
+    herdr pane send-keys "$1" enter >/dev/null 2>&1
+  ' _ "$agent_pane" </dev/null >/dev/null 2>&1 &
+fi
+
+exit "$client_status"
