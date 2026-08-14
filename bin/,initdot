@@ -6,6 +6,8 @@ import platform
 import pathlib
 
 links = {
+    "pi/agent-settings.json": "~/.pi/agent/settings.json",
+    "claude/settings.json"  : "~/.claude/settings.json",
     "jj/config.toml"        : "~/.config/jj/config.toml",
     "ghostty-config"        : "~/.config/ghostty/config",
     "kitty/kitty.conf"      : "~/.config/kitty/kitty.conf",

@@ -1,0 +1,9 @@
+{
+  "model": "opus",
+  "alwaysThinkingEnabled": true,
+  "externalEditorContext": true,
+  "env": {
+    "EDITOR": ",agent-editor",
+    "VISUAL": ",agent-editor"
+  }
+}
