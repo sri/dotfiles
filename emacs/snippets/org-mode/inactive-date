@@ -1,0 +1,7 @@
+# name: inactive date heading
+# key: ;d
+# type: command
+# --
+(insert "* ")
+(org-insert-time-stamp (current-time) nil t)
+(insert "\n")
