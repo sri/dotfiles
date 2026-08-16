@@ -1,5 +1,5 @@
 font-family = JetBrains Mono
-theme = iTerm2 Solarized Dark
+theme = Everforest Dark Soft
 auto-update-channel = tip
 # Forward shortcuts using the extended keyboard protocol so Herdr can handle
 # tabs, workspaces, and panes itself.

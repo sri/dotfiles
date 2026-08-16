@@ -99,6 +99,7 @@ try to load the source again."
          (non-gui "my-terminal")
          (this "my-dot-emacs")
          (base '("my-fns"
+                 "my-theme"
                  "my-completions"
                  "my-scratch"
                  "my-register"

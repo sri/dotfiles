@@ -1,0 +1,177 @@
+{
+  "current": "everforest",
+  "themes": {
+    "catppuccin": {
+      "aliases": [
+        "catppuccin-mocha",
+        "mocha"
+      ],
+      "emacs": "catppuccin",
+      "ghostty": "Catppuccin Mocha",
+      "herdr": "catppuccin"
+    },
+    "catppuccin-latte": {
+      "aliases": [
+        "latte"
+      ],
+      "emacs": "base16-catppuccin-latte",
+      "ghostty": "Catppuccin Latte",
+      "herdr": "catppuccin-latte"
+    },
+    "ethereal": {
+      "aliases": [],
+      "emacs": "base16-equilibrium-dark",
+      "ghostty": "Nocturnal Winter",
+      "herdr": "terminal"
+    },
+    "everforest": {
+      "aliases": [],
+      "emacs": "base16-everforest",
+      "ghostty": "Everforest Dark Soft",
+      "herdr": "terminal"
+    },
+    "flexoki-light": {
+      "aliases": [
+        "flexoki"
+      ],
+      "emacs": "base16-flexoki-light",
+      "ghostty": "Flexoki Light",
+      "herdr": "terminal"
+    },
+    "gruvbox": {
+      "aliases": [
+        "gruvbox-material",
+        "gruvbox-material-dark"
+      ],
+      "emacs": "base16-gruvbox-material-dark-medium",
+      "ghostty": "Gruvbox Material Dark",
+      "herdr": "gruvbox"
+    },
+    "hackerman": {
+      "aliases": [],
+      "emacs": "doom-henna",
+      "ghostty": "Oxocarbon",
+      "herdr": "terminal"
+    },
+    "kanagawa": {
+      "aliases": [
+        "kanagawa-wave"
+      ],
+      "emacs": "base16-kanagawa",
+      "ghostty": "Kanagawa Wave",
+      "herdr": "kanagawa"
+    },
+    "last-horizon": {
+      "aliases": [],
+      "emacs": "base16-tinta",
+      "ghostty": "Atlas Ragnarok",
+      "herdr": "terminal"
+    },
+    "lumon": {
+      "aliases": [],
+      "emacs": "doom-material",
+      "ghostty": "Graphite",
+      "herdr": "terminal"
+    },
+    "lupine": {
+      "aliases": [],
+      "emacs": "doom-opera-light",
+      "ghostty": "Pro Light",
+      "herdr": "one-light"
+    },
+    "matte-black": {
+      "aliases": [
+        "matteblack"
+      ],
+      "emacs": "doom-ayu-dark",
+      "ghostty": "Matte Black",
+      "herdr": "terminal"
+    },
+    "miasma": {
+      "aliases": [],
+      "emacs": "base16-gruvbox-dark-medium-forest",
+      "ghostty": "Miasma",
+      "herdr": "terminal"
+    },
+    "nord": {
+      "aliases": [],
+      "emacs": "doom-nord",
+      "ghostty": "Nord",
+      "herdr": "nord"
+    },
+    "osaka-jade": {
+      "aliases": [
+        "osaka"
+      ],
+      "emacs": "base16-darkmoss",
+      "ghostty": "Patina",
+      "herdr": "terminal"
+    },
+    "retro-82": {
+      "aliases": [
+        "retro82"
+      ],
+      "emacs": "cobalt",
+      "ghostty": "Monokai Pro Octagon",
+      "herdr": "terminal"
+    },
+    "ristretto": {
+      "aliases": [
+        "monokai-ristretto"
+      ],
+      "emacs": "doom-monokai-ristretto",
+      "ghostty": "Monokai Pro Ristretto",
+      "herdr": "terminal"
+    },
+    "rose-pine": {
+      "aliases": [
+        "rose-pine-dawn",
+        "rosepine"
+      ],
+      "emacs": "base16-rose-pine-dawn",
+      "ghostty": "Rose Pine Dawn",
+      "herdr": "rose-pine-dawn"
+    },
+    "solarized-dark": {
+      "aliases": [
+        "solarized",
+        "solarized dark"
+      ],
+      "emacs": "solarized-dark",
+      "ghostty": "iTerm2 Solarized Dark",
+      "herdr": "solarized"
+    },
+    "solitude": {
+      "aliases": [],
+      "emacs": "base16-grayscale-dark",
+      "ghostty": "Vague",
+      "herdr": "terminal"
+    },
+    "tokyo-night": {
+      "aliases": [
+        "tokyo",
+        "tokyonight",
+        "tokyo night"
+      ],
+      "emacs": "doom-tokyo-night",
+      "ghostty": "TokyoNight",
+      "herdr": "tokyo-night"
+    },
+    "vantablack": {
+      "aliases": [
+        "vanta-black"
+      ],
+      "emacs": "doom-homage-black",
+      "ghostty": "Atlas Ragnarok",
+      "herdr": "terminal"
+    },
+    "white": {
+      "aliases": [
+        "monochrome-light"
+      ],
+      "emacs": "doom-plain",
+      "ghostty": "iTerm2 Tango Light",
+      "herdr": "terminal"
+    }
+  }
+}

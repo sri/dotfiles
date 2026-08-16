@@ -1,61 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 (require 'bm)
 
-(defvar my-themes
-  '(
-    solarized-gruvbox
-    solarized-zenburn
-    doom-zenburn
-
-    ef-melissa-dark
-    ef-cyprus
-    gruvbox-dark-medium
-    kaolin-dark
-
-    leuven
-
-    doom-tokyo-night
-    solarized-dark
-    jetbrains-darcula
-    modus-vivendi
-    modus-operandi
-    zenburn
-    solarized-light
-    spacemacs-dark
-    ))
-
-
-(defvar my-theme
-  (let* ((hour (nth 2 (decode-time (current-time))))
-         (period (cond ((or (>= hour 17) (<= hour 4)) 'evening)
-                       ((>= hour 12) 'afternoon)
-                       (t            'morning))))
-    (cond ((eq period 'evening)
-           'solarized-gruvbox-dark)
-          (t
-           'leuven
-           'acme))
-
-    'solarized-dark)
-  "Can be defined in ~/.emacs.private.el.")
-
-(defun my-try-theme (theme)
-  (mapc #'disable-theme custom-enabled-themes)
-  (load-theme theme :no-confirm)
-  (message "trying theme: %s" theme))
-
-(let ((theme
-       (if (eq my-theme 'ask)
-           (intern
-            (completing-read
-             "Select theme: "
-             (mapcar #'symbol-name my-themes)
-             nil t))
-         (or my-theme
-             (nth (random (length my-themes)) my-themes)))))
-  (when theme
-    (message "using theme %s" theme)
-    (load-theme theme t)))
+(my/load-current-theme)
 
 (defvar my/theme-overrides-dir
   (expand-file-name "theme-overrides" my/dotfiles-dir))

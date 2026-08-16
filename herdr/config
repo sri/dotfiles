@@ -21,19 +21,11 @@ cycle_pane_previous = ["prefix+shift+tab", "super+shift+j"]
 toggle_sidebar = ["prefix+b", "super+b"]
 
 [theme]
-name = "solarized"
+name = "terminal"
 auto_switch = false
-
-# Herdr's Solarized surface_dim equals its #002b36 panel background, so
-# sidebar separators disappear. Use Solarized base02 for subtle chrome.
-[theme.custom]
-surface_dim = "#073642"
 
 [ui]
 agent_panel_sort = "priority"
-# ANSI "blue" is too low-contrast for selected tabs in kitty's default palette.
-# Use a lighter blue so tab labels (e.g. "1") stay readable.
-accent = "#89b4fa"
 pane_borders = true
 pane_gaps = false
 hide_tab_bar_when_single_tab = true

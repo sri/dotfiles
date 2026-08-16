@@ -1,0 +1,652 @@
+#!/usr/bin/env python3
+"""Discover, apply, and verify one canonical theme across local tools."""
+
+from __future__ import annotations
+
+import argparse
+import difflib
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import signal
+import subprocess
+import sys
+import tempfile
+import time
+from typing import Any
+
+ROOT = Path(__file__).resolve().parents[1]
+REGISTRY = ROOT / "theme" / "themes.json"
+GHOSTTY_CONFIG = ROOT / "ghostty-config"
+HERDR_CONFIG = ROOT / "herdr" / "config"
+EMACS_THEME_FILE = ROOT / "emacs" / "my-theme.el"
+
+# Herdr 0.8 does not expose a theme-list command.  These are its built-ins.
+HERDR_THEMES = [
+    "catppuccin",
+    "catppuccin-latte",
+    "terminal",
+    "tokyo-night",
+    "tokyo-night-day",
+    "dracula",
+    "nord",
+    "gruvbox",
+    "gruvbox-light",
+    "one-dark",
+    "one-light",
+    "solarized",
+    "solarized-light",
+    "kanagawa",
+    "kanagawa-lotus",
+    "rose-pine",
+    "rose-pine-dawn",
+    "vesper",
+]
+
+PROVIDERS = ("ghostty", "herdr", "emacs")
+
+
+class ThemeError(RuntimeError):
+    pass
+
+
+def run(command: list[str], *, check: bool = False) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(command, text=True, capture_output=True, check=check)
+
+
+def atomic_write(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    mode = path.stat().st_mode if path.exists() else 0o644
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, delete=False
+    ) as output:
+        output.write(content)
+        temporary = Path(output.name)
+    temporary.chmod(mode)
+    temporary.replace(path)
+
+
+def load_registry() -> dict[str, Any]:
+    try:
+        data = json.loads(REGISTRY.read_text())
+    except (OSError, json.JSONDecodeError) as error:
+        raise ThemeError(f"cannot read {REGISTRY}: {error}") from error
+    if not isinstance(data.get("themes"), dict):
+        raise ThemeError(f"{REGISTRY} has no themes object")
+    return data
+
+
+def save_registry(registry: dict[str, Any]) -> None:
+    atomic_write(REGISTRY, json.dumps(registry, indent=2, sort_keys=True) + "\n")
+
+
+def normalize(name: str) -> str:
+    name = re.sub(r"([a-z0-9])([A-Z])", r"\1-\2", name)
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def comparable_name(name: str) -> str:
+    parts = normalize(name).split("-")
+    while parts and parts[0] in {"doom", "base16"}:
+        parts.pop(0)
+    if parts and parts[-1] == "theme":
+        parts.pop()
+    return "-".join(parts)
+
+
+def candidate_score(query: str, candidate: str) -> float:
+    query_norm = comparable_name(query)
+    candidate_norm = comparable_name(candidate)
+    if candidate_norm == query_norm:
+        return 100.0
+    if normalize(candidate) == normalize(query):
+        return 99.0
+    query_parts = query_norm.split("-")
+    candidate_parts = candidate_norm.split("-")
+    if candidate_parts[: len(query_parts)] == query_parts:
+        return 90.0 - max(0, len(candidate_parts) - len(query_parts))
+    if set(query_parts).issubset(candidate_parts):
+        return 80.0 - max(0, len(candidate_parts) - len(query_parts))
+    return 70.0 * difflib.SequenceMatcher(None, query_norm, candidate_norm).ratio()
+
+
+def theme_palette(path: str | None) -> tuple[str | None, str | None]:
+    if not path:
+        return None, None
+    try:
+        text = Path(path).read_text()
+    except OSError:
+        return None, None
+
+    def value(key: str) -> str | None:
+        match = re.search(rf"(?m)^{key}\s*=\s*(\S+)", text)
+        return match.group(1) if match else None
+
+    return value("background"), value("foreground")
+
+
+def ghostty_candidates() -> list[dict[str, Any]]:
+    if not shutil.which("ghostty"):
+        return []
+    result = run(["ghostty", "+list-themes", "--plain", "--path"])
+    if result.returncode:
+        return []
+    candidates = []
+    for line in result.stdout.splitlines():
+        match = re.match(r"^(.*?) \([^)]*\)(?: (.*))?$", line.strip())
+        if not match:
+            continue
+        name, path = match.groups()
+        background, foreground = theme_palette(path)
+        candidates.append(
+            {
+                "name": name,
+                "path": path,
+                "background": background,
+                "foreground": foreground,
+            }
+        )
+    return candidates
+
+
+def decode_emacs_string(value: str) -> str:
+    value = value.strip()
+    if value.startswith('"') and value.endswith('"'):
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError:
+            pass
+    return value
+
+
+def emacs_candidates() -> list[dict[str, Any]]:
+    names: list[str] = []
+    if shutil.which("emacsclient"):
+        expression = "(mapcar #'symbol-name (custom-available-themes))"
+        result = run(["emacsclient", "-e", expression])
+        if result.returncode == 0:
+            for quoted in re.findall(r'"(?:\\.|[^"\\])*"', result.stdout):
+                try:
+                    names.append(json.loads(quoted))
+                except json.JSONDecodeError:
+                    pass
+    if not names and shutil.which("emacs"):
+        expression = (
+            "(progn (require 'package) (package-initialize) "
+            "(princ (mapconcat #'symbol-name (custom-available-themes) \"\\n\")))"
+        )
+        result = run(["emacs", "--batch", "-Q", "--eval", expression])
+        if result.returncode == 0:
+            names = [line for line in result.stdout.splitlines() if line]
+    return [{"name": name} for name in sorted(set(names))]
+
+
+def all_candidates() -> dict[str, list[dict[str, Any]]]:
+    return {
+        "ghostty": ghostty_candidates(),
+        "herdr": [{"name": name} for name in HERDR_THEMES],
+        "emacs": emacs_candidates(),
+    }
+
+
+def ranked_candidates(
+    query: str, candidates: list[dict[str, Any]], limit: int = 12
+) -> list[dict[str, Any]]:
+    ranked = []
+    for candidate in candidates:
+        item = dict(candidate)
+        item["score"] = candidate_score(query, candidate["name"])
+        ranked.append(item)
+    ranked.sort(key=lambda item: (-item["score"], item["name"].lower()))
+    return ranked[:limit]
+
+
+def resolve_theme(registry: dict[str, Any], requested: str) -> str:
+    requested_norm = normalize(requested)
+    for canonical, entry in registry["themes"].items():
+        names = [canonical, *entry.get("aliases", [])]
+        if requested_norm in {normalize(name) for name in names}:
+            return canonical
+    raise ThemeError(
+        f"unknown canonical theme {requested!r}; run ',theme discover {requested}'"
+    )
+
+
+def configured_ghostty_theme() -> str | None:
+    match = re.search(r"(?m)^theme\s*=\s*(.+?)\s*$", GHOSTTY_CONFIG.read_text())
+    return match.group(1).strip('"') if match else None
+
+
+def configured_herdr_theme() -> str | None:
+    text = HERDR_CONFIG.read_text()
+    section = re.search(r"(?ms)^\[theme\]\s*$\n(.*?)(?=^\[|\Z)", text)
+    if not section:
+        return None
+    match = re.search(r'(?m)^name\s*=\s*"([^"]+)"\s*$', section.group(1))
+    return match.group(1) if match else None
+
+
+def replace_ghostty_theme(text: str, theme: str) -> str:
+    changed, count = re.subn(
+        r"(?m)^theme\s*=\s*.+?$", f"theme = {theme}", text, count=1
+    )
+    if count != 1:
+        raise ThemeError("could not find exactly one Ghostty theme setting")
+    return changed
+
+
+def replace_herdr_theme(text: str, theme: str) -> str:
+    section = re.search(r"(?ms)^\[theme\]\s*$\n(.*?)(?=^\[|\Z)", text)
+    if not section:
+        raise ThemeError("could not find Herdr's [theme] section")
+    body = section.group(1)
+    changed_body, count = re.subn(
+        r'(?m)^name\s*=\s*"[^"]+"\s*$', f'name = "{theme}"', body, count=1
+    )
+    if count != 1:
+        raise ThemeError("could not find exactly one Herdr theme name")
+    return text[: section.start(1)] + changed_body + text[section.end(1) :]
+
+
+def validate_configs() -> list[str]:
+    errors = []
+    if shutil.which("ghostty"):
+        result = run(
+            ["ghostty", "+validate-config", f"--config-file={GHOSTTY_CONFIG}"]
+        )
+        if result.returncode:
+            errors.append(f"Ghostty: {(result.stderr or result.stdout).strip()}")
+    if shutil.which("herdr"):
+        result = run(["herdr", "config", "check"])
+        if result.returncode:
+            errors.append(f"Herdr: {(result.stderr or result.stdout).strip()}")
+    return errors
+
+
+def ensure_mapping_available(mapping: dict[str, Any]) -> None:
+    candidates = all_candidates()
+    missing = []
+    for provider in PROVIDERS:
+        expected = mapping.get(provider)
+        available = {candidate["name"] for candidate in candidates[provider]}
+        if not expected:
+            missing.append(f"{provider}: no mapping")
+        elif expected not in available:
+            missing.append(f"{provider}: {expected!r} is not available")
+    if missing:
+        raise ThemeError("theme mapping failed preflight:\n  " + "\n  ".join(missing))
+
+
+def reload_ghostty() -> str:
+    matched = False
+    result = run(["pkill", "-USR2", "-x", "ghostty"])
+    matched = result.returncode == 0
+    if not matched:
+        ps = run(["ps", "-axo", "pid=,comm="])
+        for line in ps.stdout.splitlines():
+            fields = line.strip().split(None, 1)
+            if len(fields) == 2 and fields[1].endswith(
+                "/Ghostty.app/Contents/MacOS/ghostty"
+            ):
+                os.kill(int(fields[0]), signal.SIGUSR2)
+                matched = True
+    return "reloaded" if matched else "not running"
+
+
+def reload_herdr() -> str:
+    if not shutil.which("herdr"):
+        return "not installed"
+    result = run(["herdr", "server", "reload-config"])
+    return "reloaded" if result.returncode == 0 else "not running"
+
+
+def reload_emacs(theme: str) -> str:
+    if not shutil.which("emacsclient"):
+        raise ThemeError("emacsclient is not installed")
+    if not re.fullmatch(r"[A-Za-z0-9_+.-]+", theme):
+        raise ThemeError(f"unsafe Emacs theme name: {theme!r}")
+    elisp_path = json.dumps(str(EMACS_THEME_FILE))
+    expression = (
+        f"(progn (load {elisp_path} nil t) "
+        f"(my/switch-theme-cleanly '{theme}) "
+        "(format \"%s|%S\" my-theme custom-enabled-themes))"
+    )
+    result = run(["emacsclient", "-e", expression])
+    if result.returncode:
+        raise ThemeError(
+            "Emacs theme switch failed via emacsclient: "
+            + (result.stderr or result.stdout).strip()
+        )
+    status = decode_emacs_string(result.stdout)
+    expected = f"{theme}|({theme})"
+    if status != expected:
+        raise ThemeError(
+            f"Emacs reported unexpected theme state {status!r}; expected {expected!r}"
+        )
+    return status
+
+
+def apply_theme(requested: str, *, reload: bool = True) -> None:
+    registry = load_registry()
+    canonical = resolve_theme(registry, requested)
+    mapping = registry["themes"][canonical]
+    ensure_mapping_available(mapping)
+
+    originals = {
+        REGISTRY: REGISTRY.read_text(),
+        GHOSTTY_CONFIG: GHOSTTY_CONFIG.read_text(),
+        HERDR_CONFIG: HERDR_CONFIG.read_text(),
+    }
+    registry["current"] = canonical
+    try:
+        atomic_write(
+            GHOSTTY_CONFIG,
+            replace_ghostty_theme(originals[GHOSTTY_CONFIG], mapping["ghostty"]),
+        )
+        atomic_write(
+            HERDR_CONFIG,
+            replace_herdr_theme(originals[HERDR_CONFIG], mapping["herdr"]),
+        )
+        save_registry(registry)
+        errors = validate_configs()
+        if errors:
+            raise ThemeError("configuration validation failed:\n  " + "\n  ".join(errors))
+    except Exception:
+        for path, content in originals.items():
+            atomic_write(path, content)
+        raise
+
+    print(f"Applied {canonical}:")
+    for provider in PROVIDERS:
+        print(f"  {provider:8} {mapping[provider]}")
+
+    if reload:
+        print("Reload:")
+        print(f"  {'ghostty':8} {reload_ghostty()}")
+        print(f"  {'herdr':8} {reload_herdr()}")
+        print(f"  {'emacs':8} {reload_emacs(mapping['emacs'])}")
+
+
+def choose_candidate(
+    provider: str,
+    ranked: list[dict[str, Any]],
+    saved: str | None,
+) -> str | None:
+    print(f"\n{provider.capitalize()} candidates:")
+    for index, candidate in enumerate(ranked, 1):
+        palette = ""
+        if candidate.get("background"):
+            palette = f"  bg={candidate['background']} fg={candidate.get('foreground') or '?'}"
+        marker = " [saved]" if candidate["name"] == saved else ""
+        print(
+            f"  {index:2}. {candidate['name']:<42} "
+            f"score={candidate['score']:5.1f}{palette}{marker}"
+        )
+    if not ranked:
+        print("  no candidates found")
+        return None
+    default = saved if saved in {item["name"] for item in ranked} else ranked[0]["name"]
+    while True:
+        answer = input(f"Select {provider} [default: {default}; '-' to skip]: ").strip()
+        if not answer:
+            return default
+        if answer == "-":
+            return None
+        if answer.isdigit() and 1 <= int(answer) <= len(ranked):
+            return ranked[int(answer) - 1]["name"]
+        exact = next((item["name"] for item in ranked if item["name"] == answer), None)
+        if exact:
+            return exact
+        print("Enter a listed number, exact name, or '-'.")
+
+
+def discover_theme(query: str) -> None:
+    registry = load_registry()
+    try:
+        canonical = resolve_theme(registry, query)
+    except ThemeError:
+        canonical = normalize(query)
+    existing = registry["themes"].get(canonical, {})
+    candidates = all_candidates()
+    ranked = {
+        provider: ranked_candidates(query, candidates[provider])
+        for provider in PROVIDERS
+    }
+
+    if not sys.stdin.isatty():
+        for provider in PROVIDERS:
+            print(f"{provider}:")
+            for candidate in ranked[provider]:
+                print(f"  {candidate['name']} ({candidate['score']:.1f})")
+        print("Run interactively to choose and save mappings.")
+        return
+
+    selected = {}
+    for provider in PROVIDERS:
+        selected[provider] = choose_candidate(
+            provider, ranked[provider], existing.get(provider)
+        )
+    missing = [provider for provider, value in selected.items() if not value]
+    if missing:
+        raise ThemeError("not saved; missing selections for " + ", ".join(missing))
+
+    aliases = list(existing.get("aliases", []))
+    if normalize(query) != normalize(canonical) and query not in aliases:
+        aliases.append(query)
+    registry["themes"][canonical] = {"aliases": aliases, **selected}
+    save_registry(registry)
+    print(f"\nSaved mapping for {canonical}. Use: ,theme set {canonical}")
+
+
+def emacs_runtime_status() -> str:
+    if not shutil.which("emacsclient"):
+        return "unavailable"
+    expression = (
+        "(format \"my-theme=%S enabled=%S magit-bg=%S\" "
+        "(and (boundp 'my-theme) my-theme) custom-enabled-themes "
+        "(and (facep 'magit-section-highlight) "
+        "(face-background 'magit-section-highlight nil t)))"
+    )
+    result = run(["emacsclient", "-e", expression])
+    if result.returncode:
+        return "not running"
+    return decode_emacs_string(result.stdout)
+
+
+def status() -> bool:
+    registry = load_registry()
+    current = registry.get("current")
+    mapping = registry["themes"].get(current, {})
+    actual = {
+        "ghostty": configured_ghostty_theme(),
+        "herdr": configured_herdr_theme(),
+    }
+    print(f"Canonical: {current}")
+    okay = True
+    for provider in ("ghostty", "herdr"):
+        expected = mapping.get(provider)
+        state = "ok" if actual[provider] == expected else "DRIFT"
+        okay &= state == "ok"
+        print(
+            f"  {provider:8} configured={actual[provider]!r} "
+            f"expected={expected!r}  {state}"
+        )
+    print(f"  {'emacs':8} expected={mapping.get('emacs')!r}")
+    runtime = emacs_runtime_status()
+    print(f"  {'runtime':8} {runtime}")
+    if mapping.get("emacs") and f"my-theme={mapping['emacs']}" not in runtime:
+        okay = False
+    if mapping.get("emacs") and f"enabled=({mapping['emacs']})" not in runtime:
+        okay = False
+    return okay
+
+
+def active_my_theme_setqs() -> list[str]:
+    paths = list((ROOT / "emacs").glob("*.el"))
+    private = Path.home() / ".emacs.private.el"
+    if private.exists():
+        paths.append(private)
+    found = []
+    pattern = re.compile(r"^\s*\(setq\s+my-theme\b")
+    for path in paths:
+        for number, line in enumerate(path.read_text(errors="replace").splitlines(), 1):
+            if pattern.search(line):
+                found.append(f"{path}:{number}")
+    return found
+
+
+def doctor() -> bool:
+    registry = load_registry()
+    current = registry.get("current")
+    mapping = registry["themes"].get(current)
+    okay = True
+    print(f"Registry: {REGISTRY}")
+    if not mapping:
+        print(f"  ERROR: current theme {current!r} has no mapping")
+        return False
+
+    candidates = all_candidates()
+    for provider in PROVIDERS:
+        expected = mapping.get(provider)
+        available = {item["name"] for item in candidates[provider]}
+        state = "ok" if expected in available else "MISSING"
+        okay &= state == "ok"
+        print(f"  {provider:8} {expected!r}: {state}")
+
+    errors = validate_configs()
+    if errors:
+        okay = False
+        for error in errors:
+            print(f"  validation ERROR: {error}")
+    else:
+        print("  config validation: ok")
+
+    setqs = active_my_theme_setqs()
+    if setqs:
+        okay = False
+        print("  active `setq my-theme` lines:")
+        for location in setqs:
+            print(f"    {location}")
+    else:
+        print("  active `setq my-theme` lines: none")
+
+    if not status():
+        okay = False
+    return okay
+
+
+def list_themes() -> None:
+    registry = load_registry()
+    current = registry.get("current")
+    for canonical, mapping in sorted(registry["themes"].items()):
+        marker = "*" if canonical == current else " "
+        print(
+            f"{marker} {canonical}: ghostty={mapping.get('ghostty')!r}, "
+            f"herdr={mapping.get('herdr')!r}, emacs={mapping.get('emacs')!r}"
+        )
+
+
+def loop_themes(seconds: float = 4.0) -> None:
+    """Apply every saved theme once, returning to the starting theme."""
+    registry = load_registry()
+    themes = sorted(registry["themes"])
+    if not themes:
+        raise ThemeError("no saved themes to loop through")
+
+    current = registry.get("current")
+    if current in themes:
+        start = themes.index(current)
+        themes = themes[start + 1 :] + themes[: start + 1]
+
+    print(
+        f"Looping through {len(themes)} themes with a {seconds:g}s pause; "
+        "press Ctrl-C to stop."
+    )
+    for index, theme in enumerate(themes, 1):
+        if index > 1:
+            time.sleep(seconds)
+        print(f"\n[{index}/{len(themes)}] {theme}", flush=True)
+        apply_theme(theme)
+
+
+def make_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog=",theme",
+        description="Keep Ghostty, Herdr, and Emacs on one canonical theme.",
+    )
+    subparsers = parser.add_subparsers(dest="command")
+
+    discover = subparsers.add_parser("discover", help="find and save provider mappings")
+    discover.add_argument("theme")
+
+    set_parser = subparsers.add_parser("set", help="apply and reload a mapped theme")
+    set_parser.add_argument("theme")
+    set_parser.add_argument("--no-reload", action="store_true")
+
+    subparsers.add_parser("list", help="list saved canonical mappings")
+
+    loop = subparsers.add_parser(
+        "loop", help="cycle once through every theme, starting after the current one"
+    )
+    loop.add_argument(
+        "--seconds",
+        type=float,
+        default=4.0,
+        help="pause before each subsequent theme (default: 4)",
+    )
+
+    subparsers.add_parser("status", help="show configured and live theme state")
+    subparsers.add_parser("doctor", help="validate mappings, configs, and runtime state")
+    return parser
+
+
+def main() -> int:
+    commands = {
+        "discover",
+        "set",
+        "list",
+        "loop",
+        "status",
+        "doctor",
+        "-h",
+        "--help",
+    }
+    arguments = sys.argv[1:]
+    if arguments and arguments[0] not in commands:
+        arguments.insert(0, "set")
+    parser = make_parser()
+    args = parser.parse_args(arguments)
+    if not args.command:
+        parser.print_help()
+        print("\nSaved themes:")
+        list_themes()
+        return 0
+
+    try:
+        if args.command == "discover":
+            discover_theme(args.theme)
+        elif args.command == "set":
+            apply_theme(args.theme, reload=not args.no_reload)
+        elif args.command == "list":
+            list_themes()
+        elif args.command == "loop":
+            if args.seconds < 0:
+                raise ThemeError("--seconds cannot be negative")
+            loop_themes(args.seconds)
+        elif args.command == "status":
+            return 0 if status() else 1
+        elif args.command == "doctor":
+            return 0 if doctor() else 1
+    except ThemeError as error:
+        print(f",theme: {error}", file=sys.stderr)
+        return 1
+    except KeyboardInterrupt:
+        print("\n,theme: cancelled", file=sys.stderr)
+        return 130
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
