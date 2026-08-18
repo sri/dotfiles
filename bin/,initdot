@@ -12,6 +12,7 @@ links = {
     "ghostty-config"        : "~/.config/ghostty/config",
     "kitty/kitty.conf"      : "~/.config/kitty/kitty.conf",
     "herdr/config"          : "~/.config/herdr/config.toml",
+    "mise/config.toml"      : "~/.config/mise/config.toml",
     "fish/config.fish"      : "~/.config/fish/config.fish",
     "tmux/tmux.conf"        : "~/.tmux.conf",
     "emacs/my-dot-emacs.el" : "~/.emacs.el",

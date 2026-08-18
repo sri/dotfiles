@@ -5,6 +5,7 @@ typeset -U path PATH fpath FPATH
 
 path=(
   ~/my/dotfiles/bin
+  ~/.local/share/mise/shims
   ~/.local/bin
   ~/.cargo/bin
   ~/.bun/bin
@@ -14,18 +15,19 @@ path=(
   "$path[@]"
 )
 
-# asdf is active: Node and Python currently resolve through it.
-if [[ -r $HOME/.asdf/asdf.sh ]]; then
-  . "$HOME/.asdf/asdf.sh"
-  fpath=($ASDF_DIR/completions $fpath)
-fi
-
 # Bun completion is autoloaded by compinit instead of sourced on every startup.
 [[ -r $HOME/.bun/_bun ]] && fpath=($HOME/.bun $fpath)
 
 if [[ -x $HOME/.rbenv/bin/rbenv ]]; then
   # Rehash only after installing executables, not on every shell startup.
   eval "$(~/.rbenv/bin/rbenv init - --no-rehash zsh)"
+fi
+
+# mise manages Node, Python, and Go.  Keep shims on PATH for non-interactive
+# consumers; activation adds directory-aware version switching in this shell.
+# Activate after rbenv so mise's selected tool paths are not shadowed.
+if [[ -x $HOME/.local/bin/mise ]]; then
+  eval "$(~/.local/bin/mise activate zsh)"
 fi
 
 # Keep SDKMAN available without paying its startup cost in every shell.

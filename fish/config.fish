@@ -9,16 +9,16 @@ end
 ############################################################
 
 ### PATH
-set -U fish_user_paths ~/my/dotfiles/bin $fish_user_paths
-
-### asdf
-if test -f ~/.asdf/asdf.fish
-    source ~/.asdf/asdf.fish
-end
+set -U fish_user_paths ~/my/dotfiles/bin ~/.local/share/mise/shims ~/.local/bin $fish_user_paths
 
 ### rbenv
 if test -x ~/.rbenv/bin/rbenv
     status --is-interactive; and source (~/.rbenv/bin/rbenv init - fish | psub)
+end
+
+### mise
+if test -x ~/.local/bin/mise
+    ~/.local/bin/mise activate fish | source
 end
 
 ### History
@@ -224,8 +224,4 @@ end
 
 if type -q oh-my-posh
     oh-my-posh init fish | source
-end
-
-if test -x /Users/sri/.local/bin/mise
-    /Users/sri/.local/bin/mise activate fish | source
 end
