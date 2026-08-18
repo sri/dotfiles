@@ -1,9 +1,10 @@
-# Ruby remains managed by rbenv; project Python versions remain managed by uv.
+# Project Python versions remain managed by uv.
 
 [settings]
-idiomatic_version_file_enable_tools = ["node"]
+idiomatic_version_file_enable_tools = ["node", "ruby"]
 
 [tools]
+ruby = "4.0.1"
 node = "22.23.2"
 python = "3.11.1"
 "pipx:black" = "24.8.0"

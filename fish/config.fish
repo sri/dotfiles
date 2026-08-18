@@ -11,11 +11,6 @@ end
 ### PATH
 set -U fish_user_paths ~/my/dotfiles/bin ~/.local/share/mise/shims ~/.local/bin $fish_user_paths
 
-### rbenv
-if test -x ~/.rbenv/bin/rbenv
-    status --is-interactive; and source (~/.rbenv/bin/rbenv init - fish | psub)
-end
-
 ### mise
 if test -x ~/.local/bin/mise
     ~/.local/bin/mise activate fish | source
