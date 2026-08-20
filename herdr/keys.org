@@ -1,0 +1,131 @@
+#+title: Herdr Keyboard Cheat Sheet
+#+updated: 2026-08-20
+
+I'm using C-q for prefix as I rarely use it in Emacs.
+
+| Category       | Key       | Action                         | Notes                      |
+|----------------+-----------+--------------------------------+----------------------------|
+| General        | C-q ?     | Show keybinding help           |                            |
+| General        | C-q s     | Open settings                  |                            |
+| General        | C-q R     | Reload config                  |                            |
+| General        | C-q q     | Detach from Herdr              |                            |
+| General        | C-q b     | Toggle sidebar                 |                            |
+| General        | C-q o     | Focus notification target      |                            |
+| General        | C-q C-q   | Send literal C-q               | To terminal                |
+|----------------+-----------+--------------------------------+----------------------------|
+| Pane           | C-q v     | Split right                    |                            |
+| Pane           | C-q -     | Split down                     |                            |
+| Pane           | C-q x     | Close pane                     |                            |
+| Pane           | C-q z     | Zoom / unzoom pane             |                            |
+| Pane           | C-q P     | Rename pane                    |                            |
+| Pane           | C-q h     | Focus pane left                |                            |
+| Pane           | C-q j     | Focus pane down                |                            |
+| Pane           | C-q k     | Focus pane up                  |                            |
+| Pane           | C-q l     | Focus pane right               |                            |
+| Pane           | C-q TAB   | Next pane                      |                            |
+| Pane           | C-q S-TAB | Previous pane                  |                            |
+| Pane           | C-q H     | Swap pane left                 |                            |
+| Pane           | C-q J     | Swap pane down                 |                            |
+| Pane           | C-q K     | Swap pane up                   |                            |
+| Pane           | C-q L     | Swap pane right                |                            |
+|----------------+-----------+--------------------------------+----------------------------|
+| Resize         | C-q r     | Enter resize mode              |                            |
+| Resize         | h         | Resize left                    | In resize mode             |
+| Resize         | j         | Resize down                    | In resize mode             |
+| Resize         | k         | Resize up                      | In resize mode             |
+| Resize         | l         | Resize right                   | In resize mode             |
+| Resize         | ESC       | Exit resize mode               |                            |
+|----------------+-----------+--------------------------------+----------------------------|
+| Tab            | C-q c     | New tab                        |                            |
+| Tab            | C-q n     | Next tab                       |                            |
+| Tab            | C-q p     | Previous tab                   |                            |
+| Tab            | C-q 1..9  | Jump to tab 1..9               |                            |
+| Tab            | C-q T     | Rename tab                     |                            |
+| Tab            | C-q X     | Close tab                      |                            |
+|----------------+-----------+--------------------------------+----------------------------|
+| Workspace      | C-q N     | New workspace                  |                            |
+| Workspace      | C-q W     | Rename workspace               |                            |
+| Workspace      | C-q D     | Close workspace                |                            |
+| Workspace      | C-q w     | Workspace navigation mode      |                            |
+| Workspace      | C-q g     | Goto / session navigator       |                            |
+| Workspace      | C-q G     | New worktree                   |                            |
+|----------------+-----------+--------------------------------+----------------------------|
+| Workspace Nav  | Up        | Previous workspace             | After C-q w                |
+| Workspace Nav  | Down      | Next workspace                 | After C-q w                |
+| Workspace Nav  | h / Left  | Pane left                      | After C-q w                |
+| Workspace Nav  | j         | Pane down                      | After C-q w                |
+| Workspace Nav  | k         | Pane up                        | After C-q w                |
+| Workspace Nav  | l / Right | Pane right                     | After C-q w                |
+| Workspace Nav  | ESC       | Exit navigation mode           |                            |
+| Workspace Nav  | C-q       | Exit navigation mode           | Prefix key                 |
+|----------------+-----------+--------------------------------+----------------------------|
+| Navigator      | C-q g     | Open session navigator         |                            |
+| Navigator      | j / Down  | Next item                      |                            |
+| Navigator      | k / Up    | Previous item                  |                            |
+| Navigator      | C-d       | Half page down                 |                            |
+| Navigator      | C-u       | Half page up                   |                            |
+| Navigator      | Home      | First item                     |                            |
+| Navigator      | G / End   | Last item                      |                            |
+| Navigator      | RET       | Go to selected item            |                            |
+| Navigator      | SPC       | Toggle selected workspace      |                            |
+| Navigator      | /         | Search                         |                            |
+| Navigator      | b         | Show blocked                   | State filter               |
+| Navigator      | w         | Show working                   | State filter               |
+| Navigator      | i         | Show idle                      | State filter               |
+| Navigator      | d         | Show done                      | State filter               |
+| Navigator      | a         | Clear filter                   |                            |
+| Navigator      | Backspace | Clear active state filter      |                            |
+| Navigator      | ESC       | Close navigator                |                            |
+|----------------+-----------+--------------------------------+----------------------------|
+| Navigator Find | C-u       | Clear search                   | While search field active  |
+| Navigator Find | C-n       | Next result                    | While search field active  |
+| Navigator Find | C-p       | Previous result                | While search field active  |
+| Navigator Find | RET       | Go to result                   | While search field active  |
+| Navigator Find | ESC       | Leave search field             |                            |
+|----------------+-----------+--------------------------------+----------------------------|
+| Copy Mode      | C-q [     | Enter copy mode                |                            |
+| Copy Mode      | h / Left  | Move left                      |                            |
+| Copy Mode      | j / Down  | Move down                      |                            |
+| Copy Mode      | k / Up    | Move up                        |                            |
+| Copy Mode      | l / Right | Move right                     |                            |
+| Copy Mode      | 0 / Home  | Beginning of line              |                            |
+| Copy Mode      | ^         | First non-blank character      |                            |
+| Copy Mode      | $ / End   | End of line                    |                            |
+| Copy Mode      | w         | Next word                      |                            |
+| Copy Mode      | b         | Previous word                  |                            |
+| Copy Mode      | e         | End of word                    |                            |
+| Copy Mode      | W         | Next WORD                      |                            |
+| Copy Mode      | B         | Previous WORD                  |                            |
+| Copy Mode      | E         | End of WORD                    |                            |
+| Copy Mode      | {         | Previous paragraph             |                            |
+| Copy Mode      | }         | Next paragraph                 |                            |
+| Copy Mode      | g         | Beginning of pane history      |                            |
+| Copy Mode      | G         | End of pane history            |                            |
+| Copy Mode      | PageUp    | Page up                        |                            |
+| Copy Mode      | PageDown  | Page down                      |                            |
+| Copy Mode      | C-u       | Half page up                   |                            |
+| Copy Mode      | C-d       | Half page down                 |                            |
+| Copy Mode      | C-b       | Page up                        | Now usable with C-q prefix |
+| Copy Mode      | C-f       | Page down                      |                            |
+| Copy Mode      | v / SPC   | Start selection                |                            |
+| Copy Mode      | V         | Select current line            |                            |
+| Copy Mode      | y / RET   | Copy selection and exit        |                            |
+| Copy Mode      | q         | Exit without copying           |                            |
+| Copy Mode      | ESC       | Clear selection/search or exit |                            |
+|----------------+-----------+--------------------------------+----------------------------|
+| Copy Search    | /         | Search forward                 | In copy mode               |
+| Copy Search    | ?         | Search backward                | In copy mode               |
+| Copy Search    | n         | Next match                     | Same search direction      |
+| Copy Search    | N         | Previous/opposite match        | Opposite search direction  |
+|----------------+-----------+--------------------------------+----------------------------|
+| Scrollback     | C-q [     | Browse / copy scrollback       | Opens copy mode            |
+| Scrollback     | C-q e     | Open scrollback in $EDITOR     |                            |
+|----------------+-----------+--------------------------------+----------------------------|
+| Help           | C-q ?     | Open keybinding help           |                            |
+| Help           | /         | Search bindings                | In help                    |
+| Help           | Backspace | Delete search character        | In help                    |
+| Help           | C-u       | Clear search                   | In help                    |
+| Help           | j / k     | Scroll                         | In help                    |
+| Help           | ESC       | Clear search / close           | In help                    |
+|----------------+-----------+--------------------------------+----------------------------|
+| Remote         | C-v       | Paste image                    | Remote client              |
