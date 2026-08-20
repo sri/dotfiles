@@ -270,14 +270,51 @@ function _my_list() {
   fi
 }
 
-function l()      { _my_list '--long --group-directories-first' '-lhG'  all  "$@" }
-function la()     { _my_list '--long --all --group-directories-first' '-lAhG' all  "$@" }
-function lf()     { _my_list '--long --only-files'                    '-lhG'  file "$@" }
-function ld()     { _my_list '--long --only-dirs'                     '-ldhG' dir  "$@" }
-function lbig()   { _my_list '--long --only-files --sort=size --reverse'     '-lhGS'  file "$@" }
-function lsmall() { _my_list '--long --only-files --sort=size'               '-lhGSr' file "$@" }
-function lnew()   { _my_list '--long --only-files --sort=modified --reverse' '-lhGt'  file "$@" }
-function lold()   { _my_list '--long --only-files --sort=modified'           '-lhGtr' file "$@" }
+function ltree() {
+  emulate -L zsh
+
+  if (( $# < 1 || $# > 2 )); then
+    print -u2 'usage: ltree <dir> [depth]'
+    return 2
+  fi
+
+  local dir=$1 depth=$2
+  local -a level_options
+
+  if [[ ! -d $dir ]]; then
+    print -u2 -- "ltree: not a directory: $dir"
+    return 1
+  fi
+
+  if (( $# == 2 )); then
+    if [[ $depth != <-> ]]; then
+      print -u2 -- "ltree: depth must be a non-negative integer: $depth"
+      return 2
+    fi
+    level_options=(-L "$depth")
+  fi
+
+  # Prevent a relative directory beginning with '-' from being parsed as an option.
+  [[ $dir == -* ]] && dir=./$dir
+
+  if (( $+commands[eza] )); then
+    command eza --tree "${level_options[@]}" -- "$dir"
+  elif (( $+commands[tree] )); then
+    command tree "${level_options[@]}" "$dir"
+  else
+    print -u2 'ltree: install eza or tree for tree listings'
+    return 127
+  fi
+}
+
+function l()      { _my_list '--long --all --group-directories-first'              '-lAhG'  all  "$@" }
+function la()     { _my_list '--long --all --group-directories-first'              '-lAhG'  all  "$@" }
+function lf()     { _my_list '--long --all --only-files'                           '-lhG'   file "$@" }
+function ld()     { _my_list '--long --all --only-dirs'                            '-ldhG'  dir  "$@" }
+function lbig()   { _my_list '--long --all --only-files --sort=size --reverse'     '-lhGS'  file "$@" }
+function lsmall() { _my_list '--long --all --only-files --sort=size'               '-lhGSr' file "$@" }
+function lnew()   { _my_list '--long --all --only-files --sort=modified --reverse' '-lhGt'  file "$@" }
+function lold()   { _my_list '--long --all --only-files --sort=modified'           '-lhGtr' file "$@" }
 
 function dubig() {
   emulate -L zsh
@@ -291,17 +328,6 @@ function dubig() {
 
   (( ${#paths} )) || return 0
   /usr/bin/du -sh -- "${paths[@]}" | /usr/bin/sort -hr
-}
-
-function ltree() {
-  if (( $+commands[eza] )); then
-    command eza --tree "$@"
-  elif (( $+commands[tree] )); then
-    command tree "$@"
-  else
-    print -u2 'ltree: install eza or tree for tree listings'
-    return 127
-  fi
 }
 
 # From https://blog.cloudflare.com/a-question-of-timing/
@@ -371,6 +397,8 @@ function hwsname() {
 function c() {
   builtin cd "$@" && l
 }
+
+function my_aliases() { alias "$@" | sort }
 
 if [[ -e ~/.zshrc_private ]]; then
   . ~/.zshrc_private
