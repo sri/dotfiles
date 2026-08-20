@@ -342,6 +342,7 @@ function my_python() {
 
 
 # Herdr helpers. `htabname New tab name` accepts the label as separate words.
+alias hcopy='herdr pane read "$HERDR_PANE_ID" --source recent-unwrapped --lines 1000000 | pbcopy'
 alias hreload='herdr server reload-config'
 function htabname() {
   if [[ -z $HERDR_TAB_ID ]]; then

@@ -1,6 +1,7 @@
 # https://github.com/XAMPPRocky/tokei
 
 brew install tokei
+brew install fastfetch
 
 # https://github.com/sharkdp/fd
 brew install fd-find
