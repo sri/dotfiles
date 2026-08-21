@@ -315,6 +315,7 @@ function lbig()   { _my_list '--long --all --only-files --sort=size --reverse'  
 function lsmall() { _my_list '--long --all --only-files --sort=size'               '-lhGSr' file "$@" }
 function lnew()   { _my_list '--long --all --only-files --sort=modified --reverse' '-lhGt'  file "$@" }
 function lold()   { _my_list '--long --all --only-files --sort=modified'           '-lhGtr' file "$@" }
+function lrecent(){ _my_list '--long --all --sort=modified --reverse'              '-lAhGt' all  "$@" }
 
 function dubig() {
   emulate -L zsh

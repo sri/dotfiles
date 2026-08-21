@@ -141,6 +141,7 @@ Fundamental mode."
 (setq help-window-select t)
 
 (setq fill-column 80)
+(setq visual-fill-column-width 70)
 
 (global-set-key (kbd "<pinch>") 'ignore)
 (global-set-key (kbd "<C-wheel-up>") 'ignore)
