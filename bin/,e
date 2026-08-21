@@ -14,6 +14,7 @@ CLIENT_ARGS=()
 SKIP=false
 NEW=false
 GUI=false
+MAGIT=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -30,6 +31,9 @@ while [[ $# -gt 0 ]]; do
     -skip)
       SKIP=true
       ;;
+    --magit)
+      MAGIT=true
+      ;;
     -q)
       # -Q is only meaningful when starting a new Emacs process.
       EMACS_ARGS+=(
@@ -45,6 +49,15 @@ while [[ $# -gt 0 ]]; do
   esac
   shift
 done
+
+if $MAGIT; then
+  # Quote the current directory as an Emacs Lisp string.
+  MAGIT_DIR=${PWD//\\/\\\\}
+  MAGIT_DIR=${MAGIT_DIR//\"/\\\"}
+  MAGIT_EVAL="(progn (require 'magit) (magit-status \"${MAGIT_DIR}\"))"
+  EMACS_ARGS+=("--eval" "$MAGIT_EVAL")
+  CLIENT_ARGS+=("--eval" "$MAGIT_EVAL")
+fi
 
 if $SKIP; then
   touch "$SKIP_FILE"
