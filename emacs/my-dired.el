@@ -101,6 +101,8 @@
 (add-hook 'dired-mode-hook
           (lambda ()
             (dired-omit-mode 1)
+            (setq dired-auto-revert-buffer t)
+            ;; (setq dired-mouse-drag-files t)
             (setq dired-dwim-target t)
             (setq dired-omit-size-limit nil)
             (setq dired-vc-rename-file t)

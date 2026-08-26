@@ -139,6 +139,8 @@ Fundamental mode."
 ;; After C-u C-SPC, you can just keep hitting C-SPC.
 (setq set-mark-command-repeat-pop t)
 (setq help-window-select t)
+;; not using this; using shell-command+
+(setq shell-command-prompt-show-cwd t)
 
 (setq fill-column 80)
 (setq visual-fill-column-width 70)
