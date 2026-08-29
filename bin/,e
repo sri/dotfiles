@@ -79,7 +79,7 @@ if $MAGIT; then
   EMACS_ARGS+=("--eval" "$MAGIT_EVAL")
   CLIENT_ARGS+=("--eval" "$MAGIT_EVAL")
 else
-  for arg in "${POSITIONAL_ARGS[@]}"; do
+  for arg in ${POSITIONAL_ARGS[@]+"${POSITIONAL_ARGS[@]}"}; do
     # emacsclient resolves relative paths from the server's working directory,
     # which may differ from this shell. Existing files and directories must be
     # made absolute so files open correctly and directories open in Dired.
