@@ -274,12 +274,12 @@ function _my_list() {
 function ltree() {
   emulate -L zsh
 
-  if (( $# < 1 || $# > 2 )); then
-    print -u2 'usage: ltree <dir> [depth]'
+  if (( $# > 2 )); then
+    print -u2 'usage: ltree [dir] [depth]'
     return 2
   fi
 
-  local dir=$1 depth=$2
+  local dir=${1:-.} depth=$2
   local -a level_options
 
   if [[ ! -d $dir ]]; then
