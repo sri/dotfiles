@@ -30,6 +30,13 @@ links = {
     }.get(platform.system())
 }
 
+# Claude uses its own personal-skills directory. Codex and Grok both discover
+# the shared Agent Skills location, so link the same source into both places.
+shared_links = [
+    ("agent-skills/adversarial-review", "~/.agents/skills/adversarial-review"),
+    ("agent-skills/adversarial-review", "~/.claude/skills/adversarial-review"),
+]
+
 def user_proceeds(prompt):
     if input(f"{prompt} ").strip() in ("y",):
         return True
@@ -50,7 +57,7 @@ def main():
             path = "~" + path
         return path
 
-    for (src, dest) in links.items():
+    for (src, dest) in list(links.items()) + shared_links:
         print(f"{src}:")
 
         if dest is None:
@@ -58,8 +65,12 @@ def main():
             continue
         dest = pathlib.Path(dest).expanduser()
         if not dest.parent.exists():
-            print(f"  parent directory {try_pretty_name(dest.parent)} does not exist...skipping")
-            continue
+            print(f"  parent directory {try_pretty_name(dest.parent)} does not exist")
+            if user_proceeds("Create(y/n)?"):
+                dest.parent.mkdir(parents=True, exist_ok=True)
+            else:
+                print("  skipping")
+                continue
 
         if dest.exists():
             if only_new:

@@ -1,5 +1,5 @@
 font-family = JetBrains Mono
-theme = Everforest Dark Soft
+theme = Gruvbox Light
 auto-update-channel = tip
 # Forward shortcuts using the extended keyboard protocol so Herdr can handle
 # tabs, workspaces, and panes itself.
@@ -13,6 +13,8 @@ keybind = cmd+t=csi:116;9u
 keybind = cmd+n=csi:110;9u
 keybind = cmd+up=csi:1;9A
 keybind = cmd+down=csi:1;9B
+keybind = cmd+1=csi:122;9u
+keybind = cmd+digit_1=csi:122;9u
 keybind = cmd+z=csi:122;9u
 keybind = cmd+b=csi:98;9u
 keybind = cmd+r=csi:114;9u

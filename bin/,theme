@@ -16,10 +16,13 @@ import sys
 import tempfile
 import time
 from typing import Any
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "theme" / "themes.json"
 GHOSTTY_CONFIG = ROOT / "ghostty-config"
+KITTY_CONFIG = ROOT / "kitty" / "kitty.conf"
+KITTY_THEME_CONFIG = ROOT / "kitty" / "current-theme.conf"
 HERDR_CONFIG = ROOT / "herdr" / "config"
 EMACS_THEME_FILE = ROOT / "emacs" / "my-theme.el"
 
@@ -45,7 +48,7 @@ HERDR_THEMES = [
     "vesper",
 ]
 
-PROVIDERS = ("ghostty", "herdr", "emacs")
+PROVIDERS = ("ghostty", "kitty", "herdr", "emacs")
 
 
 class ThemeError(RuntimeError):
@@ -151,6 +154,102 @@ def ghostty_candidates() -> list[dict[str, Any]]:
     return candidates
 
 
+def kitty_executable() -> str | None:
+    installed = shutil.which("kitty")
+    if installed:
+        return installed
+    for path in (
+        Path("/Applications/kitty.app/Contents/MacOS/kitty"),
+        Path.home() / "Applications/kitty.app/Contents/MacOS/kitty",
+    ):
+        if path.is_file() and os.access(path, os.X_OK):
+            return str(path)
+    return None
+
+
+def kitty_theme_archive() -> Path | None:
+    candidates = [
+        Path.home() / "Library/Caches/kitty/kitty-themes.zip",
+        Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache"))
+        / "kitty/kitty-themes.zip",
+    ]
+    for path in candidates:
+        if path.is_file():
+            return path
+    return None
+
+
+def kitty_theme_value(text: str, key: str) -> str | None:
+    match = re.search(rf"(?mi)^\s*{re.escape(key)}\s+([^\s#]+|#[0-9a-f]+)", text)
+    return match.group(1) if match else None
+
+
+def kitty_candidates() -> list[dict[str, Any]]:
+    executable = kitty_executable()
+    archive = kitty_theme_archive()
+    if executable and not archive:
+        # Prime kitty's official theme cache. This is also what the interactive
+        # `kitten themes` command does on first use.
+        run(
+            [
+                executable,
+                "+kitten",
+                "themes",
+                "--reload-in=none",
+                "--dump-theme",
+                "Solarized Dark",
+            ]
+        )
+        archive = kitty_theme_archive()
+    if not archive:
+        return []
+    try:
+        with zipfile.ZipFile(archive) as bundle:
+            metadata_path = next(
+                name for name in bundle.namelist() if name.endswith("/themes.json")
+            )
+            root = metadata_path.removesuffix("themes.json")
+            metadata = json.loads(bundle.read(metadata_path))
+            candidates = []
+            for entry in metadata:
+                text = bundle.read(root + entry["file"]).decode(errors="replace")
+                candidates.append(
+                    {
+                        "name": entry["name"],
+                        "path": f"{archive}!{entry['file']}",
+                        "background": kitty_theme_value(text, "background"),
+                        "foreground": kitty_theme_value(text, "foreground"),
+                        "appearance": "dark" if entry.get("is_dark") else "light",
+                    }
+                )
+            return candidates
+    except (OSError, KeyError, StopIteration, zipfile.BadZipFile, json.JSONDecodeError):
+        return []
+
+
+def dump_kitty_theme(name: str) -> str:
+    executable = kitty_executable()
+    if not executable:
+        raise ThemeError("kitty is not installed")
+    result = run(
+        [
+            executable,
+            "+kitten",
+            "themes",
+            "--cache-age=-1",
+            "--reload-in=none",
+            "--dump-theme",
+            name,
+        ]
+    )
+    if result.returncode:
+        raise ThemeError(
+            f"could not load Kitty theme {name!r}: "
+            + (result.stderr or result.stdout).strip()
+        )
+    return "# Managed by ,theme. Do not edit.\n" + result.stdout.lstrip()
+
+
 def decode_emacs_string(value: str) -> str:
     value = value.strip()
     if value.startswith('"') and value.endswith('"'):
@@ -186,6 +285,7 @@ def emacs_candidates() -> list[dict[str, Any]]:
 def all_candidates() -> dict[str, list[dict[str, Any]]]:
     return {
         "ghostty": ghostty_candidates(),
+        "kitty": kitty_candidates(),
         "herdr": [{"name": name} for name in HERDR_THEMES],
         "emacs": emacs_candidates(),
     }
@@ -217,6 +317,15 @@ def resolve_theme(registry: dict[str, Any], requested: str) -> str:
 def configured_ghostty_theme() -> str | None:
     match = re.search(r"(?m)^theme\s*=\s*(.+?)\s*$", GHOSTTY_CONFIG.read_text())
     return match.group(1).strip('"') if match else None
+
+
+def configured_kitty_theme() -> str | None:
+    if not KITTY_THEME_CONFIG.exists():
+        return None
+    match = re.search(
+        r"(?m)^##\s*name:\s*(.+?)\s*$", KITTY_THEME_CONFIG.read_text()
+    )
+    return match.group(1) if match else None
 
 
 def configured_herdr_theme() -> str | None:
@@ -258,6 +367,15 @@ def validate_configs() -> list[str]:
         )
         if result.returncode:
             errors.append(f"Ghostty: {(result.stderr or result.stdout).strip()}")
+    kitty = kitty_executable()
+    if kitty:
+        expression = (
+            "from kitty.config import load_config; "
+            f"load_config({str(KITTY_CONFIG)!r})"
+        )
+        result = run([kitty, "+runpy", expression])
+        if result.returncode:
+            errors.append(f"Kitty: {(result.stderr or result.stdout).strip()}")
     if shutil.which("herdr"):
         result = run(["herdr", "config", "check"])
         if result.returncode:
@@ -291,6 +409,23 @@ def reload_ghostty() -> str:
                 "/Ghostty.app/Contents/MacOS/ghostty"
             ):
                 os.kill(int(fields[0]), signal.SIGUSR2)
+                matched = True
+    return "reloaded" if matched else "not running"
+
+
+def reload_kitty() -> str:
+    if not kitty_executable():
+        return "not installed"
+    result = run(["pkill", "-USR1", "-x", "kitty"])
+    matched = result.returncode == 0
+    if not matched:
+        ps = run(["ps", "-axo", "pid=,comm="])
+        for line in ps.stdout.splitlines():
+            fields = line.strip().split(None, 1)
+            if len(fields) == 2 and fields[1].endswith(
+                "/kitty.app/Contents/MacOS/kitty"
+            ):
+                os.kill(int(fields[0]), signal.SIGUSR1)
                 matched = True
     return "reloaded" if matched else "not running"
 
@@ -333,10 +468,14 @@ def apply_theme(requested: str, *, reload: bool = True) -> None:
     canonical = resolve_theme(registry, requested)
     mapping = registry["themes"][canonical]
     ensure_mapping_available(mapping)
+    kitty_theme = dump_kitty_theme(mapping["kitty"])
 
     originals = {
         REGISTRY: REGISTRY.read_text(),
         GHOSTTY_CONFIG: GHOSTTY_CONFIG.read_text(),
+        KITTY_THEME_CONFIG: KITTY_THEME_CONFIG.read_text()
+        if KITTY_THEME_CONFIG.exists()
+        else None,
         HERDR_CONFIG: HERDR_CONFIG.read_text(),
     }
     registry["current"] = canonical
@@ -345,6 +484,7 @@ def apply_theme(requested: str, *, reload: bool = True) -> None:
             GHOSTTY_CONFIG,
             replace_ghostty_theme(originals[GHOSTTY_CONFIG], mapping["ghostty"]),
         )
+        atomic_write(KITTY_THEME_CONFIG, kitty_theme)
         atomic_write(
             HERDR_CONFIG,
             replace_herdr_theme(originals[HERDR_CONFIG], mapping["herdr"]),
@@ -355,7 +495,10 @@ def apply_theme(requested: str, *, reload: bool = True) -> None:
             raise ThemeError("configuration validation failed:\n  " + "\n  ".join(errors))
     except Exception:
         for path, content in originals.items():
-            atomic_write(path, content)
+            if content is None:
+                path.unlink(missing_ok=True)
+            else:
+                atomic_write(path, content)
         raise
 
     print(f"Applied {canonical}:")
@@ -365,6 +508,7 @@ def apply_theme(requested: str, *, reload: bool = True) -> None:
     if reload:
         print("Reload:")
         print(f"  {'ghostty':8} {reload_ghostty()}")
+        print(f"  {'kitty':8} {reload_kitty()}")
         print(f"  {'herdr':8} {reload_herdr()}")
         print(f"  {'emacs':8} {reload_emacs(mapping['emacs'])}")
 
@@ -435,7 +579,20 @@ def discover_theme(query: str) -> None:
     aliases = list(existing.get("aliases", []))
     if normalize(query) != normalize(canonical) and query not in aliases:
         aliases.append(query)
-    registry["themes"][canonical] = {"aliases": aliases, **selected}
+    kitty_match = next(
+        (
+            candidate
+            for candidate in candidates["kitty"]
+            if candidate["name"] == selected["kitty"]
+        ),
+        {},
+    )
+    appearance = existing.get("appearance") or kitty_match.get("appearance", "unknown")
+    registry["themes"][canonical] = {
+        "aliases": aliases,
+        "appearance": appearance,
+        **selected,
+    }
     save_registry(registry)
     print(f"\nSaved mapping for {canonical}. Use: ,theme set {canonical}")
 
@@ -461,11 +618,12 @@ def status() -> bool:
     mapping = registry["themes"].get(current, {})
     actual = {
         "ghostty": configured_ghostty_theme(),
+        "kitty": configured_kitty_theme(),
         "herdr": configured_herdr_theme(),
     }
-    print(f"Canonical: {current}")
+    print(f"Canonical: {current} ({mapping.get('appearance', 'unknown')})")
     okay = True
-    for provider in ("ghostty", "herdr"):
+    for provider in ("ghostty", "kitty", "herdr"):
         expected = mapping.get(provider)
         state = "ok" if actual[provider] == expected else "DRIFT"
         okay &= state == "ok"
@@ -540,10 +698,30 @@ def doctor() -> bool:
 def list_themes() -> None:
     registry = load_registry()
     current = registry.get("current")
-    for canonical, mapping in sorted(registry["themes"].items()):
+    themes = registry["themes"]
+    counts = {
+        appearance: sum(
+            mapping.get("appearance") == appearance for mapping in themes.values()
+        )
+        for appearance in ("light", "dark")
+    }
+    print(
+        f"Saved themes: {len(themes)} "
+        f"({counts['light']} light, {counts['dark']} dark)"
+    )
+    for canonical, mapping in sorted(
+        themes.items(),
+        key=lambda item: (
+            {"light": 0, "dark": 1}.get(item[1].get("appearance"), 2),
+            item[0],
+        ),
+    ):
         marker = "*" if canonical == current else " "
+        appearance = mapping.get("appearance", "unknown")
         print(
-            f"{marker} {canonical}: ghostty={mapping.get('ghostty')!r}, "
+            f"{marker} [{appearance:5}] {canonical}: "
+            f"ghostty={mapping.get('ghostty')!r}, "
+            f"kitty={mapping.get('kitty')!r}, "
             f"herdr={mapping.get('herdr')!r}, emacs={mapping.get('emacs')!r}"
         )
 
@@ -574,7 +752,7 @@ def loop_themes(seconds: float = 4.0) -> None:
 def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog=",theme",
-        description="Keep Ghostty, Herdr, and Emacs on one canonical theme.",
+        description="Keep Ghostty, Kitty, Herdr, and Emacs on one canonical theme.",
     )
     subparsers = parser.add_subparsers(dest="command")
 

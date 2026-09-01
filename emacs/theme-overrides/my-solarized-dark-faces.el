@@ -4,12 +4,14 @@
 (require 'color)
 
 (defconst my/org-complementary-themes
-  '(solarized-gruvbox
+  '(solarized-gruvbox-dark
+    solarized-gruvbox-light
     solarized-zenburn
     doom-zenburn
     ef-melissa-dark
     ef-cyprus
     gruvbox-dark-medium
+    gruvbox-light-medium
     kaolin-dark
     doom-tokyo-night
     solarized-dark

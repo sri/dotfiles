@@ -1,151 +1,250 @@
 {
-  "current": "everforest",
+  "current": "gruvbox-light",
   "themes": {
     "catppuccin": {
       "aliases": [
         "catppuccin-mocha",
         "mocha"
       ],
+      "appearance": "dark",
       "emacs": "catppuccin",
       "ghostty": "Catppuccin Mocha",
-      "herdr": "catppuccin"
+      "herdr": "catppuccin",
+      "kitty": "Catppuccin-Mocha"
     },
     "catppuccin-latte": {
       "aliases": [
         "latte"
       ],
+      "appearance": "light",
       "emacs": "base16-catppuccin-latte",
       "ghostty": "Catppuccin Latte",
-      "herdr": "catppuccin-latte"
+      "herdr": "catppuccin-latte",
+      "kitty": "Catppuccin-Latte"
+    },
+    "ef-cyprus": {
+      "aliases": [
+        "cyprus"
+      ],
+      "appearance": "light",
+      "emacs": "ef-cyprus",
+      "ghostty": "Flexoki Light",
+      "herdr": "terminal",
+      "kitty": "Flexoki (Light)"
     },
     "ethereal": {
       "aliases": [],
+      "appearance": "dark",
       "emacs": "base16-equilibrium-dark",
       "ghostty": "Nocturnal Winter",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Kaolin Ocean"
     },
     "everforest": {
       "aliases": [],
+      "appearance": "dark",
       "emacs": "base16-everforest",
       "ghostty": "Everforest Dark Soft",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Everforest Dark Soft"
     },
     "flexoki-light": {
       "aliases": [
         "flexoki"
       ],
+      "appearance": "light",
       "emacs": "base16-flexoki-light",
       "ghostty": "Flexoki Light",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Flexoki (Light)"
     },
     "gruvbox": {
       "aliases": [
         "gruvbox-material",
         "gruvbox-material-dark"
       ],
+      "appearance": "dark",
       "emacs": "base16-gruvbox-material-dark-medium",
       "ghostty": "Gruvbox Material Dark",
-      "herdr": "gruvbox"
+      "herdr": "gruvbox",
+      "kitty": "Gruvbox Material Dark Medium"
+    },
+    "gruvbox-light": {
+      "aliases": [
+        "gruvbox-light-medium"
+      ],
+      "appearance": "light",
+      "emacs": "gruvbox-light-medium",
+      "ghostty": "Gruvbox Light",
+      "herdr": "gruvbox-light",
+      "kitty": "Gruvbox Light"
     },
     "hackerman": {
       "aliases": [],
+      "appearance": "dark",
       "emacs": "doom-henna",
       "ghostty": "Oxocarbon",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Carbonfox"
     },
     "kanagawa": {
       "aliases": [
         "kanagawa-wave"
       ],
+      "appearance": "dark",
       "emacs": "base16-kanagawa",
       "ghostty": "Kanagawa Wave",
-      "herdr": "kanagawa"
+      "herdr": "kanagawa",
+      "kitty": "Kanagawa"
     },
     "last-horizon": {
       "aliases": [],
+      "appearance": "dark",
       "emacs": "base16-tinta",
       "ghostty": "Atlas Ragnarok",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Black Metal"
+    },
+    "leuven": {
+      "aliases": [],
+      "appearance": "light",
+      "emacs": "leuven",
+      "ghostty": "GitHub Light Default",
+      "herdr": "terminal",
+      "kitty": "GitHub Light"
     },
     "lumon": {
       "aliases": [],
+      "appearance": "dark",
       "emacs": "doom-material",
       "ghostty": "Graphite",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "graphite"
     },
     "lupine": {
       "aliases": [],
+      "appearance": "light",
       "emacs": "doom-opera-light",
       "ghostty": "Pro Light",
-      "herdr": "one-light"
+      "herdr": "one-light",
+      "kitty": "Doom One Light"
     },
     "matte-black": {
       "aliases": [
         "matteblack"
       ],
+      "appearance": "dark",
       "emacs": "doom-ayu-dark",
       "ghostty": "Matte Black",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Selenized Black"
     },
     "miasma": {
       "aliases": [],
+      "appearance": "dark",
       "emacs": "base16-gruvbox-dark-medium-forest",
       "ghostty": "Miasma",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Sourcerer"
+    },
+    "modus-operandi": {
+      "aliases": [
+        "modus",
+        "modus-light"
+      ],
+      "appearance": "light",
+      "emacs": "modus-operandi",
+      "ghostty": "Modus Operandi",
+      "herdr": "terminal",
+      "kitty": "Modus Operandi"
     },
     "nord": {
       "aliases": [],
+      "appearance": "dark",
       "emacs": "doom-nord",
       "ghostty": "Nord",
-      "herdr": "nord"
+      "herdr": "nord",
+      "kitty": "Nord"
     },
     "osaka-jade": {
       "aliases": [
         "osaka"
       ],
+      "appearance": "dark",
       "emacs": "base16-darkmoss",
       "ghostty": "Patina",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Ayu"
     },
     "retro-82": {
       "aliases": [
         "retro82"
       ],
+      "appearance": "dark",
       "emacs": "cobalt",
       "ghostty": "Monokai Pro Octagon",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Snazzy"
     },
     "ristretto": {
       "aliases": [
         "monokai-ristretto"
       ],
+      "appearance": "dark",
       "emacs": "doom-monokai-ristretto",
       "ghostty": "Monokai Pro Ristretto",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Monokai"
     },
     "rose-pine": {
       "aliases": [
         "rose-pine-dawn",
         "rosepine"
       ],
+      "appearance": "light",
       "emacs": "base16-rose-pine-dawn",
       "ghostty": "Rose Pine Dawn",
-      "herdr": "rose-pine-dawn"
+      "herdr": "rose-pine-dawn",
+      "kitty": "Ros\u00e9 Pine Dawn"
     },
     "solarized-dark": {
       "aliases": [
         "solarized",
         "solarized dark"
       ],
+      "appearance": "dark",
       "emacs": "solarized-dark",
       "ghostty": "iTerm2 Solarized Dark",
-      "herdr": "solarized"
+      "herdr": "solarized",
+      "kitty": "Solarized Dark"
+    },
+    "solarized-gruvbox-light": {
+      "aliases": [
+        "solarized-gruvbox"
+      ],
+      "appearance": "light",
+      "emacs": "solarized-gruvbox-light",
+      "ghostty": "Gruvbox Light",
+      "herdr": "gruvbox-light",
+      "kitty": "Gruvbox Light"
+    },
+    "solarized-light": {
+      "aliases": [
+        "solarized light"
+      ],
+      "appearance": "light",
+      "emacs": "solarized-light",
+      "ghostty": "iTerm2 Solarized Light",
+      "herdr": "solarized-light",
+      "kitty": "Solarized Light"
     },
     "solitude": {
       "aliases": [],
+      "appearance": "dark",
       "emacs": "base16-grayscale-dark",
       "ghostty": "Vague",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Vague"
     },
     "tokyo-night": {
       "aliases": [
@@ -153,25 +252,31 @@
         "tokyonight",
         "tokyo night"
       ],
+      "appearance": "dark",
       "emacs": "doom-tokyo-night",
       "ghostty": "TokyoNight",
-      "herdr": "tokyo-night"
+      "herdr": "tokyo-night",
+      "kitty": "Tokyo Night"
     },
     "vantablack": {
       "aliases": [
         "vanta-black"
       ],
+      "appearance": "dark",
       "emacs": "doom-homage-black",
       "ghostty": "Atlas Ragnarok",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Modus Vivendi"
     },
     "white": {
       "aliases": [
         "monochrome-light"
       ],
+      "appearance": "light",
       "emacs": "doom-plain",
       "ghostty": "iTerm2 Tango Light",
-      "herdr": "terminal"
+      "herdr": "terminal",
+      "kitty": "Tango Light"
     }
   }
 }

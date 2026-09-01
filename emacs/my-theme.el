@@ -5,12 +5,14 @@
 (require 'subr-x)
 
 (defvar my-themes
-  '(solarized-gruvbox
+  '(solarized-gruvbox-dark
+    solarized-gruvbox-light
     solarized-zenburn
     doom-zenburn
     ef-melissa-dark
     ef-cyprus
     gruvbox-dark-medium
+    gruvbox-light-medium
     kaolin-dark
     leuven
     doom-tokyo-night
@@ -101,29 +103,49 @@ working when this file is reloaded."
        clause))
    spec))
 
+(defun my/gnus-empty-group-face-p (face)
+  "Return non-nil when FACE is one of Gnus's empty group faces."
+  (string-match-p
+   "\\`gnus-group-\\(?:mail\\|news\\)-.+-empty\\'"
+   (symbol-name face)))
+
+(defun my/remove-gnus-empty-group-theme-faces (theme)
+  "Remove THEME's inverted Gnus empty-group face definitions.
+Emacs 32 makes the non-empty faces inherit from their empty counterparts;
+some external themes still define the old inverse relationship, creating an
+inheritance cycle."
+  (put theme 'theme-settings
+       (cl-loop for entry in (get theme 'theme-settings)
+                unless (and (eq (car-safe entry) 'theme-face)
+                            (my/gnus-empty-group-face-p (cadr entry)))
+                collect entry))
+  ;; `custom-theme-set-faces' records each spec both on the theme and face.
+  (dolist (face (face-list))
+    (when (my/gnus-empty-group-face-p face)
+      (put face 'theme-face
+           (assq-delete-all theme (get face 'theme-face))))))
+
+(defun my/clear-stale-gnus-empty-group-faces ()
+  "Clear partial face state left by a previously failed theme load."
+  (dolist (face (face-list))
+    (when (my/gnus-empty-group-face-p face)
+      (put face 'theme-face nil)
+      (ignore-errors (face-spec-recalc face)))))
+
 (defun my/prepare-base16-theme (theme)
   "Make base16 THEME work correctly on Emacs 32 truecolor terminals."
-  (let ((empty-group-face-p
-         (lambda (face)
-           (string-match-p
-            "\\`gnus-group-\\(?:mail\\|news\\)-[1-6]-empty\\'"
-            (symbol-name face)))))
-    (put theme 'theme-settings
-         (cl-loop for entry in (get theme 'theme-settings)
-                  unless (and (eq (car-safe entry) 'theme-face)
-                              (funcall empty-group-face-p (cadr entry)))
-                  do (when (eq (car-safe entry) 'theme-face)
-                       (setf (nth 3 entry)
-                             (my/base16-truecolor-spec (nth 3 entry))))
-                  and collect entry))
-    ;; `custom-theme-set-faces' records each spec both on the theme and face.
-    (dolist (face (face-list))
-      (if (funcall empty-group-face-p face)
-          (put face 'theme-face
-               (assq-delete-all theme (get face 'theme-face)))
-        (when-let* ((theme-spec (assq theme (get face 'theme-face))))
-          (setf (cadr theme-spec)
-                (my/base16-truecolor-spec (cadr theme-spec))))))))
+  (my/remove-gnus-empty-group-theme-faces theme)
+  (put theme 'theme-settings
+       (cl-loop for entry in (get theme 'theme-settings)
+                do (when (eq (car-safe entry) 'theme-face)
+                     (setf (nth 3 entry)
+                           (my/base16-truecolor-spec (nth 3 entry))))
+                collect entry))
+  (dolist (face (face-list))
+    (unless (my/gnus-empty-group-face-p face)
+      (when-let* ((theme-spec (assq theme (get face 'theme-face))))
+        (setf (cadr theme-spec)
+              (my/base16-truecolor-spec (cadr theme-spec)))))))
 
 (defun my/switch-theme-cleanly (theme)
   "Disable old themes, clear stale face state, and enable THEME."
@@ -134,20 +156,19 @@ working when this file is reloaded."
                                   nil t))))
   (mapc #'disable-theme (copy-sequence custom-enabled-themes))
   (my/clear-legacy-theme-face-overrides)
+  (my/clear-stale-gnus-empty-group-faces)
   ;; Recalculate every face with no enabled theme first.  This clears direct
   ;; attributes left behind by an old theme whose bookkeeping became stale.
   (dolist (face (face-list))
     (ignore-errors (face-spec-recalc face)))
+  ;; Load without enabling so Emacs 32-incompatible Gnus face definitions can
+  ;; be removed before face realization detects an inheritance cycle.
+  (load-theme theme :no-confirm :no-enable)
   (if (string-prefix-p "base16-" (symbol-name theme))
-      (progn
-        ;; Base16 20260802 and Emacs 32 disagree about the direction of
-        ;; inheritance for Gnus's empty group faces.  Load without enabling,
-        ;; remove those redundant specs, and then enable the corrected theme.
-        (load-theme theme :no-confirm :no-enable)
-        (my/prepare-base16-theme theme)
-        (enable-theme theme)
-        (run-hooks 'after-load-theme-hook))
-    (load-theme theme :no-confirm))
+      (my/prepare-base16-theme theme)
+    (my/remove-gnus-empty-group-theme-faces theme))
+  (enable-theme theme)
+  (run-hooks 'after-load-theme-hook)
   (set 'my-theme theme)
   (unless (equal custom-enabled-themes (list theme))
     (error "Theme switch left unexpected enabled themes: %S"
