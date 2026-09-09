@@ -43,9 +43,7 @@
            ("g" . my/google-search))
 
 (bind-keys
- ;; Key which don't want to override in all modes.
- ;; For example, Magit does useful things with C-i
- ;; (TAB) -- show/hide file diffs.
+ ;; Don't override mode-specific uses of C-i (TAB).
  ("C-i" . my/hippie-tab)
 ;; ("<M-return>" . my/dired)
  ("C-m" . newline-and-indent)
@@ -189,8 +187,6 @@
  ("C-c C-l" . my/toggle-auto-hscroll-mode)
  ("C-c C-b" . subword-backward-kill)
 
- ("C-x g" . magit-status)
-
  ("<home>" . beginning-of-buffer)
  ("<end>" . end-of-buffer)
 
@@ -216,12 +212,12 @@
            (not (derived-mode-p 'pi-coding-agent-input-mode)))
 
 ;; Git related under: C-c g <letter>
+(setq git-link-open-in-browser t
+      git-link-use-commit t)
+
 (bind-keys :prefix-map my/ctl-c-g-map
            :prefix "C-c g"
            ("l" . git-link)
-           ("d" . magit-file-dispatch)
-           ("b" . magit-blame-addition)
-           ("f" . magit-log-buffer-file)
            ("r" . my/git-grep-from-root)
            ("v" . my/github-visit-file)
            ("g" . consult-git-grep))

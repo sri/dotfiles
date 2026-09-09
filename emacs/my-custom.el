@@ -34,8 +34,8 @@
                    expand-region flycheck flycheck-golangci-lint
                    ghostel git-link go-eldoc go-mode gotest gptel
                    gruvbox-theme howm hydra jetbrains-darcula-theme
-                   json-mode kkp leuven-theme macrostep magit
-                   marginalia markdown-mode mistty multiple-cursors
+                   json-mode kkp leuven-theme macrostep marginalia
+                   markdown-mode mistty multiple-cursors
                    nord-theme orderless org org-bullets projectile
                    protobuf-mode rainbow-mode region-bindings-mode rg
                    rjsx-mode ruby-end s shell-command+ smart-mode-line

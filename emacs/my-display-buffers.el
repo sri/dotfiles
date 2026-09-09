@@ -4,14 +4,6 @@
          (display-buffer-reuse-window
           display-buffer-at-bottom))
         ("^\\*Embark Export:.*" display-buffer-at-bottom)
-        ("^magit-\\(revision\\|stash\\|diff\\):.*"
-         (display-buffer-reuse-window
-          display-buffer-at-bottom))
-
-        ((derived-mode . magit-status-mode)
-         (display-buffer-use-some-window)
-         (body-function . delete-other-windows))
-
         ("^\\*Calendar\\*"
          (display-buffer-reuse-window
           display-buffer-at-bottom))

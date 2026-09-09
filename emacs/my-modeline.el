@@ -121,8 +121,7 @@
     (and path (vc-git-root path))))
 
 (defun my/vc-mode-line--current-branch ()
-  (or (magit-get-current-branch)
-      (and buffer-file-name
+  (or (and buffer-file-name
            (vc-git--symbolic-ref buffer-file-name))
       (error "Can't determine current branch")))
 
@@ -140,7 +139,12 @@
     (string-remove-prefix "origin/" branch)))
 
 (defun my/vc-mode-line--github-repo-base ()
-  (let ((url (magit-get "remote" "origin" "url")))
+  (let* ((default-directory (or (my/vc-mode-line--repo-root)
+                                default-directory))
+         (url (condition-case nil
+                  (car (process-lines "git" "config" "--get"
+                                      "remote.origin.url"))
+                (error nil))))
     (unless url
       (error "No origin remote configured"))
     (setq url (s-trim url))
@@ -326,17 +330,6 @@
 (require 'vc-hooks)
 (require 'vc-git)
 
-(def-with-selected-window my/magit-status ()
-  (magit-status))
-
-(def-with-selected-window my/magit-blame ()
-  (if magit-blame-mode
-      (magit-blame-quit)
-    (magit-blame-addition '("-w"))))
-
-(def-with-selected-window my/magit-log-buffer ()
-  (magit-log-buffer-file))
-
 (def-with-selected-window my/vc-mode-line-view-pr ()
   (browse-url
    (my/vc-mode-line--pull-request-url)))
@@ -390,10 +383,7 @@
 (defvar my/vc-mode-line-menu-map
   (easy-menu-create-menu
    ""
-   '(["Magit blame" my/magit-blame t]
-     ["Magit log buffer file" my/magit-log-buffer t]
-     "---"
-     ["View PR" my/vc-mode-line-view-pr t]
+   '(["View PR" my/vc-mode-line-view-pr t]
      ["(copy)" my/vc-mode-line-copy-pr t]
      "---"
      ["View file on Web" my/vc-mode-line-view-file-on-web buffer-file-name]
@@ -431,18 +421,6 @@
                       'local-map my/vc-mode-line-keymap))
     (force-mode-line-update)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar my/buffer-mods-git-blame
-  (let ((map (make-sparse-keymap)))
-    (define-key map [mode-line mouse-1] 'my/magit-blame)
-    map))
-
-(def-modeline-var my/buffer-mods
-  `((:propertize (:eval (if buffer-file-name "ß" " "))
-                 help-echo "Git blame current file"
-                 mouse-face mode-line-highlight
-                 local-map ,my/buffer-mods-git-blame)))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Put it all  together
 (setq-default mode-line-format
               '(" "
