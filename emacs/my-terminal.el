@@ -38,3 +38,11 @@
 ;; Also fix terminal frames that already exist when this file is reloaded.
 (dolist (terminal (terminal-list))
   (set-terminal-parameter terminal 'xterm--set-selection t))
+
+
+(standard-display-unicode-special-glyphs)
+
+(set-display-table-slot standard-display-table 'truncation
+                        (make-glyph-code ?… 'shadow))
+(set-display-table-slot standard-display-table 'wrap
+                        (make-glyph-code ?↩ 'shadow))

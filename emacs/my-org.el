@@ -5,9 +5,20 @@
 (require 'org-bullets)
 (setq org-bullets-bullet-list '("○"))
 
+(unless (display-graphic-p)
+  (with-eval-after-load 'org
+    (setq org-ellipsis " …"
+          org-display-table (copy-sequence standard-display-table))))
+
+
+(defconst my/org-dir (expand-file-name "~/my/notes/"))
+
+(setq org-directory my/org-dir
+      org-default-notes-file (expand-file-name "inbox.org" my/org-dir))
+
 (setq org-capture-templates
-      '(
-        ("t" "Inbox" entry (file "~/my/notes/inbox.org") "* TODO %?\n")
+      `(
+        ("t" "Inbox" entry (file ,org-default-notes-file) "* TODO %?\n")
         ))
 
 (setq org-cycle-include-plain-lists 'integrate)
@@ -89,6 +100,17 @@
 
 
 (setq org-todo-keywords
+         '((sequence
+            "TODO(t)"
+            "DOING(i!)"
+            "WAIT(w@/!)"
+            "HOLD(h@/!)"
+            "|"
+            "DONE(d)"
+            "CANCELLED(c@)")))
+
+
+(setq org-todo-keywords
      '((sequence "TODO(t)" "IDEA(i)" "NOW(n)" "NEXT(e)" "WAIT(w)" "|" "DONE(d)" "CANCELLED(c)")))
 
 ;; Theme-specific `org-todo-keyword-faces` are applied from
@@ -102,8 +124,8 @@
             (org-bullets-mode 1)
             (setq cursor-type 'bar)))
 
-(add-to-list 'org-modules 'habits)
-
+(add-to-list 'org-modules 'habit)
+(setq org-log-repeat 'time)
 
 (org-babel-do-load-languages
  'org-babel-load-languages

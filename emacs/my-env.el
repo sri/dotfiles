@@ -67,6 +67,10 @@ Fundamental mode."
 
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
+(setq hs-display-lines-hidden t
+      hs-show-indicators t
+      hs-allow-nesting t)
+
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
@@ -144,10 +148,18 @@ Fundamental mode."
 
 (setq fill-column 80)
 (setq visual-fill-column-width 70)
+(unless (display-graphic-p)
+  (setq-default display-fill-column-indicator-character ?┊))
+(setq display-fill-column-indicator-warning t)
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+
 
 (global-set-key (kbd "<pinch>") 'ignore)
 (global-set-key (kbd "<C-wheel-up>") 'ignore)
 (global-set-key (kbd "<C-wheel-down>") 'ignore)
+
+(setq read-extended-command-predicate
+      #'command-completion-default-include-p)
 
 ;; when running make, set NATIVE_FULL_AOT=1 to
 ;; native compile all libs
@@ -212,9 +224,10 @@ Fundamental mode."
 (blink-cursor-mode -1)
 (auto-compression-mode t)
 (transient-mark-mode 1)
-(show-paren-mode t)
 (electric-pair-mode)
 
+(show-paren-mode t)
+(setq show-paren-context-when-offscreen t)
 
 (require 'server)
 (if (server-running-p)
