@@ -1,0 +1,142 @@
+;; -*- lexical-binding: t; -*-
+(require 'magit)
+(require 'magit-extras) ; to make Magit show up in project-switch-project
+
+(require 'bug-reference)
+(require 'git-link)
+
+;; https://stackoverflow.com/questions/462974/what-are-the-differences-between-double-dot-and-triple-dot-in-git-com
+;; git log  A..B   # Show me commits only on B.
+;; git log  A...B  # Show me commits only on A or only on B.
+;; git diff A..B   # Show me changes only on A or only on B.
+;; git diff A...B  # Show me changes only on B.
+
+
+
+(put 'magit-diff-edit-hunk-commit 'disabled nil)
+
+(setq git-link-open-in-browser t)
+(setq git-link-use-commit t)
+(setq magit-diff-visit-prefer-worktree t)
+
+(setq magit-section-visibility-indicator nil)
+(setq magit-save-repository-buffers 'dontask)
+(setq magit-commit-show-diff t)
+(setq magit-display-buffer-function
+      'magit-display-buffer-same-window-except-diff-v1)
+
+;; Seems to cause issues where some of the keys (like 'k')
+;; are not abound anymore and pressing that key gives an
+;; error messages like "user-error: There is no thing at
+;; point that could be deleted"
+;; (add-to-list 'magit-section-initial-visibility-alist
+;;              '(untracked . hide))
+;; (add-to-list 'magit-section-initial-visibility-alist
+;;              '(unpushed . hide))
+;;
+;; (setq magit-status-sections-hook
+;;       '(magit-insert-status-headers
+;;         magit-insert-merge-log
+;;         magit-insert-rebase-sequence
+;;         magit-insert-am-sequence
+;;         magit-insert-sequencer-sequence
+;;         magit-insert-bisect-output
+;;         magit-insert-bisect-rest
+;;         magit-insert-bisect-log
+;;         magit-insert-unstaged-changes
+;;         magit-insert-staged-changes
+;;         magit-insert-stashes
+;;         magit-insert-unpushed-to-pushremote
+;;         magit-insert-unpushed-to-upstream-or-recent
+;;         magit-insert-unpulled-from-pushremote
+;;         magit-insert-unpulled-from-upstream
+;;         magit-insert-untracked-files))
+
+;; Show these many commits in the "Recent commits" section.
+(setq magit-log-section-commit-count 10)
+
+;(set-face-attribute 'magit-diff-added-highlight nil :foreground "#22aa22")
+
+(add-hook 'magit-log-edit-mode-hook 'turn-on-auto-fill)
+
+(setq magit-diff-refine-hunk t)
+(defun my/magit-diff-toggle-refine-hunk ()
+  (interactive)
+  (let* ((vals '((t . "current hunk")
+                 (all . "all")
+                 (nil . "off")))
+         (next (or (cadr (cl-member magit-diff-refine-hunk vals
+                                    :key #'car))
+                   (car vals))))
+    (setq magit-diff-refine-hunk (car next))
+    (message "Word-diff: %s" (cdr next))))
+
+(defun my/open-repo-in-browser ()
+  (interactive)
+  (let* ((origin-url (magit-get "remote" "origin" "url"))
+         (url origin-url))
+    (when (string-match "^ssh" url)
+      (setq url (s-replace-all '(("ssh://" . "") (":22" . "")) url))
+      (setq url (concat "https://" url)))
+    (unless (string-match "^http" url)
+      (setq url (replace-regexp-in-string (rx (group (zero-or-more any)) "@" ; username
+                                              (group (zero-or-more any)) ":" ; domain
+                                              (group (zero-or-more any))     ; path
+                                              (group ".git"))
+                                          "https://\\2/\\3"
+                                          url)))
+    (message "Opening %s (origin-url: %s)" url origin-url)
+    (browse-url url)))
+
+(defun my/magit-github-repo-url ()
+  (save-match-data
+    (let ((url (magit-get "remote" "origin" "url")))
+      (unless url
+        (error "No origin remote"))
+      (cond
+       ((string-match "\\`git@github\\.com:\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+        (format "https://github.com/%s" (match-string 1 url)))
+       ((string-match "\\`ssh://git@github\\.com[:/]\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+        (format "https://github.com/%s" (match-string 1 url)))
+       ((string-match "\\`https?://github\\.com/\\(.+?\\)\\(?:\\.git\\)?/?\\'" url)
+        (format "https://github.com/%s" (match-string 1 url)))
+       (t
+        (error "Not a GitHub remote: %s" url))))))
+
+(defun my/magit-bug-reference-setup ()
+  (setq-local bug-reference-bug-regexp "\\(#\\([0-9]+\\)\\)")
+  (setq-local bug-reference-url-format
+              (lambda ()
+                (let ((pr (match-string-no-properties 2)))
+                  (format "%s/pull/%s"
+                          (my/magit-github-repo-url)
+                          pr))))
+  (bug-reference-mode 1)
+  (font-lock-flush)
+  (font-lock-ensure))
+
+(defun my/magit-diff-against-default-branch (branch)
+  "Diff current branch against selected default BRANCH (range: origin/BRANCH..HEAD)."
+  (interactive
+   (list
+    (magit-read-branch-or-commit
+     "Compare against branch"
+     (or (magit-get-current-branch) "develop"))))
+  (let* ((current (magit-get-current-branch))
+         (range   (format "origin/%s...%s" branch current)))
+    (magit-diff-range range)))
+
+(with-eval-after-load 'magit
+  (transient-append-suffix 'magit-diff "d"
+    '("D" "Diff vs default branch (origin/BRANCH..HEAD)"
+      my/magit-diff-against-default-branch)))
+
+(add-hook 'magit-mode-hook
+          (lambda ()
+            (bind-keys :map magit-mode-map
+                       ("~" . my/open-repo-in-browser)
+                       ("C-c C-s" . magit-stash-list)
+                       ("C-c C-w" . my/magit-diff-toggle-refine-hunk))))
+
+(add-hook 'magit-log-mode-hook #'my/magit-bug-reference-setup)
+(add-hook 'magit-revision-mode-hook #'my/magit-bug-reference-setup)

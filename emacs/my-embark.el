@@ -20,7 +20,10 @@ Otherwise concatenate the value and the ticket id.")
     (define-key map (kbd "t") #'my/embark-ticket-open)
     (define-key map (kbd "b") #'my/embark-ticket-open-branch-on-github)
     (define-key map (kbd "p") #'my/embark-ticket-open-pr-on-github)
+    (define-key map (kbd "m") #'my/embark-ticket-diff-against-main)
+    (define-key map (kbd "d") #'my/embark-ticket-diff-against-develop)
     (define-key map (kbd "g") #'my/embark-ticket-grep-repo)
+    (define-key map (kbd "G") #'my/embark-ticket-log-commits)
     map))
 
 (defun my/embark-ticket--repo-root ()
@@ -114,10 +117,25 @@ Otherwise concatenate the value and the ticket id.")
    (my/embark-ticket--pr-url
     (my/embark-ticket--read-branch ticket))))
 
+(defun my/embark-ticket-diff-against-main (ticket)
+  (require 'magit)
+  (let ((branch (my/embark-ticket--read-branch ticket)))
+    (magit-diff-range (format "origin/main...%s" branch))))
+
+(defun my/embark-ticket-diff-against-develop (ticket)
+  (require 'magit)
+  (let ((branch (my/embark-ticket--read-branch ticket)))
+    (magit-diff-range (format "origin/develop...%s" branch))))
+
 (defun my/embark-ticket-grep-repo (ticket)
   (require 'consult)
   (let ((default-directory (my/embark-ticket--repo-root)))
     (consult-git-grep default-directory ticket)))
+
+(defun my/embark-ticket-log-commits (ticket)
+  (require 'magit)
+  (let ((default-directory (my/embark-ticket--repo-root)))
+    (magit-log-all (list (format "--grep=%s" ticket)))))
 
 (defun my/ace-window-switch-to-selected-window ()
   (let ((aw-dispatch-always t))

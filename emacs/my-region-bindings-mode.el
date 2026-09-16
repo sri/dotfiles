@@ -5,6 +5,8 @@
 (require 'expand-region)
 
 
+(add-hook 'magit-mode-hook 'region-bindings-mode-off)
+
 (region-bindings-mode-enable)
 
 (defun my/which-key-region-bindings ()
@@ -67,13 +69,20 @@
            )
 
 
+(defun my/magit-mode-p ()
+  (memq major-mode '(magit-status-mode magit-diff-mode)))
+
 (defun my/region-bindings-k ()
   (interactive)
-  (previous-line))
+  (if (my/magit-mode-p)
+      (magit-discard)
+    (previous-line)))
 
 (defun my/region-bindings-s ()
   (interactive)
-  (my/isearch-region))
+  (if (my/magit-mode-p)
+      (magit-stage)
+    (my/isearch-region)))
 
 (add-to-list 'region-bindings-mode-disable-predicates
              'minibufferp)

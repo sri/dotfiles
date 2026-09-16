@@ -192,7 +192,12 @@ decoded URL in the minibuffer."
          (org-beginning-of-line))
         (t
          (let ((indentation-start (save-excursion
-                                    (back-to-indentation)
+                                    (cond ((derived-mode-p 'magit-mode)
+                                           (beginning-of-line)
+                                           (if (looking-at "[+-]") (forward-char 1))
+                                           (skip-chars-forward " \t"))
+                                          (t
+                                           (back-to-indentation)))
                                     (point))))
            (if (or (= (current-column) 0)
                    (> (point) indentation-start))
@@ -410,10 +415,12 @@ will bring it back."
 (defun my/copy-full-path ()
   "Copies the buffer name to the kill ring.
 If the current buffer isn't associated with a file and the major
-mode is either Shell or Dired, then the current directory is copied."
+mode is either Shell or Magit, then the current directory is
+copied."
   (interactive)
   (let ((name (or (buffer-file-name)
-                  (if (memq major-mode '(shell-mode dired-mode))
+                  (if (or (memq major-mode '(shell-mode dired-mode))
+                          (string-prefix-p "Magit" mode-name))
                       default-directory
                     nil))))
     (if (not name)
@@ -428,8 +435,8 @@ mode is either Shell or Dired, then the current directory is copied."
 
 (defun my/git-insert-current-branch ()
   (interactive)
-  (let ((current-branch (my/github--current-branch)))
-    (unless (string-empty-p current-branch)
+  (let ((current-branch (magit-get-current-branch)))
+    (when current-branch
       (insert current-branch " "))))
 
 (defvar-local my/google-search-term-prefix nil)
@@ -681,11 +688,6 @@ formats them into a list of clickable links."
     (format "%s/%s"
             (match-string 1 remote)
             (match-string 2 remote))))
-
-(defun my/open-repo-in-browser ()
-  "Open the current repository on GitHub."
-  (interactive)
-  (browse-url (format "https://github.com/%s" (my/github--repo))))
 
 (defun my/github-visit-file (&optional select-branch)
   "Open current file or dired directory on GitHub.

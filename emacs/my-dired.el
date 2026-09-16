@@ -128,6 +128,7 @@
                        ("C-m" . my/dired-find-file)
                        ("SPC" . scroll-up)
                        ("J"   . my/open-in-finder)
+                       ("G"   . magit-status)
                        ("S-SPC" . scroll-down)
                        ("N" . dired-create-empty-file)
                        ("o" . my/dired-open-marked-files-menu)

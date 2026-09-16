@@ -148,6 +148,7 @@ precmd() {
 
 # Aliases
 alias cc='claude'
+alias ,em=',e --magit'
 alias sub="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 alias gd='git diff'
 #__git_complete gd _git_diff

@@ -15,6 +15,7 @@ POSITIONAL_ARGS=()
 SKIP=false
 NEW=false
 GUI=false
+MAGIT=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -30,6 +31,9 @@ while [[ $# -gt 0 ]]; do
       ;;
     -skip)
       SKIP=true
+      ;;
+    --magit)
+      MAGIT=true
       ;;
     -q)
       # -Q is only meaningful when starting a new Emacs process.
@@ -55,14 +59,35 @@ absolute_existing_path() {
   fi
 }
 
-for arg in ${POSITIONAL_ARGS[@]+"${POSITIONAL_ARGS[@]}"}; do
-  # emacsclient resolves relative paths from the server's working directory,
-  # which may differ from this shell. Existing files and directories must be
-  # made absolute so files open correctly and directories open in Dired.
-  arg=$(absolute_existing_path "$arg")
-  EMACS_ARGS+=("$arg")
-  CLIENT_ARGS+=("$arg")
-done
+if $MAGIT; then
+  if (( ${#POSITIONAL_ARGS[@]} > 1 )); then
+    printf 'usage: ,em [directory]\n' >&2
+    exit 2
+  fi
+
+  MAGIT_DIR=${POSITIONAL_ARGS[0]:-$PWD}
+  if [[ ! -d "$MAGIT_DIR" ]]; then
+    printf ',em: not a directory: %s\n' "$MAGIT_DIR" >&2
+    exit 1
+  fi
+  MAGIT_DIR=$(absolute_existing_path "$MAGIT_DIR")
+
+  # Quote the directory as an Emacs Lisp string.
+  MAGIT_DIR=${MAGIT_DIR//\\/\\\\}
+  MAGIT_DIR=${MAGIT_DIR//\"/\\\"}
+  MAGIT_EVAL="(progn (require 'magit) (magit-status \"${MAGIT_DIR}\"))"
+  EMACS_ARGS+=("--eval" "$MAGIT_EVAL")
+  CLIENT_ARGS+=("--eval" "$MAGIT_EVAL")
+else
+  for arg in ${POSITIONAL_ARGS[@]+"${POSITIONAL_ARGS[@]}"}; do
+    # emacsclient resolves relative paths from the server's working directory,
+    # which may differ from this shell. Existing files and directories must be
+    # made absolute so files open correctly and directories open in Dired.
+    arg=$(absolute_existing_path "$arg")
+    EMACS_ARGS+=("$arg")
+    CLIENT_ARGS+=("$arg")
+  done
+fi
 
 if $SKIP; then
   touch "$SKIP_FILE"

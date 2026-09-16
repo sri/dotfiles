@@ -345,6 +345,13 @@ Fundamental mode."
 ;;(defun override-global-mode (arg) nil)
 ;; (setq ibuffer-saved-filter-groups
 ;;    '(("default"
+;;       ("Magit"
+;;        (or
+;;         (mode . magit-status-mode)
+;;         (mode . magit-log-mode)
+;;         (name . "\\*magit")
+;;         (name . "magit-")
+;;         (name . "git-monitor")))
 ;;       ("Dired"
 ;;        (mode . dired-mode))
 ;;       ("Shells"

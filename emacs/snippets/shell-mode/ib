@@ -1,4 +1,4 @@
 # name: ib
 # key: ib
 # --
-`(my/github--current-branch)` $0
+`(magit-get-current-branch)` $0
