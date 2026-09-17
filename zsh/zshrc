@@ -396,6 +396,36 @@ function hwsname() {
   command herdr workspace rename "$HERDR_WORKSPACE_ID" "$@"
 }
 
+# Close the current worktree workspace and remove its checkout. The branch is
+# retained, and Herdr refuses a dirty checkout unless --force is explicit.
+function hwsdel() {
+  if [[ -z $HERDR_WORKSPACE_ID ]]; then
+    print -u2 'hwsdel: not running inside a Herdr workspace'
+    return 1
+  fi
+  if (( $# > 1 )) || (( $# == 1 )) && [[ $1 != --force ]]; then
+    print -u2 'usage: hwsdel [--force]'
+    return 2
+  fi
+
+  local worktree_list worktree_path
+  worktree_list="$(command herdr worktree list \
+    --workspace "$HERDR_WORKSPACE_ID" --json)" || return
+  worktree_path="$(jq -r '
+    .result.source.source_checkout_path as $source
+    | [.result.worktrees[]
+       | select(.path == $source and .is_linked_worktree)]
+    | if length == 1 then .[0].path else empty end
+  ' <<<"$worktree_list")" || return
+
+  if [[ -z $worktree_path ]]; then
+    print -u2 'hwsdel: current workspace is not a linked Git worktree; refusing to remove it'
+    return 1
+  fi
+
+  command herdr worktree remove --workspace "$HERDR_WORKSPACE_ID" "$@"
+}
+
 function c() {
   builtin cd "$@" && l
 }
