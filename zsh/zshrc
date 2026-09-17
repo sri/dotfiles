@@ -411,10 +411,9 @@ function hwsdel() {
   local worktree_list worktree_path
   worktree_list="$(command herdr worktree list \
     --workspace "$HERDR_WORKSPACE_ID" --json)" || return
-  worktree_path="$(jq -r '
-    .result.source.source_checkout_path as $source
-    | [.result.worktrees[]
-       | select(.path == $source and .is_linked_worktree)]
+  worktree_path="$(jq -r --arg workspace "$HERDR_WORKSPACE_ID" '
+    [.result.worktrees[]
+     | select(.open_workspace_id == $workspace and .is_linked_worktree)]
     | if length == 1 then .[0].path else empty end
   ' <<<"$worktree_list")" || return
 
